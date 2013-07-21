@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/sql_label"
+        android:textSize="14sp" />
+                 
+    <EditText
+        android:id="@+id/sqlInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:ems="10"
+        android:enabled="true"
+        android:inputType="textMultiLine"
+        android:selectAllOnFocus="true"
+        android:textSize="12sp"
+        android:typeface="monospace" />
+
+    <TextView
+        android:id="@+id/editText3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/sql_results" 
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/sqlOutput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:textSize="12sp"
+        android:typeface="monospace" />
+    
+<GridLayout
+    android:id="@+id/grid1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:columnCount="4"
+    android:rowCount="1" >
+        
+    <Button
+        android:id="@+id/button1"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_gravity="left"
+        android:layout_row="0"
+        android:onClick="execSQL"
+        android:text="@string/exec_btn" />
+
+    <Button
+        android:id="@+id/next_rec_btn"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_gravity="left"
+        android:layout_row="0"
+        android:onClick="moveToNextRecord"
+        android:text="@string/next_rec_btn" />
+
+    <Button
+        android:id="@+id/button3"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="2"
+        android:layout_gravity="left"
+        android:layout_row="0"
+        android:onClick="clearBuffers"
+        android:text="@string/clear_btn" />
+
+    <Button
+        android:id="@+id/button2"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="3"
+        android:layout_gravity="left"
+        android:layout_row="0"
+        android:onClick="goBack"
+        android:text="@string/go_back_btn" />
+</GridLayout>
+</LinearLayout>

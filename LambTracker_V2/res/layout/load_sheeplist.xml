@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbarStyle="outsideOverlay"
+    tools:context=".MainActivity" >
+
+	<EditText
+		android:id="@+id/editText1"
+        android:layout_width="match_parent"
+               android:layout_height="175dp"
+               android:clickable="false"
+               android:ems="10"
+               android:enabled="true"
+               android:gravity="top"
+               android:inputType="textMultiLine"
+               android:scrollHorizontally="false"
+               android:scrollbarAlwaysDrawVerticalTrack="true"
+               android:scrollbars="vertical"
+               android:textAllCaps="false"
+               android:textSize="12sp"
+               android:typeface="monospace" >
+                <requestFocus />
+            </EditText>
+    
+	<Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="10dp"
+        android:onClick="createDB"
+        android:text="@string/createdb" />
+
+	   <Button
+        android:id="@+id/dumpdb_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button5"
+        android:layout_alignBottom="@+id/button5"
+        android:layout_toRightOf="@+id/button5"
+        android:onClick="@string/dump_db_action"
+        android:text="@string/dump_db" />
+	   	
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/dumpdb_btn"
+        android:layout_alignBottom="@+id/dumpdb_btn"
+        android:layout_toRightOf="@+id/dumpdb_btn"
+        android:onClick="allDone"
+        android:text="@string/backtomain" />
+    
+</RelativeLayout>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LambTracker</string>
+    <string name="app_name_long">Weyr Associates LambTracker</string>
+	<string name="app_name_settings">Weyr Associates LambTracker - Settings</string>
+    <string name="service_started">EID Service Running</string> 
+    <string name="service_label">EID Service</string> 
+    <string name="menu_settings">Settings</string>
+    <string name="load_sheeplist">Load Sheep List</string>
+    <string name="do_sheeptask">Do Sheep Tasks</string>
+    <string name="look_up_sheep">Look up a Sheep by EID</string>
+    <string name="quit_program">Quit</string>
+   
+    <string name="backtomain">Back</string>
+    
+     <string name="view_task_btn">View</string>
+    <string name="update_btn">Update</string>
+    <string name="delete_btn">Delete</string>
+    
+    <string name="title_activity_do_sheep_task">DoSheepTask</string>
+    <string name="title_activity_load_sheep_list">LoadSheepList</string>
+    <string name="title_activity_look_up_sheep">LookUpSheep</string>
+    <string name="title_activity_lamb_tracker_receiver">LambTrackerReceiver</string>
+    <string name="title_activity_incoming_receiver">IncomingReceiver</string>
+    
+    <string name="title_Message">Ewe Lambing History</string>
+    <string name="test_Message2">Test message fill sheep database here</string>
+    
+    <string name="federal_id_lbl">Federal ID</string>
+    <string name="farm_id_lbl">Farm ID</string>
+    <string name="sheep_task_lbl">Lambing History</string>
+    <string name="sheep_birthtype_lbl">Birth Type</string>
+    <string name="sheep_birthweight_lbl">Birth Weight</string>
+    <string name="lambing_results2012_lbl">2012 Lambing Results</string>
+    <string name="lambing_results2013_lbl">2013 Lambing Results</string>
+    <string name="sql_label">SQL Command</string>
+    <string name="sheep_name_lbl">Sheep name</string>
+    <string name="electronic_id_lbl">Electronic ID</string>
+       
+    <string name="createdb">Create DB</string>
+    <string name="dump_db">Show DB</string>
+    <string name="enter_data">Enter</string>
+    <string name="sql_results">Results</string>
+    <string name="exec_btn">Execute SQL</string>
+    <string name="go_back_btn">Back</string>
+    <string name="clear_btn">Clear</string>
+    <string name="edit_db_btn">Edit DB</string>
+    <string name="next_rec_btn">Next Record</string>
+    <string name="prev_rec_btn">Prev. Record</string>
+       
+    <string name="dump_db_action">dumpDB</string>
+        
+    <string name="delete_sheep">Delete Sheep?</string>
+    <string name="delete_warning">Delete Warning</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="close_task_btn">Close</string>
+   
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    
+    
+    <!-- added fed_tag, birth data and lambing data to this line -->
+    <string name="build_table">create table sheep_table(id integer primary key autoincrement,eid_tag text,
+        fed_tag text,farm_tag text,sheep_name text,birth_date text,
+        birth_type text,sheep_task text,birth_weight text,
+        lambing_2012 text, lambing_2013 text)</string>
+        
+    <string name="csv_file">demo_sheep_table.csv</string>
+    
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="savedata_names">
+		<item>None</item>
+		<item>Everything</item>
+	</string-array>
+	<string-array name="savedata_codes">
+		<item>none</item>
+		<item>allbinary</item>
+	</string-array>
+</resources>
