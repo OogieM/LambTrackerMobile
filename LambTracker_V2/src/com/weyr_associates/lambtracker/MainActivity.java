@@ -24,7 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.content.BroadcastReceiver;
+// import android.content.BroadcastReceiver; commented out becasue not used also testing GitHub push
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
