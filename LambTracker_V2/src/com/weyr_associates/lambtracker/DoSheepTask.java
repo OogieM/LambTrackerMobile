@@ -1,20 +1,14 @@
 package com.weyr_associates.lambtracker;
 
-// import android.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.LightingColorFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 
 public class DoSheepTask extends Activity
@@ -26,7 +20,7 @@ public class DoSheepTask extends Activity
 	private Cursor 	cursor;
 	private int			    recNo;
 	private int             nRecs;
-	private String[]        colNames;
+	private String[]        colNames; // Left in because I will need it for Convert to EID task
 	@Override
     public void onCreate(Bundle savedInstanceState)	
     {
@@ -49,8 +43,6 @@ public class DoSheepTask extends Activity
     // user clicked the 'back' button
     public void backBtn( View v )
 	    {
-    	// Added this to close the database if we go back to the main activity  	
-//       	cursor.close ();
        	dbh.closeDB();
     	clearBtn( null );
     	finish();
@@ -61,14 +53,11 @@ public class DoSheepTask extends Activity
     	{
     	TextView TV  = (TextView) findViewById( R.id.eidText );
     	String   eid = TV.getText().toString();
-//    	Log.i("DoSheepTaskEnter", eid);
     	TextView TV2  = (TextView) findViewById( R.id.fedText );
     	String   fed = TV2.getText().toString();
-//    	Log.i("DoSheepTaskEnter", fed);
     	// added section here to include a farm ID tag	
     	TextView TV3 = (TextView) findViewById( R.id.farmText );
     	String	 farm = TV3.getText().toString();
-//    	Log.i("DoSheepTaskEnter", farm);
     	TV = (TextView) findViewById( R.id.sheepnameText );
     	String sheepName = dbh.fixApostrophes( TV.getText().toString() );
     	
@@ -126,7 +115,6 @@ public class DoSheepTask extends Activity
     	if( eid != null && eid.length() > 0 )
     		{
     		cmd = String.format( "select * from sheep_table where eid_tag='%s'", eid);
-//    		Log.i("DoSheep", cmd);
     		}	
     	else
     	{
@@ -164,15 +152,10 @@ public class DoSheepTask extends Activity
         	return;
     		}
     	if( dbh.getSize() >1){
-//   		Log.i ("DoSheepTask", "More than 1 record");
-//      	
-//    		String dbsize = String.valueOf(dbh.getSize());
-//          Log.i ("DoSheepTask", dbsize + " Records found");
+
 // 			Enable the previous and next record buttons
     		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
     		btn2.setEnabled(true);  
-//    		Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
-//    		btn3.setEnabled(true);
     		//	Set up the various pointers and cursor data needed to traverse the sequence
     		recNo    = 1;
     		cursor   = (Cursor) crsr;
@@ -180,9 +163,7 @@ public class DoSheepTask extends Activity
     		colNames = cursor.getColumnNames();
     		cursor.moveToFirst();
     	}
-//       	Log.i ("DoSheepTask", "In view  before setting id and the record id is " + String.valueOf(id) );
     	id = dbh.getInt( 0 ); // Get the primary key from the first column  
-//    	Log.i ("DoSheepTask", "In view after setting id and the record id is " + String.valueOf(id) );   
     	// 		Format and show the first record    
     	TV = (TextView) findViewById( R.id.eidText );
     	TV.setText( dbh.getStr(1) );
@@ -202,16 +183,12 @@ public class DoSheepTask extends Activity
     	TV.setText( dbh.getStr(9) );
     	TV = (TextView) findViewById( R.id.lambing2013Text );
     	TV.setText( dbh.getStr(10) ); 
- //   	Log.i ("DoSheepTask", "end of view button " + String.valueOf(crsr) );
     	}
     
     // user clicked the "next record" button
     public void nextBtn( View v)
     {
     	TextView TV;
-//   	Log.i ("DoSheepTask", "In next button code");
-//    	Log.i ("DoSheepTask", "In if statement record number " + String.valueOf(recNo) );
-//    	Log.i ("DoSheepTask", "In if statement nRecs " + String.valueOf(nRecs) );
     	if (recNo == (nRecs-1)) {
     		// at end so disable next record button
     		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
@@ -255,9 +232,6 @@ public class DoSheepTask extends Activity
     public void prevBtn( View v)
     {
     	TextView TV;
-//    	Log.i ("DoSheepTask", "In previous button code");
-//		Log.i ("DoSheepTask", "incoming record number is " + String.valueOf(recNo) );
-    	
     	if ( cursor.moveToPrevious() ){
     		// I've moved back so enable the next record button
     		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
@@ -265,8 +239,6 @@ public class DoSheepTask extends Activity
         	id = dbh.getInt( 0 ); // Get the primary key from the current record
         	Log.i ("DoSheepTask", "In if statement prev button and the record id is " + String.valueOf(id) );
     		recNo  -= 1;
-//    		Log.i ("DoSheepTask", "In if statement " + String.valueOf(cursor.isAfterLast()) );
-//      		Log.i ("DoSheepTask", "In if statement record number is " + String.valueOf(recNo) );
       		TV = (TextView) findViewById( R.id.eidText );
     		TV.setText( dbh.getStr(1) );
     		TV = (TextView) findViewById( R.id.fedText );

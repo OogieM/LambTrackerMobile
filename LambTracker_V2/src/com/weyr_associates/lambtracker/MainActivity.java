@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-// import android.content.BroadcastReceiver; commented out becasue not used also testing GitHub push
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
@@ -40,9 +39,6 @@ public class MainActivity extends Activity {
 	
 	Messenger mService = null;
 	boolean mIsBound;
-	
-	// added this to hold the statement I send with the intents
-//	public final static String LASTEID = "com.weyr_associates.lambtracker.LASTEID";
 	
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	// variable to hold the string
@@ -67,8 +63,6 @@ public class MainActivity extends Activity {
 				LastEID = (b2.getString("info1"));
 //				We have a good whole EID number so send it to the LookUpSheep component	
 				lookUpSheep ();	
-//		Test sending to doSheep instead
-//				doSheepTasks (v);
 				break;			
 			case eidService.MSG_UPDATE_LOG_APPEND:
 				Bundle b3 = msg.getData();
@@ -266,9 +260,6 @@ public class MainActivity extends Activity {
 		case 0: //Settings
 			startActivity(new Intent(this, EditPreferences.class));
 			return true;
-//		case 9: //Record Note Here
-//			AskUserAboutNote();
-//			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
@@ -368,15 +359,12 @@ public class MainActivity extends Activity {
 					Message msg = Message.obtain(null, eidService.MSG_UNREGISTER_CLIENT);
 					msg.replyTo = mMessenger;
 					mService.send(msg);
-//					Log.i("Activity", "At Unregister");
 				} catch (RemoteException e) {
-//					Log.i("Activity", "At Exception");
 					// There is nothing special we need to do if the service has crashed.
 				}
 			}
 			// Detach our existing connection.
 			unbindService(mConnection);
-//			Log.i("Activity", "At Detaching");
 			mIsBound = false;
 		}
 		textStat.setText("Disconnected");
