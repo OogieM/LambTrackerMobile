@@ -137,7 +137,7 @@ public class MainActivity extends Activity {
 		textInfo2.setOnClickListener(ListenerToggleDisplayMsgType);
 		
 		restoreMe(savedInstanceState);
-		Log.i("LambTracker", "At Restore Prefs.");
+//		Log.i("LambTracker", "At Restore Prefs.");
 		CheckIfServiceIsRunning();
 	}
 	private String SetDefaultStatusText() {
@@ -276,7 +276,7 @@ public class MainActivity extends Activity {
 //					getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 //				}
 			} else {
-				Log.i("Activity", "Disconnect clicked");
+//				Log.i("Activity", "Disconnect clicked");
 				doUnbindService();
 				stopService(new Intent(MainActivity.this, eidService.class));
 				LogMessage("Service Stopped");
@@ -405,6 +405,7 @@ public class MainActivity extends Activity {
 		startActivity(workSheep);
 		}
 
+	// use EID reader to look up a sheep
 	public void lookUpSheep( )
     {
 	Intent lookSheep = new Intent( this, LookUpSheep.class );
@@ -412,6 +413,14 @@ public class MainActivity extends Activity {
 	startActivity(lookSheep);
 	}
 
+	// Convert to EID by updating what tags are where on each sheep
+	public void convertToEID( )
+    {
+	Intent convertSheep = new Intent( this, ConvertToEID.class );
+//	convertSheep.putExtra("com.weyr_associates.lambtracker.LASTEID", LastEID);
+	startActivity(convertSheep);
+	}
+	
 	// edit the database
 	public void editDB( View v )
 		{
@@ -422,7 +431,7 @@ public class MainActivity extends Activity {
  // quit the app
 	public void quitApp( View v )
 	{
-		Log.i("Activity", "Quit clicked");
+//		Log.i("Activity", "Quit clicked");
 		doUnbindService();
 		stopService(new Intent(MainActivity.this, eidService.class));
 		LogMessage("Service Stopped");

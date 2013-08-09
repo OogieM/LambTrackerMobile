@@ -34,7 +34,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="10dp"
         android:onClick="createDB"
-        android:text="@string/createdb" />
+        android:text="@string/create_db_btn" />
 
 	   <Button
         android:id="@+id/dumpdb_btn"
@@ -44,7 +44,7 @@
         android:layout_alignBottom="@+id/button5"
         android:layout_toRightOf="@+id/button5"
         android:onClick="@string/dump_db_action"
-        android:text="@string/dump_db" />
+        android:text="@string/show_db_btn" />
 	   	
     <Button
         android:id="@+id/button4"
@@ -54,6 +54,6 @@
         android:layout_alignBottom="@+id/dumpdb_btn"
         android:layout_toRightOf="@+id/dumpdb_btn"
         android:onClick="allDone"
-        android:text="@string/backtomain" />
+        android:text="@string/back_btn" />
     
 </RelativeLayout>

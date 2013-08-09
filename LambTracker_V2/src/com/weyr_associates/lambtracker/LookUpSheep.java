@@ -392,7 +392,7 @@ public class LookUpSheep extends Activity
     	    		   clearBtn( null );
     	               }
     	       });
-    		builder.setNegativeButton( R.string.cancel, new DialogInterface.OnClickListener() {
+    		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int idx) {
     	               // User cancelled the dialog
     	           }

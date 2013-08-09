@@ -114,7 +114,7 @@
             android:layout_gravity="left"
             android:layout_row="0"
             android:inputType="none"
-            android:text="@string/sheep_birthtype_lbl" />
+            android:text="@string/sheep_birth_type_lbl" />
 
         <EditText
             android:id="@+id/sheepbirthtypeText"
@@ -135,7 +135,7 @@
             android:layout_gravity="left"
             android:layout_row="0"
             android:inputType="none"
-            android:text="@string/sheep_birthweight_lbl" />
+            android:text="@string/sheep_birth_weight_lbl" />
 
         <EditText
             android:id="@+id/sheepbirthweightText"
@@ -233,7 +233,7 @@
             android:layout_gravity="left|top"
             android:layout_row="0"
             android:onClick="enterBtn"
-            android:text="@string/enter_data" />
+            android:text="@string/enter_btn" />
 
         <Button
             android:id="@+id/view_task_btn"
@@ -243,7 +243,7 @@
             android:layout_gravity="left|top"
             android:layout_row="0"
             android:onClick="viewBtn"
-            android:text="@string/view_task_btn" />
+            android:text="@string/view_btn" />
 
         <Button
             android:id="@+id/next_rec_btn"
@@ -283,7 +283,7 @@
             android:layout_gravity="left|top"
             android:layout_row="0"
             android:onClick="backBtn"
-            android:text="@string/backtomain" />
+            android:text="@string/back_btn" />
 
     </GridLayout>
 

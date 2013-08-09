@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/sql_label"
+        android:text="@string/sql_command_lbl"
         android:textSize="14sp" />
                  
     <EditText
@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/sql_results" 
+        android:text="@string/results_lbl" 
         android:textSize="14sp" />
 
     <EditText
@@ -57,7 +57,7 @@
         android:layout_gravity="left"
         android:layout_row="0"
         android:onClick="execSQL"
-        android:text="@string/exec_btn" />
+        android:text="@string/exec_sql_btn" />
 
     <Button
         android:id="@+id/next_rec_btn"
@@ -90,6 +90,6 @@
         android:layout_gravity="left"
         android:layout_row="0"
         android:onClick="goBack"
-        android:text="@string/go_back_btn" />
+        android:text="@string/back_btn" />
 </GridLayout>
 </LinearLayout>

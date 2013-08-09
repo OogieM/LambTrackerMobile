@@ -17,7 +17,7 @@
         android:text="@string/load_sheeplist" />
 
     <Button
-        android:id="@+id/edit_db_btn"
+        android:id="@+id/editdb_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/button2"
@@ -35,13 +35,13 @@
         android:text="@string/do_sheeptask" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/quit_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/edit_db_btn"
         android:layout_below="@+id/edit_db_btn"
         android:onClick="quitApp"
-        android:text="@string/quit_program" />
+        android:text="@string/quit_btn" />
 
 
 <TextView
@@ -60,7 +60,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentLeft="true"
-    android:layout_below="@+id/button3"
+    android:layout_below="@+id/quit_btn"
     android:layout_marginTop="15dp"
     android:padding="1sp"
     android:text="Disconnected"

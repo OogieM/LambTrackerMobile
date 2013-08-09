@@ -39,6 +39,10 @@
         </activity>
         <activity android:name="com.weyr_associates.lambtracker.EditDB" >
         </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.ConvertToEID"
+            android:label="@string/title_activity_convert_to_eid" >
+        </activity>
         <activity android:name="com.weyr_associates.lambtracker.EditPreferences" 
             android:label="@string/app_name_settings"> 
         </activity>

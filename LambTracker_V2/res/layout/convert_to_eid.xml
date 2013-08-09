@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/title_Message"
+        android:text="@string/title_activity_convert_to_eid"
         android:textSize="14sp" />
 
     <GridLayout
