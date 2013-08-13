@@ -6,6 +6,7 @@
 	<string name="app_name_settings">Weyr Associates LambTracker - Settings</string>
 	
 	<string name="database_file">lambtracker_db.sqlite</string>
+	<string name="database_path">/data/data/com.weyr_associates.lambtracker/databases/</string>
 	
     <string name="service_started">EID Service Running</string> 
     <string name="service_label">EID Service</string> 
@@ -21,6 +22,7 @@
     <string name="exec_sql_btn">Execute SQL</string>    
     <string name="edit_db_btn">Edit DB</string>
     <string name="create_db_btn">Create DB</string>
+    <string name="copy_real_db_btn">Copy Real DB</string>
     <string name="next_rec_btn">Next Record</string>
     <string name="prev_rec_btn">Prev. Record</string>
     <string name="clear_btn">Clear</string>
@@ -75,7 +77,8 @@
     <string name="title_Message">Ewe Lambing History</string>
          
     <string name="dump_db_action">dumpDB</string>
-        
+    <string name="copy_real_db_action">dumpDB</string> 
+      
     <string name="delete_sheep">Delete Sheep?</string>
     <string name="delete_warning">Delete Warning</string>
     

@@ -1,11 +1,17 @@
 package com.weyr_associates.lambtracker;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 public class LoadSheepList extends Activity {
+    
     
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,4 +44,19 @@ public class LoadSheepList extends Activity {
     	dbh.close();
     	}
    
+    public void copyRealDB( View v )
+	{
+	DatabaseHandler dbh     = new DatabaseHandler( this, "lambtracker_db.sqlite" );
+	try {
+		dbh.copyRealDataBase();
+	}
+	catch (IOException e) {
+		
+	}
+	
+	dbh.close();
+	}
+
+    
+    
     }

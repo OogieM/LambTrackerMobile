@@ -20,7 +20,7 @@ public class EditDB extends Activity
 		{
 	    super.onCreate(savedInstanceState);
 	    setContentView( R.layout.edit_db );
-	    dbh = new DatabaseHandler( this, "weyr_associates" );
+	    dbh = new DatabaseHandler( this, "lambtracker_db.sqlite" );
 		}
 	
 	public void execSQL( View v )
@@ -107,7 +107,7 @@ public class EditDB extends Activity
 				case Cursor.FIELD_TYPE_STRING:
 					line = String.format( "  %s: %s\n", colNames[i], cursor.getString(i) );
 					break;
-				
+					
 				default:
 					line = String.format( "  %s: ?? %s ??", colNames[i], cursor.getString(i) );
 					break;

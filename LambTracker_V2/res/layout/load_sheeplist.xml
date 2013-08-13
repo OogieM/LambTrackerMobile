@@ -26,7 +26,7 @@
             </EditText>
     
 	<Button
-        android:id="@+id/button5"
+        android:id="@+id/create_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -40,14 +40,14 @@
         android:id="@+id/dumpdb_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button5"
-        android:layout_alignBottom="@+id/button5"
-        android:layout_toRightOf="@+id/button5"
+        android:layout_alignBaseline="@+id/create_btn"
+        android:layout_alignBottom="@+id/create_btn"
+        android:layout_toRightOf="@+id/create_btn"
         android:onClick="@string/dump_db_action"
         android:text="@string/show_db_btn" />
 	   	
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/dumpdb_btn"
@@ -55,5 +55,14 @@
         android:layout_toRightOf="@+id/dumpdb_btn"
         android:onClick="allDone"
         android:text="@string/back_btn" />
+
+    <Button
+        android:id="@+id/copydb_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/create_btn"
+        android:layout_alignLeft="@+id/create_btn"
+        android:onClick="@string/copy_real_db_action"
+        android:text="@string/copy_real_db_btn" />
     
 </RelativeLayout>
