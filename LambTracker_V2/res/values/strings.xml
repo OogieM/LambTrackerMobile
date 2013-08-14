@@ -77,7 +77,7 @@
     <string name="title_Message">Ewe Lambing History</string>
          
     <string name="dump_db_action">dumpDB</string>
-    <string name="copy_real_db_action">dumpDB</string> 
+    <string name="copy_real_db_action">copyRealDB</string> 
       
     <string name="delete_sheep">Delete Sheep?</string>
     <string name="delete_warning">Delete Warning</string>
