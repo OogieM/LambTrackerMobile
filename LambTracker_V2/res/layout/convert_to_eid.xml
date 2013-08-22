@@ -11,257 +11,70 @@
         android:text="@string/title_activity_convert_to_eid"
         android:textSize="14sp" />
 
-    <GridLayout
-        android:id="@+id/grid1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:columnCount="6"
-        android:rowCount="6" >
-
-        <TextView
+  <TextView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
+            android:layout_height="wrap_content"     
             android:layout_gravity="left"
-            android:layout_row="0"
             android:inputType="none"
-            android:text="@string/federal_id_lbl" />
+            android:text="@string/input_id_lbl" />
 
         <EditText
-            android:id="@+id/fedText"
-            android:layout_width="142dp"
+            android:id="@+id/inputText"
+           android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_column="0"
             android:layout_gravity="left"
-            android:layout_row="1"
             android:enabled="true"
             android:inputType="text"
             android:textSize="12sp"
             android:typeface="monospace" >
             <requestFocus />
         </EditText>
-
-        <TextView
-            android:layout_width="142dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left"
-            android:layout_row="0"
-            android:inputType="none"
-            android:text="@string/farm_id_lbl" />
-
-        <EditText
-            android:id="@+id/farmText"
-            android:layout_width="142dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left"
-            android:layout_row="1"
-            android:enabled="true"
-            android:inputType="text"
-            android:textSize="12sp"
-            android:typeface="monospace" />
-
-        <TextView
-            android:layout_width="142dp"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left|top"
-            android:layout_row="2"
-            android:inputType="none"
-            android:text="@string/electronic_id_lbl" />
-        
-        <EditText
-            android:id="@+id/eidText"
-            android:layout_width="145dp"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left|top"
-            android:layout_row="3"
-            android:enabled="true"
-            android:inputType="text"
-            android:textSize="12sp"
-            android:typeface="monospace" />  
-                    
-        <TextView
-        	android:layout_width="142dp"
-        	android:layout_height="wrap_content"
-        	android:layout_column="0"
-        	android:layout_gravity="left|top"
-        	android:layout_row="4"
-        	android:inputType="none"
-        	android:text="@string/sheep_name_lbl" />
-        
-        <EditText
-        	android:id="@+id/sheepnameText"
-        	android:layout_width="142dp"
-        	android:layout_height="wrap_content"
-        	android:layout_column="0"
-        	android:layout_gravity="left"
-            android:layout_row="5"
-            android:enabled="true"
-            android:ems="10"
-        	android:gravity="start"
-        	android:inputType="text"
-        	android:textSize="12sp"
-        	android:typeface="monospace" >    
-    	</EditText>
-           
-        <TextView
-       	 	android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left"
-            android:layout_row="2"
-            android:inputType="none"
-            android:text="@string/sheep_birth_type_lbl" />
-
-        <EditText
-            android:id="@+id/sheepbirthtypeText"
-       	 	android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left"
-            android:layout_row="3"
-            android:enabled="true"
-            android:inputType="text"
-            android:textSize="12sp"
-            android:typeface="monospace" />
-            
-        <TextView
-       	 	android:layout_width="75dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left"
-            android:layout_row="4"
-            android:inputType="none"
-            android:text="@string/sheep_birth_weight_lbl" />
-
-        <EditText
-            android:id="@+id/sheepbirthweightText"
-       	 	android:layout_width="75dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left"
-            android:layout_row="5"
-            android:enabled="true"
-            android:inputType="text"
-            android:textSize="12sp"
-            android:typeface="monospace" />
-        
-    </GridLayout>
-    
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="none"
-        android:text="@string/sheep_task_lbl" />
-
-    <EditText
-        android:id="@+id/sheeptaskText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:enabled="true"
-        android:gravity="start"
-        android:inputType="textMultiLine"
-        android:textSize="12sp"
-        android:typeface="monospace" />
-<TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="none"
-        android:text="@string/lambing_results2012_lbl" />
-
-    <EditText
-        android:id="@+id/lambing2012Text"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:enabled="true"
-        android:gravity="start"
-        android:inputType="textMultiLine"
-        android:textSize="12sp"
-        android:typeface="monospace" />
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="none"
-        android:text="@string/lambing_results2013_lbl" />
-
-    <EditText
-        android:id="@+id/lambing2013Text"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:enabled="true"
-        android:gravity="start"
-        android:inputType="textMultiLine"
-        android:textSize="12sp"
-        android:typeface="monospace" />
-    
+   
     <GridLayout
-        android:id="@+id/grid3"
+        android:id="@+id/grid1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="9" >
+        android:columnCount="6" >
 
         <Button
-            android:id="@+id/delete_task_btn"
+            android:id="@+id/scan_eid_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="0"
             android:layout_gravity="left|top"
             android:layout_row="0"
-            android:onClick="deleteBtn"
-            android:text="@string/delete_btn" />
+            android:onClick="scanEid"
+            android:text="@string/scan_eid_btn" />
         
           <Button
-            android:id="@+id/update_task_btn"
+            android:id="@+id/update_tag_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
             android:layout_gravity="left|top"
             android:layout_row="0"
-            android:onClick="updateBtn"
+            android:onClick="updateTag"
             android:text="@string/update_btn" />
 
         <Button
-            android:id="@+id/task_enter_btn"
+            android:id="@+id/remove_tag_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="2"
             android:layout_gravity="left|top"
             android:layout_row="0"
-            android:onClick="enterBtn"
-            android:text="@string/enter_btn" />
+            android:onClick="removeTag"
+            android:text="@string/remove_tag_btn" />
 
         <Button
-            android:id="@+id/view_task_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="3"
-            android:layout_gravity="left|top"
-            android:layout_row="0"
-            android:onClick="viewBtn"
-            android:text="@string/view_btn" />
-
-        <Button
-            android:id="@+id/next_rec_btn"
+            android:id="@+id/add_new_tag_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="0"
             android:layout_gravity="left|top"
             android:layout_row="1"
-            android:onClick="nextBtn"
-            android:text="@string/next_rec_btn" />
-        
-        <Button
-            android:id="@+id/prev_rec_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="left|top"
-            android:layout_row="1"
-            android:onClick="prevBtn"
-            android:text="@string/prev_rec_btn" />
+            android:onClick="addNewTag"
+            android:text="@string/add_new_tag_btn" />
 
         <Button
             android:id="@+id/clear_form_btn"
@@ -285,4 +98,24 @@
 
     </GridLayout>
 
+     <TextView
+        	android:layout_width="match_parent"
+       	 	android:layout_height="wrap_content"
+        	android:inputType="none"
+        	android:text="@string/sheep_name_lbl" />
+        
+        <EditText
+        	android:id="@+id/sheepnameText"
+        	android:layout_width="match_parent"
+       	 	android:layout_height="wrap_content"
+            android:enabled="true"
+            android:ems="10"
+        	android:gravity="start"
+        	android:inputType="text"
+        	android:textSize="12sp"
+        	android:typeface="monospace" >    
+    	</EditText>
+    	
+        
+         
 </LinearLayout>

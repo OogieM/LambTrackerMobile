@@ -3,7 +3,9 @@ package com.weyr_associates.lambtracker;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class EditDB extends Activity
@@ -67,7 +69,16 @@ public class EditDB extends Activity
 			sqlTV.setText( formatRecord(cursor) );
 			}
 		}
-	
+	public void moveToPrevRecord( View v )
+	{
+	if( cursor.moveToPrevious() )
+		{
+		recNo         += 1;
+		TextView sqlTV = (TextView) findViewById( R.id.sqlOutput );
+		sqlTV.setText( formatRecord(cursor) );
+		}
+	}
+
 	public void clearBuffers( View v )
 		{
 		// clear the text buffers

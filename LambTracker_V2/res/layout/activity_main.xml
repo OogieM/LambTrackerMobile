@@ -1,49 +1,65 @@
-<RelativeLayout android:id="@+id/RelativeLayout01"
+<LinearLayout android:id="@+id/LinearLayout01"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".MainActivity" 
+    android:orientation="vertical" >
+    
+<Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_lbl" />
+
+<Spinner
+    android:id="@+id/select_sheep_task"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_below="@+id/button1"
+    android:entries="@array/sheep_task_array"
+    android:prompt="@string/select" />
 
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="29dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginLeft="29dp"  
+        android:layout_below="@+id/select_sheep_task"     
         android:onClick="loadSheepList"
         android:text="@string/load_sheeplist" />
+	<Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_marginLeft="29dp" 
+        android:layout_below="@+id/button1"
+        android:onClick="doSheepTasks"
+        android:text="@string/do_sheeptask" />
 
     <Button
         android:id="@+id/edit_db_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/button2"
+        android:layout_marginLeft="29dp" 
         android:layout_below="@+id/button2"
         android:onClick="editDB"
-        android:text="@string/edit_db_btn" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_below="@+id/button1"
-        android:onClick="doSheepTasks"
-        android:text="@string/do_sheeptask" />
+        android:text="@string/edit_db_btn" />   
 
     <Button
         android:id="@+id/quit_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/edit_db_btn"
+        android:layout_marginLeft="29dp" 
         android:layout_below="@+id/edit_db_btn"
         android:onClick="quitApp"
         android:text="@string/quit_btn" />
-
-
+   
 <TextView
     android:id="@+id/textInfo2"
     android:layout_width="wrap_content"
@@ -125,6 +141,7 @@
 	android:layout_alignParentBottom="true"
 />
 </RelativeLayout>
-</RelativeLayout>
+
+</LinearLayout>
 
         

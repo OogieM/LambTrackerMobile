@@ -19,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Spinner;
+import android.widget.Toast;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,6 +31,9 @@ import android.content.pm.PackageManager;
 
 
 public class MainActivity extends Activity {
+	private Spinner select_sheep_task;
+	private Button button;
+
 	Button btnService;
 	TextView textStat, textInfo1, textInfo2, textLog, textBytes;
 	
@@ -140,6 +145,25 @@ public class MainActivity extends Activity {
 //		Log.i("LambTracker", "At Restore Prefs.");
 		CheckIfServiceIsRunning();
 	}
+	public void addListenerOnSpinnerItemSelection() {
+		select_sheep_task = (Spinner) findViewById(R.id.select_sheep_task);
+		select_sheep_task.setOnItemSelectedListener(new MyOnItemSelectedListener());
+		  }
+	
+	public void addListenerOnButton() {
+		select_sheep_task = (Spinner) findViewById(R.id.select_sheep_task);
+		    button = (Button) findViewById(R.id.button);
+		    button.setOnClickListener(new OnClickListener() {
+		      @Override	
+		    public void onClick(View v) {
+		        Toast.makeText(MainActivity.this,	
+		        "Result : " +
+		        "\nselect_sheep_task : "+ String.valueOf(select_sheep_task.getSelectedItem()),     
+		         Toast.LENGTH_SHORT).show();	
+		      }		
+		    });
+		}
+
 	private String SetDefaultStatusText() {
 		String t = "Contact: oogiem@desertweyr.com"; 
 		try {

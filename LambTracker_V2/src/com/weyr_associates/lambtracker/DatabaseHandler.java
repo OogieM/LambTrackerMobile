@@ -59,10 +59,10 @@ public class DatabaseHandler extends SQLiteOpenHelper
     // the active database
     private SQLiteDatabase db = null;
   
-//	private static String db_path = getString(R.string.database_path);
+//	String db_path = getString(R.string.database_path);
 
-//    private static String db_name = getString(R.string.database_file);
-    
+    // String db_name = getString(R.string.database_file);
+
     
     /**
      * Constructor for the DatabaseHandler
@@ -100,7 +100,9 @@ public class DatabaseHandler extends SQLiteOpenHelper
         
         if( db == null )
             db = this.getWritableDatabase();
-        
+        if( db.isOpen()){
+        	db.close();
+        }
         db.execSQL( "drop table if exists " + tableName );
         db.execSQL( createTableSQL );
         
@@ -537,7 +539,8 @@ public class DatabaseHandler extends SQLiteOpenHelper
     
     public void copyRealDataBase() throws IOException
     {
-        //Open your local db as the input stream
+    
+        //Open the original local db pre-loaded into assets as the input stream
         InputStream myInput = context.getAssets().open("lambtracker_db.sqlite");
  
         // Path to the just created empty db
