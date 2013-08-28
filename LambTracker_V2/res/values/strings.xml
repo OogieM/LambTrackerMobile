@@ -46,18 +46,20 @@
     <string name="title_activity_lamb_tracker_receiver">LambTrackerReceiver</string>
     <string name="title_activity_incoming_receiver">IncomingReceiver</string>
     <string name="title_activity_convert_to_eid">ConvertToEID</string>
+    <string name="title_activity_evaluate_sheep">EvaluateSheep</string>
     
     <string name="select">Choose a Flock Task</string>
-    <string name="button_lbl">Spinner Button</string>
     <string-array name="sheep_task_array">
-        <item>Look Up Sheep</item>
-        <item>Do Sheep task</item>
+        <item>Choose a Flock Task</item>
+        <item>Load Sheep Database</item>
+        <item>Do Sheep Tasks</item>
         <item>Convert to EID</item>
+        <item>Evaluate Sheep</item>
+        <item>Edit Database</item>
      </string-array>
   
     <string name="fileListTitle_label">Choose Sheep Tasks</string>
-    
-    
+       
     <string name="sheep_name_lbl">Sheep Name</string>
     <string name="flock_prefix_lbl">Flock Prefix</string>
     <string name="sheep_sex">Sex</string>  

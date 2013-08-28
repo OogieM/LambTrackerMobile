@@ -22,18 +22,22 @@ import android.view.WindowManager;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 
 public class MainActivity extends Activity {
-	private Spinner select_sheep_task;
-	private Button button;
-
+	
+	public Button button;
+	public Spinner select_sheep_task;
+	
 	Button btnService;
 	TextView textStat, textInfo1, textInfo2, textLog, textBytes;
 	
@@ -143,27 +147,77 @@ public class MainActivity extends Activity {
 		
 		restoreMe(savedInstanceState);
 //		Log.i("LambTracker", "At Restore Prefs.");
-		CheckIfServiceIsRunning();
+		CheckIfServiceIsRunning();		
+		
+//	public void addListenerOnSpinnerItemSelection() {
+		select_sheep_task = (Spinner) findViewById(R.id.select_sheep_task);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, 
+		R.array.sheep_task_array, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+		select_sheep_task.setAdapter (adapter);
+		
+		Log.i("Activity", "In Spinner");
+		select_sheep_task.setOnItemSelectedListener(new SpinnerActivity());
+//		  }
 	}
-	public void addListenerOnSpinnerItemSelection() {
-		select_sheep_task = (Spinner) findViewById(R.id.select_sheep_task);
-		select_sheep_task.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		  }
 	
-	public void addListenerOnButton() {
-		select_sheep_task = (Spinner) findViewById(R.id.select_sheep_task);
-		    button = (Button) findViewById(R.id.button);
-		    button.setOnClickListener(new OnClickListener() {
-		      @Override	
-		    public void onClick(View v) {
-		        Toast.makeText(MainActivity.this,	
-		        "Result : " +
-		        "\nselect_sheep_task : "+ String.valueOf(select_sheep_task.getSelectedItem()),     
-		         Toast.LENGTH_SHORT).show();	
-		      }		
-		    });
+	public class SpinnerActivity extends Activity implements OnItemSelectedListener {
+		//	@Override
+
+//		select_sheep_task.setOnItemSelectedListener(new OnItemSelectedListener() {		
+		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+//			Toast.makeText(parent.getContext(), "Selected Task : " + parent.getItemAtPosition(pos).toString(), Toast.LENGTH_SHORT).show();
+			Log.i("Activity", "In Spinner");
+			Intent i = null;
+			String teststring = String.valueOf (parent.getSelectedItemPosition());
+			Log.i("Spinner", "Position = "+teststring);
+
+				switch (parent.getSelectedItemPosition()){		
+				case 0:
+			        break;
+			    case 1:
+					i = new Intent(MainActivity.this, LoadSheepList.class);
+					MainActivity.this.startActivity(i);
+			        break;
+				case 2:
+					i = new Intent(MainActivity.this, DoSheepTask.class);
+					MainActivity.this.startActivity(i);
+			        break;
+				case 3:
+					i = new Intent(MainActivity.this, ConvertToEID.class);
+					MainActivity.this.startActivity(i);
+			        break;
+				case 4:
+//					i = new Intent(this, EvaluateSheep.class);
+//			        this.startActivity(d);
+			        break;
+				case 5:
+					i = new Intent(MainActivity.this, EditDB.class);
+					MainActivity.this.startActivity(i);
+			        break;
+			}
+			
 		}
 
+		@Override
+		public void onNothingSelected(AdapterView<?> arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+//		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+//	        public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+//	            if (position == 1){
+//	                Intent intent = new Intent(MyActivity.this, AnotherActivity.class);
+//	                MyActivity.this.startActivity(intent);
+//	            }
+//	        }
+	//
+//	        public void onNothingSelected(AdapterView<?> parentView) {
+//	            // To do ...
+//	        }
+	//
+//	    });
+	}
 	private String SetDefaultStatusText() {
 		String t = "Contact: oogiem@desertweyr.com"; 
 		try {
@@ -462,8 +516,8 @@ public class MainActivity extends Activity {
 		finish();
 		this.moveTaskToBack( true );
 	}
-		    	   		
-	}
+	
+}
 
 
 
