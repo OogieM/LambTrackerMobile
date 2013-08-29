@@ -38,6 +38,9 @@
     <string name="cancel_btn">Cancel</string>
     <string name="scan_eid_btn">Scan EID</string>
     <string name="remove_tag_btn">Remove Tag</string>
+	<string name="search_fed_btn">Search Federal Tag</string>
+	<string name="search_farm_btn">Search Farm Tag</string>
+	<string name="search_other_btn">Search Other ID</string>
     <string name="add_new_tag_btn">Add Tag</string>
     
     <string name="title_activity_do_sheep_task">DoSheepTask</string>

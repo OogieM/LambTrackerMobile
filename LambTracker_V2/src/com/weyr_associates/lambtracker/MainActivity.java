@@ -166,15 +166,16 @@ public class MainActivity extends Activity {
 
 //		select_sheep_task.setOnItemSelectedListener(new OnItemSelectedListener() {		
 		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-//			Toast.makeText(parent.getContext(), "Selected Task : " + parent.getItemAtPosition(pos).toString(), Toast.LENGTH_SHORT).show();
-			Log.i("Activity", "In Spinner");
+
+//			Log.i("Activity", "In Spinner");
 			Intent i = null;
-			String teststring = String.valueOf (parent.getSelectedItemPosition());
-			Log.i("Spinner", "Position = "+teststring);
+//			String teststring = String.valueOf (parent.getSelectedItemPosition());
+//			Log.i("Spinner", "Position = "+teststring);
 
 				switch (parent.getSelectedItemPosition()){		
 				case 0:
-			        break;
+			        // Don't want to do anything until something is selected so just break at position zero
+					break;
 			    case 1:
 					i = new Intent(MainActivity.this, LoadSheepList.class);
 					MainActivity.this.startActivity(i);
@@ -204,19 +205,7 @@ public class MainActivity extends Activity {
 			// TODO Auto-generated method stub
 			
 		}
-//		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-//	        public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-//	            if (position == 1){
-//	                Intent intent = new Intent(MyActivity.this, AnotherActivity.class);
-//	                MyActivity.this.startActivity(intent);
-//	            }
-//	        }
-	//
-//	        public void onNothingSelected(AdapterView<?> parentView) {
-//	            // To do ...
-//	        }
-	//
-//	    });
+
 	}
 	private String SetDefaultStatusText() {
 		String t = "Contact: oogiem@desertweyr.com"; 
