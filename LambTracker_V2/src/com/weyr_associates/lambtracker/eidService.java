@@ -274,7 +274,7 @@ public class eidService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		//Log.i("eidService", "Service Started.");
-		logmsgs = TheDateTimeIs() + "Service Started";
+//		logmsgs = TheDateTimeIs() + "Service Started";
 
 		isRunning = true;
 		LoadPreferences(false);
@@ -290,7 +290,7 @@ public class eidService extends Service {
 	}
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.i("eidService", "Received start id " + startId + ": " + intent);
+//		Log.i("eidService", "Received start id " + startId + ": " + intent);
 		return START_STICKY; // run until explicitly stopped.
 	}
 	private void LoadPreferences(Boolean NotifyOfChanges) {
@@ -401,7 +401,7 @@ public class eidService extends Service {
 	// Bluetooth Reader Stuff
 	
 	private synchronized void setBTState(int state) {
-        Log.i("eidService", "setBTState() " + mBTState + " -> " + state);
+//        Log.i("eidService", "setBTState() " + mBTState + " -> " + state);
         mBTState = state;
     }
 	public synchronized int getBTState() {
@@ -409,7 +409,7 @@ public class eidService extends Service {
 	    }
 	public synchronized void BTstart() {
 		SetDisplayMsgType(0);
-		Log.i("eidService", "BTstart");
+//		Log.i("eidService", "BTstart");
         // Cancel any thread attempting to make a connection
         if (mBTConnectThread != null) {mBTConnectThread.cancel(); mBTConnectThread = null;}
         // Cancel any thread currently running a connection
@@ -569,7 +569,7 @@ public class eidService extends Service {
                 	bytesread = mmInStream.read(buffer); //This is a blocking call
                     byte[] tempdata = new byte[bytesread];
                     System.arraycopy(buffer, 0, tempdata, 0, bytesread);
-                    Log.d("EidService", "Got Data: " + new String(tempdata));
+//                    Log.d("EidService", "Got Data: " + new String(tempdata));
                     handler.sendMessage(handler.obtainMessage(MSG_BT_GOT_DATA, tempdata));
                     //mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
                 } catch (IOException e) {
@@ -597,7 +597,7 @@ public class eidService extends Service {
         }
     }
 	public synchronized void BTstop() {
-        Log.i("eidService", "BTstop");
+//        Log.i("eidService", "BTstop");
         if (mBTConnectThread != null) {mBTConnectThread.cancel(); mBTConnectThread = null;}
         if (mBTConnectedThread != null) {mBTConnectedThread.cancel(); mBTConnectedThread = null;}
         setBTState(STATE_NONE);
@@ -615,7 +615,7 @@ public class eidService extends Service {
         r.write(buffer);
 	}
 	private void ParseBTDataStream(byte[] buffer) {
-		LogMessage("bytes from bt:" + buffer.length + ", " + new String(buffer));
+//		LogMessage("bytes from bt:" + buffer.length + ", " + new String(buffer));
 		ParseEIDStream(new String(buffer));
 // Save all data to file
 //			SaveRawDataToFile(buffer); // helpful for debugging 

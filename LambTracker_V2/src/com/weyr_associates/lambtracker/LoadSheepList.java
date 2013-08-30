@@ -4,7 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
+import android.util.Log;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -26,6 +26,7 @@ public class LoadSheepList extends Activity {
     public void createDemoDB( View v )
 		{
     	String 	dbfile = getString(R.string.demo_database_file) ;
+    	Log.i ("createdb", dbfile);
     	DatabaseHandler dbh     = new DatabaseHandler( this, dbfile );
     	String          cmd     = getString( R.string.build_table );
     	String          csv     = getString( R.string.csv_file );

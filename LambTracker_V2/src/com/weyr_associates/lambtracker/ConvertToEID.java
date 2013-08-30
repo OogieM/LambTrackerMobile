@@ -8,6 +8,7 @@ import android.graphics.LightingColorFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.database.Cursor;
@@ -51,7 +52,29 @@ public class ConvertToEID extends Activity {
     public void clearBtn( View v )
 	    {
 	    // clear out the display of everything
-	    
+    	TextView TV10 = (TextView) findViewById( R.id.inputText );
+    	TV10.setText( "" );		
+    	TextView TV = (TextView) findViewById( R.id.sheepnameText );
+	    TV.setText( "" );
+	    TextView TV1  = (TextView) findViewById( R.id.eidText );
+	    TV1.setText( "" );
+	    TextView TV2  = (TextView) findViewById( R.id.fedText );
+	    TV2.setText( "" );
+	    TextView TV3  = (TextView) findViewById( R.id.farmText );
+	    TV3.setText( "" );
+	    TextView TV4 = (TextView) findViewById( R.id.fed_colorText );
+	    TV4.setText( "" );
+	    TextView TV5 = (TextView) findViewById( R.id.fed_locationText );
+	    TV5.setText( "" );
+	    TextView TV6 = (TextView) findViewById( R.id.farm_colorText );
+	    TV6.setText( "" );
+	    TextView TV7 = (TextView) findViewById( R.id.farm_locationText);
+	    TV7.setText( "" );
+	    TextView TV8 = (TextView) findViewById( R.id.eid_colorText );
+	    TV8.setText( "" );
+	    TextView TV9 = (TextView) findViewById( R.id.eid_locationText );
+	    TV9.setText( "" );
+	    id = 0;
     }
  // user clicked 'Search Fed' button
     public void searchFedTag( View v )
@@ -60,6 +83,10 @@ public class ConvertToEID extends Activity {
 
     	TextView		TV = (TextView) findViewById( R.id.inputText );
     	String			fed = TV.getText().toString();
+    	// Hide the keyboard when you click the button
+    	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+    	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    	
  		// Start of the actual code to process the button click
     	if( fed != null && fed.length() > 0 )
     		{
@@ -113,4 +140,12 @@ public class ConvertToEID extends Activity {
     	TV = (TextView) findViewById(R.id.sheepnameText);
     	TV.setText(dbh.getStr(0));
     	}
+    
+    
+        
+   
+
+    
+    
+    
 }
