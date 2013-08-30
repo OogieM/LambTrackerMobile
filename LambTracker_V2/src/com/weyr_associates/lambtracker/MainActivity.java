@@ -152,11 +152,11 @@ public class MainActivity extends Activity {
 //	public void addListenerOnSpinnerItemSelection() {
 		select_sheep_task = (Spinner) findViewById(R.id.select_sheep_task);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, 
-		R.array.sheep_task_array, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+		R.array.sheep_task_array, R.layout.task_spinner);
+		adapter.setDropDownViewResource(R.layout.task_spinner);
 		select_sheep_task.setAdapter (adapter);
 		
-		Log.i("Activity", "In Spinner");
+//		Log.i("Activity", "In Spinner");
 		select_sheep_task.setOnItemSelectedListener(new SpinnerActivity());
 //		  }
 	}
@@ -295,7 +295,7 @@ public class MainActivity extends Activity {
 
 	private void CheckIfServiceIsRunning() {
 		//If the service is running when the activity starts, we want to automatically bind to it.
-		Log.i("LambTracker", "At isRunning.");
+//		Log.i("LambTracker", "At isRunning.");
 		if (eidService.isRunning()) {
 			doBindService();
 			mLogoImage.setVisibility(View.GONE);		} else {
@@ -407,10 +407,10 @@ public class MainActivity extends Activity {
 		}
 	}
 	void doUnbindService() {
-		Log.i("Activity", "At DoUnbindservice");
+//		Log.i("Activity", "At DoUnbindservice");
 		if (mService != null) {
 		try {
-			//Stop tags eidService from sending tags
+			//Stop eidService from sending tags
 			Message msg = Message.obtain(null, eidService.MSG_NO_TAGS_PLEASE);
 			msg.replyTo = mMessenger;
 			mService.send(msg);
@@ -450,7 +450,7 @@ public class MainActivity extends Activity {
 		}
 		
 		try {
-			Log.i("Activity", "onDestroy");
+//			Log.i("Activity", "onDestroy");
 			doUnbindService();
 		} catch (Throwable t) {
 			Log.e("MainActivity", "Failed to unbind from the service", t);

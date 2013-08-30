@@ -629,16 +629,16 @@ public class eidService extends Service {
 		String[] lines = EID.split("\n"); // works for both
 
 
-		LogMessage("In Parse1" + " " + lines.length + ", " + new String(newdata) + ", " + EID);
+//		LogMessage("In Parse1" + " " + lines.length + ", " + new String(newdata) + ", " + EID);
 		if (lines.length > 0) {
 			for (int i = 0; i < lines.length; i++) {
 				completeline = false; // Reset this
 				if (lines.length > 0) { // There is some data here
-					LogMessage("In Parse2" + " " + i + " " + lines[i].length() + " " + lines[i].lastIndexOf("\r"));
+//					LogMessage("In Parse2" + " " + i + " " + lines[i].length() + " " + lines[i].lastIndexOf("\r"));
 					if (lines[i].lastIndexOf("\r") + 1 == lines[i].length()) { // Line ends with a \r 
 						completeline = true;
 							if (lines[i].substring(3, 4).equals("_")) {
-								LogMessage("eidService0, Priority1");
+//								LogMessage("eidService0, Priority1");
 							} else 
 							if (lines[i].substring(3, 4).equals(" ")) {
 									LogMessage("eidService0, Y-Tex Panel");
@@ -647,7 +647,7 @@ public class eidService extends Service {
 								LogMessage("eidService0, Y-Tex Wand");
 								EID = EID.substring(0, 3) + "_" + EID.substring(3,EID.length()-1);
 							}																				
-						LogMessage("eidService1, completeline true");				
+//						LogMessage("eidService1, completeline true");				
 						LastEID = EID.substring(0, EID.length() - 1);  //prune off end of line for the database
  						sendNewEIDMessageToUI();								
 						EID = ""; // Clear out EID for next one
@@ -666,7 +666,7 @@ public class eidService extends Service {
 			}
 
 			if (!completeline) { // Last line wasn't complete, put last incomplete line back
-				LogMessage("eidService2, completeline false but more data to come");
+//				LogMessage("eidService2, completeline false but more data to come");
 				if (lines[lines.length - 1].length() < 1000) { // Only if less than 1000 characters long.
 					EID = lines[lines.length - 1];
 				}
@@ -780,7 +780,7 @@ public class eidService extends Service {
 				LogMessage((String) msg.obj);
 				break;
 			case MSG_BT_FINISHED:
-				Log.i("handleMessage", "MSG_BT_FINISHED");
+//				Log.i("handleMessage", "MSG_BT_FINISHED");
 				BTstop();
 				break;
 			default:
@@ -799,7 +799,7 @@ public class eidService extends Service {
 		// Kill threads
 		if (timer != null) {timer.cancel();}
 
-		Log.i("eidService", "onDestroy.");
+//		Log.i("eidService", "onDestroy.");
 		BTstop();
 
 		
@@ -810,7 +810,7 @@ public class eidService extends Service {
 		}
 
 		stopForeground(true);
-		Log.i("eidService", "Service Stopped.");
+//		Log.i("eidService", "Service Stopped.");
 		isRunning = false;
 	}
 	

@@ -32,7 +32,7 @@ public class ConvertToEID extends Activity {
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
  
     	//	Disable the Next Record and Prev. Record button until we have multiple records
-//       	Button btn2 = (Button) findViewById( R.id.next_rec_btn );
+//      Button btn2 = (Button) findViewById( R.id.next_rec_btn );
 //    	btn2.setEnabled(false); 
 //    	Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
 //    	btn3.setEnabled(false);
@@ -64,14 +64,20 @@ public class ConvertToEID extends Activity {
     	if( fed != null && fed.length() > 0 )
     		{
 //Need to figure out the proper SQL select for here
+//    		cmd = String.format( "select sheep_table.sheep_name, id_type_table.idtype_name, " +
+//    				"tag_colors_table.tag_color_name, id_info_table.tag_number from sheep_table inner" +
+//    				" join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id" +
+//    				" left outer join tag_colors_table on id_info_table.tag_color_male = " +
+//    				"tag_colors_table.tag_colors_id inner join id_type_table on id_info_table.tag_type = " +
+//    				"id_type_table.id_typeid" +
+//    				"where id_info_table.tag_date_off is NULL and id_info_table.tag_type = 1 and" +
+//    				" id_info_table.tag_number='%s'", fed);
     		cmd = String.format( "select sheep_table.sheep_name, id_type_table.idtype_name, " +
-    				"tag_colors_table.tag_color_name, id_info_table.tag_number from sheep_table inner" +
-    				" join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id" +
-    				" left outer join tag_colors_table on id_info_table.tag_color_male = " +
-    				"tag_colors_table.tag_colors_id inner join id_type_table on id_info_table.tag_type = " +
-    				"id_type_table.id_typeid" +
-    				"where id_info_table.tag_date_off is NULL and id_info_table.tag_type = 1 and" +
-    				" id_info_table.tag_number='%s'", fed);
+    				"tag_colors_table.tag_color_name, id_info_table.tag_number from sheep_table inner join " +
+    				"id_info_table on sheep_table.sheep_id = id_info_table.sheep_id left outer join " +
+    				"tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid inner join " +
+    				"id_type_table on id_info_table.tag_type = id_type_table.id_typeid where " +
+    				"id_info_table.tag_number='%s'", fed);
     		}	
     	else
     	{
@@ -82,15 +88,15 @@ public class ConvertToEID extends Activity {
     	if( dbh.getSize() == 0 )
     		{
 //    		clearBtn( v );
-    		TV = (TextView) findViewById( R.id.sheeptaskText );
+    		TV = (TextView) findViewById( R.id.sheepnameText );
         	TV.setText( "Cannot find requested sheep." );
         	return;
     		}
     	if( dbh.getSize() >1){
 
 // 			Enable the previous and next record buttons
-    		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
-    		btn2.setEnabled(true);  
+//    		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
+//    		btn2.setEnabled(true);  
     		//	Set up the various pointers and cursor data needed to traverse the sequence
     		recNo    = 1;
     		cursor   = (Cursor) crsr;
@@ -100,8 +106,11 @@ public class ConvertToEID extends Activity {
     	}
     	id = dbh.getInt( 0 ); // Get the primary key from the first column  
     	// 		Format and show the first record    
- //   	TV = (TextView) findViewById( R.id.eidText );
- //   	TV.setText( dbh.getStr(1) );
-    	Log.i("Convert", "got fed ID " + "fed");
+//    	TV = (TextView) findViewById( R.id.eidText );
+//    	TV.setText( dbh.getStr(1) );
+    	String test = String.valueOf(fed);
+ //   	Log.i("Convert", "got fed ID " + test);
+    	TV = (TextView) findViewById(R.id.sheepnameText);
+    	TV.setText(dbh.getStr(0));
     	}
 }
