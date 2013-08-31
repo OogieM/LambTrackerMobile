@@ -155,7 +155,7 @@ public class MainActivity extends Activity {
 		R.array.sheep_task_array, R.layout.task_spinner);
 		adapter.setDropDownViewResource(R.layout.task_spinner);
 		select_sheep_task.setAdapter (adapter);
-		
+		select_sheep_task.setSelection(0);
 //		Log.i("Activity", "In Spinner");
 		select_sheep_task.setOnItemSelectedListener(new SpinnerActivity());
 //		  }
@@ -222,8 +222,8 @@ public class MainActivity extends Activity {
 		
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		KeepScreenOn = preferences.getBoolean("keepscreenon", false);
-		Log.i("Activity", "Resume" );
-		
+//		Log.i("Activity", "Resume" );
+		select_sheep_task.setSelection(0);
 		if (mIsBound) { // Request a status update.
 			if (mService != null) {
 				Log.i("Activity", "Resume Bound" );

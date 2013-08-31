@@ -13,10 +13,6 @@
     <string name="service_label">EID Service</string> 
     <string name="menu_settings">Settings</string>
     
-    <string name="load_sheeplist">Load Sheep List</string>
-    <string name="do_sheeptask">Do Sheep Tasks</string>
-    <string name="look_up_sheep">Look up a Sheep by EID</string>
-    
     <string name="show_demo_db_btn">Show Demo DB</string>
     <string name="create_demo_db_btn">Create Demo DB</string>
     
@@ -38,10 +34,16 @@
     <string name="cancel_btn">Cancel</string>
     <string name="scan_eid_btn">Scan EID</string>
     <string name="remove_tag_btn">Remove Tag</string>
+    <string name="remove_fedtag_btn">Remove Fed Tag</string>
+    <string name="remove_farmtag_btn">Remove Farm</string>
 	<string name="search_fed_btn">Search Federal Tag</string>
 	<string name="search_farm_btn">Search Farm Tag</string>
 	<string name="search_other_btn">Search Other ID</string>
     <string name="add_new_tag_btn">Add Tag</string>
+   
+    <string name="load_sheeplist">Load Sheep Database</string>
+    <string name="do_sheeptask">Do Sheep Tasks</string>
+    <string name="look_up_sheep">Look up a Sheep by EID</string>
     
     <string name="title_activity_do_sheep_task">DoSheepTask</string>
     <string name="title_activity_load_sheep_list">LoadSheepList</string>
@@ -55,7 +57,7 @@
     <string-array name="sheep_task_array">
         <item>Choose a Flock Task</item>
         <item>Load Sheep Database</item>
-        <item>Do Sheep Tasks</item>
+        <item>Demo Lambing Data</item>
         <item>Convert to EID</item>
         <item>Evaluate Sheep</item>
         <item>Edit Database</item>
@@ -83,6 +85,7 @@
     <string name="input_id_lbl">Input Search String</string>
       
     <string name="tag_type_lbl">Tag Type</string>
+    <string name="tag_color_lbl">Tag Color</string>
     <string name="tag_color_male_lbl">Tag Color Male Side</string>
     <string name="tag_color_female_lbl">Tag Color Female Side</string>
     <string name="tag_location_lbl">Tag Location</string>
@@ -103,6 +106,7 @@
     <string name="show_real_db_action">showDemoDB</string>
       
     <string name="delete_sheep">Delete Sheep?</string>
+     <string name="delete_tag">Delete Tag?</string>
     <string name="delete_warning">Delete Warning</string>
     
     <string name="ok">OK</string> 
@@ -113,8 +117,7 @@
     <string name="build_table">create table sheep_table(id integer primary key autoincrement,eid_tag text,
         fed_tag text,farm_tag text,sheep_name text,birth_date text,
         birth_type text,sheep_task text,birth_weight text,
-        lambing_2012 text, lambing_2013 text)</string>
-        
+        lambing_2012 text, lambing_2013 text)</string>     
     <string name="csv_file">demo_sheep_table.csv</string>
     
 </resources>
