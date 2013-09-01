@@ -107,7 +107,7 @@ public class ConvertToEID extends Activity {
     				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
     				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
     				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-    				"where id_type_table.id_typeid = 1 and id_info_table.tag_number='%s'", fed);
+    				"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off = NULL and id_info_table.tag_number='%s'", fed);
     		
 //    		Log.i("Convert", "building command ");
     		}	
@@ -158,7 +158,7 @@ public class ConvertToEID extends Activity {
 		"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 		"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-		"where id_type_table.id_typeid = 4 and id_info_table.sheep_id='%s'", ii);
+		"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off = NULL and id_info_table.sheep_id='%s'", ii);
     	
     	crsr = dbh.exec( cmd );
     	dbh.moveToFirstRecord();
@@ -197,7 +197,7 @@ public class ConvertToEID extends Activity {
     				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
     				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
     				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-    				"where id_type_table.id_typeid = 4 and id_info_table.tag_number='%s'", farm);
+    				"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off = NULL and id_info_table.tag_number='%s'", farm);
     		
 //    		Log.i("Convert", "building command ");
     		}	
@@ -247,7 +247,7 @@ public class ConvertToEID extends Activity {
 		"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 		"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-		"where id_type_table.id_typeid = 1 and id_info_table.sheep_id='%s'", ii);
+		"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off = NULL and id_info_table.sheep_id='%s'", ii);
     	
     	crsr = dbh.exec( cmd );
     	dbh.moveToFirstRecord();
@@ -280,35 +280,7 @@ public class ConvertToEID extends Activity {
 //        	id = dbh.getInt( 0 ); // Get the primary key from the current record
 //        	Log.i ("DoSheepTask", "In if statement next button and the record id is " + String.valueOf(id) );
     		recNo         += 1;
-        	TV = (TextView) findViewById(R.id.sheepnameText);
-        	TV.setText(dbh.getStr(0));
-        	TextView TV2 = (TextView) findViewById(R.id.farmText)	;
-        	TV2.setText(dbh.getStr(4));
-        	TextView TV3 = (TextView) findViewById(R.id.farm_colorText);
-        	TV3.setText(dbh.getStr(3));
-        	TextView TV4 = (TextView) findViewById(R.id.farm_locationText);
-        	TV4.setText(dbh.getStr(5));
-        	ii = dbh.getInt(1);
-        	
-//    		Now we need to get the rest of the tags and fill the display with data
-        	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-    		"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-    		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-    		"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-    		"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-    		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-    		"where id_type_table.id_typeid = 1 and id_info_table.sheep_id='%s'", ii);
-        	
-        	Object crsr = dbh.exec( cmd );
-        	dbh.moveToFirstRecord();
-        	
-        	TextView TV5 = (TextView) findViewById(R.id.fedText)	;
-        	TV5.setText(dbh.getStr(4));
-        	TextView TV6 = (TextView) findViewById(R.id.fed_colorText);
-        	TV6.setText(dbh.getStr(3));
-        	TextView TV7 = (TextView) findViewById(R.id.fed_locationText);
-        	TV7.setText(dbh.getStr(5));
-        	ii = dbh.getInt(1);
+//display stuff here
 		}
     	else {
     		//At the end so disable the next button
@@ -331,35 +303,7 @@ public class ConvertToEID extends Activity {
 //        	id = dbh.getInt( 0 ); // Get the primary key from the current record
  //       	Log.i ("DoSheepTask", "In if statement prev button and the record id is " + String.valueOf(id) );
     		recNo  -= 1;
-        	TV = (TextView) findViewById(R.id.sheepnameText);
-        	TV.setText(dbh.getStr(0));
-        	TextView TV2 = (TextView) findViewById(R.id.farmText)	;
-        	TV2.setText(dbh.getStr(4));
-        	TextView TV3 = (TextView) findViewById(R.id.farm_colorText);
-        	TV3.setText(dbh.getStr(3));
-        	TextView TV4 = (TextView) findViewById(R.id.farm_locationText);
-        	TV4.setText(dbh.getStr(5));
-        	ii = dbh.getInt(1);
-        	
-//    		Now we need to get the rest of the tags and fill the display with data
-        	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-    		"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-    		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-    		"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-    		"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-    		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-    		"where id_type_table.id_typeid = 1 and id_info_table.sheep_id='%s'", ii);
-        	
-        	Object crsr = dbh.exec( cmd );
-        	dbh.moveToFirstRecord();
-        	
-        	TextView TV5 = (TextView) findViewById(R.id.fedText)	;
-        	TV5.setText(dbh.getStr(4));
-        	TextView TV6 = (TextView) findViewById(R.id.fed_colorText);
-        	TV6.setText(dbh.getStr(3));
-        	TextView TV7 = (TextView) findViewById(R.id.fed_locationText);
-        	TV7.setText(dbh.getStr(5));
-        	ii = dbh.getInt(1);
+ //display stuff here
 		}
     	else {
     		// at beginning so disable the previous button
@@ -387,9 +331,10 @@ public class ConvertToEID extends Activity {
     	               // User clicked OK button -- delete the federal tag
     	        	   //add a tag_date_off of today to the tag   	       		
     	        	   String today = TodayIs();
-    	        	   Log.i("removefedtag", today);
-//    	       		   String cmd = String.format( "update id_info_table SET tag_date_off = today where id_infoid=%d", fedtagid );
-//    	    		   dbh.exec( cmd );
+//    	        	   Log.i("removefedtag", today);
+    	        	   Log.i("removefedtag", String.valueOf(fedtagid));
+    	       		   String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", fedtagid );
+    	    		   dbh.exec( cmd );
     	    		   clearBtn( null );
     	               }
     	       });
@@ -417,7 +362,8 @@ public class ConvertToEID extends Activity {
     	               // User clicked OK button -- delete the farm tag
     	        	   //add a tag_date_off of today to the tag
     	        	   String today = TodayIs();
-    	        	   Log.i("removefarmtag", today);
+ //   	        	   Log.i("removefarmtag", today);
+    	        	   Log.i("removefarmtag", String.valueOf(farmtagid));
  //   	       		   String cmd = String.format( "update id_info_table SET tag_date_off = today where id_infoid=%d", farmtagid );
  //   	    		   dbh.exec( cmd );
     	    		   clearBtn( null );
