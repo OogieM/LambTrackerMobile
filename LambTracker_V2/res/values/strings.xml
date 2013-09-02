@@ -5,7 +5,7 @@
     <string name="app_name_long">Weyr Associates LambTracker</string>
 	<string name="app_name_settings">Weyr Associates LambTracker - Settings</string>
 	
-	<string name="demo_database_file">weyr_associates</string>
+	<string name="demo_database_file">demo_db.sqlite</string>
 	<string name="real_database_file">lambtracker_db.sqlite</string>
 	<string name="database_path">/data/data/com.weyr_associates.lambtracker/databases/</string>
 	
@@ -21,6 +21,7 @@
     
     <string name="copy_real_db_btn">Copy Real DB</string>
     <string name="show_real_db_btn">Show Real DB</string>
+    <string name ="backup_real_db_btn">Backup Real DB</string>
     <string name="next_rec_btn">Next Record</string>
     <string name="prev_rec_btn">Prev. Record</string>
     <string name="clear_btn">Clear</string>
@@ -52,15 +53,17 @@
     <string name="title_activity_incoming_receiver">IncomingReceiver</string>
     <string name="title_activity_convert_to_eid">ConvertToEID</string>
     <string name="title_activity_evaluate_sheep">EvaluateSheep</string>
+    <string name="title_activity_test_interface_designs">TestInterfaceDesigns</string>
     
     <string name="select">Choose a Flock Task</string>
     <string-array name="sheep_task_array">
         <item>Choose a Flock Task</item>
-        <item>Load Sheep Database</item>
+        <item>Manage Sheep Databases</item>
         <item>Demo Lambing Data</item>
         <item>Convert to EID</item>
         <item>Evaluate Sheep</item>
         <item>Edit Database</item>
+        <item>Test Interface Designs</item>
      </string-array>
   
     <string name="fileListTitle_label">Choose Sheep Tasks</string>
@@ -91,6 +94,10 @@
     <string name="tag_location_lbl">Tag Location</string>
     <string name="tag_date_on_lbl">Tag Date On</string>
     <string name="tag_date_off_lbl">Tag Date Off</string>
+    
+    <string name="evaluation_lbl">Sheep Evaluation</string>
+    <string name="evaluation_scores_lbl">   -1   0   1  2   3   4   5</string>
+    <string name="missing_teeth_lbl">Missing Teeth</string>
        
 	<string name="sql_command_lbl">SQL Command</string>
 	<string name="results_lbl">Results</string>

@@ -149,7 +149,6 @@ public class MainActivity extends Activity {
 //		Log.i("LambTracker", "At Restore Prefs.");
 		CheckIfServiceIsRunning();		
 		
-//	public void addListenerOnSpinnerItemSelection() {
 		select_sheep_task = (Spinner) findViewById(R.id.select_sheep_task);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, 
 		R.array.sheep_task_array, R.layout.task_spinner);
@@ -158,7 +157,6 @@ public class MainActivity extends Activity {
 		select_sheep_task.setSelection(0);
 //		Log.i("Activity", "In Spinner");
 		select_sheep_task.setOnItemSelectedListener(new SpinnerActivity());
-//		  }
 	}
 	
 	public class SpinnerActivity extends Activity implements OnItemSelectedListener {
@@ -194,6 +192,12 @@ public class MainActivity extends Activity {
 			        break;
 				case 5:
 					i = new Intent(MainActivity.this, EditDB.class);
+					Log.i("Main", "In case 5 " + i);
+					MainActivity.this.startActivity(i);
+			        break;
+				case 6:
+					i = new Intent(MainActivity.this, TestInterfaceDesigns.class);
+					Log.i("Main", "In case 6 " + i);
 					MainActivity.this.startActivity(i);
 			        break;
 			}

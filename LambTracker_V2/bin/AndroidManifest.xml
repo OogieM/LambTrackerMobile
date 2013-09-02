@@ -44,7 +44,11 @@
             android:name="com.weyr_associates.lambtracker.ConvertToEID"
             android:label="@string/title_activity_convert_to_eid" >
         </activity>
-    <activity 
+        <activity
+            android:name="com.weyr_associates.lambtracker.TestInterfaceDesigns"
+            android:label="@string/title_activity_test_interface_designs" >
+        </activity>
+        <activity 
             android:name="com.weyr_associates.lambtracker.MyOnItemSelectedListener" >
         </activity>
         <activity android:name="com.weyr_associates.lambtracker.EditPreferences" 

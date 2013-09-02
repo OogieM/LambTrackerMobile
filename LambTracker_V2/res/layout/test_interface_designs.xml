@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+ <Spinner
+  	  android:id="@+id/test_dynamic_spinner"
+  	  android:layout_width="fill_parent"
+  	  android:layout_height="wrap_content"
+  	  />
+ 
+ <TextView
+        android:id="@+id/radio1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/evaluation_lbl"
+        android:textSize="14sp" 
+		android:layout_below="@id/test_dynamic_spinner"/>
+ 
+ <TextView
+        android:id="@+id/radio2"
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"      
+        android:text="@string/evaluation_scores_lbl"
+        android:textSize="14sp" 
+        android:typeface="monospace"
+		android:layout_below="@id/radio1"
+		android:layout_alignParentRight="true"/>
+ 
+ <TextView
+        android:id="@+id/radio3"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"      
+        android:text="@string/missing_teeth_lbl"
+        android:textSize="14sp" 
+        android:typeface="monospace"
+        android:layout_below="@id/radio2"
+		android:layout_alignParentLeft="true"/>
+ 
+ <RadioGroup 
+    android:id="@+id/test_radio_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_below="@id/radio2"
+    android:layout_toRightOf="@id/radio3"
+    android:layout_alignBottom="@id/radio3">
+    
+    <RadioButton android:id="@+id/radio_negativeone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+    	android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_zero"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"       
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"       
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"     
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_three"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"   
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_four"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"        
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_five"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onRadioButtonClicked"/>
+    
+</RadioGroup>
+<GridLayout
+        android:id="@+id/grid1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3" 
+        android:layout_below="@id/test_radio_button">
+   
+    <TextView
+        android:id="@+id/radio4"
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"      
+        android:text="@string/evaluation_scores_lbl"
+        android:textSize="14sp" 
+        android:typeface="monospace"
+		android:layout_column="1"
+        android:layout_gravity="left|top"
+        android:layout_row="0"/>
+    
+    <TextView
+        android:id="@+id/radio5"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"      
+        android:text="@string/missing_teeth_lbl"
+        android:textSize="14sp" 
+        android:typeface="monospace"
+        android:layout_column="0"
+        android:layout_gravity="left|top"
+        android:layout_row="1"/>
+    
+    <RadioGroup 
+    	android:id="@+id/test_radio_button2"
+   	 	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:layout_column="1"
+        android:layout_gravity="left|top"
+        android:layout_row="1">
+    
+    <RadioButton android:id="@+id/radio_negativeone2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+    	android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_zero2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"       
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_one2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"       
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_two2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"     
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_three2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"   
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_four2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"        
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_five2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+   </GridLayout>   
+ <Button
+            android:id="@+id/back_to_main_btn"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+    		android:layout_alignParentLeft="true"
+            android:onClick="backBtn"
+            android:text="@string/back_btn" />
+</RelativeLayout>

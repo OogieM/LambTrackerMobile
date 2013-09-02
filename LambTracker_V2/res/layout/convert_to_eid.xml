@@ -74,32 +74,22 @@
             android:layout_row="0"
             android:onClick="clearBtn"
             android:text="@string/clear_btn" />
-               
-        <Button
-            android:id="@+id/remove_tag_btn"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left|top"
-            android:layout_row="1"
-            android:onClick="removeTag"
-            android:text="@string/remove_tag_btn" />
         
           <Button
             android:id="@+id/update_tag_btn"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_column="2"
+            android:layout_column="3"
             android:layout_gravity="left|top"
             android:layout_row="1"
-            android:onClick="updateTag"
+            android:onClick="updateTags"
             android:text="@string/update_btn" />
           
         <Button
             android:id="@+id/add_new_tag_btn"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_column="1"
+            android:layout_column="2"
             android:layout_gravity="left|top"
             android:layout_row="1"
             android:onClick="addNewTag"
@@ -111,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_column="0"
             android:layout_gravity="left|top"
-            android:layout_row="2"
+            android:layout_row="1"
             android:onClick="prevBtn"
             android:text="@string/prev_rec_btn" />
         
@@ -121,7 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_column="1"
             android:layout_gravity="left|top"
-            android:layout_row="2"
+            android:layout_row="1"
             android:onClick="nextBtn"
             android:text="@string/next_rec_btn" />
               

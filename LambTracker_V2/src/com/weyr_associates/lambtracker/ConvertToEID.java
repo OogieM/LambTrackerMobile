@@ -16,7 +16,7 @@ import android.database.Cursor;
 
 public class ConvertToEID extends Activity {
 	private DatabaseHandler dbh;
-	int             fedtagid, farmtagid;
+	int             fedtagid, farmtagid, eidtagid;
 	private Cursor 	cursor;
 	private int			    recNo;
 	private int             nRecs;
@@ -30,9 +30,7 @@ public class ConvertToEID extends Activity {
     	dbh = new DatabaseHandler( this, dbname );
     	
     	//	make the remove tag buttons red
-    	Button btn = (Button) findViewById( R.id.remove_tag_btn );
-    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-    	btn = (Button) findViewById( R.id.remove_fedtag_btn );
+    	Button btn = (Button) findViewById( R.id.remove_fedtag_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	btn = (Button) findViewById( R.id.remove_farmtag_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -44,6 +42,7 @@ public class ConvertToEID extends Activity {
     	btn3.setEnabled(false);
     	fedtagid = 0;
     	farmtagid = 0;
+    	eidtagid = 0;
        	}
     
     // user clicked the 'back' button
@@ -102,14 +101,13 @@ public class ConvertToEID extends Activity {
     		
     		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
     				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-    				"id_info_table.id_infoid " +
+    				"id_info_table.id_infoid, id_info_table.tag_date_off " +
     				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
     				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
     				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
     				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-    				"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off = NULL and id_info_table.tag_number='%s'", fed);
-    		
-//    		Log.i("Convert", "building command ");
+    				"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", fed);
+ //   		Log.i("Convert", cmd);
     		}	
     	else
     	{
@@ -117,12 +115,11 @@ public class ConvertToEID extends Activity {
      	}
     	Object crsr = dbh.exec( cmd );   	
     	dbh.moveToFirstRecord();
-    	fedtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
-    	if( dbh.getSize() == 0 )
+		if( dbh.getSize() == 0 )
     		{ // no sheep with that federal tag in the database so clear out and return
     		clearBtn( v );
     		TV = (TextView) findViewById( R.id.sheepnameText );
-        	TV.setText( "Cannot find requested sheep." );
+        	TV.setText( "Cannot find this sheep." );
         	return;
     		}
 // This section would allow for multiple sheep with same tag if we implement next and previous
@@ -139,7 +136,9 @@ public class ConvertToEID extends Activity {
 //    		colNames = cursor.getColumnNames();
 //    		cursor.moveToFirst();
 //    	}
-
+    	fedtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
+		Log.i("Convert", String.valueOf(fedtagid));
+		
     	TV = (TextView) findViewById(R.id.sheepnameText);
     	TV.setText(dbh.getStr(0));
     	TextView TV2 = (TextView) findViewById(R.id.fedText)	;
@@ -153,26 +152,31 @@ public class ConvertToEID extends Activity {
 //		Now we need to get the farm tag for that sheep and fill the display with data
     	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 		"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-		"id_info_table.id_infoid " +
+		"id_info_table.id_infoid, id_info_table.tag_date_off " +
 		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
 		"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 		"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-		"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off = NULL and id_info_table.sheep_id='%s'", ii);
-    	
+		"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", ii);
+
+    	//   	Log.i("Convert", cmd);    	
     	crsr = dbh.exec( cmd );
     	dbh.moveToFirstRecord();
-    	
-    	TextView TV5 = (TextView) findViewById(R.id.farmText)	;
-    	TV5.setText(dbh.getStr(4));
-    	TextView TV6 = (TextView) findViewById(R.id.farm_colorText);
-    	TV6.setText(dbh.getStr(3));
-    	TextView TV7 = (TextView) findViewById(R.id.farm_locationText);
-    	TV7.setText(dbh.getStr(5));
-    	ii = dbh.getInt(1);
-    	farmtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
+		if( dbh.getSize() == 0 )
+		{ // This sheep does not have a farm tag installed
+			TV = (TextView) findViewById( R.id.farm_colorText );
+			TV.setText( "No tag" );
+    	} else {
+    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
+    		TV5.setText(dbh.getStr(4));
+    		TextView TV6 = (TextView) findViewById(R.id.farm_colorText);
+    		TV6.setText(dbh.getStr(3));
+    		TextView TV7 = (TextView) findViewById(R.id.farm_locationText);
+    		TV7.setText(dbh.getStr(5));
+    		ii = dbh.getInt(1);
+    		farmtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
     	}
-    
+    	}
 // 	user clicked 'Search Farm Tag' button
     public void searchFarmTag( View v )
     	{
@@ -192,12 +196,12 @@ public class ConvertToEID extends Activity {
     		
     		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
     				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-    				"id_info_table.id_infoid " +
+    				"id_info_table.id_infoid, id_info_table.tag_date_off " +
     				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
     				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
     				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
     				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-    				"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off = NULL and id_info_table.tag_number='%s'", farm);
+    				"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", farm);
     		
 //    		Log.i("Convert", "building command ");
     		}	
@@ -207,12 +211,11 @@ public class ConvertToEID extends Activity {
      	}
     	Object crsr = dbh.exec( cmd );   	
     	dbh.moveToFirstRecord();
-    	farmtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
     	if( dbh.getSize() == 0 )
     		{ // no sheep with that farm tag in the database so clear out and return
     		clearBtn( v );
     		TV = (TextView) findViewById( R.id.sheepnameText );
-        	TV.setText( "Cannot find requested sheep." );
+        	TV.setText( "Cannot find this sheep." );
         	return;
     		}
 //Need to add next and previous buttons if we have duplicate farm tags
@@ -228,7 +231,8 @@ public class ConvertToEID extends Activity {
 ////    		colNames = cursor.getColumnNames();
 //    		cursor.moveToFirst();
 //    	}
-
+    	
+    	farmtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
     	TV = (TextView) findViewById(R.id.sheepnameText);
     	TV.setText(dbh.getStr(0));
     	TextView TV2 = (TextView) findViewById(R.id.farmText)	;
@@ -242,24 +246,30 @@ public class ConvertToEID extends Activity {
 //		Now we need to get the rest of the tags and fill the display with data
     	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 		"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-		"id_info_table.id_infoid " +
+		"id_info_table.id_infoid, id_info_table.tag_date_off " +
 		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
 		"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 		"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-		"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off = NULL and id_info_table.sheep_id='%s'", ii);
+		"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", ii);
     	
     	crsr = dbh.exec( cmd );
     	dbh.moveToFirstRecord();
-    	fedtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database   	
-    	TextView TV5 = (TextView) findViewById(R.id.fedText)	;
-    	TV5.setText(dbh.getStr(4));
-    	TextView TV6 = (TextView) findViewById(R.id.fed_colorText);
-    	TV6.setText(dbh.getStr(3));
-    	TextView TV7 = (TextView) findViewById(R.id.fed_locationText);
-    	TV7.setText(dbh.getStr(5));
-    	ii = dbh.getInt(1);
     	
+		if( dbh.getSize() == 0 )
+		{ // This sheep does not have a federal tag installed
+			TV = (TextView) findViewById( R.id.fed_colorText );
+			TV.setText( "No tag" );
+    	} else {
+        	fedtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database   	
+        	TextView TV5 = (TextView) findViewById(R.id.fedText)	;
+        	TV5.setText(dbh.getStr(4));
+        	TextView TV6 = (TextView) findViewById(R.id.fed_colorText);
+        	TV6.setText(dbh.getStr(3));
+        	TextView TV7 = (TextView) findViewById(R.id.fed_locationText);
+        	TV7.setText(dbh.getStr(5));
+        	ii = dbh.getInt(1);
+    	}
     	}    
         
     // user clicked the "next record" button
@@ -364,8 +374,8 @@ public class ConvertToEID extends Activity {
     	        	   String today = TodayIs();
  //   	        	   Log.i("removefarmtag", today);
     	        	   Log.i("removefarmtag", String.valueOf(farmtagid));
- //   	       		   String cmd = String.format( "update id_info_table SET tag_date_off = today where id_infoid=%d", farmtagid );
- //   	    		   dbh.exec( cmd );
+    	       		   String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", farmtagid );
+    	    		   dbh.exec( cmd );
     	    		   clearBtn( null );
     	               }
     	       });
@@ -393,4 +403,71 @@ public class ConvertToEID extends Activity {
 			return Integer.toString(i);
 		}
 	}
+    public void updateTags( View v ){
+    	String          cmd;
+    	Object		crsr;
+    	// Get the values from the UI screen
+    	TextView TV = (TextView) findViewById( R.id.sheepnameText );
+    	String	sheepnameText = TV.getText().toString();
+    	Log.i("update", sheepnameText);
+    	
+	    TV  = (TextView) findViewById( R.id.eidText );
+	    String	eidText = TV.getText().toString();
+	    TV  = (TextView) findViewById( R.id.fedText );
+	    Integer fedText = Integer.parseInt (TV.getText().toString());	    
+	    TV  = (TextView) findViewById( R.id.farmText );
+	    Integer	farmText = Integer.parseInt (TV.getText().toString());
+	    TV = (TextView) findViewById( R.id.fed_colorText );
+	    Integer	fed_colorText = Integer.parseInt (TV.getText().toString());
+	    TV = (TextView) findViewById( R.id.fed_locationText );
+	    Integer	fed_locationText = Integer.parseInt (TV.getText().toString());
+	    
+//	    TV = (TextView) findViewById( R.id.farm_colorText );
+//	    Integer	farm_colorText = Integer.parseInt (TV.getText().toString());
+//	    TV = (TextView) findViewById( R.id.farm_locationText);
+//	    Integer	farm_locationText = Integer.parseInt (TV.getText().toString());
+//	    TV = (TextView) findViewById( R.id.eid_colorText );
+//	    Integer	eid_colorText = Integer.parseInt (TV.getText().toString());
+//	    TV = (TextView) findViewById( R.id.eid_locationText );
+//	    Integer	eid_locationText = Integer.parseInt (TV.getText().toString());
+	    
+	    //	Need to add tests to see what data we really have and only update if there is some
+	    
+//	    if (fedtagid != 0) {
+//	    	// update the Federal tag data
+//	    	Log.i("epdatefed", "tag record is not zero, needs update here");
+//	    	cmd = String.format( "update id_info_table SET tag_number=%d, tag_color_male=%d, tag_location=%d where id_infoid=%d", fedText, fed_colorText, fed_locationText, fedtagid );
+//		    Log.i("updatefederal", cmd);
+//		    crsr = dbh.exec( cmd );
+//		    }
+//	    	else {
+//	    		// fedtagid is zero so need to test whether there is a federal tag and add a record if there is one
+//	    		if (fedText != null){
+//	    			//have a federal tag but no fedid so add a new record;
+//	    			Log.i("updatefed", "need to add a new record here");
+//	    		}
+//	    		else{
+//	    			// no federal tag to enter so return
+//	    			return;
+//	    		}
+//	    	}
+//	    
+//
+//	    
+//	    //Update the Farm Tag data
+//	    cmd = String.format( "update id_info_table SET tag_number=%d, tag_color_male=%d, tag_location=%d where id_infoid=%d", farmText, farm_colorText, farm_locationText, farmtagid );
+//	    Log.i("updatefarm", cmd);
+//	    crsr = dbh.exec( cmd );
+//	    if (eidtagid != 0) {
+//	    	// update the eid tag
+//	    	Log.i("epdateeid", "tag is not zero, needs update here");
+//	    }
+//	    	else {
+//	    		// eidtagid is zero so need to test whether there is an EID and add a record if there is one
+//	    		
+//	    		return;
+//	    	}
+	    }
+    
+    
 }

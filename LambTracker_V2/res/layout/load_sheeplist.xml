@@ -50,17 +50,25 @@
         android:id="@+id/back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/create_demo_db_btn"
+        android:layout_above="@+id/copy_real_db_btn"
         android:layout_alignLeft="@+id/create_demo_db_btn"
         android:onClick="allDone"
         android:text="@string/back_btn" />
+<Button
+        android:id="@+id/backup_real_db_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/copy_real_db_btn"
+        android:layout_toRightOf="@+id/back_btn"
+        android:onClick="backupRealDB"
+        android:text="@string/backup_real_db_btn" />
 
     <Button
         android:id="@+id/copy_real_db_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/create_demo_db_btn"
-        android:layout_toRightOf="@+id/back_btn"
+     	android:layout_marginLeft="10dp"
         android:onClick="@string/copy_real_db_action"
         android:text="@string/copy_real_db_btn" />
     
