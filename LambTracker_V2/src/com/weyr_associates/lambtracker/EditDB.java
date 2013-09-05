@@ -73,7 +73,7 @@ public class EditDB extends Activity
 	{
 	if( cursor.moveToPrevious() )
 		{
-		recNo         += 1;
+		recNo         -= 1;
 		TextView sqlTV = (TextView) findViewById( R.id.sqlOutput );
 		sqlTV.setText( formatRecord(cursor) );
 		}

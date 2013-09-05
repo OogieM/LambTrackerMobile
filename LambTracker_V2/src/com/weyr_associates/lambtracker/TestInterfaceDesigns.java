@@ -52,9 +52,10 @@ public class TestInterfaceDesigns extends Activity{
 	        // Select All fields from Query
 	        cmd = "select * from tag_colors_table";
 	        Object crsr = dbh.exec( cmd );  
-	        cursor   = (Cursor) crsr;
+	        cursor   = ( Cursor ) crsr;
 	    	dbh.moveToFirstRecord();
-	    	Log.i("testinterface", "in onCreate below got tag color table");
+	    	labels.add("Select a Color");
+	    	// Log.i("testinterface", "in onCreate below got tag color table");
 	        // looping through all rows and adding to list
 	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	    		labels.add(cursor.getString(2));
@@ -78,8 +79,8 @@ public class TestInterfaceDesigns extends Activity{
 //			Log.i("Activity", "In Spinner");
 			Intent i = null;
 			String teststring;
-//			String teststring = String.valueOf (parent.getSelectedItemPosition());
-//			Log.i("Spinner", "Position = "+teststring);
+			teststring = String.valueOf (parent.getSelectedItemPosition());
+			// Log.i("Spinner", "Position = "+teststring);
 
 				switch (parent.getSelectedItemPosition()){		
 				case 0:
@@ -88,23 +89,118 @@ public class TestInterfaceDesigns extends Activity{
 			    case 1:
 			    	teststring = String.valueOf (parent.getSelectedItemPosition());
 			    	Log.i("Spinner", "Position = "+teststring);
-			        break;
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	break;
 				case 2:
 					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
 			    	Log.i("Spinner", "Position = "+teststring);
 			        break;
 				case 3:
 					teststring = String.valueOf (parent.getSelectedItemPosition());
 			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
 			        break;
 				case 4:
 					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
 			    	Log.i("Spinner", "Position = "+teststring);
 			        break;
 				case 5:
 					teststring = String.valueOf (parent.getSelectedItemPosition());
 			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
 			        break;
+				case 6:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+				case 7:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+				case 8:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+				case 9:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+				case 10:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+				case 11:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+				case 12:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+				case 13:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+				case 14:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+				case 15:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+				case 16:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+				case 17:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+				case 18:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+				case 19:
+					teststring = String.valueOf (parent.getSelectedItemPosition());
+			    	Log.i("Spinner", "Position = "+teststring);
+			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
+			    	Log.i("Spinner", "Position = "+teststring);
+			        break;
+			        
 			}
 			
 		}
@@ -123,7 +219,22 @@ public class TestInterfaceDesigns extends Activity{
     	dbh.closeDB();   	
     	finish();
     }
- 
+	  // user clicked the 'saveScores' button
+    public void saveScores( View v )
+    {
+    
+//    	RadioButton negativeone = null;
+//    	
+//    	negativeone = (RadioButton) findViewById(R.id.radio_negativeone);
+//    	
+//    	Log.i("saveScores","Add saving here"); 		
+//    	int id = ((RadioGroup)findViewById( R.id.test_radio_button )).getCheckedRadioButtonId();	
+//    	Log.i("saveScores", "First radio button" + String.valueOf(id));
+//    	if (negativeone.isChecked()){
+//    		Log.i("saveScores", "Value is -1");
+//    		}
+     }
+    
     public void onRadioButtonClicked( View v )
     {
         // Is the button now checked?
@@ -137,6 +248,7 @@ public class TestInterfaceDesigns extends Activity{
             case R.id.radio_negativeone:
                 if (checked)
                     // save a -1 score
+                	Log.i("radio", "Value = -1");
                 break;
             case R.id.radio_zero:
                 if (checked)

@@ -162,7 +162,6 @@ public class MainActivity extends Activity {
 	public class SpinnerActivity extends Activity implements OnItemSelectedListener {
 		//	@Override
 
-//		select_sheep_task.setOnItemSelectedListener(new OnItemSelectedListener() {		
 		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
 //			Log.i("Activity", "In Spinner");
@@ -187,17 +186,15 @@ public class MainActivity extends Activity {
 					MainActivity.this.startActivity(i);
 			        break;
 				case 4:
-//					i = new Intent(this, EvaluateSheep.class);
-//			        this.startActivity(d);
+					i = new Intent(this, EvaluateSheep.class);
+			        this.startActivity(i);
 			        break;
 				case 5:
 					i = new Intent(MainActivity.this, EditDB.class);
-					Log.i("Main", "In case 5 " + i);
 					MainActivity.this.startActivity(i);
 			        break;
 				case 6:
 					i = new Intent(MainActivity.this, TestInterfaceDesigns.class);
-					Log.i("Main", "In case 6 " + i);
 					MainActivity.this.startActivity(i);
 			        break;
 			}

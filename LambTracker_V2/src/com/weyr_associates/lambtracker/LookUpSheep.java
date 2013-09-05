@@ -65,8 +65,6 @@ public class LookUpSheep extends Activity
         	dbh.moveToFirstRecord();
         	if( dbh.getSize() == 0 )
         	{
-        	// Commented out the clear button to see if we can add a sheep from here
-//        	clearBtn( null );
         		// disable update button     		
         		Button btn3 = (Button) findViewById( R.id.update_task_btn );
             	btn3.setEnabled(false); 
@@ -181,86 +179,6 @@ public class LookUpSheep extends Activity
     	id = dbh.getInt( 0 ); // Get the primary key from the first record
     	clearBtn( v );
     	}
-    
-//    // user clicked 'view' button
-//    public void viewBtn( View v )
-//    	{
-//    	String          cmd;
-//    	String          sheepName;
-//    
-//    	DatabaseHandler dbh = new DatabaseHandler( this, "weyr_associates" );  	
-//    	TextView        TV  = (TextView) findViewById( R.id.eidText );
-//    	String eid = TV.getText().toString();  	
-//    	// added section here to include a federal ID tag
-//    	TextView		TV2 = (TextView) findViewById( R.id.fedText );
-//    	String			fed = TV2.getText().toString();
-//    	// added section here to include a farm ID tag	
-//    	TextView		TV3 = (TextView) findViewById( R.id.farmText );
-//    	String			farm = TV3.getText().toString();
-//    	// Moved the sheep name stuff to here for readability
-//		TextView 		TV4 = (TextView) findViewById( R.id.sheepnameText );
-//		sheepName = dbh.fixApostrophes( TV4.getText().toString() );
-//		// Start of the actual code to process the buttons
-//    	if( eid != null && eid.length() > 0 )
-//    		{
-//    		cmd = String.format( "select * from sheep_table where eid_tag='%s'", eid );
-//    		}	
-//    	else
-//    	{
-//    		//added this if statement to also check using federal id tag
-//        	if( fed != null && fed.length() > 0 )
-//    		{
-//    		cmd = String.format( "select * from sheep_table where fed_tag='%s'", fed );
-//    		}
-//    		//added this if statement to also check using farm id tag
-//        	else
-//        	{
-//        		if( farm != null && farm.length() > 0 )
-//        		{
-//        			cmd = String.format( "select * from sheep_table where farm_tag='%s'", farm );
-//        		}
-//        		else
-//        		{
-////    				TV = (TextView) findViewById( R.id.sheepnameText );
-////    				sheepName = dbh.fixApostrophes( TV.getText().toString() );
-//    	
-//        			if( sheepName != null && sheepName.length() > 0 )
-//        			{
-//        				cmd = String.format("select * from sheep_table where sheep_name='%s'",
-//    								dbh.fixApostrophes(sheepName) );
-//        			}
-//    		
-//        			else
-//        				return;
-//        		}
-//        		}
-//    	}
-//    	dbh.exec( cmd );
-//    	dbh.moveToFirstRecord();
-//    	if( dbh.getSize() == 0 )
-//    		{
-//    		clearBtn( v );
-//    		TV = (TextView) findViewById( R.id.sheeptaskText );
-//        	TV.setText( "Cannot find requested sheep" );
-//        	return;
-//    		}
-//    	
-//    	id = dbh.getInt( 0 );
-//    	TV = (TextView) findViewById( R.id.eidText );
-//    	TV.setText( dbh.getStr(1) );
-//       	TV = (TextView) findViewById( R.id.fedText );
-//    	TV.setText( dbh.getStr(2) );
-//    	TV = (TextView) findViewById( R.id.farmText );
-//    	TV.setText( dbh.getStr(3) );
-//    	TV = (TextView) findViewById( R.id.sheepnameText );
-//    	TV.setText( dbh.getStr(4) );
-//    	TV = (TextView) findViewById( R.id.sheeptaskText );
-//    	TV.setText( dbh.getStr(7) );
-//    	TV = (TextView) findViewById( R.id.lambing2012Text );
-//    	TV.setText( dbh.getStr(9) );
-//    	TV = (TextView) findViewById( R.id.lambing2013Text );
-//    	TV.setText( dbh.getStr(10) );
-//        }
     
     // user clicked 'clear' button
     public void clearBtn( View v )
@@ -405,10 +323,7 @@ public class LookUpSheep extends Activity
     
     // user clicked 'close' button
     public void closeTaskBtn( View v )
-    	{
-    	// make an entry in the history file
-    	// remove the task but not the sheep
-    	
+    	{   	
     	// Added this to close the database if we go back to the main activity  	
     	dbh.closeDB();
     	// clear the form

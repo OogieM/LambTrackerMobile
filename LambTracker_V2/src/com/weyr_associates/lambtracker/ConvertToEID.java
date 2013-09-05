@@ -52,6 +52,24 @@ public class ConvertToEID extends Activity {
     	clearBtn( null );   	
     	finish();
 	    }
+    // user clicked the 'help' button
+    public void helpBtn( View v )
+    {
+   	// Display help here   	
+		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+		builder.setMessage( R.string.help_convert )
+	           .setTitle( R.string.help_warning );
+		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+	           public void onClick(DialogInterface dialog, int idx) {
+	               // User clicked OK button 
+	        	  
+	    		   clearBtn( null );
+	               }
+	       });		
+		AlertDialog dialog = builder.create();
+		dialog.show();
+		
+    }
     
     // user clicked 'clear' button
     public void clearBtn( View v )
@@ -403,6 +421,18 @@ public class ConvertToEID extends Activity {
 			return Integer.toString(i);
 		}
 	}
+    public void scanEid( View v){
+    	String LastEID ;
+    	
+    	// Here is where I need to get a tag scanned and put the data into the variable LastEID
+    	
+    	LastEID = "xxx"; //temporary placeholder will be filled with proper EID from scanner
+    	
+    	TextView TV = (TextView) findViewById (R.id.eidText);
+    	TV.setText( LastEID );
+    	
+    	
+    }
     public void updateTags( View v ){
     	String          cmd;
     	Object		crsr;

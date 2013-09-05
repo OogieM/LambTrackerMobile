@@ -29,6 +29,7 @@
     <string name="quit_btn">Quit</string>  
     <string name="back_btn">Back</string>
     <string name="view_btn">View</string>
+    <string name="help_btn">Help</string>
     <string name="update_btn">Update</string>
     <string name="delete_btn">Delete</string>
     <string name="close_btn">Close</string>
@@ -41,6 +42,7 @@
 	<string name="search_farm_btn">Search Farm Tag</string>
 	<string name="search_other_btn">Search Other ID</string>
     <string name="add_new_tag_btn">Add Tag</string>
+    <string name="save_evaluation_scores_btn">Save Scores</string>
    
     <string name="load_sheeplist">Load Sheep Database</string>
     <string name="do_sheeptask">Do Sheep Tasks</string>
@@ -54,6 +56,14 @@
     <string name="title_activity_convert_to_eid">ConvertToEID</string>
     <string name="title_activity_evaluate_sheep">EvaluateSheep</string>
     <string name="title_activity_test_interface_designs">TestInterfaceDesigns</string>
+    
+    <string name="help_warning">Help Screen</string>
+    <string name="help_convert">Select a sheep based on either Federal or Farm tag. The system assumes there are no duplicate
+         farm tags and no duplicate federal tags. There can be duplicates where one is a federal tag and one is a farm tag. </string>   
+    <string name="help_evaluate">Evaluate sheep based ont eh criteria you select. Use the select to locate a sheep by Federal, 
+        Farm or Scanning an EID tag. Then select the scores for each trait. When finished select Save Scores
+        to write the data to the database with an evaluation date of today.</string>
+        
     
     <string name="select">Choose a Flock Task</string>
     <string-array name="sheep_task_array">
@@ -70,7 +80,7 @@
        
     <string name="sheep_name_lbl">Sheep Name</string>
     <string name="flock_prefix_lbl">Flock Prefix</string>
-    <string name="sheep_sex">Sex</string>  
+    <string name="sheep_sex_lbl">Sex</string>  
     <string name="sheep_birth_date_lbl">Birth Date</string>
     <string name="sheep_birth_type_lbl">Birth Type</string>
     <string name="sheep_birth_weight_lbl">Birth Weight</string>
@@ -98,6 +108,8 @@
     <string name="evaluation_lbl">Sheep Evaluation</string>
     <string name="evaluation_scores_lbl">   -1   0   1  2   3   4   5</string>
     <string name="missing_teeth_lbl">Missing Teeth</string>
+    <string name="head_lbl">Head</string>
+    <string name="body_lbl">Body</string>
        
 	<string name="sql_command_lbl">SQL Command</string>
 	<string name="results_lbl">Results</string>
@@ -113,7 +125,7 @@
     <string name="show_real_db_action">showDemoDB</string>
       
     <string name="delete_sheep">Delete Sheep?</string>
-     <string name="delete_tag">Delete Tag?</string>
+    <string name="delete_tag">Delete Tag?</string>
     <string name="delete_warning">Delete Warning</string>
     
     <string name="ok">OK</string> 

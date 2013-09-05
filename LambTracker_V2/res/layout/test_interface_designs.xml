@@ -8,55 +8,116 @@
   	  android:id="@+id/test_dynamic_spinner"
   	  android:layout_width="fill_parent"
   	  android:layout_height="wrap_content"
+  	  android:textSize="24sp"
   	  />
  
  <TextView
-        android:id="@+id/radio1"
+     android:id="@+id/evaluation_lbl"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_below="@id/test_dynamic_spinner"
+     android:layout_alignParentLeft="true"
+     android:gravity="left"
+     android:text="@string/evaluation_lbl"
+     android:textSize="24sp" />
+ 
+ <TextView
+     android:id="@+id/textView1"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_below="@id/evaluation_lbl"
+     android:layout_alignParentLeft="true"
+     android:layout_marginLeft="110dp"  
+     android:text="-1" />
+ 
+ <TextView
+     android:id="@+id/textView2"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_above="@+id/grid1"
+     android:layout_marginLeft="20dp"
+     android:layout_toRightOf="@+id/textView1"
+     android:text="0" />
+ 
+ <TextView
+     android:id="@+id/textView3"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_above="@+id/grid1"
+     android:layout_marginLeft="20dp"
+     android:layout_toRightOf="@+id/textView2"
+     android:text="1" />
+ 
+ <TextView
+     android:id="@+id/textView4"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_above="@+id/grid1"
+     android:layout_marginLeft="20dp"
+     android:layout_toRightOf="@+id/textView3"
+     android:text="2" />
+ 
+ <TextView
+     android:id="@+id/textView5"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_above="@+id/grid1"
+     android:layout_marginLeft="20dp"
+     android:layout_toRightOf="@+id/textView4"
+     android:text="3" />
+ 
+ <TextView
+     android:id="@+id/textView6"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_above="@+id/grid1"
+     android:layout_marginLeft="20dp"
+     android:layout_toRightOf="@+id/textView5"
+     android:text="4" />
+ 
+ <TextView
+     android:id="@+id/textView7"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_above="@+id/grid1"
+     android:layout_marginLeft="20dp"
+     android:layout_toRightOf="@+id/textView6"
+     android:text="5" />
+ 
+<GridLayout
+        android:id="@+id/grid1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="@string/evaluation_lbl"
-        android:textSize="14sp" 
-		android:layout_below="@id/test_dynamic_spinner"/>
- 
- <TextView
-        android:id="@+id/radio2"
-        android:layout_width="225dp"
-        android:layout_height="wrap_content"      
-        android:text="@string/evaluation_scores_lbl"
-        android:textSize="14sp" 
-        android:typeface="monospace"
-		android:layout_below="@id/radio1"
-		android:layout_alignParentRight="true"/>
- 
- <TextView
+        android:columnCount="3" 
+        android:layout_below="@id/textView1">
+  
+    <TextView
         android:id="@+id/radio3"
         android:layout_width="100dp"
         android:layout_height="wrap_content"      
-        android:text="@string/missing_teeth_lbl"
+        android:text="@string/body_lbl"
         android:textSize="14sp" 
         android:typeface="monospace"
-        android:layout_below="@id/radio2"
-		android:layout_alignParentLeft="true"/>
+		android:layout_column="0"
+        android:layout_gravity="left|center"
+        android:layout_row="0"/>
  
  <RadioGroup 
     android:id="@+id/test_radio_button"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_below="@id/radio2"
-    android:layout_toRightOf="@id/radio3"
-    android:layout_alignBottom="@id/radio3">
+    android:layout_column="1"
+        android:layout_gravity="left|top"
+        android:layout_row="0">
     
     <RadioButton android:id="@+id/radio_negativeone"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-    	android:onClick="onRadioButtonClicked"/>
+        android:layout_height="wrap_content"/>
     
     <RadioButton android:id="@+id/radio_zero"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"       
-        android:onClick="onRadioButtonClicked"/>
+        android:layout_height="wrap_content"/>
     
     <RadioButton android:id="@+id/radio_one"
         android:layout_width="wrap_content"
@@ -84,23 +145,6 @@
         android:onClick="onRadioButtonClicked"/>
     
 </RadioGroup>
-<GridLayout
-        android:id="@+id/grid1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="3" 
-        android:layout_below="@id/test_radio_button">
-   
-    <TextView
-        android:id="@+id/radio4"
-        android:layout_width="225dp"
-        android:layout_height="wrap_content"      
-        android:text="@string/evaluation_scores_lbl"
-        android:textSize="14sp" 
-        android:typeface="monospace"
-		android:layout_column="1"
-        android:layout_gravity="left|top"
-        android:layout_row="0"/>
     
     <TextView
         android:id="@+id/radio5"
@@ -110,7 +154,7 @@
         android:textSize="14sp" 
         android:typeface="monospace"
         android:layout_column="0"
-        android:layout_gravity="left|top"
+        android:layout_gravity="left|center"
         android:layout_row="1"/>
     
     <RadioGroup 
@@ -157,7 +201,73 @@
         android:layout_height="wrap_content"
         android:onClick="onRadioButtonClicked"/>
     </RadioGroup>
-   </GridLayout>   
+    
+    <TextView
+        android:id="@+id/radio6"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"      
+        android:text="@string/head_lbl"
+        android:textSize="14sp" 
+        android:typeface="monospace"
+        android:layout_column="0"
+        android:layout_gravity="left|center"
+        android:layout_row="2"/>
+    
+    <RadioGroup 
+    	android:id="@+id/test_radio_button3"
+   	 	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:layout_column="1"
+        android:layout_gravity="left|center"
+        android:layout_row="2">
+    
+    <RadioButton android:id="@+id/radio_negativeone3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+    	android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_zero3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"       
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_one3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"       
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_two3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"     
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_three3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"   
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_four3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"        
+        android:onClick="onRadioButtonClicked"/>
+    
+    <RadioButton android:id="@+id/radio_five3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+    
+   </GridLayout>  
+   
+<Button
+    android:id="@+id/save_evaluation_scores_btn"
+    android:layout_width="100dp"
+    android:layout_height="wrap_content"
+    android:onClick="saveScores"
+    android:text="@string/save_evaluation_scores_btn" 
+    android:layout_below="@id/grid1"/>
+
  <Button
             android:id="@+id/back_to_main_btn"
             android:layout_width="100dp"
@@ -166,4 +276,5 @@
     		android:layout_alignParentLeft="true"
             android:onClick="backBtn"
             android:text="@string/back_btn" />
+
 </RelativeLayout>

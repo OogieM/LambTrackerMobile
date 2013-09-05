@@ -39,91 +39,89 @@
         <Button
             android:id="@+id/search_fed_btn"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_column="0"
             android:layout_gravity="left|top"
             android:layout_row="0"
             android:onClick="searchFedTag"
-            android:text="@string/search_fed_btn" />
+            android:text="@string/search_fed_btn" 
+            android:textSize="14sp"/>
  
         <Button
             android:id="@+id/search_farm_btn"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_column="1"
             android:layout_gravity="left|top"
             android:layout_row="0"
             android:onClick="searchFarmTag"
-            android:text="@string/search_farm_btn" />
+            android:text="@string/search_farm_btn" 
+            android:textSize="14sp"/>
        
         <Button
             android:id="@+id/scan_eid_btn"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_column="2"
             android:layout_gravity="left|top"
             android:layout_row="0"
             android:onClick="scanEid"
-            android:text="@string/scan_eid_btn" />
+            android:text="@string/scan_eid_btn"
+            android:textSize="14sp" />
         <Button
             android:id="@+id/clear_form_btn"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_column="3"
             android:layout_gravity="left|top"
             android:layout_row="0"
             android:onClick="clearBtn"
-            android:text="@string/clear_btn" />
+            android:text="@string/clear_btn"
+            android:textSize="14sp" />
         
           <Button
             android:id="@+id/update_tag_btn"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_column="3"
             android:layout_gravity="left|top"
             android:layout_row="1"
             android:onClick="updateTags"
-            android:text="@string/update_btn" />
+            android:text="@string/update_btn"
+            android:textSize="14sp" />
           
         <Button
             android:id="@+id/add_new_tag_btn"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_column="2"
             android:layout_gravity="left|top"
             android:layout_row="1"
             android:onClick="addNewTag"
-            android:text="@string/add_new_tag_btn" />
+            android:text="@string/add_new_tag_btn"
+            android:textSize="14sp" />
         
         <Button
             android:id="@+id/prev_rec_btn"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_column="0"
             android:layout_gravity="left|top"
             android:layout_row="1"
             android:onClick="prevBtn"
-            android:text="@string/prev_rec_btn" />
+            android:text="@string/prev_rec_btn"
+            android:textSize="14sp" />
         
        <Button
             android:id="@+id/next_rec_btn"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_column="1"
             android:layout_gravity="left|top"
             android:layout_row="1"
             android:onClick="nextBtn"
-            android:text="@string/next_rec_btn" />
-              
-        <Button
-            android:id="@+id/back_to_main_btn"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left|top"
-            android:layout_row="2"
-            android:onClick="backBtn"
-            android:text="@string/back_btn" />
+            android:text="@string/next_rec_btn"
+            android:textSize="14sp" />
 
     </GridLayout>
 
@@ -217,12 +215,13 @@
         <Button
             android:id="@+id/remove_fedtag_btn"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_column="3"
             android:layout_gravity="left|top"
             android:layout_row="1"
             android:onClick="removeFedTag"
-            android:text="@string/remove_fedtag_btn" />
+            android:text="@string/remove_fedtag_btn"
+            android:textSize="14sp" />
         
         
         <TextView
@@ -291,12 +290,13 @@
         <Button
             android:id="@+id/remove_farmtag_btn"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_column="3"
             android:layout_gravity="left|top"
             android:layout_row="3"
             android:onClick="removeFarmTag"
-            android:text="@string/remove_farmtag_btn" />
+            android:text="@string/remove_farmtag_btn"
+            android:textSize="14sp" />
         
         </GridLayout>
        <GridLayout
@@ -327,7 +327,7 @@
             android:textSize="24sp"
             android:typeface="monospace" />  
        
-               <TextView
+        <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_column="1"
@@ -370,5 +370,29 @@
         </EditText>
         
         </GridLayout>
-              
+
+<RelativeLayout
+    android:id="@+id/LinearLayout01"
+    android:orientation="horizontal" 
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content">
+        
+       	<Button
+            android:id="@+id/back_to_main_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_alignParentLeft="true"
+            android:onClick="backBtn"
+            android:text="@string/back_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+           android:id="@+id/help_btn"
+           android:layout_width="100dp"
+           android:layout_height="50dp"
+           android:layout_alignParentRight="true"
+           android:onClick="helpBtn"
+           android:text="@string/help_btn"
+           android:textSize="14sp" />
+  </RelativeLayout>        
 </LinearLayout>
