@@ -82,24 +82,24 @@ public class TestInterfaceDesigns extends Activity{
 	         
 	        // Select All fields from Query
 	        cmd = "select * from evaluation_trait_table";
-	        Object crsr2 = dbh2.exec( cmd ); ;
+	        crsr = dbh.exec( cmd ); ;
 	        Log.i("testing", "executed command " + cmd);
-	        cursor2   = ( Cursor ) crsr2;
-	    	dbh2.moveToFirstRecord();
+	        cursor   = ( Cursor ) crsr;
+	    	dbh.moveToFirstRecord();
 	    	evaluation_traits.add("Select a Trait");
 	    	 Log.i("testinterface", "in onCreate below got evaluation straits table");
 	        // looping through all rows and adding to list
-	    	for (cursor2.moveToFirst(); !cursor2.isAfterLast(); cursor2.moveToNext()){
-	    		evaluation_traits.add(cursor2.getString(1));
+	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+	    		evaluation_traits.add(cursor.getString(1));
 	    	}
-	    	cursor2.close();
+	    	cursor.close();
 	        Log.i("testinterface ", "below if loop");
 		        // Creating adapter for spinner
-		        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this,
+		        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
 		                android.R.layout.simple_spinner_item, evaluation_traits);
 	
-			dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			trait_spinner.setAdapter (dataAdapter2);
+			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			trait_spinner.setAdapter (dataAdapter);
 			trait_spinner.setSelection(0);
 //			Log.i("Activity", "In trait Spinner");
 			trait_spinner.setOnItemSelectedListener(new SpinnerActivity());		

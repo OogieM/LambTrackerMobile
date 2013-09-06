@@ -220,7 +220,7 @@
    </GridLayout>
    
     <RelativeLayout
-    android:id="@+id/LinearLayout01"
+    android:id="@+id/RelativeLayout02"
     android:orientation="horizontal" 
   	android:layout_width="fill_parent"
   	android:layout_height="wrap_content">
