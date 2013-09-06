@@ -30,12 +30,14 @@ import android.widget.RadioGroup;
 
 
 public class TestInterfaceDesigns extends Activity{
-		private DatabaseHandler dbh;
-		private Cursor 	cursor;
+		private DatabaseHandler dbh, dbh2;
+		private Cursor 	cursor, cursor2;
 		
 		public Button button;
-		public Spinner test_dynamic_spinner;
-
+		public Spinner test_dynamic_spinner, trait_spinner;
+		List<String> tag_colors, evaluation_traits;
+		ArrayAdapter<String> dataAdapter, dataAdapter2;
+		
 		String          cmd;
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
@@ -44,39 +46,70 @@ public class TestInterfaceDesigns extends Activity{
 			setContentView(R.layout.test_interface_designs);
 			String dbname = getString(R.string.real_database_file); 
 	    	dbh = new DatabaseHandler( this, dbname );	
-	    	
+	    	dbh2 = new DatabaseHandler( this, dbname );
 	    	test_dynamic_spinner = (Spinner) findViewById(R.id.test_dynamic_spinner);
 	    	Log.i("testinterface", "in onCreate below test spinner");
-	    	List<String> labels = new ArrayList<String>();
+	    	tag_colors = new ArrayList<String>();
 	         
-	        // Select All fields from Query
+	        // Select All fields from tag colors to build the spinner
 	        cmd = "select * from tag_colors_table";
 	        Object crsr = dbh.exec( cmd );  
 	        cursor   = ( Cursor ) crsr;
 	    	dbh.moveToFirstRecord();
-	    	labels.add("Select a Color");
+	    	tag_colors.add("Select a Color");
 	    	// Log.i("testinterface", "in onCreate below got tag color table");
 	        // looping through all rows and adding to list
 	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-	    		labels.add(cursor.getString(2));
+	    		tag_colors.add(cursor.getString(2));
 	    	}
 	    	cursor.close();
 	        Log.i("testinterface", "below if loop");
 		        // Creating adapter for spinner
-		        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-		                android.R.layout.simple_spinner_item, labels);
+		        dataAdapter = new ArrayAdapter<String>(this,
+		                android.R.layout.simple_spinner_item, tag_colors);
 	
 			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			test_dynamic_spinner.setAdapter (dataAdapter);
 			test_dynamic_spinner.setSelection(0);
 //			Log.i("Activity", "In Spinner");
-			test_dynamic_spinner.setOnItemSelectedListener(new SpinnerActivity());		  
+			test_dynamic_spinner.setOnItemSelectedListener(new SpinnerActivity());	
+			
+			// add second spinner here to verify several will work in same class
+			
+			trait_spinner = (Spinner) findViewById(R.id.trait_spinner);
+	    	Log.i("testinterface", "in onCreate starting to get ready for the second spinner");
+	    	evaluation_traits = new ArrayList<String>();
+	         
+	        // Select All fields from Query
+	        cmd = "select * from evaluation_trait_table";
+	        Object crsr2 = dbh2.exec( cmd ); ;
+	        Log.i("testing", "executed command " + cmd);
+	        cursor2   = ( Cursor ) crsr2;
+	    	dbh2.moveToFirstRecord();
+	    	evaluation_traits.add("Select a Trait");
+	    	 Log.i("testinterface", "in onCreate below got evaluation straits table");
+	        // looping through all rows and adding to list
+	    	for (cursor2.moveToFirst(); !cursor2.isAfterLast(); cursor2.moveToNext()){
+	    		evaluation_traits.add(cursor2.getString(1));
+	    	}
+	    	cursor2.close();
+	        Log.i("testinterface ", "below if loop");
+		        // Creating adapter for spinner
+		        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this,
+		                android.R.layout.simple_spinner_item, evaluation_traits);
+	
+			dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			trait_spinner.setAdapter (dataAdapter2);
+			trait_spinner.setSelection(0);
+//			Log.i("Activity", "In trait Spinner");
+			trait_spinner.setOnItemSelectedListener(new SpinnerActivity());		
+			
 		}
 		
 	private class SpinnerActivity extends Activity implements OnItemSelectedListener {
 		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
-//			Log.i("Activity", "In Spinner");
+			Log.i("Activity", "In Spinner activity before the case statement");
 			Intent i = null;
 			String teststring;
 			teststring = String.valueOf (parent.getSelectedItemPosition());

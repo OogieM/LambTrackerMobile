@@ -268,6 +268,14 @@
     android:text="@string/save_evaluation_scores_btn" 
     android:layout_below="@id/grid1"/>
 
+ <Spinner
+  	  android:id="@+id/trait_spinner"
+  	  android:layout_width="fill_parent"
+  	  android:layout_height="wrap_content"
+  	  android:textSize="24sp"
+  	  android:layout_below="@id/save_evaluation_scores_btn"
+  	  />
+ 
  <Button
             android:id="@+id/back_to_main_btn"
             android:layout_width="100dp"

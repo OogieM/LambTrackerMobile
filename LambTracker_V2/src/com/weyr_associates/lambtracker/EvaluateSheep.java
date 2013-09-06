@@ -28,7 +28,7 @@ public class EvaluateSheep extends Activity {
         String          cmd;
         dbh = new DatabaseHandler( this, dbname );
     	
-        cmd = "SELECT trait_name FROM evaluation_trait_table ORDER BY id_traitid ASC";
+        cmd = "select trait_name from evaluation_trait_table order by id_traitid asc";
         
         Object crsr = dbh.exec( cmd );   	
         cursor   = ( Cursor ) crsr;
@@ -56,6 +56,13 @@ public class EvaluateSheep extends Activity {
     	
     	// then add the rest of the stuff for sheep evaluations here:
        	}
+	   public void backBtn( View v )
+	    {
+      	dbh.closeDB();
+   	clearBtn( null );   	
+   	finish();
+	    }
+	   
 	public void helpBtn( View v )
     {
    	// Display help here   	
