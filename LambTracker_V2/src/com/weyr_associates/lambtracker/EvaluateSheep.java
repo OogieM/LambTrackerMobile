@@ -24,14 +24,14 @@ public class EvaluateSheep extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.evaluate_sheep);
-        String dbname = getString(R.string.real_database_file); 
+        String 			dbname = getString(R.string.real_database_file); 
         String          cmd;
+        Object 			crsr;
         dbh = new DatabaseHandler( this, dbname );
     	
         cmd = "select trait_name from evaluation_trait_table order by id_traitid asc";
-        
-        Object crsr = dbh.exec( cmd );   	
-        cursor   = ( Cursor ) crsr;
+        crsr = dbh.exec( cmd );   	
+        cursor = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
     	
     	if (cursor != null ) {

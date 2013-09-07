@@ -49,6 +49,10 @@
             android:label="@string/title_activity_evaluate_sheep" >
         </activity>
         <activity
+            android:name="com.weyr_associates.lambtracker.CreateSheepEvaluation"
+            android:label="@string/title_activity_create_sheep_evaluation" >
+        </activity>
+        <activity
             android:name="com.weyr_associates.lambtracker.TestInterfaceDesigns"
             android:label="@string/title_activity_test_interface_designs" >
         </activity>

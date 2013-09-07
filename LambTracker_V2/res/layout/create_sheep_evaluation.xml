@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TextView
+        android:id="@+id/TextView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/title_activity_create_sheep_evaluation"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/TextView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/select_scored_traits.lbl"
+        android:textSize="18sp" />
+    
+    <Spinner
+  	  android:id="@+id/trait01_spinner"
+  	  android:layout_width="fill_parent"
+  	  android:layout_height="wrap_content"
+  	  android:textSize="24sp"
+  	  />
+    <Spinner
+  	  android:id="@+id/trait02_spinner"
+  	  android:layout_width="fill_parent"
+  	  android:layout_height="wrap_content"
+  	  android:textSize="24sp"
+  	  />
+    <Spinner
+  	  android:id="@+id/trait03_spinner"
+  	  android:layout_width="fill_parent"
+  	  android:layout_height="wrap_content"
+  	  android:textSize="24sp"
+  	  />
+    <Spinner
+  	  android:id="@+id/trait04_spinner"
+  	  android:layout_width="fill_parent"
+  	  android:layout_height="wrap_content"
+  	  android:textSize="24sp"
+  	  />
+    <Spinner
+  	  android:id="@+id/trait05_spinner"
+  	  android:layout_width="fill_parent"
+  	  android:layout_height="wrap_content"
+  	  android:textSize="24sp"
+  	  />
+<TextView
+        android:id="@+id/TextView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/select_value_traits.lbl"
+        android:textSize="18sp" />
+
+
+    <RelativeLayout
+    android:id="@+id/RelativeLayout02"
+    android:orientation="horizontal" 
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content">
+        
+       	<Button
+            android:id="@+id/back_to_main_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_alignParentLeft="true"
+            android:onClick="backBtn"
+            android:text="@string/back_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+            android:id="@+id/create_evaluation_task_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:onClick="createEval"
+            android:layout_toRightOf="@+id/back_to_main_btn"
+            android:text="@string/create_evaluation_task_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+           android:id="@+id/help_btn"
+           android:layout_width="100dp"
+           android:layout_height="50dp"
+           android:layout_alignParentRight="true"
+           android:onClick="helpBtn"
+           android:text="@string/help_btn"
+           android:textSize="14sp" />
+  </RelativeLayout>        
+  
+</LinearLayout>

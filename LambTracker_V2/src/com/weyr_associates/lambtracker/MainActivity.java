@@ -177,23 +177,27 @@ public class MainActivity extends Activity {
 					i = new Intent(MainActivity.this, LoadSheepList.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 2:
+			    case 2:
+					i = new Intent(MainActivity.this, CreateSheepEvaluation.class);
+					MainActivity.this.startActivity(i);
+			        break;
+			    case 3:
 					i = new Intent(MainActivity.this, DoSheepTask.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 3:
+				case 4:
 					i = new Intent(MainActivity.this, ConvertToEID.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 4:
+				case 5:
 					i = new Intent(this, EvaluateSheep.class);
 			        this.startActivity(i);
 			        break;
-				case 5:
+				case 6:
 					i = new Intent(MainActivity.this, EditDB.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 6:
+				case 7:
 					i = new Intent(MainActivity.this, TestInterfaceDesigns.class);
 					MainActivity.this.startActivity(i);
 			        break;

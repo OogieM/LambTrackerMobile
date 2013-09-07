@@ -423,7 +423,6 @@ public class ConvertToEID extends Activity {
 	}
     public void scanEid( View v){
     	String LastEID ;
-    	
     	// Here is where I need to get a tag scanned and put the data into the variable LastEID
     	
     	LastEID = "xxx"; //temporary placeholder will be filled with proper EID from scanner

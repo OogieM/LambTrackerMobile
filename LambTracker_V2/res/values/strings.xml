@@ -43,6 +43,7 @@
 	<string name="search_other_btn">Search Other ID</string>
     <string name="add_new_tag_btn">Add Tag</string>
     <string name="save_evaluation_scores_btn">Save Scores</string>
+    <string name="create_evaluation_task_btn">Create Evaluation</string>
    
     <string name="load_sheeplist">Load Sheep Database</string>
     <string name="do_sheeptask">Do Sheep Tasks</string>
@@ -56,6 +57,7 @@
     <string name="title_activity_convert_to_eid">ConvertToEID</string>
     <string name="title_activity_evaluate_sheep">EvaluateSheep</string>
     <string name="title_activity_test_interface_designs">TestInterfaceDesigns</string>
+    <string name="title_activity_create_sheep_evaluation">Create Evaluation Task</string>
     
     <string name="help_warning">Help Screen</string>
     <string name="help_convert">Select a sheep based on either Federal or Farm tag. The system assumes there are no duplicate
@@ -63,16 +65,18 @@
     <string name="help_evaluate">Evaluate sheep based ont eh criteria you select. Use the select to locate a sheep by Federal, 
         Farm or Scanning an EID tag. Then select the scores for each trait. When finished select Save Scores
         to write the data to the database with an evaluation date of today.</string>
-        
+    <string name="help_create_evaluate">Create a list of traits to evaluate on this run with the sheep. You can select 
+        as many or as few items to evaluate as you wish up to 14 scored items and 2 real data items.</string>    
     
     <string name="select">Choose a Flock Task</string>
     <string-array name="sheep_task_array">
         <item>Choose a Flock Task</item>
         <item>Manage Sheep Databases</item>
+        <item>Create a Sheep Evaluation Task</item>
         <item>Demo Lambing Data</item>
         <item>Convert to EID</item>
         <item>Evaluate Sheep</item>
-        <item>Edit Database</item>
+        <item>Edit Real Database</item>
         <item>Test Interface Designs</item>
      </string-array>
   
@@ -104,6 +108,9 @@
     <string name="tag_location_lbl">Tag Location</string>
     <string name="tag_date_on_lbl">Tag Date On</string>
     <string name="tag_date_off_lbl">Tag Date Off</string>
+    
+    <string name="select_scored_traits.lbl">Select Traits Scored 0 to 5</string>
+    <string name="select_value_traits.lbl">Select Traits with Real values</string>
     
     <string name="evaluation_lbl">Sheep Evaluation</string>
     <string name="evaluation_scores_lbl">   -1   0   1  2   3   4   5</string>

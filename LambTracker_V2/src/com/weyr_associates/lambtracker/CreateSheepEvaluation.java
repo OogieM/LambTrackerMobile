@@ -1,8 +1,16 @@
 package com.weyr_associates.lambtracker;
 
+import java.util.List;
+
+import android.database.Cursor;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import com.weyr_associates.lambtracker.MainActivity.SpinnerActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -27,89 +35,96 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import com.weyr_associates.lambtracker.MainActivity.SpinnerActivity;
 
-public class TestInterfaceDesigns extends Activity{
-		private DatabaseHandler dbh;
-		private Cursor 	cursor;
-		
-		public Button button;
-		public Spinner test_dynamic_spinner, trait_spinner;
-		List<String> tag_colors, evaluation_traits;
-		ArrayAdapter<String> dataAdapter;
-		
-		String          cmd;
-		@Override
-		public void onCreate(Bundle savedInstanceState) {
-			setTitle(R.string.app_name_long);
-			super.onCreate(savedInstanceState);
-			setContentView(R.layout.test_interface_designs);
-			String dbname = getString(R.string.real_database_file); 
-	    	dbh = new DatabaseHandler( this, dbname );	
-	    	test_dynamic_spinner = (Spinner) findViewById(R.id.test_dynamic_spinner);
-	    	Log.i("testinterface", "in onCreate below test spinner");
-	    	tag_colors = new ArrayList<String>();
-	         
-	        // Select All fields from tag colors to build the spinner
-	        cmd = "select * from tag_colors_table";
-	        Object crsr = dbh.exec( cmd );  
-	        cursor   = ( Cursor ) crsr;
-	    	dbh.moveToFirstRecord();
-	    	tag_colors.add("Select a Color");
-	    	// Log.i("testinterface", "in onCreate below got tag color table");
-	        // looping through all rows and adding to list
-	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-	    		tag_colors.add(cursor.getString(2));
-	    	}
-	    	cursor.close();
-	        Log.i("testinterface", "below if loop");
-		        // Creating adapter for spinner
-		        dataAdapter = new ArrayAdapter<String>(this,
-		                android.R.layout.simple_spinner_item, tag_colors);
+public class CreateSheepEvaluation extends Activity {
+
+	private DatabaseHandler dbh;
+	private Cursor 	cursor;
 	
-			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			test_dynamic_spinner.setAdapter (dataAdapter);
-			test_dynamic_spinner.setSelection(0);
-//			Log.i("Activity", "In Spinner");
-			test_dynamic_spinner.setOnItemSelectedListener(new SpinnerActivity());	
-			
-			// add second spinner here to verify several will work in same class
-			
-			trait_spinner = (Spinner) findViewById(R.id.trait_spinner);
-	    	Log.i("testinterface", "in onCreate starting to get ready for the second spinner");
-	    	evaluation_traits = new ArrayList<String>();
-	         
-	        // Select All fields from Query
-	        cmd = "select * from evaluation_trait_table";
-	        crsr = dbh.exec( cmd ); ;
-	        Log.i("testing", "executed command " + cmd);
-	        cursor   = ( Cursor ) crsr;
-	    	dbh.moveToFirstRecord();
-	    	evaluation_traits.add("Select a Trait");
-	    	 Log.i("testinterface", "in onCreate below got evaluation straits table");
-	        // looping through all rows and adding to list
-	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-	    		evaluation_traits.add(cursor.getString(1));
-	    	}
-	    	cursor.close();
-	        Log.i("testinterface ", "below if loop");
-		        // Creating adapter for spinner
-//		        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-//		                android.R.layout.simple_spinner_item, evaluation_traits);
-	        dataAdapter = new ArrayAdapter<String>(this,
-	                android.R.layout.simple_spinner_item, tag_colors);
-	        
-			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			trait_spinner.setAdapter (dataAdapter);
-			trait_spinner.setSelection(0);
-			trait_spinner.setOnItemSelectedListener(new SpinnerActivity());		
-			
-		}
+	public Button button;
+	public Spinner trait01_spinner, trait02_spinner, trait03_spinner, trait04_spinner, trait05_spinner, test_dynamic_spinner;
+	List<String> scored_evaluation_traits, data_evaluation_traits;
+	ArrayAdapter<String> dataAdapter;
+	Object 		crsr;
+	String     	cmd;
+	Integer 	i;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		setTitle(R.string.app_name_long);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.test_interface_designs);
+		String dbname = getString(R.string.real_database_file); 
+    	dbh = new DatabaseHandler( this, dbname );	
 		
+    	scored_evaluation_traits = new ArrayList<String>();
+         
+        // Select All fields from trait table that are score type and get set to fill the spinners
+        cmd = "select * from evaluation_trait_table where trait_type = 1";
+        crsr = dbh.exec( cmd ); ;
+        Log.i("testing", "executed command " + cmd);
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+    	scored_evaluation_traits.add("Select a Trait");
+    	 Log.i("testinterface", "in onCreate below got evaluation straits table");
+        // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		scored_evaluation_traits.add(cursor.getString(1));
+    	}
+    	cursor.close();
+        Log.i("createEval ", "below for loop");
+    	
+        trait01_spinner = (Spinner) findViewById(R.id.trait01_spinner);
+    	// Creating adapter for spinner
+		dataAdapter = new ArrayAdapter<String>(this,
+	                android.R.layout.simple_spinner_item, scored_evaluation_traits);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		Log.i("createEval ", "ready to fill spinners");
+	
+		trait01_spinner.setAdapter (dataAdapter);
+		Log.i("createEval ", "set first data adapter");
+		trait01_spinner.setSelection(0);
+		Log.i("createEval ", "move to position 0");
+		trait01_spinner.setOnItemSelectedListener(new SpinnerActivity());
+		Log.i("createEval ", "create new listener");
+		
+		trait02_spinner = (Spinner) findViewById(R.id.trait02_spinner);
+		dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, scored_evaluation_traits);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		trait02_spinner.setAdapter (dataAdapter);
+		trait02_spinner.setSelection(0);
+		trait02_spinner.setOnItemSelectedListener(new SpinnerActivity());
+		
+		trait03_spinner = (Spinner) findViewById(R.id.trait03_spinner);
+		dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, scored_evaluation_traits);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		trait03_spinner.setAdapter (dataAdapter);
+		trait03_spinner.setSelection(0);
+		trait03_spinner.setOnItemSelectedListener(new SpinnerActivity());
+		
+		trait04_spinner = (Spinner) findViewById(R.id.trait04_spinner);
+		dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, scored_evaluation_traits);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		trait04_spinner.setAdapter (dataAdapter);
+		trait04_spinner.setSelection(0);
+		trait04_spinner.setOnItemSelectedListener(new SpinnerActivity());
+		
+		trait05_spinner = (Spinner) findViewById(R.id.trait05_spinner);
+		dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, scored_evaluation_traits);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		trait05_spinner.setAdapter (dataAdapter);
+		trait05_spinner.setSelection(0);
+		trait05_spinner.setOnItemSelectedListener(new SpinnerActivity());
+	
+	}
 	private class SpinnerActivity extends Activity implements OnItemSelectedListener {
 		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
-			Log.i("Activity", "In Spinner activity before the case statement");
-			Intent i = null;
+//			Log.i("Activity", "In Spinner activity before the case statement");
 			String teststring;
 			teststring = String.valueOf (parent.getSelectedItemPosition());
 			// Log.i("Spinner", "Position = "+teststring);
@@ -232,81 +247,48 @@ public class TestInterfaceDesigns extends Activity{
 			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
 			    	Log.i("Spinner", "Position = "+teststring);
 			        break;
-			        
+				}   	
 			}
-			
-		}
-
 		@Override
 		public void onNothingSelected(AdapterView<?> arg0) {
 			// TODO Auto-generated method stub
 			
 		}
-		
-	
 	}
-	  // user clicked the 'back' button
-    public void backBtn( View v )
-    {
-    	dbh.closeDB();   	
-    	finish();
-    }
-	  // user clicked the 'saveScores' button
-    public void saveScores( View v )
-    {
-    
-//    	RadioButton negativeone = null;
-//    	
-//    	negativeone = (RadioButton) findViewById(R.id.radio_negativeone);
-//    	
-//    	Log.i("saveScores","Add saving here"); 		
-//    	int id = ((RadioGroup)findViewById( R.id.test_radio_button )).getCheckedRadioButtonId();	
-//    	Log.i("saveScores", "First radio button" + String.valueOf(id));
-//    	if (negativeone.isChecked()){
-//    		Log.i("saveScores", "Value is -1");
-//    		}
-     }
-    
-    public void onRadioButtonClicked( View v )
-    {
-        // Is the button now checked?
-        boolean checked = ((RadioButton) v).isChecked();
-        
-        // Check which radio button was clicked
-        // Need to add all the testing to get the data for the correct trait for saving into the database
-        // this needs to be a generic onClicked somehow
-        // perhaps add a variable to pass a link to the trait in the database?
-        switch(v.getId()) {
-            case R.id.radio_negativeone:
-                if (checked)
-                    // save a -1 score
-                	Log.i("radio", "Value = -1");
-                break;
-            case R.id.radio_zero:
-                if (checked)
-                    // save a 0 score
-                break;
-            case R.id.radio_one:
-                if (checked)
-                    // save a 1 score
-                break;
-            case R.id.radio_two:
-                if (checked)
-                    // save a 2 score
-                break;
-            case R.id.radio_three:
-                if (checked)
-                    // save a 3 score
-                break;
-            case R.id.radio_four:
-                if (checked)
-                    // save a 4 score
-                break;
-            case R.id.radio_five:
-                if (checked)
-                    // save a 5 score
-                break;
-        }
-    }
-    
-    }
+		 // user clicked the 'back' button
+		public void backBtn( View v )
+		{
+			dbh.closeDB();   	
+			finish();
+		}	
+	   public void helpBtn( View v )
+	    {
+	   	// Display help here   	
+			AlertDialog.Builder builder = new AlertDialog.Builder( this );
+			builder.setMessage( R.string.help_create_evaluate )
+		           .setTitle( R.string.help_warning );
+			builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int idx) {
+		               // User clicked OK button 
+		        	  
+		    		   clearBtn( null );
+		               }
+		       });		
+			AlertDialog dialog = builder.create();
+			dialog.show();
+			
+	    }
+	    // user clicked 'clear' button
+	    public void clearBtn( View v )
+		    {
+		    // clear out the display of everything
+
+	    }	   
+
+	    public void createEval( View v )
+	    {
+	    //Need to get the position and text for every spinner and the real data points and use
+	   // this to fill the actual evaluation task screen
+
+    }	 
+}
