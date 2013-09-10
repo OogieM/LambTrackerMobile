@@ -43,6 +43,7 @@ public class MainActivity extends Activity {
 	
 	ScrollView svLog;
 	private Boolean KeepScreenOn = false;
+	private Boolean mIspaused = false;
 	DecimalFormat df = new DecimalFormat();
 	ImageView mLogoImage;
 	
@@ -71,7 +72,11 @@ public class MainActivity extends Activity {
 				textInfo2.setText(b2.getString("info2")); // contains the time the tag was read
 				LastEID = (b2.getString("info1"));
 //				We have a good whole EID number so send it to the LookUpSheep component	
-				lookUpSheep ();	
+
+				if (!mIspaused)  {
+					lookUpSheep ();
+				}
+				
 				break;			
 			case eidService.MSG_UPDATE_LOG_APPEND:
 				Bundle b3 = msg.getData();
@@ -237,6 +242,7 @@ public class MainActivity extends Activity {
 					Message msg = Message.obtain(null, eidService.MSG_RELOAD_PREFERENCES, 0, 0);
 					msg.replyTo = mMessenger;
 					mService.send(msg);
+					mIspaused = false;
 				} catch (RemoteException e) {}
 			}
 		}
@@ -267,6 +273,7 @@ public class MainActivity extends Activity {
 			Message msg = Message.obtain(null, eidService.MSG_NO_TAGS_PLEASE);
 			msg.replyTo = mMessenger;
 			mService.send(msg);
+			mIspaused = true;
 		} catch (RemoteException e) {
 			// In this case the service has crashed before we could even do anything with it
 		}

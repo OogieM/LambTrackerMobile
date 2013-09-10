@@ -138,11 +138,11 @@ public class eidService extends Service {
 				break;
 			case MSG_SEND_ME_TAGS:
 				sendTagsOK = true; // Client requested Tags
-//				Log.i("eidService", "sendTagsOK.");
+				Log.i("eidService", "sendTagsOK.");
 				break;
 			case MSG_NO_TAGS_PLEASE:
 				sendTagsOK = false; // Client requested No Tags
-//				Log.i("eidService", "No Tags.");
+				Log.i("eidService", "No Tags.");
 				break;
 			default:
 				super.handleMessage(msg);

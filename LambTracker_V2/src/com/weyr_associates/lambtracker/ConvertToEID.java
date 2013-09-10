@@ -2,15 +2,32 @@ package com.weyr_associates.lambtracker;
 
 
 import java.util.Calendar;
+
+//import com.weyr_associates.lambtracker.MainActivity.IncomingHandler;
+
+
+
+
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.LightingColorFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.database.Cursor;
 
@@ -21,6 +38,168 @@ public class ConvertToEID extends Activity {
 	private int			    recNo;
 	private int             nRecs;
 //	private String[]        colNames; 
+	
+/////////////////////////////////////////////////////
+
+	
+	Messenger mService = null;
+	boolean mIsBound;
+	
+	final Messenger mMessenger = new Messenger(new IncomingHandler());
+	// variable to hold the string
+	public String LastEID ;
+	
+	class IncomingHandler extends Handler {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case eidService.MSG_UPDATE_STATUS:
+				Bundle b1 = msg.getData();
+		
+				break;
+			case eidService.MSG_NEW_EID_FOUND:
+				Bundle b2 = msg.getData();
+
+				LastEID = (b2.getString("info1"));
+//				We have a good whole EID number	
+				gotEID ();	
+				break;			
+			case eidService.MSG_UPDATE_LOG_APPEND:
+//				Bundle b3 = msg.getData();
+//				Log.i("Convert", "Add to Log.");
+				
+				break;
+			case eidService.MSG_UPDATE_LOG_FULL:
+//				Log.i("Convert", "Log Full.");
+				
+				break;
+			case eidService.MSG_THREAD_SUICIDE:
+				Log.i("Convert", "Service informed Activity of Suicide.");
+				doUnbindService();
+				stopService(new Intent(ConvertToEID.this, eidService.class));
+				
+				break;
+			default:
+				super.handleMessage(msg);
+			}
+		}
+	}
+	
+ 	 public ServiceConnection mConnection = new ServiceConnection() {
+ 		public void onServiceConnected(ComponentName className, IBinder service) {
+ 			mService = new Messenger(service);
+ 			Log.i("Convert", "At Service.");
+ 			try {
+ 				//Register client with service
+ 				Message msg = Message.obtain(null, eidService.MSG_REGISTER_CLIENT);
+ 				msg.replyTo = mMessenger;
+ 				mService.send(msg);
+
+ 				//Request a status update.
+// 				msg = Message.obtain(null, eidService.MSG_UPDATE_STATUS, 0, 0);
+ //				mService.send(msg);
+ 				
+ 				//Request full log from service.
+ //				msg = Message.obtain(null, eidService.MSG_UPDATE_LOG_FULL, 0, 0);
+ //				mService.send(msg);
+ 				
+ 			} catch (RemoteException e) {
+ 				// In this case the service has crashed before we could even do anything with it
+ 			}
+ 		}
+ 		public void onServiceDisconnected(ComponentName className) {
+ 			// This is called when the connection with the service has been unexpectedly disconnected - process crashed.
+ 			mService = null;
+ 		}
+ 	};    	
+
+	private void CheckIfServiceIsRunning() {
+		//If the service is running when the activity starts, we want to automatically bind to it.
+		Log.i("Convert", "At isRunning?.");
+		if (eidService.isRunning()) {
+//			Log.i("Convert", "is.");
+			doBindService();
+		} else {
+//			Log.i("Convert", "is not, start it");
+			startService(new Intent(ConvertToEID.this, eidService.class));
+			doBindService();
+		}
+//		Log.i("Convert", "Done isRunning.");
+	} 	
+ 	
+	void doBindService() {
+		// Establish a connection with the service.  We use an explicit
+		// class name because there is no reason to be able to let other
+		// applications replace our component.
+//		Log.i("Convert", "At doBind1.");
+		bindService(new Intent(this, eidService.class), mConnection, Context.BIND_AUTO_CREATE);
+//		Log.i("Convert", "At doBind2.");
+
+		mIsBound = true;
+		
+
+		if (mService != null) {
+//			Log.i("Convert", "At doBind3.");
+			try {
+				//Request status update
+				Message msg = Message.obtain(null, eidService.MSG_UPDATE_STATUS, 0, 0);
+				msg.replyTo = mMessenger;
+				mService.send(msg);
+				Log.i("Convert", "At doBind4.");
+				//Request full log from service.
+				msg = Message.obtain(null, eidService.MSG_UPDATE_LOG_FULL, 0, 0);
+				mService.send(msg);
+			} catch (RemoteException e) {}
+		}
+//		Log.i("Convert", "At doBind5.");
+	}
+ 	void doUnbindService() {
+// 		Log.i("Convert", "At DoUnbindservice");
+ 		if (mService != null) {
+ 		try {
+ 			//Stop eidService from sending tags
+ 			Message msg = Message.obtain(null, eidService.MSG_NO_TAGS_PLEASE);
+ 			msg.replyTo = mMessenger;
+ 			mService.send(msg);
+ 			
+ 		} catch (RemoteException e) {
+ 			// In this case the service has crashed before we could even do anything with it
+ 		}
+ 		}
+ 		if (mIsBound) {
+ 			// If we have received the service, and hence registered with it, then now is the time to unregister.
+ 			if (mService != null) {
+ 				try {
+ 					Message msg = Message.obtain(null, eidService.MSG_UNREGISTER_CLIENT);
+ 					msg.replyTo = mMessenger;
+ 					mService.send(msg);
+ 				} catch (RemoteException e) {
+ 					// There is nothing special we need to do if the service has crashed.
+ 				}
+ 			}
+ 			// Detach our existing connection.
+ 			unbindService(mConnection);
+ 			mIsBound = false;
+ 		}
+
+ 	}    	
+
+
+	
+	
+	// use EID reader to look up a sheep
+	public void gotEID( )
+    {
+    	TextView TV = (TextView) findViewById (R.id.eidText);
+    	TV.setText( LastEID );
+//		Log.i("Convert", "Got EID");
+		
+	}	
+	
+/////////////////////////////////////////////////////	
+	
+	
+	
 	@Override
     public void onCreate(Bundle savedInstanceState)	
     {
@@ -28,6 +207,15 @@ public class ConvertToEID extends Activity {
         setContentView(R.layout.convert_to_eid);
         String dbname = getString(R.string.real_database_file); 
     	dbh = new DatabaseHandler( this, dbname );
+    	
+ ////////////////////////////////////
+    	
+  
+		CheckIfServiceIsRunning();
+//		Log.i("Convert", "back from isRunning");
+    	
+////////////////////////////////////    	
+    	
     	
     	//	make the remove tag buttons red
     	Button btn = (Button) findViewById( R.id.remove_fedtag_btn );
@@ -48,6 +236,8 @@ public class ConvertToEID extends Activity {
     // user clicked the 'back' button
     public void backBtn( View v )
 	    {
+		doUnbindService();
+		stopService(new Intent(ConvertToEID.this, eidService.class));
        	dbh.closeDB();
     	clearBtn( null );   	
     	finish();
@@ -421,17 +611,29 @@ public class ConvertToEID extends Activity {
 			return Integer.toString(i);
 		}
 	}
+//     user clicked 'Scan' button    
     public void scanEid( View v){
-    	String LastEID ;
+ //   	String LastEID ;
     	// Here is where I need to get a tag scanned and put the data into the variable LastEID
+		if (mService != null) {
+		try {
+			//Start eidService sending tags
+			Message msg = Message.obtain(null, eidService.MSG_SEND_ME_TAGS);
+			msg.replyTo = mMessenger;
+			mService.send(msg);
+			
+		} catch (RemoteException e) {
+			// In this case the service has crashed before we could even do anything with it
+		}
+		}
+//    	LastEID = "xxx"; //temporary placeholder will be filled with proper EID from scanner
     	
-    	LastEID = "xxx"; //temporary placeholder will be filled with proper EID from scanner
-    	
-    	TextView TV = (TextView) findViewById (R.id.eidText);
-    	TV.setText( LastEID );
+//    	TextView TV = (TextView) findViewById (R.id.eidText);
+//    	TV.setText( LastEID );
     	
     	
     }
+    
     public void updateTags( View v ){
     	String          cmd;
     	Object		crsr;
