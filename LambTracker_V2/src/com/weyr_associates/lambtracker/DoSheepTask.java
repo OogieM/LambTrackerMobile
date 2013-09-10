@@ -26,7 +26,8 @@ public class DoSheepTask extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.do_sheeptask);
-    	dbh = new DatabaseHandler( this, "weyr_associates" );
+        String 	dbfile = getString(R.string.demo_database_file) ;
+    	dbh = new DatabaseHandler( this, dbfile );
     	
     	//	make the delete button red
     	Button btn = (Button) findViewById( R.id.delete_task_btn );

@@ -34,10 +34,13 @@ public class LoadSheepList extends Activity {
     public void createDemoDB( View v )
 		{
     	String 	dbfile = getString(R.string.demo_database_file) ;
-    	Log.i ("createdb", dbfile);
+    	Log.i ("LoadSheep", " the createdemo db file to create is: " + dbfile);
     	DatabaseHandler dbh     = new DatabaseHandler( this, dbfile );
+    	Log.i("LoadSheep", "  the database is: " + String.valueOf(dbh));
     	String          cmd     = getString( R.string.build_table );
     	String          csv     = getString( R.string.csv_file );
+//    	Log.i("Create Demo DB ", cmd);
+//    	Log.i("Create from CSV file ", csv);
     	int             n       = dbh.createTable( "sheep_table", cmd, csv );
     	String          howMany = String.format( "records written to 'sheep_table': %d", n );
     	TextView        txtView = (TextView) findViewById( R.id.editText1 );
@@ -57,6 +60,7 @@ public class LoadSheepList extends Activity {
    
     public void copyRealDB( View v )
 		{
+    	TextView        txtView = (TextView) findViewById( R.id.editText1 );
 //    	Resources res = getResources();
     	String 	dbfile = getString(R.string.real_database_file) ;
     	DatabaseHandler dbh     = new DatabaseHandler( this, dbfile );
@@ -65,6 +69,8 @@ public class LoadSheepList extends Activity {
     	}
     	catch (IOException e) {
     	}
+    	
+    	txtView.setText("Created Real Database from Copy in Assets.");
     	dbh.close();
 	}
 
@@ -77,8 +83,8 @@ public class LoadSheepList extends Activity {
 //	and then displaying it
 //	get a table to display
 	
-//	String          theDump = dbh.dumpTable( "sheep_table" );
-//	txtView.setText( theDump );
+	String          theDump = dbh.dumpTable( "sheep_table" );
+	txtView.setText( theDump );
 	dbh.close();
 	}
     

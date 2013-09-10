@@ -78,6 +78,10 @@ public class TestInterfaceDesigns extends Activity{
 //			Log.i("Activity", "In Spinner");
 			test_dynamic_spinner.setOnItemSelectedListener(new SpinnerActivity());	
 			
+			TextView TV = (TextView) findViewById(R.id.rb1_lbl);
+	        TV.setText( "Missing Teeth" );
+	        
+	        
 		}
 	
 		  // user clicked the 'saveScores' button

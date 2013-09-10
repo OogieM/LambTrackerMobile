@@ -59,7 +59,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
     // the active database
     private SQLiteDatabase db = null;
   
-//	String db_path = getString(R.string.database_path);
+    //	String db_path = getString(R.string.database_path);
 
     // String db_name = getString(R.string.database_file);
 
@@ -97,13 +97,19 @@ public class DatabaseHandler extends SQLiteOpenHelper
         activeTable = tableName;
         buildTable  = createTableSQL;
         theCSVFile  = csvFile;
-        
-        if( db == null )
+        Log.i("in DBH", " createTable the active table is: " + activeTable);
+        Log.i("in DBH", " createTable the SQL command is: " +buildTable);
+        Log.i("in DBH", " createTable the CSV file is: " + theCSVFile);
+        Log.i("in DBH", " createTable the database is: " + String.valueOf(db));
+        if( db == null ){
             db = this.getWritableDatabase();
-        if( db.isOpen()){
-        	db.close();
         }
-        db.execSQL( "drop table if exists " + tableName );
+        Log.i("in DBH ", "the writable database is: " + String.valueOf(db));
+//        if( db.isOpen()){
+//        	db.close();
+//        }
+//        db.execSQL( "drop table if exists " + tableName );
+        Log.i("DBH ", "Before the create table command");
         db.execSQL( createTableSQL );
         
         // load from .csv file in assets/
@@ -176,6 +182,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
     	StringTokenizer tok = new StringTokenizer(sqlStmt, " " );
     	String          cmd = tok.nextToken();
         
+    	Log.i("DBH Exec", "token is: " + tok);
         if( db == null )
             db = this.getWritableDatabase();
         

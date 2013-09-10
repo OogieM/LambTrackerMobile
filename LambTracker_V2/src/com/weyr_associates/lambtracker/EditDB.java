@@ -22,7 +22,10 @@ public class EditDB extends Activity
 		{
 	    super.onCreate(savedInstanceState);
 	    setContentView( R.layout.edit_db );
-	    dbh = new DatabaseHandler( this, "lambtracker_db.sqlite" );
+//	    dbh = new DatabaseHandler( this, "lambtracker_db.sqlite" );
+	    String 	dbfile = getString(R.string.demo_database_file) ;
+    	dbh = new DatabaseHandler( this, dbfile );
+
 		}
 	
 	public void execSQL( View v )

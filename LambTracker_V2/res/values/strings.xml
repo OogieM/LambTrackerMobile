@@ -21,7 +21,7 @@
     
     <string name="copy_real_db_btn">Copy Real DB</string>
     <string name="show_real_db_btn">Show Real DB</string>
-    <string name ="backup_real_db_btn">Backup Real DB</string>
+    <string name="backup_real_db_btn">Backup Real DB</string>
     <string name="next_rec_btn">Next Record</string>
     <string name="prev_rec_btn">Prev. Record</string>
     <string name="clear_btn">Clear</string>
