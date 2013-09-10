@@ -80,9 +80,7 @@ public class TestInterfaceDesigns extends Activity{
 			
 			TextView TV = (TextView) findViewById(R.id.rb1_lbl);
 	        TV.setText( "Missing Teeth" );
-	        
-	        
-		}
+			}
 	
 		  // user clicked the 'saveScores' button
 	    public void saveScores( View v )
@@ -97,9 +95,7 @@ public class TestInterfaceDesigns extends Activity{
 	    		rating_scores.add(ratingBar02.getRating());	
 	    		Log.i("RatingBar02 ", String.valueOf(ratingBar02.getRating()));
 	    }
-	     
-	    
-	        
+	     	        
 	private class SpinnerActivity extends Activity implements OnItemSelectedListener {
 		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 

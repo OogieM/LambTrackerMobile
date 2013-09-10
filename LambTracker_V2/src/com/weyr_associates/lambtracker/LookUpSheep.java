@@ -25,7 +25,8 @@ public class LookUpSheep extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lookup_sheep);
-       	dbh = new DatabaseHandler( this, "weyr_associates" );
+        String 	dbfile = getString(R.string.real_database_file) ;
+    	dbh = new DatabaseHandler( this, dbfile );
     	
 //		Added the variable definitions here    	
       	String          cmd;
@@ -48,13 +49,13 @@ public class LookUpSheep extends Activity
 //        mymsg="exists is true";
 //        Log.i ("LookUpSheep2", mymsg);
 //		added a way to verify the sheep_table exists here
-        exists = tableExists("sheep_table");
+        exists = tableExists("demo_sheep_table");
         if (exists)
         	{
  //       	mymsg = "in if loop w/sheep table present";
  //       	Log.i ("LookUpSheep", mymsg);
         	if( eid != null && eid.length() > 0 ){
-        	cmd = String.format( "select *  from sheep_table where eid_tag='%s'", eid );      	
+        	cmd = String.format( "select *  from demo_sheep_table where eid_tag='%s'", eid );      	
   //      	Log.i("LookUpSheep2", cmd);
         	}	
         	else
@@ -160,7 +161,7 @@ public class LookUpSheep extends Activity
     	TV = (TextView) findViewById( R.id.lambing2013Text );
     	String lambing2013 = dbh.fixApostrophes( TV.getText().toString() );
         	
-    	String cmd = String.format( "insert into sheep_table(eid_tag,fed_tag,farm_tag,sheep_name,sheep_task,birth_type,birth_weight,lambing_2012,lambing_2013) values('%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+    	String cmd = String.format( "insert into demo_sheep_table(eid_tag,fed_tag,farm_tag,sheep_name,sheep_task,birth_type,birth_weight,lambing_2012,lambing_2013) values('%s','%s','%s','%s','%s','%s','%s','%s','%s')",
     								eid,
     								fed,
     								farm,
@@ -174,7 +175,7 @@ public class LookUpSheep extends Activity
     	dbh.exec( cmd );
     	
     	// get the id
-    	dbh.exec( "select max(id) from sheep_table" );
+    	dbh.exec( "select max(id) from demo_sheep_table" );
     	dbh.moveToFirstRecord();
     	id = dbh.getInt( 0 ); // Get the primary key from the first record
     	clearBtn( v );
@@ -286,7 +287,7 @@ public class LookUpSheep extends Activity
 		if( sets.endsWith(",") )
 			sets = sets.replaceFirst( ",$", "" );
 		
-		String cmd  = String.format( "update sheep_table set %s where id=%d", sets, id );
+		String cmd  = String.format( "update demo_sheep_table set %s where id=%d", sets, id );
 		dbh.exec( cmd );
 		clearBtn( v );
 		}
@@ -305,7 +306,7 @@ public class LookUpSheep extends Activity
     		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int idx) {
     	               // User clicked OK button -- delete the sheep
-    	       		   String cmd = String.format( "delete from sheep_table where id=%d", id );
+    	       		   String cmd = String.format( "delete from demo_sheep_table where id=%d", id );
     	    		   dbh.exec( cmd );
     	    		   clearBtn( null );
     	               }

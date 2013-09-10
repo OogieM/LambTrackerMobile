@@ -31,34 +31,7 @@ public class LoadSheepList extends Activity {
     	finish();
 		}
 
-    public void createDemoDB( View v )
-		{
-    	String 	dbfile = getString(R.string.demo_database_file) ;
-    	Log.i ("LoadSheep", " the createdemo db file to create is: " + dbfile);
-    	DatabaseHandler dbh     = new DatabaseHandler( this, dbfile );
-    	Log.i("LoadSheep", "  the database is: " + String.valueOf(dbh));
-    	String          cmd     = getString( R.string.build_table );
-    	String          csv     = getString( R.string.csv_file );
-//    	Log.i("Create Demo DB ", cmd);
-//    	Log.i("Create from CSV file ", csv);
-    	int             n       = dbh.createTable( "sheep_table", cmd, csv );
-    	String          howMany = String.format( "records written to 'sheep_table': %d", n );
-    	TextView        txtView = (TextView) findViewById( R.id.editText1 );
-    	txtView.setText( howMany );
-    	dbh.close();
-		}
-
-    public void showDemoDB( View v )
-    	{
-    	String 	dbfile = getString(R.string.demo_database_file) ;
-    	DatabaseHandler dbh     = new DatabaseHandler( this, dbfile );
-    	TextView        txtView = (TextView) findViewById( R.id.editText1 );
-    	String          theDump = dbh.dumpTable( "sheep_table" );
-    	txtView.setText( theDump );
-    	dbh.close();
-    	}
-   
-    public void copyRealDB( View v )
+     public void copyRealDB( View v )
 		{
     	TextView        txtView = (TextView) findViewById( R.id.editText1 );
 //    	Resources res = getResources();
@@ -68,8 +41,7 @@ public class LoadSheepList extends Activity {
     		dbh.copyRealDataBase();
     	}
     	catch (IOException e) {
-    	}
-    	
+    	} 	
     	txtView.setText("Created Real Database from Copy in Assets.");
     	dbh.close();
 	}
@@ -81,8 +53,7 @@ public class LoadSheepList extends Activity {
 	TextView        txtView = (TextView) findViewById( R.id.editText1 );
 //	Figure out how to show the entire real LambTracker database by selecting a table to show 
 //	and then displaying it
-//	get a table to display
-	
+// 	Decided to just dump the sheep table as a first cut	
 	String          theDump = dbh.dumpTable( "sheep_table" );
 	txtView.setText( theDump );
 	dbh.close();

@@ -20,13 +20,12 @@ public class DoSheepTask extends Activity
 	private Cursor 	cursor;
 	private int			    recNo;
 	private int             nRecs;
-	private String[]        colNames; // Left in because I will need it for Convert to EID task
 	@Override
     public void onCreate(Bundle savedInstanceState)	
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.do_sheeptask);
-        String 	dbfile = getString(R.string.demo_database_file) ;
+        String 	dbfile = getString(R.string.real_database_file) ;
     	dbh = new DatabaseHandler( this, dbfile );
     	
     	//	make the delete button red
@@ -77,7 +76,7 @@ public class DoSheepTask extends Activity
     	TV = (TextView) findViewById( R.id.lambing2013Text );
     	String lambing2013 = dbh.fixApostrophes( TV.getText().toString() );
         	
-    	String cmd = String.format( "insert into sheep_table(eid_tag,fed_tag,farm_tag,sheep_name,sheep_task,birth_type,birth_weight,lambing_2012,lambing_2013) values('%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+    	String cmd = String.format( "insert into demo_sheep_table(eid_tag,fed_tag,farm_tag,sheep_name,sheep_task,birth_type,birth_weight,lambing_2012,lambing_2013) values('%s','%s','%s','%s','%s','%s','%s','%s','%s')",
     								eid,
     								fed,
     								farm,
@@ -91,7 +90,7 @@ public class DoSheepTask extends Activity
     	dbh.exec( cmd );
     	
     	// get the id
-    	dbh.exec( "select max(id) from sheep_table" );
+    	dbh.exec( "select max(id) from demo_sheep_table" );
     	dbh.moveToFirstRecord();
     	id = dbh.getInt( 0 ); // Get the primary key from the first record
     	clearBtn( v );
@@ -115,27 +114,27 @@ public class DoSheepTask extends Activity
 		// Start of the actual code to process the buttons
     	if( eid != null && eid.length() > 0 )
     		{
-    		cmd = String.format( "select * from sheep_table where eid_tag='%s'", eid);
+    		cmd = String.format( "select * from demo_sheep_table where eid_tag='%s'", eid);
     		}	
     	else
     	{
     		//added this if statement to also check using federal id tag
         	if( fed != null && fed.length() > 0 )
     		{
-    		cmd = String.format( "select * from sheep_table where fed_tag='%s'", fed );
+    		cmd = String.format( "select * from demo_sheep_table where fed_tag='%s'", fed );
     		}
     		//added this if statement to also check using farm id tag
         	else
         	{
         		if( farm != null && farm.length() > 0 )
         		{
-        			cmd = String.format( "select * from sheep_table where farm_tag='%s'", farm );
+        			cmd = String.format( "select * from demo_sheep_table where farm_tag='%s'", farm );
         		}
         		else
         		{   	
         			if( sheepName != null && sheepName.length() > 0 )
         			{
-        				cmd = String.format("select * from sheep_table where sheep_name='%s'",
+        				cmd = String.format("select * from demo_sheep_table where sheep_name='%s'",
     								sheepName );
         			}
         			else
@@ -161,7 +160,6 @@ public class DoSheepTask extends Activity
     		recNo    = 1;
     		cursor   = (Cursor) crsr;
     		nRecs    = cursor.getCount();
-    		colNames = cursor.getColumnNames();
     		cursor.moveToFirst();
     	}
     	id = dbh.getInt( 0 ); // Get the primary key from the first column  
@@ -200,7 +198,7 @@ public class DoSheepTask extends Activity
     		Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
     		btn3.setEnabled(true);
     		id = dbh.getInt( 0 );
-        	Log.i ("DoSheepTask", "In if statement next button and the record id is " + String.valueOf(id) );
+//        	Log.i ("DoSheepTask", "In if statement next button and the record id is " + String.valueOf(id) );
     		recNo         += 1;
     		TV = (TextView) findViewById( R.id.eidText );
     		TV.setText( dbh.getStr(1) );
@@ -238,7 +236,7 @@ public class DoSheepTask extends Activity
     		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
     		btn2.setEnabled(true);  
         	id = dbh.getInt( 0 ); // Get the primary key from the current record
-        	Log.i ("DoSheepTask", "In if statement prev button and the record id is " + String.valueOf(id) );
+//        	Log.i ("DoSheepTask", "In if statement prev button and the record id is " + String.valueOf(id) );
     		recNo  -= 1;
       		TV = (TextView) findViewById( R.id.eidText );
     		TV.setText( dbh.getStr(1) );
@@ -381,7 +379,7 @@ public class DoSheepTask extends Activity
     		if( sets.endsWith(",") )
     			sets = sets.replaceFirst( ",$", "" );
     		
-    		String cmd  = String.format( "update sheep_table set %s where id=%d", sets, id );
+    		String cmd  = String.format( "update demo_sheep_table set %s where id=%d", sets, id );
     		dbh.exec( cmd );
     		clearBtn( v );
     		}
@@ -399,7 +397,7 @@ public class DoSheepTask extends Activity
     		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int idx) {
     	               // User clicked OK button -- delete the sheep
-    	       		   String cmd = String.format( "delete from sheep_table where id=%d", id );
+    	       		   String cmd = String.format( "delete from demo_sheep_table where id=%d", id );
     	    		   dbh.exec( cmd );
     	    		   clearBtn( null );
     	               }
@@ -415,4 +413,3 @@ public class DoSheepTask extends Activity
     		}
     	}
     }
-

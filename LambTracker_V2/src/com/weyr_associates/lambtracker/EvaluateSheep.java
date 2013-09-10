@@ -26,8 +26,8 @@ public class EvaluateSheep extends Activity {
 	private RatingBar trait01_ratingbar ;
 	private RatingBar trait02_ratingbar ;
 	private RatingBar trait03_ratingbar ;
-//	private RatingBar trait04_ratingbar ;
-//	private RatingBar trait05_ratingbar ;
+	private RatingBar trait04_ratingbar ;
+	private RatingBar trait05_ratingbar ;
 //	private RatingBar trait06_ratingbar ;
 //	private RatingBar trait07_ratingbar ;
 //	private RatingBar trait08_ratingbar ;
@@ -52,22 +52,6 @@ public class EvaluateSheep extends Activity {
         
         Object 			crsr;
         dbh = new DatabaseHandler( this, dbname );
-        
-//        cmd = "select trait_name from evaluation_trait_table where trait_type = 1";
-//        crsr = dbh.exec( cmd );   	
-//        cursor = ( Cursor ) crsr;
-//        dbh.moveToFirstRecord();
-//    	
-//    	if (cursor != null ) {
-//    	    if  (cursor.moveToFirst()) {
-//    	        int i = 0;
-//    	        do {
-//    	            i++;
-//    	            String name = cursor.getString(cursor.getColumnIndex("trait_name"));
-//    	            results.add(name);
-//    	        }while (cursor.moveToNext());
-//    	    } 
-//    	} 
 
         TV = (TextView) findViewById(R.id.trait01_lbl);
         TV.setText( "Missing Teeth" );
@@ -90,13 +74,13 @@ public class EvaluateSheep extends Activity {
     		rating_scores.add(trait03_ratingbar.getRating());	
     		Log.i("trait03_ratingbar ", String.valueOf(trait03_ratingbar.getRating()));
     		
-//    		trait04_ratingbar = (RatingBar) findViewById(R.id.trait04_ratingbar);
-//    		rating_scores.add(trait04_ratingbar.getRating());	
-//    		Log.i("trait04_ratingbar ", String.valueOf(trait04_ratingbar.getRating()));
-//    		
-//    		trait05_ratingbar = (RatingBar) findViewById(R.id.trait05_ratingbar);
-//    		rating_scores.add(trait05_ratingbar.getRating());	
-//    		Log.i("trait05_ratingbar ", String.valueOf(trait05_ratingbar.getRating()));
+    		trait04_ratingbar = (RatingBar) findViewById(R.id.trait04_ratingbar);
+    		rating_scores.add(trait04_ratingbar.getRating());	
+    		Log.i("trait04_ratingbar ", String.valueOf(trait04_ratingbar.getRating()));
+    		
+    		trait05_ratingbar = (RatingBar) findViewById(R.id.trait05_ratingbar);
+    		rating_scores.add(trait05_ratingbar.getRating());	
+    		Log.i("trait05_ratingbar ", String.valueOf(trait05_ratingbar.getRating()));
 //    		
 //    		trait06_ratingbar = (RatingBar) findViewById(R.id.trait06_ratingbar);
 //    		rating_scores.add(trait06_ratingbar.getRating());	

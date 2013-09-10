@@ -496,7 +496,6 @@ public class MainActivity extends Activity {
 	public void convertToEID( )
     {
 	Intent convertSheep = new Intent( this, ConvertToEID.class );
-//	convertSheep.putExtra("com.weyr_associates.lambtracker.LASTEID", LastEID);
 	startActivity(convertSheep);
 	}
 	

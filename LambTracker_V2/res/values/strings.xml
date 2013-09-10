@@ -5,16 +5,12 @@
     <string name="app_name_long">Weyr Associates LambTracker</string>
 	<string name="app_name_settings">Weyr Associates LambTracker - Settings</string>
 	
-	<string name="demo_database_file">demo_db.sqlite</string>
 	<string name="real_database_file">lambtracker_db.sqlite</string>
 	<string name="database_path">/data/data/com.weyr_associates.lambtracker/databases/</string>
 	
     <string name="service_started">EID Service Running</string> 
     <string name="service_label">EID Service</string> 
     <string name="menu_settings">Settings</string>
-    
-    <string name="show_demo_db_btn">Show Demo DB</string>
-    <string name="create_demo_db_btn">Create Demo DB</string>
     
     <string name="exec_sql_btn">Execute SQL</string>    
     <string name="edit_db_btn">Edit DB</string>
@@ -48,6 +44,9 @@
     <string name="load_sheeplist">Load Sheep Database</string>
     <string name="do_sheeptask">Do Sheep Tasks</string>
     <string name="look_up_sheep">Look up a Sheep by EID</string>
+   	<string name="copy_real_db_action">copyRealDB</string> 
+    <string name="show_real_db_action">showRealDB</string>
+      
     
     <string name="title_activity_do_sheep_task">DoSheepTask</string>
     <string name="title_activity_load_sheep_list">LoadSheepList</string>
@@ -62,9 +61,9 @@
     <string name="help_warning">Help Screen</string>
     <string name="help_convert">Select a sheep based on either Federal or Farm tag. The system assumes there are no duplicate
          farm tags and no duplicate federal tags. There can be duplicates where one is a federal tag and one is a farm tag. </string>   
-    <string name="help_evaluate">Evaluate sheep based ont eh criteria you select. Use the select to locate a sheep by Federal, 
+    <string name="help_evaluate">Evaluate sheep based on the criteria you select. Use the select to locate a sheep by Federal, 
         Farm or Scanning an EID tag. Then select the scores for each trait. When finished select Save Scores
-        to write the data to the database with an evaluation date of today.</string>
+        to write the data to the database with an evaluation date of today. The units fields are not yet implemented in this version. </string>
     <string name="help_create_evaluate">Create a list of traits to evaluate on this run with the sheep. You can select 
         as many or as few items to evaluate as you wish up to 14 scored items and 2 real data items.</string>    
     
@@ -76,11 +75,11 @@
         <item>Demo Lambing Data</item>
         <item>Convert to EID</item>
         <item>Evaluate Sheep</item>
-        <item>Edit Real Database</item>
+        <item>Edit Database</item>
         <item>Test Interface Designs</item>
      </string-array>
   
-    <string name="fileListTitle_label">Choose Sheep Tasks</string>
+    <string name="fileListTitle_label">Choose a Flock Task</string>
        
     <string name="sheep_name_lbl">Sheep Name</string>
     <string name="flock_prefix_lbl">Flock Prefix</string>
@@ -113,10 +112,6 @@
     <string name="select_value_traits.lbl">Select Traits with Real values</string>
     
     <string name="evaluation_lbl">Sheep Evaluation</string>
-    <string name="evaluation_scores_lbl">   -1   0   1  2   3   4   5</string>
-    <string name="missing_teeth_lbl">Missing Teeth</string>
-    <string name="head_lbl">Head</string>
-    <string name="body_lbl">Body</string>
        
 	<string name="sql_command_lbl">SQL Command</string>
 	<string name="results_lbl">Results</string>
@@ -127,10 +122,6 @@
 
     <string name="title_Message">Ewe Lambing History</string>
          
-    <string name="show_demo_db_action">showDemoDB</string>
-    <string name="copy_real_db_action">copyRealDB</string> 
-    <string name="show_real_db_action">showDemoDB</string>
-      
     <string name="delete_sheep">Delete Sheep?</string>
     <string name="delete_tag">Delete Tag?</string>
     <string name="delete_warning">Delete Warning</string>
@@ -138,12 +129,5 @@
     <string name="ok">OK</string> 
    
     <string name="action_settings">Settings</string>
-    
-    <!-- added fed_tag, birth data and lambing data to this line -->
-    <string name="build_table">create table sheep_table(id integer primary key autoincrement,eid_tag text,
-        fed_tag text,farm_tag text,sheep_name text,birth_date text,
-        birth_type text,sheep_task text,birth_weight text,
-        lambing_2012 text, lambing_2013 text)</string>     
-    <string name="csv_file">demo_sheep_table.csv</string>
-    
+       
 </resources>

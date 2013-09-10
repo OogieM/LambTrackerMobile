@@ -183,9 +183,6 @@ public class ConvertToEID extends Activity {
  		}
 
  	}    	
-
-
-	
 	
 	// use EID reader to look up a sheep
 	public void gotEID( )
@@ -198,8 +195,6 @@ public class ConvertToEID extends Activity {
 	
 /////////////////////////////////////////////////////	
 	
-	
-	
 	@Override
     public void onCreate(Bundle savedInstanceState)	
     {
@@ -208,15 +203,12 @@ public class ConvertToEID extends Activity {
         String dbname = getString(R.string.real_database_file); 
     	dbh = new DatabaseHandler( this, dbname );
     	
- ////////////////////////////////////
-    	
-  
+ //////////////////////////////////// 
 		CheckIfServiceIsRunning();
 //		Log.i("Convert", "back from isRunning");
     	
 ////////////////////////////////////    	
-    	
-    	
+    	   	
     	//	make the remove tag buttons red
     	Button btn = (Button) findViewById( R.id.remove_fedtag_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -625,17 +617,11 @@ public class ConvertToEID extends Activity {
 		} catch (RemoteException e) {
 			// In this case the service has crashed before we could even do anything with it
 		}
-		}
-//    	LastEID = "xxx"; //temporary placeholder will be filled with proper EID from scanner
-    	
-//    	TextView TV = (TextView) findViewById (R.id.eidText);
-//    	TV.setText( LastEID );
-    	
-    	
+		}    	    	
     }
     
     public void updateTags( View v ){
-    	String          cmd;
+    	String      cmd;
     	Object		crsr;
     	// Get the values from the UI screen
     	TextView TV = (TextView) findViewById( R.id.sheepnameText );

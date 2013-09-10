@@ -54,7 +54,6 @@
         android:layout_column="0"
         android:layout_gravity="left|center"
         android:layout_row="1"
-        android:text="@string/body_lbl"
         android:textSize="18sp"
         android:typeface="monospace" />
        

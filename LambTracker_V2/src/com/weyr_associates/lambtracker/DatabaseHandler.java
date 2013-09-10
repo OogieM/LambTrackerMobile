@@ -97,18 +97,18 @@ public class DatabaseHandler extends SQLiteOpenHelper
         activeTable = tableName;
         buildTable  = createTableSQL;
         theCSVFile  = csvFile;
-        Log.i("in DBH", " createTable the active table is: " + activeTable);
-        Log.i("in DBH", " createTable the SQL command is: " +buildTable);
-        Log.i("in DBH", " createTable the CSV file is: " + theCSVFile);
-        Log.i("in DBH", " createTable the database is: " + String.valueOf(db));
+//        Log.i("in DBH", " createTable the active table is: " + activeTable);
+//        Log.i("in DBH", " createTable the SQL command is: " +buildTable);
+//        Log.i("in DBH", " createTable the CSV file is: " + theCSVFile);
+//        Log.i("in DBH", " createTable the database is: " + String.valueOf(db));
         if( db == null ){
             db = this.getWritableDatabase();
         }
         Log.i("in DBH ", "the writable database is: " + String.valueOf(db));
-//        if( db.isOpen()){
-//        	db.close();
-//        }
-//        db.execSQL( "drop table if exists " + tableName );
+        if( db.isOpen()){
+        	db.close();
+        }
+        db.execSQL( "drop table if exists " + tableName );
         Log.i("DBH ", "Before the create table command");
         db.execSQL( createTableSQL );
         
@@ -182,7 +182,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
     	StringTokenizer tok = new StringTokenizer(sqlStmt, " " );
     	String          cmd = tok.nextToken();
         
-    	Log.i("DBH Exec", "token is: " + tok);
+ //   	Log.i("DBH Exec", "token is: " + tok);
         if( db == null )
             db = this.getWritableDatabase();
         
