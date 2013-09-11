@@ -54,7 +54,7 @@ public class EvaluateSheep extends Activity {
         dbh = new DatabaseHandler( this, dbname );
 
         TV = (TextView) findViewById(R.id.trait01_lbl);
-        TV.setText( "Missing Teeth" );
+ //       TV.setText( "Missing Teeth" );
         
         
        	}

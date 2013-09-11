@@ -14,6 +14,7 @@ import java.util.Calendar;
 import android.util.Log;
 import android.app.Activity;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -43,7 +44,12 @@ public class LoadSheepList extends Activity {
     	catch (IOException e) {
     	} 	
     	txtView.setText("Created Real Database from Copy in Assets.");
-    	dbh.close();
+    	
+    	String cmd = String.format( "select count(*) from %s", "demo_sheep_table" );
+        Cursor crsr = ((Cursor) dbh.exec( cmd ));
+        crsr.moveToFirst();
+        txtView.setText("Records created in demo_sheep_table = " + String.valueOf(crsr.getInt( 0 )));
+        dbh.close();
 	}
 
     public void showRealDB( View v )
