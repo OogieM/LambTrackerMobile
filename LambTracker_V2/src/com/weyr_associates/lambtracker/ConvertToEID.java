@@ -205,8 +205,7 @@ public class ConvertToEID extends Activity {
     	
  //////////////////////////////////// 
 		CheckIfServiceIsRunning();
-//		Log.i("Convert", "back from isRunning");
-    	
+//		Log.i("Convert", "back from isRunning");  	
 ////////////////////////////////////    	
     	   	
     	//	make the remove tag buttons red
