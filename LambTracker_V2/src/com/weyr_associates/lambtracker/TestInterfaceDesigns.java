@@ -38,7 +38,7 @@ public class TestInterfaceDesigns extends Activity{
 		List<String> tag_colors, evaluation_traits;
 		List<Float> rating_scores;
 		ArrayAdapter<String> dataAdapter;
-		
+		List<String> scored_evaluation_traits, data_evaluation_traits;
 		private RatingBar ratingBar01 ;
 		private RatingBar ratingBar02 ;		
 		
@@ -50,9 +50,10 @@ public class TestInterfaceDesigns extends Activity{
 			setContentView(R.layout.test_interface_designs);
 			String dbname = getString(R.string.real_database_file); 
 	    	dbh = new DatabaseHandler( this, dbname );	
+	    	scored_evaluation_traits = new ArrayList<String>();
 	    	
 	    	test_dynamic_spinner = (Spinner) findViewById(R.id.test_dynamic_spinner);
-	    	Log.i("testinterface", "in onCreate below test spinner");
+//	    	Log.i("testinterface", "in onCreate below test spinner");
 	    	tag_colors = new ArrayList<String>();
 	         
 	        // Select All fields from tag colors to build the spinner
@@ -78,8 +79,46 @@ public class TestInterfaceDesigns extends Activity{
 //			Log.i("Activity", "In Spinner");
 			test_dynamic_spinner.setOnItemSelectedListener(new SpinnerActivity());	
 			
-			TextView TV = (TextView) findViewById(R.id.rb1_lbl);
-	        TV.setText( "Missing Teeth" );
+			
+			// Select All fields from trait table that are score type and get set to fill the spinners
+	        cmd = "select * from evaluation_trait_table where trait_type = 1";
+	        crsr = dbh.exec( cmd ); ;
+//	       Log.i("testing", "executed command " + cmd);
+	        cursor   = ( Cursor ) crsr;
+	    	dbh.moveToFirstRecord();
+	    	scored_evaluation_traits.add("Select a Trait");
+//	    	 Log.i("testinterface", "in onCreate below got evaluation straits table");
+	        // looping through all rows and adding to list
+	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+	    		scored_evaluation_traits.add(cursor.getString(1));
+	    	}
+	    	cursor.close();
+//	        Log.i("createEval ", "below for loop");
+	    	
+	    	trait_spinner = (Spinner) findViewById(R.id.trait_spinner);	
+	    	dataAdapter = new ArrayAdapter<String>(this,
+		                android.R.layout.simple_spinner_item, scored_evaluation_traits);
+			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
+			trait_spinner.setAdapter (dataAdapter);
+			trait_spinner.setSelection(0);
+			trait_spinner.setOnItemSelectedListener(new SpinnerActivity());
+			
+			
+//			cmd = "select * from evaluation_trait_table where id_traitid = 7";
+//	        crsr = dbh.exec( cmd );  
+//	        cursor   = ( Cursor ) crsr;
+//	    	dbh.moveToFirstRecord();    	
+//			TextView TV = (TextView) findViewById(R.id.rb1_lbl);
+//	        TV.setText( cursor.getString(1) );
+//	        cursor.close();
+	        
+	        cmd = "select * from evaluation_trait_table where id_traitid = 2";
+	        crsr = dbh.exec( cmd );  
+	        cursor   = ( Cursor ) crsr;
+	    	dbh.moveToFirstRecord();    	
+	    	TextView TV = (TextView) findViewById(R.id.rb2_lbl);
+	        TV.setText( cursor.getString(1) );
+	        cursor.close();
 			}
 	
 		  // user clicked the 'saveScores' button

@@ -92,6 +92,8 @@ public class EditDB extends Activity
 	public void goBack( View v )
 		{
 		// return to main
+		
+		dbh.closeDB();
 		finish();
 		}
 	

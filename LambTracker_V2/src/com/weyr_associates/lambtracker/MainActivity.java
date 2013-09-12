@@ -195,8 +195,9 @@ public class MainActivity extends Activity {
 					MainActivity.this.startActivity(i);
 			        break;
 				case 5:
-					i = new Intent(this, EvaluateSheep.class);
-			        this.startActivity(i);
+					Log.i("MainActivity", "in case 5 should start Evaluate Sheep class here");
+					i = new Intent(MainActivity.this, EvaluateSheep.class);
+			        MainActivity.this.startActivity(i);
 			        break;
 				case 6:
 					i = new Intent(MainActivity.this, EditDB.class);

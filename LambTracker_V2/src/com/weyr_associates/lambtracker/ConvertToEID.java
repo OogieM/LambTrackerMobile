@@ -187,6 +187,10 @@ public class ConvertToEID extends Activity {
 	// use EID reader to look up a sheep
 	public void gotEID( )
     {
+	   	//	make the scan eid button red
+    	Button btn = (Button) findViewById( R.id.scan_eid_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+    	
     	TextView TV = (TextView) findViewById (R.id.eidText);
     	TV.setText( LastEID );
 //		Log.i("Convert", "Got EID");
@@ -612,6 +616,9 @@ public class ConvertToEID extends Activity {
 			Message msg = Message.obtain(null, eidService.MSG_SEND_ME_TAGS);
 			msg.replyTo = mMessenger;
 			mService.send(msg);
+		   	//	make the scan eid button green
+	    	Button btn = (Button) findViewById( R.id.scan_eid_btn );
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xFFCC0000));
 			
 		} catch (RemoteException e) {
 			// In this case the service has crashed before we could even do anything with it
