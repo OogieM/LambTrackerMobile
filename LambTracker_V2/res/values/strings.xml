@@ -64,8 +64,7 @@
     <string name="help_evaluate">Evaluate sheep based on the criteria you select. Use the select to locate a sheep by Federal, 
         Farm or Scanning an EID tag. Then select the scores for each trait. When finished select Save Scores
         to write the data to the database with an evaluation date of today. The units fields are not yet implemented in this version. </string>
-    <string name="help_create_evaluate">Create a list of traits to evaluate on this run with the sheep. You can select 
-        as many or as few items to evaluate as you wish up to 5 scored items and 2 real data items.</string>    
+    <string name="help_create_evaluate">Create a list of traits to evaluate on this run with the sheep. You must select 5 scored items and 2 real data items.</string>    
     
     <string name="select">Choose a Flock Task</string>
     <string-array name="sheep_task_array">

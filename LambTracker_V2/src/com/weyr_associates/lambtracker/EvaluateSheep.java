@@ -42,14 +42,9 @@ public class EvaluateSheep extends Activity {
 	private RatingBar trait03_ratingbar ;
 	private RatingBar trait04_ratingbar ;
 	private RatingBar trait05_ratingbar ;
-//	private RatingBar trait06_ratingbar ;
-//	private RatingBar trait07_ratingbar ;
-//	private RatingBar trait08_ratingbar ;
-//	private RatingBar trait09_ratingbar ;
-//	private RatingBar trait10_ratingbar ;
-//	private RatingBar trait11_ratingbar ;
-//	private RatingBar trait12_ratingbar ;
-	public Float trait01_data, trait02_data, trait03_data, trait04_data, trait05_data, trait06_data, trait07_data;
+
+	public Float trait01_data, trait02_data, trait03_data, trait04_data, trait05_data;
+	public Float trait06_data, trait07_data;
 	
 	private DatabaseHandler dbh;
 	private Cursor 	cursor;
@@ -70,47 +65,47 @@ public class EvaluateSheep extends Activity {
         Log.i("EvaluateSheep ", cmd);
         crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
-        
         dbh.moveToFirstRecord();
+        
         trait01 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait01 = " + String.valueOf(trait01));
+//        Log.i("EvaluateSheep ", "trait01 = " + String.valueOf(trait01));
         cursor.moveToNext();
         
         trait02 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait02 = " + String.valueOf(trait02));
+//        Log.i("EvaluateSheep ", "trait02 = " + String.valueOf(trait02));
         cursor.moveToNext();
         
         trait03 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait03 = " + String.valueOf(trait03));
+//        Log.i("EvaluateSheep ", "trait03 = " + String.valueOf(trait03));
         cursor.moveToNext();
         
         trait04 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait04 = " + String.valueOf(trait04));
+//        Log.i("EvaluateSheep ", "trait04 = " + String.valueOf(trait04));
         cursor.moveToNext();
         
         trait05 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait05 = " + String.valueOf(trait05));
+//        Log.i("EvaluateSheep ", "trait05 = " + String.valueOf(trait05));
         cursor.moveToNext();
         
         trait06 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait06 = " + String.valueOf(trait06));
+//        Log.i("EvaluateSheep ", "trait06 = " + String.valueOf(trait06));
         cursor.moveToNext();
         
         trait07 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait07 = " + String.valueOf(trait07));
+//        Log.i("EvaluateSheep ", "trait07 = " + String.valueOf(trait07));
         cursor.moveToNext();    
         
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
         		"evaluation_trait_table.id_traitid=%s", trait01 );
-        Log.i("get name ", cmd);
+//        Log.i("get name ", cmd);
         crsr = dbh.exec( cmd );
-        Log.i("EvaluateSheep ", "after get name");
+//        Log.i("EvaluateSheep ", "after get name");
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
-        Log.i("EvaluateSheep ", "after move to first");
+//        Log.i("EvaluateSheep ", "after move to first");
         TV = (TextView) findViewById( R.id.trait01_lbl );
         TV.setText(dbh.getStr(0));
-        Log.i("EvaluateSheep ", "after get the text");
+//        Log.i("EvaluateSheep ", "after get the text");
               
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
         		"evaluation_trait_table.id_traitid=%s", trait02 );
@@ -205,34 +200,7 @@ public class EvaluateSheep extends Activity {
     		trait05_ratingbar = (RatingBar) findViewById(R.id.trait05_ratingbar);
     		trait05_data = trait01_ratingbar.getRating();
     		Log.i("trait05_ratingbar ", String.valueOf(trait05_data));
-//    		
-//    		trait06_ratingbar = (RatingBar) findViewById(R.id.trait06_ratingbar);
-//    		rating_scores.add(trait06_ratingbar.getRating());	
-//    		Log.i("trait06_ratingbar ", String.valueOf(trait06_ratingbar.getRating()));
-//    		
-//    		trait07_ratingbar = (RatingBar) findViewById(R.id.trait07_ratingbar);
-//    		rating_scores.add(trait07_ratingbar.getRating());	
-//    		Log.i("trait07_ratingbar ", String.valueOf(trait07_ratingbar.getRating()));
-//    		
-//    		trait08_ratingbar = (RatingBar) findViewById(R.id.trait08_ratingbar);
-//    		rating_scores.add(trait08_ratingbar.getRating());	
-//    		Log.i("trait08_ratingbar ", String.valueOf(trait08_ratingbar.getRating()));
-//    		
-//    		trait09_ratingbar = (RatingBar) findViewById(R.id.trait09_ratingbar);
-//    		rating_scores.add(trait09_ratingbar.getRating());	
-//    		Log.i("trait09_ratingbar ", String.valueOf(trait09_ratingbar.getRating()));
-//    		
-//    		trait10_ratingbar = (RatingBar) findViewById(R.id.trait10_ratingbar);
-//    		rating_scores.add(trait10_ratingbar.getRating());	
-//    		Log.i("trait10_ratingbar ", String.valueOf(trait10_ratingbar.getRating()));
-//    		
-//    		trait11_ratingbar = (RatingBar) findViewById(R.id.trait11_ratingbar);
-//    		rating_scores.add(trait11_ratingbar.getRating());	
-//    		Log.i("trait11_ratingbar ", String.valueOf(trait11_ratingbar.getRating()));
-//    		
-//    		trait12_ratingbar = (RatingBar) findViewById(R.id.trait12_ratingbar);
-//    		rating_scores.add(trait12_ratingbar.getRating());	
-//    		Log.i("trait12_ratingbar ", String.valueOf(trait12_ratingbar.getRating()));
+
 //    		
     }
 	

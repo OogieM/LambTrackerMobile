@@ -62,8 +62,11 @@ public class CreateSheepEvaluation extends Activity {
     	dbh = new DatabaseHandler( this, dbname );	
     	
     	scored_evaluation_traits = new ArrayList<String>();
-         
-        // Select All fields from trait table that are score type and get set to fill the spinners
+        // enable the Create an evaluation button when we come in to start this task
+    	Button btn2 = (Button) findViewById( R.id.create_evaluation_task_btn );
+    	btn2.setEnabled(true);
+    	
+        // Select All fields from trait table that are scored type and get set to fill the spinners
         cmd = "select * from evaluation_trait_table where trait_type = 1";
         Object crsr = dbh.exec( cmd ); ;
 //       Log.i("testing", "executed command " + cmd);
@@ -71,57 +74,37 @@ public class CreateSheepEvaluation extends Activity {
     	dbh.moveToFirstRecord();
     	scored_evaluation_traits.add("Select a Trait");
 //    	 Log.i("testinterface", "in onCreate below got evaluation straits table");
-        // looping through all rows and adding to list
+        // looping through all rows and adding to list all the scored evaluatin types
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		scored_evaluation_traits.add(cursor.getString(1));
     	}
     	cursor.close();
-//        Log.i("createEval ", "below for loop");
-    	
     	dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, scored_evaluation_traits);
     	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
 	
+    	//Fill the 5 scored spinners from the same list of evaluation traits.
     	trait01_spinner = (Spinner) findViewById(R.id.trait01_spinner);	
-//    	dataAdapter = new ArrayAdapter<String>(this,
-//	                android.R.layout.simple_spinner_item, scored_evaluation_traits);
-//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
 		trait01_spinner.setAdapter (dataAdapter);
 		trait01_spinner.setSelection(0);
-//		trait01_spinner.setOnItemSelectedListener(new SpinnerActivity());
 		
 		trait02_spinner = (Spinner) findViewById(R.id.trait02_spinner);
-//		dataAdapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_spinner_item, scored_evaluation_traits);
-//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		trait02_spinner.setAdapter (dataAdapter);
 		trait02_spinner.setSelection(0);
-//		trait02_spinner.setOnItemSelectedListener(new SpinnerActivity());
 		
 		trait03_spinner = (Spinner) findViewById(R.id.trait03_spinner);
-//		dataAdapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_spinner_item, scored_evaluation_traits);
-//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		trait03_spinner.setAdapter (dataAdapter);
 		trait03_spinner.setSelection(0);
-//		trait03_spinner.setOnItemSelectedListener(new SpinnerActivity());
 		
 		trait04_spinner = (Spinner) findViewById(R.id.trait04_spinner);
-//		dataAdapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_spinner_item, scored_evaluation_traits);
-//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		trait04_spinner.setAdapter (dataAdapter);
 		trait04_spinner.setSelection(0);
-//		trait04_spinner.setOnItemSelectedListener(new SpinnerActivity());
 		
 		trait05_spinner = (Spinner) findViewById(R.id.trait05_spinner);
-//		dataAdapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_spinner_item, scored_evaluation_traits);
-//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		trait05_spinner.setAdapter (dataAdapter);
 		trait05_spinner.setSelection(0);
-//		trait05_spinner.setOnItemSelectedListener(new SpinnerActivity());
 		
+		// Now set up for the two real data traits
 		data_evaluation_traits = new ArrayList<String>();
         
         // Select All fields from trait table that are real data type and get set to fill the spinners
@@ -131,7 +114,7 @@ public class CreateSheepEvaluation extends Activity {
         cursor   = ( Cursor ) crsr;
     	dbh.moveToFirstRecord();
     	data_evaluation_traits.add("Select a Trait");
-//    	 Log.i("testinterface", "in onCreate below got evaluation straits table");
+//    	 Log.i("testinterface", "in onCreate below got evaluation traits table");
         // looping through all rows and adding to list
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		data_evaluation_traits.add(cursor.getString(1));
@@ -143,176 +126,20 @@ public class CreateSheepEvaluation extends Activity {
     	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
 
     	trait06_spinner = (Spinner) findViewById(R.id.trait06_spinner);	
-//    	dataAdapter = new ArrayAdapter<String>(this,
-//	                android.R.layout.simple_spinner_item, data_evaluation_traits);
-//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
 		trait06_spinner.setAdapter (dataAdapter);
 		trait06_spinner.setSelection(0);
-//		trait06_spinner.setOnItemSelectedListener(new SpinnerActivity());
 		
 		trait07_spinner = (Spinner) findViewById(R.id.trait07_spinner);
-//		dataAdapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_spinner_item, data_evaluation_traits);
-//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		trait07_spinner.setAdapter (dataAdapter);
 		trait07_spinner.setSelection(0);
-//		trait07_spinner.setOnItemSelectedListener(new SpinnerActivity());
 	
 	}
 //	private class SpinnerActivity extends Activity implements OnItemSelectedListener {
-//		
-//		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-//
-////			Log.i("Activity", "In Spinner activity before the case statement");
-//			String string_position;
-//			String which_spinner ; 
-//			int which_spinner2;
-//			
-//			string_position = String.valueOf (parent.getSelectedItemPosition());
-//			which_spinner = String.valueOf (parent);
-//			Log.i("Which Spinner ", which_spinner);
-//			Log.i("Spinner Position ", string_position);
-//			
-//			which_spinner2 = parent.getId();
-//			Log.i("Which Spinner ", which_spinner);
-//			Log.i("Which Spinner ID ", String.valueOf(which_spinner2));
-//			Log.i("Spinner Position ", string_position);
-//			
-////			String res = getResources().getResourceEntryName(which_spinner2);
-////			Log.i("Which Spinner name ", res);
-////			getResources().getResourceName(which_spinner2);
-//			
-////			Log.i("Which Spinner ", which_spinner);
-////			Log.i("Which Spinner ID ", String.valueOf (which_spinner2));
-////			Log.i("Spinner Position ", string_position);
-//			
-//			
-////			switch (parent){
-////			case 0:
-////				
-////			}
-//
-//				switch (parent.getSelectedItemPosition()){		
-//				case 0:
-//			        // Don't want to do anything until something is selected so just break at position zero
-//					break;
-//			    case 1:
-//			    	// Save the spinner and position into an array
-//			    	
-//			    	break;
-//				case 2:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 3:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 4:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 5:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 6:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 7:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 8:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 9:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 10:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 11:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 12:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 13:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 14:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 15:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 16:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 17:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 18:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				case 19:
-////					teststring = String.valueOf (parent.getSelectedItemPosition());
-////			    	Log.i("Spinner", "Position = "+teststring);
-////			    	teststring = trait01_spinner.getSelectedItem().toString();
-////			    	Log.i("Spinner", "Position = "+teststring);
-//			        break;
-//				}   	
+//		becasue we only get the spinner data when the user selects the create an evaluation 
+//		this class is not needed.
 //			}
 //		@Override
 //		public void onNothingSelected(AdapterView<?> arg0) {
-//			// TODO Auto-generated method stub
 //			
 //		}
 //	}
@@ -349,6 +176,7 @@ public class CreateSheepEvaluation extends Activity {
 	    public void createEval( View v )
 	    {
 	    	Object 			crsr;
+	    	String cmd;
 	   // Need to get the position and text for every spinner and the real data points and use
 	   // this to fill the actual evaluation task screen with what we are looking at.
 	    	trait01_spinner = (Spinner) findViewById(R.id.trait01_spinner);
@@ -359,60 +187,29 @@ public class CreateSheepEvaluation extends Activity {
 	    	trait06_spinner = (Spinner) findViewById(R.id.trait06_spinner);
 	    	trait07_spinner = (Spinner) findViewById(R.id.trait07_spinner);
 	    	
-//	    	trait01 =  trait01_spinner.getSelectedItemPosition();
-//	    	Log.i("trait01_spinner ", "Position = "+String.valueOf(trait01));
-//	    	trait01_label = trait01_spinner.getItemAtPosition(trait01).toString();
+	    	// fill the labels with the contents of the various spinners
 	    	trait01_label = trait01_spinner.getSelectedItem().toString();
-	    	Log.i("trait01_spinner ", "Contents = "+ trait01_label);
-	    	
+//	    	Log.i("trait01_spinner ", "Contents = "+ trait01_label);
 	    	trait02_label = trait02_spinner.getSelectedItem().toString();
 	    	trait03_label = trait03_spinner.getSelectedItem().toString();
 	    	trait04_label = trait04_spinner.getSelectedItem().toString();
 	    	trait05_label = trait05_spinner.getSelectedItem().toString();
 	    	trait06_label = trait06_spinner.getSelectedItem().toString();
 	    	trait07_label = trait07_spinner.getSelectedItem().toString();
+
+	    	// Need to get the id_traitid from the evaluation trait table and store
+	    	// that as the actual thing we reference in the evaluate sheep section since it won't change
+	    	// from time to time
 	    	
-//	    	
-//	    	trait02_label = trait02_spinner.getSelectedItem().toString();
-//	    	Log.i("trait02_spinner ", "Contents = "+ trait02_label);
-//	    	
-//	    	trait06_label = trait06_spinner.getSelectedItem().toString();
-//	    	Log.i("trait06_spinner ", "Contents = "+ trait06_label);
-//	    	
-//	    	trait07_label = trait07_spinner.getSelectedItem().toString();
-//	    	Log.i("trait07_spinner ", "Contents = "+ trait07_label);
-//	    		    	
-//	    	trait02 =  trait02_spinner.getSelectedItemPosition();
-//	    	Log.i("trait02_spinner ", "Position = "+String.valueOf(trait02));	   
-////	    	trait02_label = trait01_spinner.getSelectedItem().toString();
-//	    	
-//	    	trait03 =  trait03_spinner.getSelectedItemPosition();
-//	    	Log.i("trait03_spinner ", "Position = "+String.valueOf(trait03));	   
-////	    	trait03_label = trait01_spinner.getSelectedItem().toString();
-//	    	
-//	    	trait04 =  trait04_spinner.getSelectedItemPosition();
-//	    	Log.i("trait04_spinner ", "Position = "+String.valueOf(trait04));	   
-//	    	
-//	    	trait05 =  trait05_spinner.getSelectedItemPosition();
-//	    	Log.i("trait05_spinner ", "Position = "+String.valueOf(trait05));	   
-//	    	
-//	    	trait06 =  trait06_spinner.getSelectedItemPosition();
-//	    	Log.i("trait06_spinner ", "Position = "+String.valueOf(trait06));
-//	    	
-//	    	trait07 =  trait07_spinner.getSelectedItemPosition();
-//	    	Log.i("trait07_spinner ", "Position = "+String.valueOf(trait07));
-	    	// Need to get the values from scored_evaluation_traits and data_evaluation_traits lists
-	    	// and cross reference to the actual id_traitid from the evaluation trait table and store
-	    	// that as the actual thing we reference in the evaluate sheep section
-	    	
+	    	// Should be able to enclose each of these into an IF statement to see if a trait was selected
+	    	// and if not then do not do the database lookup but not implemented yet
 	    	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
 	    			"where trait_name='%s'", trait01_label);
-	    	Log.i("query trait1", cmd);
+//	    	Log.i("query trait1", cmd);
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        trait01 = dbh.getInt(0);
-//	        Log.i("trait01_spinner ", "Position = "+String.valueOf(trait01));
 
 	    	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
 	    			"where trait_name='%s'", trait02_label);
@@ -453,7 +250,6 @@ public class CreateSheepEvaluation extends Activity {
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        trait06 = dbh.getInt(0);
-//	        Log.i("trait06_spinner ", "Position = "+String.valueOf(trait06));
 
 	        cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
 	    			"where trait_name='%s'", trait07_label);
@@ -462,38 +258,42 @@ public class CreateSheepEvaluation extends Activity {
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        trait07 = dbh.getInt(0);
-//	        Log.i("trait07_spinner ", "Position = "+String.valueOf(trait07));
 
-	       
-	    	
+	        // We have all the actual traits now to get their id_traitid and store it for look-up later
 	    	cmd = "drop table if exists temp_table";
 	    	dbh.exec (cmd);
 	    	
 	    	cmd = "CREATE TABLE temp_table (id_temp INTEGER PRIMARY KEY " +
 	    			"AUTOINCREMENT, temp_eval INTEGER NOT NULL)";
-	    	Log.i("db create ", cmd);
+//	    	Log.i("db create ", cmd);
 	    	dbh.exec (cmd);
 	    	
-	    	String cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait01);
-	    	Log.i("db cmd ", cmd);	    	
+	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait01);
+//	    	Log.i("db cmd ", cmd);	    	
 	    	dbh.exec( cmd );
 	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait02);
-	    	Log.i("db cmd ", cmd);
+//	    	Log.i("db cmd ", cmd);
 	    	dbh.exec( cmd );
 	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait03);
-	    	Log.i("db cmd ", cmd);
+//	    	Log.i("db cmd ", cmd);
 	    	dbh.exec( cmd );
 	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait04);
-	    	Log.i("db cmd ", cmd);
+//	    	Log.i("db cmd ", cmd);
 	    	dbh.exec( cmd );
 	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait05);
-	    	Log.i("db cmd ", cmd);
+//	    	Log.i("db cmd ", cmd);
 	    	dbh.exec( cmd );
 	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait06);
-	    	Log.i("db cmd ", cmd);
+//	    	Log.i("db cmd ", cmd);
 	    	dbh.exec( cmd );
 	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait07);
-	    	Log.i("db cmd ", cmd);
-	    	dbh.exec( cmd );	    	
+//	    	Log.i("db cmd ", cmd);
+	    	dbh.exec( cmd );
+	    	// All done need to disable the create create_evaluation_task_btn so we don't do it twice
+	    	
+//	    	Disable the Next Record and Prev. Record button until we have multiple records
+	       	Button btn2 = (Button) findViewById( R.id.create_evaluation_task_btn );
+	    	btn2.setEnabled(false); 
+	    	
     }	 
 }
