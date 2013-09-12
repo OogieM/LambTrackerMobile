@@ -302,49 +302,46 @@
     </GridLayout>
     <GridLayout
         android:id="@+id/grid5"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:columnCount="5" >
+        android:columnCount="4" >
     
         <EditText
         android:id="@+id/trait06_lbl"
-        android:layout_width="150dp"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_column="0"
-        
-        android:layout_row="1"
+        android:layout_row="0"
         android:inputType="text"
         android:textSize="14sp"
         android:typeface="monospace" />
+        
         <EditText
         android:id="@+id/trait06_data"
-        android:layout_width="150dp"
+        android:layout_width="85dp"
         android:layout_height="wrap_content"
         android:layout_column="1"
-        
-        android:layout_row="0"
-        android:inputType="number"
+         android:layout_row="0"
+        android:inputType="numberDecimal"
         android:textSize="14sp"
         android:typeface="monospace" />
         
         <EditText
         android:id="@+id/trait07_lbl"
-        android:layout_width="150dp"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_column="2"
-       
         android:layout_row="0"
         android:inputType="text"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:typeface="monospace" />
         <EditText
         android:id="@+id/trait07_data"
-        android:layout_width="150dp"
+        android:layout_width="85dp"
         android:layout_height="wrap_content"
         android:layout_column="3"
-       
-        android:layout_row="0"
-        android:inputType="number"
+       	android:layout_row="0"
+        android:inputType="numberDecimal"
         android:textSize="14sp"
         android:typeface="monospace" />
     

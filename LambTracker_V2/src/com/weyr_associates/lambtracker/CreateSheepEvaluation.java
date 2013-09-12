@@ -45,10 +45,10 @@ public class CreateSheepEvaluation extends Activity {
 	
 	public Button button;
 	public int trait01, trait02, trait03, trait04, trait05, trait06, trait07;
-	
+	public String trait01_label, trait02_label, trait03_label, trait04_label, trait05_label, trait06_label, trait07_label; 
 	public Spinner trait01_spinner, trait02_spinner, trait03_spinner, trait04_spinner, 
 		trait05_spinner, trait06_spinner, trait07_spinner;
-	List<String> scored_evaluation_traits, data_evaluation_traits;
+	public List<String> scored_evaluation_traits, data_evaluation_traits;
 	
 	ArrayAdapter<String> dataAdapter;
 	String     	cmd;
@@ -78,42 +78,46 @@ public class CreateSheepEvaluation extends Activity {
     	cursor.close();
 //        Log.i("createEval ", "below for loop");
     	
-    	trait01_spinner = (Spinner) findViewById(R.id.trait01_spinner);	
     	dataAdapter = new ArrayAdapter<String>(this,
-	                android.R.layout.simple_spinner_item, scored_evaluation_traits);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
+                android.R.layout.simple_spinner_item, scored_evaluation_traits);
+    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
+	
+    	trait01_spinner = (Spinner) findViewById(R.id.trait01_spinner);	
+//    	dataAdapter = new ArrayAdapter<String>(this,
+//	                android.R.layout.simple_spinner_item, scored_evaluation_traits);
+//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
 		trait01_spinner.setAdapter (dataAdapter);
 		trait01_spinner.setSelection(0);
 //		trait01_spinner.setOnItemSelectedListener(new SpinnerActivity());
 		
 		trait02_spinner = (Spinner) findViewById(R.id.trait02_spinner);
-		dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, scored_evaluation_traits);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		dataAdapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_spinner_item, scored_evaluation_traits);
+//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		trait02_spinner.setAdapter (dataAdapter);
 		trait02_spinner.setSelection(0);
 //		trait02_spinner.setOnItemSelectedListener(new SpinnerActivity());
 		
 		trait03_spinner = (Spinner) findViewById(R.id.trait03_spinner);
-		dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, scored_evaluation_traits);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		dataAdapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_spinner_item, scored_evaluation_traits);
+//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		trait03_spinner.setAdapter (dataAdapter);
 		trait03_spinner.setSelection(0);
 //		trait03_spinner.setOnItemSelectedListener(new SpinnerActivity());
 		
 		trait04_spinner = (Spinner) findViewById(R.id.trait04_spinner);
-		dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, scored_evaluation_traits);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		dataAdapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_spinner_item, scored_evaluation_traits);
+//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		trait04_spinner.setAdapter (dataAdapter);
 		trait04_spinner.setSelection(0);
 //		trait04_spinner.setOnItemSelectedListener(new SpinnerActivity());
 		
 		trait05_spinner = (Spinner) findViewById(R.id.trait05_spinner);
-		dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, scored_evaluation_traits);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		dataAdapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_spinner_item, scored_evaluation_traits);
+//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		trait05_spinner.setAdapter (dataAdapter);
 		trait05_spinner.setSelection(0);
 //		trait05_spinner.setOnItemSelectedListener(new SpinnerActivity());
@@ -134,19 +138,22 @@ public class CreateSheepEvaluation extends Activity {
     	}
     	cursor.close();
 //        Log.i("createEval ", "below for loop");
-    	
-    	trait06_spinner = (Spinner) findViewById(R.id.trait06_spinner);	
     	dataAdapter = new ArrayAdapter<String>(this,
-	                android.R.layout.simple_spinner_item, data_evaluation_traits);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
+                android.R.layout.simple_spinner_item, data_evaluation_traits);
+    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
+
+    	trait06_spinner = (Spinner) findViewById(R.id.trait06_spinner);	
+//    	dataAdapter = new ArrayAdapter<String>(this,
+//	                android.R.layout.simple_spinner_item, data_evaluation_traits);
+//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
 		trait06_spinner.setAdapter (dataAdapter);
 		trait06_spinner.setSelection(0);
 //		trait06_spinner.setOnItemSelectedListener(new SpinnerActivity());
 		
 		trait07_spinner = (Spinner) findViewById(R.id.trait07_spinner);
-		dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, data_evaluation_traits);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		dataAdapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_spinner_item, data_evaluation_traits);
+//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		trait07_spinner.setAdapter (dataAdapter);
 		trait07_spinner.setSelection(0);
 //		trait07_spinner.setOnItemSelectedListener(new SpinnerActivity());
@@ -341,7 +348,7 @@ public class CreateSheepEvaluation extends Activity {
 
 	    public void createEval( View v )
 	    {
-	    	
+	    	Object 			crsr;
 	   // Need to get the position and text for every spinner and the real data points and use
 	   // this to fill the actual evaluation task screen with what we are looking at.
 	    	trait01_spinner = (Spinner) findViewById(R.id.trait01_spinner);
@@ -352,26 +359,112 @@ public class CreateSheepEvaluation extends Activity {
 	    	trait06_spinner = (Spinner) findViewById(R.id.trait06_spinner);
 	    	trait07_spinner = (Spinner) findViewById(R.id.trait07_spinner);
 	    	
-	    	trait01 =  trait01_spinner.getSelectedItemPosition();
-	    	Log.i("trait01_spinner ", "Position = "+String.valueOf(trait01));	    	
+//	    	trait01 =  trait01_spinner.getSelectedItemPosition();
+//	    	Log.i("trait01_spinner ", "Position = "+String.valueOf(trait01));
+//	    	trait01_label = trait01_spinner.getItemAtPosition(trait01).toString();
+	    	trait01_label = trait01_spinner.getSelectedItem().toString();
+	    	Log.i("trait01_spinner ", "Contents = "+ trait01_label);
 	    	
-	    	trait02 =  trait02_spinner.getSelectedItemPosition();
-	    	Log.i("trait02_spinner ", "Position = "+String.valueOf(trait02));	   
+	    	trait02_label = trait02_spinner.getSelectedItem().toString();
+	    	trait03_label = trait03_spinner.getSelectedItem().toString();
+	    	trait04_label = trait04_spinner.getSelectedItem().toString();
+	    	trait05_label = trait05_spinner.getSelectedItem().toString();
+	    	trait06_label = trait06_spinner.getSelectedItem().toString();
+	    	trait07_label = trait07_spinner.getSelectedItem().toString();
 	    	
-	    	trait03 =  trait03_spinner.getSelectedItemPosition();
-	    	Log.i("trait03_spinner ", "Position = "+String.valueOf(trait03));	   
+//	    	
+//	    	trait02_label = trait02_spinner.getSelectedItem().toString();
+//	    	Log.i("trait02_spinner ", "Contents = "+ trait02_label);
+//	    	
+//	    	trait06_label = trait06_spinner.getSelectedItem().toString();
+//	    	Log.i("trait06_spinner ", "Contents = "+ trait06_label);
+//	    	
+//	    	trait07_label = trait07_spinner.getSelectedItem().toString();
+//	    	Log.i("trait07_spinner ", "Contents = "+ trait07_label);
+//	    		    	
+//	    	trait02 =  trait02_spinner.getSelectedItemPosition();
+//	    	Log.i("trait02_spinner ", "Position = "+String.valueOf(trait02));	   
+////	    	trait02_label = trait01_spinner.getSelectedItem().toString();
+//	    	
+//	    	trait03 =  trait03_spinner.getSelectedItemPosition();
+//	    	Log.i("trait03_spinner ", "Position = "+String.valueOf(trait03));	   
+////	    	trait03_label = trait01_spinner.getSelectedItem().toString();
+//	    	
+//	    	trait04 =  trait04_spinner.getSelectedItemPosition();
+//	    	Log.i("trait04_spinner ", "Position = "+String.valueOf(trait04));	   
+//	    	
+//	    	trait05 =  trait05_spinner.getSelectedItemPosition();
+//	    	Log.i("trait05_spinner ", "Position = "+String.valueOf(trait05));	   
+//	    	
+//	    	trait06 =  trait06_spinner.getSelectedItemPosition();
+//	    	Log.i("trait06_spinner ", "Position = "+String.valueOf(trait06));
+//	    	
+//	    	trait07 =  trait07_spinner.getSelectedItemPosition();
+//	    	Log.i("trait07_spinner ", "Position = "+String.valueOf(trait07));
+	    	// Need to get the values from scored_evaluation_traits and data_evaluation_traits lists
+	    	// and cross reference to the actual id_traitid from the evaluation trait table and store
+	    	// that as the actual thing we reference in the evaluate sheep section
 	    	
-	    	trait04 =  trait04_spinner.getSelectedItemPosition();
-	    	Log.i("trait04_spinner ", "Position = "+String.valueOf(trait04));	   
-	    	
-	    	trait05 =  trait05_spinner.getSelectedItemPosition();
-	    	Log.i("trait05_spinner ", "Position = "+String.valueOf(trait05));	   
-	    	
-	    	trait06 =  trait06_spinner.getSelectedItemPosition();
-	    	Log.i("trait06_spinner ", "Position = "+String.valueOf(trait06));
-	    	
-	    	trait07 =  trait07_spinner.getSelectedItemPosition();
-	    	Log.i("trait07_spinner ", "Position = "+String.valueOf(trait07));
+	    	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
+	    			"where trait_name='%s'", trait01_label);
+	    	Log.i("query trait1", cmd);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait01 = dbh.getInt(0);
+//	        Log.i("trait01_spinner ", "Position = "+String.valueOf(trait01));
+
+	    	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
+	    			"where trait_name='%s'", trait02_label);
+	    	Log.i("query trait2", cmd);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait02 = dbh.getInt(0);
+	        
+	    	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
+	    			"where trait_name='%s'", trait03_label);
+	    	Log.i("query trait3", cmd);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait03 = dbh.getInt(0);
+	        
+	    	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
+	    			"where trait_name='%s'", trait04_label);
+	    	Log.i("query trait4", cmd);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait04 = dbh.getInt(0);
+	        
+	    	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
+	    			"where trait_name='%s'", trait05_label);
+	    	Log.i("query trait5", cmd);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait05 = dbh.getInt(0);
+	        
+	        cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
+	    			"where trait_name='%s'", trait06_label);
+	        Log.i("query trait6", cmd);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait06 = dbh.getInt(0);
+//	        Log.i("trait06_spinner ", "Position = "+String.valueOf(trait06));
+
+	        cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
+	    			"where trait_name='%s'", trait07_label);
+	        Log.i("query trait7", cmd);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait07 = dbh.getInt(0);
+//	        Log.i("trait07_spinner ", "Position = "+String.valueOf(trait07));
+
+	       
 	    	
 	    	cmd = "drop table if exists temp_table";
 	    	dbh.exec (cmd);

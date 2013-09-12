@@ -73,44 +73,44 @@ public class EvaluateSheep extends Activity {
         
         dbh.moveToFirstRecord();
         trait01 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait01 = " + String.valueOf(trait01));
+        Log.i("EvaluateSheep ", "trait01 = " + String.valueOf(trait01));
         cursor.moveToNext();
         
         trait02 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait02 = " + String.valueOf(trait02));
+        Log.i("EvaluateSheep ", "trait02 = " + String.valueOf(trait02));
         cursor.moveToNext();
         
         trait03 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait03 = " + String.valueOf(trait03));
+        Log.i("EvaluateSheep ", "trait03 = " + String.valueOf(trait03));
         cursor.moveToNext();
         
         trait04 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait04 = " + String.valueOf(trait04));
+        Log.i("EvaluateSheep ", "trait04 = " + String.valueOf(trait04));
         cursor.moveToNext();
         
         trait05 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait05 = " + String.valueOf(trait05));
+        Log.i("EvaluateSheep ", "trait05 = " + String.valueOf(trait05));
         cursor.moveToNext();
         
         trait06 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait06 = " + String.valueOf(trait06));
+        Log.i("EvaluateSheep ", "trait06 = " + String.valueOf(trait06));
         cursor.moveToNext();
         
         trait07 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait07 = " + String.valueOf(trait07));
+        Log.i("EvaluateSheep ", "trait07 = " + String.valueOf(trait07));
         cursor.moveToNext();    
         
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
         		"evaluation_trait_table.id_traitid=%s", trait01 );
-//        Log.i("EvaluateSheep ", cmd);
+        Log.i("get name ", cmd);
         crsr = dbh.exec( cmd );
-//        Log.i("EvaluateSheep ", "after");
+        Log.i("EvaluateSheep ", "after get name");
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
-//        Log.i("EvaluateSheep ", "after move to first");
+        Log.i("EvaluateSheep ", "after move to first");
         TV = (TextView) findViewById( R.id.trait01_lbl );
         TV.setText(dbh.getStr(0));
-//        Log.i("EvaluateSheep ", "after get the text");
+        Log.i("EvaluateSheep ", "after get the text");
               
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
         		"evaluation_trait_table.id_traitid=%s", trait02 );
