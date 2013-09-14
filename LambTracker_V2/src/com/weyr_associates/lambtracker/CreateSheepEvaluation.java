@@ -13,6 +13,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -44,11 +46,13 @@ public class CreateSheepEvaluation extends Activity {
 	private Cursor 	cursor;
 	
 	public Button button;
-	public int trait01, trait02, trait03, trait04, trait05, trait06, trait07;
-	public String trait01_label, trait02_label, trait03_label, trait04_label, trait05_label, trait06_label, trait07_label; 
+	public int trait01, trait02, trait03, trait04, trait05, trait06, trait07, trait06_unitid, trait07_unitid;
+	public String trait01_label, trait02_label, trait03_label, trait04_label, trait05_label; 
+	public String trait06_label, trait07_label, trait06_units, trait07_units; 
 	public Spinner trait01_spinner, trait02_spinner, trait03_spinner, trait04_spinner, 
 		trait05_spinner, trait06_spinner, trait07_spinner;
-	public List<String> scored_evaluation_traits, data_evaluation_traits;
+	public Spinner trait06_units_spinner, trait07_units_spinner;
+	public List<String> scored_evaluation_traits, data_evaluation_traits, trait_units;
 	
 	ArrayAdapter<String> dataAdapter;
 	String     	cmd;
@@ -60,7 +64,7 @@ public class CreateSheepEvaluation extends Activity {
 		setContentView(R.layout.create_sheep_evaluation);
 		String dbname = getString(R.string.real_database_file); 
     	dbh = new DatabaseHandler( this, dbname );	
-    	
+   
     	scored_evaluation_traits = new ArrayList<String>();
         // enable the Create an evaluation button when we come in to start this task
     	Button btn2 = (Button) findViewById( R.id.create_evaluation_task_btn );
@@ -69,12 +73,12 @@ public class CreateSheepEvaluation extends Activity {
         // Select All fields from trait table that are scored type and get set to fill the spinners
         cmd = "select * from evaluation_trait_table where trait_type = 1";
         Object crsr = dbh.exec( cmd ); ;
-//       Log.i("testing", "executed command " + cmd);
+        Log.i("testing", "executed command " + cmd);
         cursor   = ( Cursor ) crsr;
     	dbh.moveToFirstRecord();
     	scored_evaluation_traits.add("Select a Trait");
-//    	 Log.i("testinterface", "in onCreate below got evaluation straits table");
-        // looping through all rows and adding to list all the scored evaluatin types
+    	 Log.i("testinterface", "in onCreate below got evaluation straits table");
+        // looping through all rows and adding to list all the scored evaluation types
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		scored_evaluation_traits.add(cursor.getString(1));
     	}
@@ -104,6 +108,8 @@ public class CreateSheepEvaluation extends Activity {
 		trait05_spinner.setAdapter (dataAdapter);
 		trait05_spinner.setSelection(0);
 		
+		Log.i("create eval", "got score spinners initialized");
+		
 		// Now set up for the two real data traits
 		data_evaluation_traits = new ArrayList<String>();
         
@@ -120,7 +126,7 @@ public class CreateSheepEvaluation extends Activity {
     		data_evaluation_traits.add(cursor.getString(1));
     	}
     	cursor.close();
-//        Log.i("createEval ", "below for loop");
+//        Log.i("createEval ", "below got eval traits");
     	dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, data_evaluation_traits);
     	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
@@ -133,9 +139,140 @@ public class CreateSheepEvaluation extends Activity {
 		trait07_spinner.setAdapter (dataAdapter);
 		trait07_spinner.setSelection(0);
 	
+		Log.i("create eval", "got real spinners initialized");
+		
+		trait_units = new ArrayList<String>();
+		
+        // Select All fields from trait units table and get set to fill the spinners
+        cmd = "select * from units_table ";
+        crsr = dbh.exec( cmd );
+        Log.i("units ", "executed command " + cmd);
+        cursor   = ( Cursor ) crsr;
+//        Log.i("units ", "below set cursor");
+    	dbh.moveToFirstRecord();
+//    	Log.i("units ", "below move to first");
+    	trait_units.add("Select a Unit");
+//    	Log.i("units ", "below add select a unit");
+//    	 Log.i("testinterface", "in onCreate below got units table");
+        // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		trait_units.add(cursor.getString(1));
+    	}
+    	cursor.close();
+//        Log.i("createEval ", "got units data");
+    	dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, trait_units);
+    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
+    	
+    	trait06_units_spinner = (Spinner) findViewById(R.id.trait06_units_spinner);	
+    	trait06_units_spinner.setAdapter (dataAdapter);
+    	trait06_units_spinner.setSelection(0);
+		
+    	trait07_units_spinner = (Spinner) findViewById(R.id.trait07_units_spinner);
+    	trait07_units_spinner.setAdapter (dataAdapter);
+    	trait07_units_spinner.setSelection(0);
+    	Log.i("create eval", "got units spinners initialized");
+		
+    	
+    	if (isTableExists("temp_table")){
+    		//Table exists so fill spinners from last results
+    		cmd = "select * from temp_table";
+    		Log.i("in if table exists ", cmd);
+    		crsr = dbh.exec( cmd );
+    		cursor   = ( Cursor ) crsr;
+        	dbh.moveToFirstRecord();
+        	
+        	trait01 = dbh.getInt(0);
+        	cursor.moveToNext();	
+        	trait02 = dbh.getInt(0);
+        	cursor.moveToNext();
+        	trait03 = dbh.getInt(0);
+        	cursor.moveToNext();
+        	trait04 = dbh.getInt(0);
+        	cursor.moveToNext();
+        	trait05 = dbh.getInt(0);
+        	cursor.moveToNext();
+        	trait06 = dbh.getInt(0);
+        	cursor.moveToNext();
+        	trait07 = dbh.getInt(0);
+        	cursor.moveToNext();
+        	cursor.close();
+        	
+        	// need to get what position within the current scored_evaluation_traits this trait is 
+	        // and set the spinner position to be that position
+        	cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table " +
+	    			"where id_traitid='%s'", trait01);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait01_label = dbh.getStr(0);
+	        i = scored_evaluation_traits.indexOf(trait01_label);
+	        trait01_spinner.setSelection(i);
+	        
+	        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table " +
+	    			"where id_traitid='%s'", trait02);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait02_label = dbh.getStr(0);
+	        i = scored_evaluation_traits.indexOf(trait02_label);
+	        trait02_spinner.setSelection(i);
+	        
+	        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table " +
+	    			"where id_traitid='%s'", trait03);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait03_label = dbh.getStr(0);
+	        i = scored_evaluation_traits.indexOf(trait03_label);
+	        trait03_spinner.setSelection(i);
+	        
+	        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table " +
+	    			"where id_traitid='%s'", trait04);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait04_label = dbh.getStr(0);
+	        i = scored_evaluation_traits.indexOf(trait04_label);
+	        trait04_spinner.setSelection(i);
+	     
+	        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table " +
+	    			"where id_traitid='%s'", trait05);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait05_label = dbh.getStr(0);
+	        i = scored_evaluation_traits.indexOf(trait05_label);
+	        trait05_spinner.setSelection(i);
+	        
+	        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table " +
+	    			"where id_traitid='%s'", trait06);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait06_label = dbh.getStr(0);
+	        i = data_evaluation_traits.indexOf(trait06_label);
+	        trait06_spinner.setSelection(i);
+	        
+	        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table " +
+	    			"where id_traitid='%s'", trait07);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait07_label = dbh.getStr(0);
+	        i = data_evaluation_traits.indexOf(trait07_label);
+	        trait07_spinner.setSelection(i);
+        	
+    	}else {
+      		Log.i("in else", " table not exists "+ cmd);
+    		cmd = "CREATE TABLE temp_table (id_temp INTEGER PRIMARY KEY " +
+        			"AUTOINCREMENT, temp_eval INTEGER NOT NULL, temp_units INTEGER )";
+        	dbh.exec (cmd);
+      	}
+		
 	}
 //	private class SpinnerActivity extends Activity implements OnItemSelectedListener {
-//		becasue we only get the spinner data when the user selects the create an evaluation 
+//		because we only get the spinner data when the user selects the create an evaluation 
 //		this class is not needed.
 //			}
 //		@Override
@@ -186,23 +323,30 @@ public class CreateSheepEvaluation extends Activity {
 	    	trait05_spinner = (Spinner) findViewById(R.id.trait05_spinner);
 	    	trait06_spinner = (Spinner) findViewById(R.id.trait06_spinner);
 	    	trait07_spinner = (Spinner) findViewById(R.id.trait07_spinner);
+	    	trait06_units_spinner = (Spinner) findViewById(R.id.trait06_units_spinner);	
+	    	trait07_units_spinner = (Spinner) findViewById(R.id.trait07_units_spinner);
 	    	
 	    	// fill the labels with the contents of the various spinners
 	    	trait01_label = trait01_spinner.getSelectedItem().toString();
-//	    	Log.i("trait01_spinner ", "Contents = "+ trait01_label);
 	    	trait02_label = trait02_spinner.getSelectedItem().toString();
 	    	trait03_label = trait03_spinner.getSelectedItem().toString();
 	    	trait04_label = trait04_spinner.getSelectedItem().toString();
 	    	trait05_label = trait05_spinner.getSelectedItem().toString();
 	    	trait06_label = trait06_spinner.getSelectedItem().toString();
 	    	trait07_label = trait07_spinner.getSelectedItem().toString();
-
+	    	trait06_units = trait06_units_spinner.getSelectedItem().toString();
+	    	trait07_units = trait07_units_spinner.getSelectedItem().toString();
+	    	
 	    	// Need to get the id_traitid from the evaluation trait table and store
 	    	// that as the actual thing we reference in the evaluate sheep section since it won't change
 	    	// from time to time
 	    	
 	    	// Should be able to enclose each of these into an IF statement to see if a trait was selected
 	    	// and if not then do not do the database lookup but not implemented yet
+//	    	if (trait01_label == "Select a Trait") {
+//	    			// no trait selected do nothing
+//	    	}else
+//	    	{
 	    	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
 	    			"where trait_name='%s'", trait01_label);
 //	    	Log.i("query trait1", cmd);
@@ -210,6 +354,7 @@ public class CreateSheepEvaluation extends Activity {
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        trait01 = dbh.getInt(0);
+//	        }
 
 	    	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
 	    			"where trait_name='%s'", trait02_label);
@@ -258,42 +403,111 @@ public class CreateSheepEvaluation extends Activity {
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        trait07 = dbh.getInt(0);
+	        
+	        // Now get the units the user selected as well
+	        
+	        cmd = String.format("select units_table.id_unitsid from units_table " +
+	    			"where units_name='%s'", trait06_units);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait06_unitid = dbh.getInt(0);
+	        
+	        cmd = String.format("select units_table.id_unitsid from units_table " +
+	    			"where units_name='%s'", trait07_units);
+	        Log.i("query trait7", cmd);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait07_unitid = dbh.getInt(0);
 
-	        // We have all the actual traits now to get their id_traitid and store it for look-up later
-	    	cmd = "drop table if exists temp_table";
-	    	dbh.exec (cmd);
-	    	
-	    	cmd = "CREATE TABLE temp_table (id_temp INTEGER PRIMARY KEY " +
-	    			"AUTOINCREMENT, temp_eval INTEGER NOT NULL)";
+	        // We have all the actual traits now to save their id_traitid and store it for look-up later
+//	    	cmd = "drop table if exists temp_table";
+//	    	dbh.exec (cmd);
+//	    	
+//	    	cmd = "CREATE TABLE temp_table (id_temp INTEGER PRIMARY KEY " +
+//	    			"AUTOINCREMENT, temp_eval INTEGER NOT NULL, temp_units INTEGER )";
 //	    	Log.i("db create ", cmd);
-	    	dbh.exec (cmd);
-	    	
-	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait01);
+//	    	dbh.exec (cmd);
+	        
+	        cmd  = String.format( "update temp_table set temp_eval=%s where id_temp=1", trait01 );
+	    	Log.i("db cmd ", cmd);	 	        
+//	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait01);
 //	    	Log.i("db cmd ", cmd);	    	
 	    	dbh.exec( cmd );
-	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait02);
+
+	        cmd  = String.format( "update temp_table set temp_eval=%s where id_temp=2", trait02 );
+//	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait02);
 //	    	Log.i("db cmd ", cmd);
 	    	dbh.exec( cmd );
-	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait03);
+	    	
+	        cmd  = String.format( "update temp_table set temp_eval=%s where id_temp=3", trait03 );
+//	        cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait03);
 //	    	Log.i("db cmd ", cmd);
 	    	dbh.exec( cmd );
-	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait04);
+	        cmd  = String.format( "update temp_table set temp_eval=%s where id_temp=4", trait04 );
+//	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait04);
 //	    	Log.i("db cmd ", cmd);
 	    	dbh.exec( cmd );
-	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait05);
+	        cmd  = String.format( "update temp_table set temp_eval=%s where id_temp=5", trait05 );
+//	        cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait05);
 //	    	Log.i("db cmd ", cmd);
 	    	dbh.exec( cmd );
-	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait06);
+	        cmd  = String.format( "update temp_table set temp_eval=%s where id_temp=6", trait06 );
+	        cmd  = String.format( "update temp_table set temp_units=%s where id_temp=6", trait06_unitid );
+//	        cmd = String.format( "insert into temp_table (temp_eval, temp_units) values('%s','%s')",trait06, trait06_unitid);
 //	    	Log.i("db cmd ", cmd);
 	    	dbh.exec( cmd );
-	    	cmd = String.format( "insert into temp_table (temp_eval) values('%s')",trait07);
+	    	cmd  = String.format( "update temp_table set temp_eval=%s where id_temp=7", trait07 );
+	        cmd  = String.format( "update temp_table set temp_units=%s where id_temp=7", trait07_unitid );
+//	    	cmd = String.format( "insert into temp_table (temp_eval, temp_units) values('%s','%s')",trait07, trait07_unitid);
 //	    	Log.i("db cmd ", cmd);
 	    	dbh.exec( cmd );
 	    	// All done need to disable the create create_evaluation_task_btn so we don't do it twice
-	    	
-//	    	Disable the Next Record and Prev. Record button until we have multiple records
 	       	Button btn2 = (Button) findViewById( R.id.create_evaluation_task_btn );
 	    	btn2.setEnabled(false); 
 	    	
-    }	 
+    }	
+	    public boolean isTableExists(String tableName) {
+	    	Object 			crsr;
+	    	String     	cmd;
+	    	
+//	    	public boolean isTableExists(String tableName, boolean openDb) {
+	    	
+//	        if(openDb) {
+//	            if(mDatabase == null || !mDatabase.isOpen()) {
+//	                mDatabase = getReadableDatabase();
+//	            }
+//
+//	            if(!mDatabase.isReadOnly()) {
+//	                mDatabase.close();
+//	                mDatabase = getReadableDatabase();
+//	            }
+//	        }	    
+	    	Log.i("in method", " isTableExists before the db access");
+	    	try{
+	    		cmd = String.format("select * from temp_table");
+		    	Log.i("in method", " isTableExists ready for cmd"+ cmd);
+		    	crsr = dbh.exec( cmd );
+		        cursor   = ( Cursor ) crsr;
+
+		        if(cursor==null) {
+	            	cursor.close();
+	                return false;
+	            }
+	    		}catch (SQLiteException e) {
+	    			cursor.close();
+		            return false;
+	    		}
+//	    	cmd = String.format("select * from temp_table");
+//	    	Log.i("in method", " isTableExists ready for cmd"+ cmd);
+//	    	crsr = dbh.exec( cmd );
+//	        cursor   = ( Cursor ) crsr;
+//	        if(cursor==null) {
+//	            	cursor.close();
+//	                return false;
+//	            }
+//	        cursor.close();
+	        return true;
+	    }
 }
