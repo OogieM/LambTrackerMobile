@@ -239,38 +239,37 @@ public class EvaluateSheep extends Activity {
         dbh.moveToFirstRecord();
         
         trait01 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait01 = " + String.valueOf(trait01));
+//        Log.i("EvaluateSheep ", "trait01 = " + String.valueOf(trait01));
         cursor.moveToNext();
         
         trait02 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait02 = " + String.valueOf(trait02));
+//        Log.i("EvaluateSheep ", "trait02 = " + String.valueOf(trait02));
         cursor.moveToNext();
         
         trait03 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait03 = " + String.valueOf(trait03));
+//        Log.i("EvaluateSheep ", "trait03 = " + String.valueOf(trait03));
         cursor.moveToNext();
         
         trait04 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait04 = " + String.valueOf(trait04));
+//        Log.i("EvaluateSheep ", "trait04 = " + String.valueOf(trait04));
         cursor.moveToNext();
         
         trait05 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait05 = " + String.valueOf(trait05));
+//        Log.i("EvaluateSheep ", "trait05 = " + String.valueOf(trait05));
         cursor.moveToNext();
         
         trait06 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait06 = " + String.valueOf(trait06));
+//        Log.i("EvaluateSheep ", "trait06 = " + String.valueOf(trait06));
         trait06_units = cursor.getInt(2);
-        Log.i("EvaluateSheep ","units trait06 "+String.valueOf(trait06_units));
+//        Log.i("EvaluateSheep ","units trait06 "+String.valueOf(trait06_units));
         cursor.moveToNext();
         
         trait07 = cursor.getInt(1);
-        Log.i("EvaluateSheep ", "trait07 = " + String.valueOf(trait07));
+//        Log.i("EvaluateSheep ", "trait07 = " + String.valueOf(trait07));
         trait07_units = cursor.getInt(2); 
-        Log.i("EvaluateSheep ","units trait07 "+String.valueOf(trait07_units));
+//        Log.i("EvaluateSheep ","units trait07 "+String.valueOf(trait07_units));
         cursor.close();
            
-        // need to set these into if statements so as not to crash if we don't have all traits
         if (trait01!=0) {
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
         		"evaluation_trait_table.id_traitid=%s", trait01 );
@@ -378,27 +377,27 @@ public class EvaluateSheep extends Activity {
     	// I got the sheep id from the search by federal or farm or EID tag
     	// it's in the sheep_id variable
     	
-    	Log.i("in save scores", " sheep id is " + String.valueOf(sheep_id));    
+//    	Log.i("in save scores", " sheep id is " + String.valueOf(sheep_id));    
     	// Get the rating bar scores
     		trait01_ratingbar = (RatingBar) findViewById(R.id.trait01_ratingbar);
     		trait01_data = trait01_ratingbar.getRating();
-    		Log.i("trait01_ratingbar ", String.valueOf(trait01_data));
+//    		Log.i("trait01_ratingbar ", String.valueOf(trait01_data));
     		
     		trait02_ratingbar = (RatingBar) findViewById(R.id.trait02_ratingbar);
     		trait02_data = trait02_ratingbar.getRating();
-    		Log.i("trait02_ratingbar ", String.valueOf(trait02_data));
+//    		Log.i("trait02_ratingbar ", String.valueOf(trait02_data));
     		
     		trait03_ratingbar = (RatingBar) findViewById(R.id.trait03_ratingbar);
     		trait03_data = trait03_ratingbar.getRating();	
-    		Log.i("trait03_ratingbar ", String.valueOf(trait03_data));
+//    		Log.i("trait03_ratingbar ", String.valueOf(trait03_data));
     		
     		trait04_ratingbar = (RatingBar) findViewById(R.id.trait04_ratingbar);
     		trait04_data = trait04_ratingbar.getRating();
-    		Log.i("trait04_ratingbar ", String.valueOf(trait04_data));
+//    		Log.i("trait04_ratingbar ", String.valueOf(trait04_data));
     		
     		trait05_ratingbar = (RatingBar) findViewById(R.id.trait05_ratingbar);
     		trait05_data = trait05_ratingbar.getRating();
-    		Log.i("trait05_ratingbar ", String.valueOf(trait05_data));
+//    		Log.i("trait05_ratingbar ", String.valueOf(trait05_data));
     		
     		// get the real data scores
     		
@@ -408,13 +407,13 @@ public class EvaluateSheep extends Activity {
     	        // EditText was empty
     	        // so no real data collected just break out
     			trait06_data = 0.0f;
-    			Log.i("save trait6", "float data is " + String.valueOf(trait06_data));
+//    			Log.i("save trait6", "float data is " + String.valueOf(trait06_data));
     			trait06_units = 0;
     	    }
     		else {
     			trait06_data = Float.valueOf(TV.getText().toString());
-    			Log.i("save trait6", "float data is " + String.valueOf(trait06_data));
-    			Log.i("trait06_units ", String.valueOf(trait06_units));
+//    			Log.i("save trait6", "float data is " + String.valueOf(trait06_data));
+//    			Log.i("trait06_units ", String.valueOf(trait06_units));
     		}
     		
     		TV = (TextView) findViewById(R.id.trait07_data);
@@ -423,18 +422,17 @@ public class EvaluateSheep extends Activity {
     	        // EditText was empty
     	        // so no real data collected just break out
     			trait07_data = 0.0f;
-    			Log.i("save trait7", "float data is " + String.valueOf(trait07_data));
+//    			Log.i("save trait7", "float data is " + String.valueOf(trait07_data));
     			trait07_units = 0;
     	    }
     		else {
     			trait07_data = Float.valueOf(temp_string);
-        		Log.i("save trait7", "float data is " + String.valueOf(trait07_data));
-        		Log.i("trait07_units ", String.valueOf(trait07_units));
+//        		Log.i("save trait7", "float data is " + String.valueOf(trait07_data));
+//        		Log.i("trait07_units ", String.valueOf(trait07_units));
     		}
     		// I need to get the traits scored for this pass here:
     		String mytoday = TodayIs();
-    		
-    		Log.i("Date is ", mytoday);
+//    		Log.i("Date is ", mytoday);
     		// Now that I have all the data I need to write it into the sheep_evaluation_table
        		
     		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
@@ -442,7 +440,7 @@ public class EvaluateSheep extends Activity {
     		"trait_name03,trait_score03, trait_name04, trait_score04, trait_name05, trait_score05, " +
     		"trait_name06,trait_score06, trait_name07, trait_score07, " +
     		"trait_units06, trait_units07, eval_date) " +
-    		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ", 
+    		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s') ", 
     				sheep_id, trait01, trait01_data, trait02, trait02_data, trait03, trait03_data,
     				trait04, trait04_data, trait05, trait05_data, trait06, trait06_data,
     				trait07, trait07_data, trait06_units, trait07_units, mytoday );

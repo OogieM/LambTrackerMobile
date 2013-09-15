@@ -35,11 +35,11 @@
     <EditText
         android:id="@+id/sqlOutput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="350dp"
         android:layout_gravity="top"
         android:ems="10"
         android:inputType="textMultiLine"
-        android:textSize="24sp"
+        android:textSize="14sp"
         android:typeface="monospace" />
     
 <GridLayout

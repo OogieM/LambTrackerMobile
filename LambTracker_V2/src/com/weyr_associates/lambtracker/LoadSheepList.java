@@ -34,6 +34,7 @@ public class LoadSheepList extends Activity {
 
      public void copyRealDB( View v )
 		{
+    	String temp;
     	TextView        txtView = (TextView) findViewById( R.id.editText1 );
 //    	Resources res = getResources();
     	String 	dbfile = getString(R.string.real_database_file) ;
@@ -43,13 +44,19 @@ public class LoadSheepList extends Activity {
     	}
     	catch (IOException e) {
     	} 	
-    	txtView.setText("Created Real Database from Copy in Assets.");
+    	temp = "Created Real Database from Copy in Assets.";
     	
     	String cmd = String.format( "select count(*) from %s", "demo_sheep_table" );
         Cursor crsr = ((Cursor) dbh.exec( cmd ));
         crsr.moveToFirst();
-        txtView.setText("Records created in demo_sheep_table = " + String.valueOf(crsr.getInt( 0 )));
-        dbh.close();
+        temp = String.format(temp + "\n" +"Records created in demo_sheep_table = " + String.valueOf(crsr.getInt( 0 )));
+        cmd = String.format( "select count(*) from %s", "sheep_table" );
+        crsr = ((Cursor) dbh.exec( cmd ));
+        crsr.moveToFirst();
+        temp = String.format(temp + "\n" + "Records created in sheep_table = " + String.valueOf(crsr.getInt( 0 )));
+//        txtView.setText("Records created in sheep_table = " + String.valueOf(crsr.getInt( 0 )));
+        txtView.setText(temp);
+        dbh.closeDB();
 	}
 
     public void showRealDB( View v )
@@ -62,7 +69,7 @@ public class LoadSheepList extends Activity {
 // 	Decided to just dump the sheep table as a first cut	
 	String          theDump = dbh.dumpTable( "sheep_table" );
 	txtView.setText( theDump );
-	dbh.close();
+	dbh.closeDB();
 	}
     
     public void backupRealDB( View v ) throws IOException{
@@ -78,7 +85,7 @@ public class LoadSheepList extends Activity {
 			Log.i("backup", "input database file not found" + fullPath);
 			return;
 		}
-        String outFileName = Environment.getExternalStorageDirectory()+"/lambtracker_copy.db";
+        String outFileName = Environment.getExternalStorageDirectory()+"/lambtracker_db_copy.sqlite";
         Log.i("backup", outFileName);
         // Open the empty db as the output stream
         OutputStream output;
@@ -100,5 +107,8 @@ public class LoadSheepList extends Activity {
         output.flush();
         output.close();
         fis.close();
+    
+    	TextView        txtView = (TextView) findViewById( R.id.editText1 );
+    	txtView.setText("Real Data backed up to External Storage" );
         }
     }
