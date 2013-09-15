@@ -378,6 +378,7 @@ public class EvaluateSheep extends Activity {
     	// I got the sheep id from the search by federal or farm or EID tag
     	// it's in the sheep_id variable
     	
+    	Log.i("in save scores", " sheep id is " + String.valueOf(sheep_id));    
     	// Get the rating bar scores
     		trait01_ratingbar = (RatingBar) findViewById(R.id.trait01_ratingbar);
     		trait01_data = trait01_ratingbar.getRating();
@@ -413,7 +414,7 @@ public class EvaluateSheep extends Activity {
     		else {
     			trait06_data = Float.valueOf(TV.getText().toString());
     			Log.i("save trait6", "float data is " + String.valueOf(trait06_data));
-    			Log.i("save trait06_units ", String.valueOf(trait06_units));
+    			Log.i("trait06_units ", String.valueOf(trait06_units));
     		}
     		
     		TV = (TextView) findViewById(R.id.trait07_data);
@@ -428,39 +429,25 @@ public class EvaluateSheep extends Activity {
     		else {
     			trait07_data = Float.valueOf(temp_string);
         		Log.i("save trait7", "float data is " + String.valueOf(trait07_data));
-        		Log.i("save trait07_units ", String.valueOf(trait07_units));
+        		Log.i("trait07_units ", String.valueOf(trait07_units));
     		}
     		// I need to get the traits scored for this pass here:
     		String mytoday = TodayIs();
     		
+    		Log.i("Date is ", mytoday);
     		// Now that I have all the data I need to write it into the sheep_evaluation_table
-    		
+       		
     		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
     		"trait_name01, trait_score01, trait_name02,trait_score02, " +
     		"trait_name03,trait_score03, trait_name04, trait_score04, trait_name05, trait_score05, " +
     		"trait_name06,trait_score06, trait_name07, trait_score07, " +
     		"trait_units06, trait_units07, eval_date) " +
-    		"values('%i','%i','%d','%i','%d','%i','%d','%i','%d','%i','%d','%i','%d','%i','%d','%i','%i','%s') " + 
-    				sheep_id,
-    				trait01,
-    				trait01_data,
-    				trait02,
-    				trait02_data,
-    				trait03,
-    				trait03_data,
-    				trait04,
-    				trait04_data,
-    				trait05,
-    				trait05_data,
-    				trait06,
-    				trait06_data,
-    				trait07,
-    				trait07_data,
-    				trait06_units,
-    				trait07_units,
-    				mytoday
-    				);
-    		Log.i("save eval ", cmd);
+    		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ", 
+    				sheep_id, trait01, trait01_data, trait02, trait02_data, trait03, trait03_data,
+    				trait04, trait04_data, trait05, trait05_data, trait06, trait06_data,
+    				trait07, trait07_data, trait06_units, trait07_units, mytoday );
+    		
+//    		Log.i("save eval ", cmd);
     		dbh.exec( cmd );
     		clearBtn( null );
     }
