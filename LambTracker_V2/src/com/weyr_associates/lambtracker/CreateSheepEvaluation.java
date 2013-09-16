@@ -149,7 +149,7 @@ public class CreateSheepEvaluation extends Activity {
         Log.i("units ", "executed command " + cmd);
         cursor   = ( Cursor ) crsr;
     	dbh.moveToFirstRecord();
-    	trait_units.add("Select a Unit");
+    	trait_units.add("Select Measurement Units");
        // looping through all rows and adding to list
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		trait_units.add(cursor.getString(1));
