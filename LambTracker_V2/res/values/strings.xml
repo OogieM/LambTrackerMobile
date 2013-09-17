@@ -30,6 +30,7 @@
     <string name="delete_btn">Delete</string>
     <string name="close_btn">Close</string>
     <string name="cancel_btn">Cancel</string>
+    <string name="alert_btn">Alert</string>
     <string name="scan_eid_btn">Scan EID</string>
     <string name="remove_tag_btn">Remove Tag</string>
     <string name="remove_fedtag_btn">Remove Fed Tag</string>
@@ -58,6 +59,7 @@
     <string name="title_activity_test_interface_designs">TestInterfaceDesigns</string>
     <string name="title_activity_create_sheep_evaluation">Create Evaluation Task</string>
     
+    <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
     <string name="help_convert">Select a sheep based on either Federal or Farm tag. The system assumes there are no duplicate
          farm tags and no duplicate federal tags. There can be duplicates where one is a federal tag and one is a farm tag. </string>   

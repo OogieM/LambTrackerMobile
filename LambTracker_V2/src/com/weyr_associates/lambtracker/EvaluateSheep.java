@@ -96,7 +96,7 @@ public class EvaluateSheep extends Activity {
 				
 				break;
 			case eidService.MSG_THREAD_SUICIDE:
-				Log.i("Evaluate", "Service informed Activity of Suicide.");
+//				Log.i("Evaluate", "Service informed Activity of Suicide.");
 				doUnbindService();
 				stopService(new Intent(EvaluateSheep.this, eidService.class));
 				
@@ -110,7 +110,7 @@ public class EvaluateSheep extends Activity {
 	 public ServiceConnection mConnection = new ServiceConnection() {
 		public void onServiceConnected(ComponentName className, IBinder service) {
 			mService = new Messenger(service);
-			Log.i("Evaluate", "At Service.");
+//			Log.i("Evaluate", "At Service.");
 			try {
 				//Register client with service
 				Message msg = Message.obtain(null, eidService.MSG_REGISTER_CLIENT);
@@ -137,7 +137,7 @@ public class EvaluateSheep extends Activity {
 
 	private void CheckIfServiceIsRunning() {
 		//If the service is running when the activity starts, we want to automatically bind to it.
-		Log.i("Evaluate", "At isRunning?.");
+//		Log.i("Evaluate", "At isRunning?.");
 		if (eidService.isRunning()) {
 //			Log.i("Evaluate", "is.");
 			doBindService();
@@ -167,7 +167,7 @@ public class EvaluateSheep extends Activity {
 				Message msg = Message.obtain(null, eidService.MSG_UPDATE_STATUS, 0, 0);
 				msg.replyTo = mMessenger;
 				mService.send(msg);
-				Log.i("Evaluate", "At doBind4.");
+//				Log.i("Evaluate", "At doBind4.");
 				//Request full log from service.
 				msg = Message.obtain(null, eidService.MSG_UPDATE_LOG_FULL, 0, 0);
 				mService.send(msg);
@@ -226,7 +226,7 @@ public class EvaluateSheep extends Activity {
         setContentView(R.layout.evaluate_sheep);
         String 			dbname = getString(R.string.real_database_file); 
         String          cmd;
-        
+        Button 			btn;
         TextView TV;       
         Object 			crsr;
         dbh = new DatabaseHandler( this, dbname );
@@ -362,7 +362,10 @@ public class EvaluateSheep extends Activity {
 //        Log.i("EvaluateSheep ", "after get the text");
         }
         cursor.close();
-        
+       	// make the alert button normal and disabled
+    	btn = (Button) findViewById( R.id.alert_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+    	btn.setEnabled(false);        
        	}
     public void saveScores( View v )
     {    	
@@ -433,6 +436,10 @@ public class EvaluateSheep extends Activity {
     		// I need to get the traits scored for this pass here:
     		String mytoday = TodayIs();
 //    		Log.i("Date is ", mytoday);
+    		//	Set the alert for this sheep so there is a note that the evaluation is done
+    		
+    		
+    		
     		// Now that I have all the data I need to write it into the sheep_evaluation_table
        		
     		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
@@ -447,6 +454,10 @@ public class EvaluateSheep extends Activity {
     		
 //    		Log.i("save eval ", cmd);
     		dbh.exec( cmd );
+    		String alert_text = "Evaluation Done";
+    		cmd = String.format("update sheep_table set alert01='%s' where sheep_id=%d", alert_text, sheep_id);
+//    		Log.i("test alert ", cmd);   
+    		dbh.exec( cmd );
     		clearBtn( null );
     }
 	
@@ -458,7 +469,35 @@ public class EvaluateSheep extends Activity {
 			clearBtn( null );   	
 			finish();
 	    }
-	   
+	 
+	public void showAlert(View v)
+	{
+		String	alert_text;
+		String 			dbname = getString(R.string.real_database_file); 
+        String          cmd;    
+        Object 			crsr;
+        	dbh = new DatabaseHandler( this, dbname );
+		// Display alerts here   	
+				AlertDialog.Builder builder = new AlertDialog.Builder( this );
+				cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_id =%d", sheep_id);
+//				Log.i("get alert ", cmd);  
+				crsr = dbh.exec( cmd );
+		        cursor   = ( Cursor ) crsr;
+		        dbh.moveToFirstRecord();		       
+		        alert_text = (dbh.getStr(0));
+				builder.setMessage( alert_text )
+			           .setTitle( R.string.alert_warning );
+				builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int idx) {
+			               // User clicked OK button   	  
+			               }
+			       });		
+				AlertDialog dialog = builder.create();
+				dialog.show();
+				cursor.close();
+	}
+	
+	
 	public void helpBtn( View v )
     {
    	// Display help here   	
@@ -479,7 +518,7 @@ public class EvaluateSheep extends Activity {
     {
 		// clear out the display of everything
 		TextView TV ;
-		
+		Button btn;
 		TV = (TextView) findViewById( R.id.inputText );
 		TV.setText( "" );		
 		TV = (TextView) findViewById( R.id.sheepnameText );
@@ -506,6 +545,10 @@ public class EvaluateSheep extends Activity {
 		TV.setText ( "" );
 		TV = (TextView) findViewById( R.id.trait07_data );
 		TV.setText ( "" );
+       	// make the alert button normal and disabled
+    	btn = (Button) findViewById( R.id.alert_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+    	btn.setEnabled(false);  
     }
 	   private String TodayIs() {
 			Calendar calendar = Calendar.getInstance();
@@ -559,7 +602,7 @@ public class EvaluateSheep extends Activity {
 //    		assumes no duplicate federal tag numbers, ok for our flock not ok for the general case
     		
     		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off " +
+    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off , sheep_table.alert01 " +
     				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +	
     				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
     				"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", fed);
@@ -601,7 +644,15 @@ public class EvaluateSheep extends Activity {
     	sheep_id = dbh.getInt(1);
     	TV = (TextView) findViewById(R.id.fedText)	;
     	TV.setText(dbh.getStr(3));
-    	
+    	String alert_text = dbh.getStr(6);
+//    	Now to test of the sheep has an alert and if so then set the alerts button to red
+		if (alert_text != null){
+	       	// make the alert button red
+	    	Button btn = (Button) findViewById( R.id.alert_btn );
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+	    	btn.setEnabled(true);   
+		}
+		
     	ii = dbh.getInt(1);
     	
 //		Now we need to get the farm tag for that sheep and fill the display with data
@@ -645,12 +696,12 @@ public class EvaluateSheep extends Activity {
 //    		assumes no duplicate farm tag numbers, ok for our flock not ok for the general case  
     		
     		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off " +
+    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off, sheep_table.alert01 " +
     				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
     				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
     				"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", farm);
     		
-    		Log.i("Evaluate", "building command search for farm tag ");
+//    		Log.i("Evaluate", "building command search for farm tag ");
     		}	
     	else
     	{
@@ -687,6 +738,14 @@ public class EvaluateSheep extends Activity {
     	TV.setText(dbh.getStr(3));
     	ii = dbh.getInt(1);
     	
+//    	Now to test of the sheep has an alert and if so then set the alerts button to red
+    	String alert_text = dbh.getStr(6);
+    	if (alert_text != null){
+	       	// make the alert button red
+	    	Button btn = (Button) findViewById( R.id.alert_btn );
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+	    	btn.setEnabled(true);   
+		}
 //		Now we need to get the rest of the tags and fill the display with data
 		
     	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +

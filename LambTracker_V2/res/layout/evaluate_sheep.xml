@@ -30,7 +30,7 @@
            
            <EditText
             android:id="@+id/inputText"
-           android:layout_width="150dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_column="0"
@@ -359,9 +359,17 @@
             android:id="@+id/save_evaluation_scores_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
-           	android:layout_centerHorizontal="true"
+           	android:layout_toRightOf="@+id/back_to_main_btn"
             android:onClick="saveScores"
             android:text="@string/save_evaluation_scores_btn"
+            android:textSize="14sp" />
+       	<Button
+            android:id="@+id/alert_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_toRightOf="@+id/save_evaluation_scores_btn"
+            android:onClick="showAlert"
+            android:text="@string/alert_btn"
             android:textSize="14sp" />
        		
        	<Button

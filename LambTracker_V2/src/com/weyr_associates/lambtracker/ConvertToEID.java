@@ -37,6 +37,8 @@ public class ConvertToEID extends Activity {
 	private Cursor 	cursor;
 	private int			    recNo;
 	private int             nRecs;
+	
+	public Button btn;
 //	private String[]        colNames; 
 	
 /////////////////////////////////////////////////////
@@ -188,7 +190,7 @@ public class ConvertToEID extends Activity {
 	public void gotEID( )
     {
 	   	//	make the scan eid button red
-    	Button btn = (Button) findViewById( R.id.scan_eid_btn );
+    	btn = (Button) findViewById( R.id.scan_eid_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	
     	TextView TV = (TextView) findViewById (R.id.eidText);
@@ -213,16 +215,21 @@ public class ConvertToEID extends Activity {
 ////////////////////////////////////    	
     	   	
     	//	make the remove tag buttons red
-    	Button btn = (Button) findViewById( R.id.remove_fedtag_btn );
+    	btn = (Button) findViewById( R.id.remove_fedtag_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	btn = (Button) findViewById( R.id.remove_farmtag_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+
+    	//	Disable the alert button until we have an alert for this sheep
+    	btn = (Button) findViewById( R.id.alert_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+    	btn.setEnabled(false); 
     	
     	//	Disable the Next Record and Prev. Record button until we have multiple records
-    	Button btn2 = (Button) findViewById( R.id.next_rec_btn );
-    	btn2.setEnabled(false); 
-    	Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
-    	btn3.setEnabled(false);
+    	btn = (Button) findViewById( R.id.next_rec_btn );
+    	btn.setEnabled(false); 
+    	btn = (Button) findViewById( R.id.prev_rec_btn );
+    	btn.setEnabled(false);
     	fedtagid = 0;
     	farmtagid = 0;
     	eidtagid = 0;
@@ -252,8 +259,7 @@ public class ConvertToEID extends Activity {
 	               }
 	       });		
 		AlertDialog dialog = builder.create();
-		dialog.show();
-		
+		dialog.show();		
     }
     
     // user clicked 'clear' button
@@ -284,6 +290,10 @@ public class ConvertToEID extends Activity {
 	    TV9.setText( "" );
 	  	fedtagid = 0;
     	farmtagid = 0;
+    	// make the alert button normal and disabled
+    	btn = (Button) findViewById( R.id.alert_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+    	btn.setEnabled(false); 
     }
  // user clicked 'Search Fed' button
     public void searchFedTag( View v )
@@ -304,7 +314,7 @@ public class ConvertToEID extends Activity {
     		
     		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
     				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-    				"id_info_table.id_infoid, id_info_table.tag_date_off " +
+    				"id_info_table.id_infoid, id_info_table.tag_date_off, sheep_table.alert01 " +
     				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
     				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
     				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
@@ -351,6 +361,18 @@ public class ConvertToEID extends Activity {
     	TextView TV4 = (TextView) findViewById(R.id.fed_locationText);
     	TV4.setText(dbh.getStr(5));
     	ii = dbh.getInt(1);
+    	
+    	// Now we need to check and see if there is an alert for this sheep
+    	// If there is we need to set up the display of the alert button
+    	
+    	String alert_text = dbh.getStr(6);
+//    	Now to test of the sheep has an alert and if so then set the alerts button to red
+		if (alert_text != null){
+	       	// make the alert button red
+	    	Button btn = (Button) findViewById( R.id.alert_btn );
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+		}
+    	
     	
 //		Now we need to get the farm tag for that sheep and fill the display with data
     	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +

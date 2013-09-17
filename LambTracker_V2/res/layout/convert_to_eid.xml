@@ -11,27 +11,61 @@
         android:text="@string/title_activity_convert_to_eid"
         android:textSize="18sp" />
 
-  <TextView
-            android:layout_width="fill_parent"
+  <GridLayout 
+        	android:id="@+id/grid1"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+        	android:columnCount="3"
+       		android:rowCount="3">
+        
+           <TextView
+            android:layout_width="150dp"
             android:layout_height="wrap_content"     
             android:layout_gravity="left"
+            android:layout_column="0"
+            android:layout_row="0"
             android:inputType="none"
             android:text="@string/input_id_lbl" />
-
-        <EditText
+           
+           <EditText
             android:id="@+id/inputText"
-           android:layout_width="fill_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
+            android:layout_column="0"
+            android:layout_row="1"
             android:enabled="true"
             android:inputType="number"
-            android:textSize="24sp"
+            android:textSize="14sp"
             android:typeface="monospace" >
             <requestFocus />
-        </EditText>
+            </EditText>
+            
+  			<TextView
+        	android:layout_width="200dp"
+       	 	android:layout_height="wrap_content"
+        	android:layout_column="1"
+            android:layout_gravity="left"
+            android:layout_row="0"
+            android:inputType="none"
+        	android:text="@string/sheep_name_lbl" />
+        
+        <EditText
+        	android:id="@+id/sheepnameText"
+        	android:layout_width="200dp"
+       	 	android:layout_height="wrap_content"
+           	android:layout_column="1"
+            android:layout_gravity="left"
+            android:layout_row="1"
+            android:ems="10"
+        	android:gravity="left"
+        	android:inputType="text"
+        	android:textSize="14sp"
+        	android:typeface="monospace" />       
+       </GridLayout>  
    
     <GridLayout
-        android:id="@+id/grid1"
+        android:id="@+id/grid2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="6" >
@@ -124,27 +158,9 @@
             android:textSize="14sp" />
 
     </GridLayout>
-
-     <TextView
-        	android:layout_width="match_parent"
-       	 	android:layout_height="wrap_content"
-        	android:inputType="none"
-        	android:text="@string/sheep_name_lbl" />
-        
-        <EditText
-        	android:id="@+id/sheepnameText"
-        	android:layout_width="match_parent"
-       	 	android:layout_height="wrap_content"
-            android:enabled="true"
-            android:ems="10"
-        	android:gravity="start"
-        	android:inputType="text"
-        	android:textSize="24sp"
-        	android:typeface="monospace" >    
-    	</EditText>
     	
-         <GridLayout
-        android:id="@+id/grid2"
+        <GridLayout
+        android:id="@+id/grid3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:columnCount="6"
@@ -222,8 +238,7 @@
             android:onClick="removeFedTag"
             android:text="@string/remove_fedtag_btn"
             android:textSize="14sp" />
-        
-        
+               
         <TextView
             android:layout_width="90dp"
             android:layout_height="wrap_content"
@@ -300,11 +315,11 @@
         
         </GridLayout>
        <GridLayout
-        android:id="@+id/grid3"
+        android:id="@+id/grid4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:columnCount="6"
-        android:rowCount="6" > 
+        android:columnCount="3"
+        android:rowCount="2" > 
               
         <TextView
             android:layout_width="200dp"
@@ -384,6 +399,14 @@
            	android:layout_alignParentLeft="true"
             android:onClick="backBtn"
             android:text="@string/back_btn"
+            android:textSize="14sp" />
+       	<Button
+            android:id="@+id/alert_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_toRightOf="@+id/back_to_main_btn"
+            android:onClick="showAlert"
+            android:text="@string/alert_btn"
             android:textSize="14sp" />
        	
        	<Button
