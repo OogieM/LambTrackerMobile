@@ -14,6 +14,7 @@ import android.R.string;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -546,8 +547,18 @@ public class DatabaseHandler extends SQLiteOpenHelper
     
     public void copyRealDataBase() throws IOException
     {
-    
-        //Open the original local db pre-loaded into assets as the input stream
+
+    	InputStream inputStream = null;
+
+//    	    try {
+////    	    	inputStream = ApplicationContextProvider.getContext().getAssets().open("lambtracker_db.sqlite");
+////    	        inputStream = assetManager.open("lambtracker_db.sqlite");
+//    	            if ( inputStream != null)
+//    	                Log.d("in copy db", " It worked!");
+//    	        } catch (IOException e) {
+//    	            e.printStackTrace();
+//    	        }
+//        //Open the original local db pre-loaded into assets as the input stream
         InputStream myInput = context.getAssets().open("lambtracker_db.sqlite");
  
         // Path to the just created empty db

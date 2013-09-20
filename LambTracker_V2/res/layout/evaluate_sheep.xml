@@ -51,7 +51,7 @@
             android:inputType="none"
         	android:text="@string/sheep_name_lbl" />
         
-        <EditText
+        <TextView
         	android:id="@+id/sheepnameText"
         	android:layout_width="200dp"
        	 	android:layout_height="wrap_content"
@@ -60,7 +60,6 @@
             android:layout_row="1"
             android:ems="10"
         	android:gravity="left"
-        	android:inputType="text"
         	android:textSize="14sp"
         	android:typeface="monospace" />    
     
@@ -94,6 +93,7 @@
             android:text="@string/search_farm_btn" 
             android:textSize="14sp"/>
        
+        
         <Button
             android:id="@+id/scan_eid_btn"
             android:layout_width="100dp"
@@ -104,16 +104,18 @@
             android:onClick="scanEid"
             android:text="@string/scan_eid_btn"
             android:textSize="14sp" />
+        
         <Button
-            android:id="@+id/clear_form_btn"
+            android:id="@+id/save_evaluation_scores_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_column="3"
             android:layout_gravity="left|top"
-            android:layout_row="0"
-            android:onClick="clearBtn"
-            android:text="@string/clear_btn"
+            android:layout_row="0"        	
+            android:onClick="saveScores"
+            android:text="@string/save_evaluation_scores_btn"
             android:textSize="14sp" />
+        
         
        </GridLayout> 
     
@@ -133,17 +135,15 @@
             android:inputType="none"
             android:text="@string/federal_id_lbl" />
 
-        <EditText
+        <TextView
             android:id="@+id/fedText"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:layout_column="0"
             android:layout_gravity="left"
             android:layout_row="1"
-            android:inputType="number"
-            android:textSize="14sp"
-            android:typeface="monospace" >
-        </EditText>
+			android:textSize="14sp"
+            android:typeface="monospace" />
         
  		<TextView
             android:layout_width="90dp"
@@ -154,7 +154,7 @@
             android:inputType="none"
             android:text="@string/farm_id_lbl" />
 
-        <EditText
+        <TextView
             android:id="@+id/farmText"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
@@ -162,7 +162,6 @@
             android:layout_gravity="left"
             android:layout_row="1"
             android:enabled="true"
-            android:inputType="number"
             android:textSize="14sp"
             android:typeface="monospace" />
         
@@ -175,17 +174,16 @@
             android:inputType="none"
             android:text="@string/electronic_id_lbl" />
         
-        <EditText
+        <TextView
             android:id="@+id/eidText"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_column="2"
             android:layout_gravity="left|top"
             android:layout_row="1"
-            android:enabled="true"
-            android:inputType="text"
             android:textSize="14sp"
             android:typeface="monospace" />
+        
     </GridLayout>
         
     <GridLayout
@@ -356,20 +354,20 @@
             android:textSize="14sp" />
        	
        	<Button
-            android:id="@+id/save_evaluation_scores_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-           	android:layout_toRightOf="@+id/back_to_main_btn"
-            android:onClick="saveScores"
-            android:text="@string/save_evaluation_scores_btn"
-            android:textSize="14sp" />
-       	<Button
             android:id="@+id/alert_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
-           	android:layout_toRightOf="@+id/save_evaluation_scores_btn"
+           	android:layout_toRightOf="@+id/back_to_main_btn"
             android:onClick="showAlert"
             android:text="@string/alert_btn"
+            android:textSize="14sp" />
+       	<Button
+            android:id="@+id/clear_form_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/alert_btn"
+            android:onClick="clearBtn"
+            android:text="@string/clear_btn"
             android:textSize="14sp" />
        		
        	<Button
