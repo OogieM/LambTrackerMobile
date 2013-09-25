@@ -31,6 +31,7 @@
     <string name="close_btn">Close</string>
     <string name="cancel_btn">Cancel</string>
     <string name="alert_btn">Alert</string>
+    <string name="ok">OK</string>    
     <string name="scan_eid_btn">Scan EID</string>
     <string name="remove_tag_btn">Remove Tag</string>
     <string name="remove_fedtag_btn">Remove Fed Tag</string>
@@ -49,14 +50,15 @@
     <string name="show_real_db_action">showRealDB</string>
       
     
-    <string name="title_activity_do_sheep_task">DoSheepTask</string>
-    <string name="title_activity_load_sheep_list">LoadSheepList</string>
-    <string name="title_activity_look_up_sheep">LookUpSheep</string>
-    <string name="title_activity_lamb_tracker_receiver">LambTrackerReceiver</string>
+    <string name="title_activity_do_sheep_task">Demo Lambing Data</string>
+    <string name="title_activity_load_sheep_list">Manage Sheep Database</string>
+    <string name="title_activity_look_up_sheep">Look Up Sheep</string>
+    <string name="title_activity_edit_database">Edit Sheep Database</string>
+    <string name="title_activity_lamb_tracker_receiver">Lamb Tracker Receiver</string>
     <string name="title_activity_incoming_receiver">IncomingReceiver</string>
-    <string name="title_activity_convert_to_eid">ConvertToEID</string>
-    <string name="title_activity_evaluate_sheep">EvaluateSheep</string>
-    <string name="title_activity_test_interface_designs">TestInterfaceDesigns</string>
+    <string name="title_activity_convert_to_eid">Convert To EID</string>
+    <string name="title_activity_evaluate_sheep">Evaluate Sheep</string>
+    <string name="title_activity_test_interface_designs">Test Interface Designs</string>
     <string name="title_activity_create_sheep_evaluation">Create Evaluation Task</string>
     
     <string name="alert_warning">Alert Screen</string>
@@ -66,22 +68,19 @@
     <string name="help_evaluate">Evaluate sheep based on the criteria you select. Use the select to locate a sheep by Federal, 
         Farm or Scanning an EID tag. Then select the scores for each trait. When finished select Save Scores
         to write the data to the database with an evaluation date of today. </string>
-    <string name="help_create_evaluate">Create a list of traits to evaluate on this run with the sheep. You may select 5 scored items and 2 real data items.</string>    
+    <string name="help_create_evaluate">Create a list of traits to evaluate on this run with the sheep. You may select 6 scored items and 2 real data items.</string>    
     
-    <string name="select">Choose a Flock Task</string>
     <string-array name="sheep_task_array">
         <item>Choose a Flock Task</item>
-        <item>Manage Sheep Databases</item>
-        <item>Create a Sheep Evaluation Task</item>
-        <item>Demo Lambing Data</item>
+        <item>Manage Sheep Database</item>
         <item>Convert to EID</item>
+        <item>Create a Sheep Evaluation Task</item>       
         <item>Evaluate Sheep</item>
         <item>Edit Database</item>
         <item>Test Interface Designs</item>
+        <item>Demo Lambing Data</item>
      </string-array>
-  
-    <string name="fileListTitle_label">Choose a Flock Task</string>
-       
+   
     <string name="sheep_name_lbl">Sheep Name</string>
     <string name="flock_prefix_lbl">Flock Prefix</string>
     <string name="sheep_sex_lbl">Sex</string>  
@@ -98,7 +97,6 @@
     <string name="federal_id_lbl">Federal ID</string>
     <string name="farm_id_lbl">Farm ID</string>
     <string name="electronic_id_lbl">Electronic ID</string>
-    <string name="other_id_lbl">Other ID</string> 
     <string name="input_id_lbl">Input Search String</string>
       
     <string name="tag_type_lbl">Tag Type</string>
@@ -111,8 +109,6 @@
     
     <string name="select_scored_traits.lbl">Select Traits Scored 0 to 5</string>
     <string name="select_value_traits.lbl">Select Traits with Real values</string>
-    
-    <string name="evaluation_lbl">Sheep Evaluation</string>
        
 	<string name="sql_command_lbl">SQL Command</string>
 	<string name="results_lbl">Results</string>
@@ -120,15 +116,11 @@
     <string name="sheep_task_lbl">Lambing History</string>   
     <string name="lambing_results2012_lbl">2012 Lambing Results</string>
     <string name="lambing_results2013_lbl">2013 Lambing Results</string>
-
-    <string name="title_Message">Ewe Lambing History</string>
          
     <string name="delete_sheep">Delete Sheep?</string>
     <string name="delete_tag">Delete Tag?</string>
     <string name="delete_warning">Delete Warning</string>
     
-    <string name="ok">OK</string> 
-   
     <string name="action_settings">Settings</string>
        
 </resources>

@@ -38,11 +38,14 @@ public class LoadSheepList extends Activity {
     	TextView        txtView = (TextView) findViewById( R.id.editText1 );
 //    	Resources res = getResources();
     	String 	dbfile = getString(R.string.real_database_file) ;
+    	Log.i("LoadSheepList ", " got this as a file " + dbfile);
     	DatabaseHandler dbh     = new DatabaseHandler( this, dbfile );
     	try {
+    		Log.i("in try ", " before going to DBH");
     		dbh.copyRealDataBase();
     	}
     	catch (IOException e) {
+    		Log.i("in try ", " got an exception ");
     	} 	
     	temp = "Created Real Database from Copy in Assets.";
     	

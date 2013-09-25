@@ -40,7 +40,7 @@ public class EvaluateSheep extends Activity {
 	String     	cmd;
 	Integer 	i;
 	
-	public int trait01, trait02, trait03, trait04, trait05, trait06, trait07;
+	public int trait01, trait02, trait03, trait04, trait05, trait06, trait07, trait08;
 	public int trait06_units, trait07_units;
 	public int sheep_id;
 	int 		id;
@@ -57,8 +57,9 @@ public class EvaluateSheep extends Activity {
 	public RatingBar trait03_ratingbar ;
 	public RatingBar trait04_ratingbar ;
 	public RatingBar trait05_ratingbar ;
+	public RatingBar trait08_ratingbar ;
 
-	public Float trait01_data, trait02_data, trait03_data, trait04_data, trait05_data;
+	public Float trait01_data, trait02_data, trait03_data, trait04_data, trait05_data, trait08_data;
 	public Float trait06_data, trait07_data;
 	
 	private DatabaseHandler dbh;
@@ -268,6 +269,11 @@ public class EvaluateSheep extends Activity {
 //        Log.i("EvaluateSheep ", "trait07 = " + String.valueOf(trait07));
         trait07_units = cursor.getInt(2); 
 //        Log.i("EvaluateSheep ","units trait07 "+String.valueOf(trait07_units));
+        cursor.moveToNext();
+        
+        trait08 = cursor.getInt(1);
+//        Log.i("EvaluateSheep ", "trait08 = " + String.valueOf(trait08));
+           
         cursor.close();
            
         if (trait01!=0) {
@@ -334,6 +340,19 @@ public class EvaluateSheep extends Activity {
         TV = (TextView) findViewById( R.id.trait05_lbl );
         TV.setText(dbh.getStr(0));
 //        Log.i("EvaluateSheep ", "after get the text");
+        }
+        if (trait08!=0) {
+        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
+        		"evaluation_trait_table.id_traitid=%s", trait08 );
+//        Log.i("EvaluateSheep ", cmd);
+        crsr = dbh.exec( cmd );
+//        Log.i("EvaluateSheep ", "after");
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+//        Log.i("EvaluateSheep ", "after move to first");
+        TV = (TextView) findViewById( R.id.trait08_lbl );
+        TV.setText(dbh.getStr(0));
+        Log.i("EvaluateSheep ", "after get the text " + TV);
         }
         if (trait06!=0) {
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
@@ -402,6 +421,10 @@ public class EvaluateSheep extends Activity {
     		trait05_data = trait05_ratingbar.getRating();
 //    		Log.i("trait05_ratingbar ", String.valueOf(trait05_data));
     		
+       		trait08_ratingbar = (RatingBar) findViewById(R.id.trait08_ratingbar);
+    		trait08_data = trait08_ratingbar.getRating();
+//    		Log.i("trait08_ratingbar ", String.valueOf(trait08s_data));
+    		
     		// get the real data scores
     		
     		TV = (TextView) findViewById(R.id.trait06_data);
@@ -444,12 +467,12 @@ public class EvaluateSheep extends Activity {
        		
     		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
     		"trait_name01, trait_score01, trait_name02,trait_score02, " +
-    		"trait_name03,trait_score03, trait_name04, trait_score04, trait_name05, trait_score05, " +
-    		"trait_name06,trait_score06, trait_name07, trait_score07, " +
+    		"trait_name03, trait_score03, trait_name04, trait_score04, trait_name05, trait_score05, " +
+    		"trait_name08, trait_score08, trait_name06, trait_score06, trait_name07, trait_score07, " +
     		"trait_units06, trait_units07, eval_date) " +
     		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s') ", 
     				sheep_id, trait01, trait01_data, trait02, trait02_data, trait03, trait03_data,
-    				trait04, trait04_data, trait05, trait05_data, trait06, trait06_data,
+    				trait04, trait04_data, trait05, trait05_data, trait08, trait08_data, trait06, trait06_data,
     				trait07, trait07_data, trait06_units, trait07_units, mytoday );
     		
 //    		Log.i("save eval ", cmd);
@@ -540,6 +563,8 @@ public class EvaluateSheep extends Activity {
 		trait04_ratingbar.setRating(0.0f);
 		trait05_ratingbar = (RatingBar) findViewById(R.id.trait05_ratingbar);
 		trait05_ratingbar.setRating(0.0f);
+		trait08_ratingbar = (RatingBar) findViewById(R.id.trait08_ratingbar);
+		trait08_ratingbar.setRating(0.0f);
 //		Log.i("Clear btn", "After clear rating bars");
 		TV = (TextView) findViewById( R.id.trait06_data );
 		TV.setText ( "" );

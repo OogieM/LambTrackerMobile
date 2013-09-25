@@ -47,6 +47,7 @@
         </activity>
         <activity 
             android:name="com.weyr_associates.lambtracker.EditDB" 
+            android:label="@string/title_activity_edit_database" 
             android:screenOrientation="portrait"
             android:configChanges="orientation">
         </activity>

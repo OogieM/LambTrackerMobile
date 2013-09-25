@@ -30,9 +30,8 @@ public class LookUpSheep extends Activity
     	
 //		Added the variable definitions here    	
       	String          cmd;
-    	String          sheepName;
     	Boolean			exists;
-//    	String 			mymsg;
+
 //		make the delete button red
     	Button btn = (Button) findViewById( R.id.delete_task_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -46,13 +45,10 @@ public class LookUpSheep extends Activity
         String eid = this.getIntent().getExtras().getString("com.weyr_associates.lambtracker.LASTEID");
 //      Log.i("LookUpSheep", eid);         
         exists = true;
-//        mymsg="exists is true";
-//        Log.i ("LookUpSheep2", mymsg);
 //		added a way to verify the sheep_table exists here
         exists = tableExists("demo_sheep_table");
         if (exists)
         	{
- //       	mymsg = "in if loop w/sheep table present";
  //       	Log.i ("LookUpSheep", mymsg);
         	if( eid != null && eid.length() > 0 ){
         	cmd = String.format( "select *  from demo_sheep_table where eid_tag='%s'", eid );      	
@@ -105,16 +101,10 @@ public class LookUpSheep extends Activity
         }
     
 	public boolean tableExists (String table){
-//		String 	mymsg;
-//		mymsg = "nothing yet";
 		try {
 	        dbh.exec("select * from "+ table);   
-//	        mymsg = "table does exist";
-//	        Log.i ("tableExists", mymsg);
 	        return true;
 		} catch (SQLiteException e) {
-//			mymsg = "table not here";
-//			Log.i ("tableExists", mymsg);
 			return false;
 	        		}
 	        	}
@@ -126,8 +116,6 @@ public class LookUpSheep extends Activity
     	dbh.closeDB();
     	//Go back to main
       	finish();
-//    	Intent toMain = new Intent( this, MainActivity.class );
-//		startActivity( toMain );
 	    }
     
 	// user clicked 'enter' button

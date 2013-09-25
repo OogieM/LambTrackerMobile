@@ -59,11 +59,6 @@ public class DatabaseHandler extends SQLiteOpenHelper
     
     // the active database
     private SQLiteDatabase db = null;
-  
-    //	String db_path = getString(R.string.database_path);
-
-    // String db_name = getString(R.string.database_file);
-
     
     /**
      * Constructor for the DatabaseHandler
@@ -547,36 +542,30 @@ public class DatabaseHandler extends SQLiteOpenHelper
     
     public void copyRealDataBase() throws IOException
     {
-
-    	InputStream inputStream = null;
-
-//    	    try {
-////    	    	inputStream = ApplicationContextProvider.getContext().getAssets().open("lambtracker_db.sqlite");
-////    	        inputStream = assetManager.open("lambtracker_db.sqlite");
-//    	            if ( inputStream != null)
-//    	                Log.d("in copy db", " It worked!");
-//    	        } catch (IOException e) {
-//    	            e.printStackTrace();
-//    	        }
-//        //Open the original local db pre-loaded into assets as the input stream
+    	if( db == null ){
+            db = this.getWritableDatabase();
+        }   	
+//    	Log.i("DBH ", "In copyRealDatabase");
+    	
+        //Open the original local db pre-loaded into assets as the input stream
         InputStream myInput = context.getAssets().open("lambtracker_db.sqlite");
- 
         // Path to the just created empty db
         String outFileName = "/data/data/com.weyr_associates.lambtracker/databases/" + "lambtracker_db.sqlite";
- 
-        //Open the empty db as the output stream
+         //Open the empty db as the output stream
         OutputStream myOutput = new FileOutputStream(outFileName);
- 
-        //transfer bytes from the inputfile to the outputfile
+         //transfer bytes from the inputfile to the outputfile
         byte[] buffer = new byte[1024];
         int length;
-        while ((length = myInput.read(buffer))>0)
+        length = 0;
+         while ((length = myInput.read(buffer))>0)
         {
             myOutput.write(buffer, 0, length);
         }
         //Close the streams
+         
         myOutput.flush();
         myOutput.close();
         myInput.close();
+        closeDB();
     }
     }

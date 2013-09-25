@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical" >
     
-    <TextView
-        android:id="@+id/TextView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="@string/title_activity_create_sheep_evaluation"
-        android:textSize="18sp" />
     <TextView
         android:id="@+id/TextView2"
         android:layout_width="match_parent"
@@ -45,6 +38,12 @@
   	  />
     <Spinner
   	  android:id="@+id/trait05_spinner"
+  	  android:layout_width="fill_parent"
+  	  android:layout_height="wrap_content"
+  	  android:textSize="24sp"
+  	  />
+    <Spinner
+  	  android:id="@+id/trait08_spinner"
   	  android:layout_width="fill_parent"
   	  android:layout_height="wrap_content"
   	  android:textSize="24sp"
