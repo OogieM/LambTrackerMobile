@@ -27,19 +27,23 @@
     <string name="view_btn">View</string>
     <string name="help_btn">Help</string>
     <string name="update_btn">Update</string>
+    <string name="update_database_btn">Update Database</string>
+    <string name="update_tag_btn">Update Tag</string>
+    <string name="update_display_btn">Update Display</string>
+    <string name="update_eid_tag_btn">Update EID Tag</string>
     <string name="delete_btn">Delete</string>
     <string name="close_btn">Close</string>
     <string name="cancel_btn">Cancel</string>
     <string name="alert_btn">Alert</string>
     <string name="ok">OK</string>    
-    <string name="scan_eid_btn">Scan EID</string>
+    <string name="scan_eid_btn">Scan an EID</string>
     <string name="remove_tag_btn">Remove Tag</string>
     <string name="remove_fedtag_btn">Remove Fed Tag</string>
-    <string name="remove_farmtag_btn">Remove Farm</string>
+    <string name="remove_farmtag_btn">Remove Farm Tag</string>
 	<string name="search_fed_btn">Search Federal Tag</string>
 	<string name="search_farm_btn">Search Farm Tag</string>
 	<string name="search_other_btn">Search Other ID</string>
-    <string name="add_new_tag_btn">Add Tag</string>
+    <string name="add_new_tag_btn">Add New Tag</string>
     <string name="save_evaluation_scores_btn">Save Scores</string>
     <string name="create_evaluation_task_btn">Create Evaluation</string>
    
@@ -106,6 +110,7 @@
     <string name="tag_location_lbl">Tag Location</string>
     <string name="tag_date_on_lbl">Tag Date On</string>
     <string name="tag_date_off_lbl">Tag Date Off</string>
+    <string name="new_tag_lbl">New Tag Number</string>
     
     <string name="select_scored_traits.lbl">Select Traits Scored 0 to 5</string>
     <string name="select_value_traits.lbl">Select Traits with Real values</string>

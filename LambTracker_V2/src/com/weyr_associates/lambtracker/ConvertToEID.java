@@ -1,13 +1,12 @@
 package com.weyr_associates.lambtracker;
 
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
 
 //import com.weyr_associates.lambtracker.MainActivity.IncomingHandler;
-
-
-
-
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -26,19 +25,30 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.database.Cursor;
 
 public class ConvertToEID extends Activity {
 	private DatabaseHandler dbh;
 	int             fedtagid, farmtagid, eidtagid;
-	private Cursor 	cursor;
-	private int			    recNo;
-	private int             nRecs;
+	public Cursor 	cursor;
+	public int 		thissheep_id, new_tag_type, new_tag_color, new_tag_location;
+	private int		recNo;
+	private int     nRecs;
 	
 	public Button btn;
+	public String tag_type_label, tag_color_label, tag_location_label, new_tag_number, eid_tag_color_label ;
+	public String eid_tag_location_label, eidText;
+	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner, eid_tag_color_spinner, eid_tag_location_spinner;
+	public List<String> tag_types, tag_locations, tag_colors;
+	ArrayAdapter<String> dataAdapter;
+	String     	cmd;
+	Integer 	i;
+	
 //	private String[]        colNames; 
 	
 /////////////////////////////////////////////////////
@@ -189,13 +199,50 @@ public class ConvertToEID extends Activity {
 	// use EID reader to look up a sheep
 	public void gotEID( )
     {
+		Object crsr;
+		
 	   	//	make the scan eid button red
     	btn = (Button) findViewById( R.id.scan_eid_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-    	
+    	// 	Display the EID number
     	TextView TV = (TextView) findViewById (R.id.eidText);
     	TV.setText( LastEID );
-//		Log.i("Convert", "Got EID");
+    	
+		Log.i("Convert", "Got EID");
+    	//	Set up the location and color spinners for EID  
+    	eid_tag_color_spinner = (Spinner) findViewById(R.id.eid_tag_color_spinner);
+    	tag_colors = new ArrayList<String>();        
+        // Select All fields from tag colors to build the spinner
+        cmd = "select * from tag_colors_table";
+        crsr = dbh.exec( cmd );  
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+    	tag_colors.add("Select a Color");
+         // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		tag_colors.add(cursor.getString(2));
+    	}
+    	cursor.close();
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_colors);
+    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		eid_tag_color_spinner.setAdapter (dataAdapter);
+		eid_tag_color_spinner.setSelection(1);
+		Log.i("Convert", " Got color spinner set");
+		
+		eid_tag_location_spinner = (Spinner) findViewById(R.id.eid_tag_location_spinner);
+		tag_locations = new ArrayList<String>(); 
+		tag_locations.add("Select a Location");
+		tag_locations.add("RE");		
+		tag_locations.add("LE");
+		
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_locations);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		eid_tag_location_spinner.setAdapter (dataAdapter);
+		eid_tag_location_spinner.setSelection(1);
+		
+		Log.i("Convert", " Got location spinner set");
 		
 	}	
 	
@@ -230,6 +277,10 @@ public class ConvertToEID extends Activity {
     	btn.setEnabled(false); 
     	btn = (Button) findViewById( R.id.prev_rec_btn );
     	btn.setEnabled(false);
+    	
+    	//	Disable the bottom update tag button until we choose to add or update
+       	btn = (Button) findViewById( R.id.update_display_btn );
+    	btn.setEnabled(false); 
     	fedtagid = 0;
     	farmtagid = 0;
     	eidtagid = 0;
@@ -273,9 +324,9 @@ public class ConvertToEID extends Activity {
 	    TextView TV1  = (TextView) findViewById( R.id.eidText );
 	    TV1.setText( "" );
 	    TextView TV2  = (TextView) findViewById( R.id.fedText );
-	    TV2.setText( "" );
+	    TV2.setText( null );
 	    TextView TV3  = (TextView) findViewById( R.id.farmText );
-	    TV3.setText( "" );
+	    TV3.setText( null );
 	    TextView TV4 = (TextView) findViewById( R.id.fed_colorText );
 	    TV4.setText( "" );
 	    TextView TV5 = (TextView) findViewById( R.id.fed_locationText );
@@ -284,16 +335,21 @@ public class ConvertToEID extends Activity {
 	    TV6.setText( "" );
 	    TextView TV7 = (TextView) findViewById( R.id.farm_locationText);
 	    TV7.setText( "" );
-	    TextView TV8 = (TextView) findViewById( R.id.eid_colorText );
-	    TV8.setText( "" );
-	    TextView TV9 = (TextView) findViewById( R.id.eid_locationText );
-	    TV9.setText( "" );
+//	    TextView TV8 = (TextView) findViewById( R.id.eid_colorText );
+//	    TV8.setText( "" );
+//	    TextView TV9 = (TextView) findViewById( R.id.eid_locationText );
+//	    TV9.setText( "" );
 	  	fedtagid = 0;
     	farmtagid = 0;
+    	eidtagid = 0;
     	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
     	btn.setEnabled(false); 
+    	//	make the scan button normal
+    	btn = (Button) findViewById( R.id.scan_eid_btn );
+    	btn.getBackground().setColorFilter(null);
+    	
     }
  // user clicked 'Search Fed' button
     public void searchFedTag( View v )
@@ -361,19 +417,17 @@ public class ConvertToEID extends Activity {
     	TextView TV4 = (TextView) findViewById(R.id.fed_locationText);
     	TV4.setText(dbh.getStr(5));
     	ii = dbh.getInt(1);
+    	thissheep_id = ii;
     	
     	// Now we need to check and see if there is an alert for this sheep
-    	// If there is we need to set up the display of the alert button
-    	
-    	String alert_text = dbh.getStr(6);
+       	String alert_text = dbh.getStr(6);
 //    	Now to test of the sheep has an alert and if so then set the alerts button to red
 		if (alert_text != null){
 	       	// make the alert button red
 	    	Button btn = (Button) findViewById( R.id.alert_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 		}
-    	
-    	
+     	
 //		Now we need to get the farm tag for that sheep and fill the display with data
     	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 		"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
@@ -445,8 +499,7 @@ public class ConvertToEID extends Activity {
     		}
 //Need to add next and previous buttons if we have duplicate farm tags
 //    	if( dbh.getSize() >1){
-//
-// 			Enable the previous and next record buttons
+//// 			Enable the next record buttons
 //    		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
 //    		btn2.setEnabled(true);  
 //    		//	Set up the various pointers and cursor data needed to traverse the sequence
@@ -460,13 +513,14 @@ public class ConvertToEID extends Activity {
     	farmtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
     	TV = (TextView) findViewById(R.id.sheepnameText);
     	TV.setText(dbh.getStr(0));
-    	TextView TV2 = (TextView) findViewById(R.id.farmText)	;
-    	TV2.setText(dbh.getStr(4));
-    	TextView TV3 = (TextView) findViewById(R.id.farm_colorText);
-    	TV3.setText(dbh.getStr(3));
-    	TextView TV4 = (TextView) findViewById(R.id.farm_locationText);
-    	TV4.setText(dbh.getStr(5));
+    	TV = (TextView) findViewById(R.id.farmText)	;
+    	TV.setText(dbh.getStr(4));
+    	TV = (TextView) findViewById(R.id.farm_colorText);
+    	TV.setText(dbh.getStr(3));
+    	TV = (TextView) findViewById(R.id.farm_locationText);
+    	TV.setText(dbh.getStr(5));
     	ii = dbh.getInt(1);
+    	thissheep_id = ii;
     	
 //		Now we need to get the rest of the tags and fill the display with data
     	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
@@ -487,12 +541,12 @@ public class ConvertToEID extends Activity {
 			TV.setText( "No tag" );
     	} else {
         	fedtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database   	
-        	TextView TV5 = (TextView) findViewById(R.id.fedText)	;
-        	TV5.setText(dbh.getStr(4));
-        	TextView TV6 = (TextView) findViewById(R.id.fed_colorText);
-        	TV6.setText(dbh.getStr(3));
-        	TextView TV7 = (TextView) findViewById(R.id.fed_locationText);
-        	TV7.setText(dbh.getStr(5));
+        	TV = (TextView) findViewById(R.id.fedText)	;
+        	TV.setText(dbh.getStr(4));
+        	TV = (TextView) findViewById(R.id.fed_colorText);
+        	TV.setText(dbh.getStr(3));
+        	TV = (TextView) findViewById(R.id.fed_locationText);
+        	TV.setText(dbh.getStr(5));
         	ii = dbh.getInt(1);
     	}
     	}    
@@ -516,7 +570,7 @@ public class ConvertToEID extends Activity {
 //        	Log.i ("DoSheepTask", "In if statement next button and the record id is " + String.valueOf(id) );
     		recNo         += 1;
 //display stuff here
-		}
+ 		}
     	else {
     		//At the end so disable the next button
            	Button btn2 = (Button) findViewById( R.id.next_rec_btn );
@@ -539,7 +593,7 @@ public class ConvertToEID extends Activity {
  //       	Log.i ("DoSheepTask", "In if statement prev button and the record id is " + String.valueOf(id) );
     		recNo  -= 1;
  //display stuff here
-		}
+ 		}
     	else {
     		// at beginning so disable the previous button
         	Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
@@ -563,14 +617,20 @@ public class ConvertToEID extends Activity {
     	           .setTitle( R.string.delete_warning );
     		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int idx) {
-    	               // User clicked OK button -- delete the federal tag
-    	        	   //add a tag_date_off of today to the tag   	       		
-    	        	   String today = TodayIs();
-//    	        	   Log.i("removefedtag", today);
-    	        	   Log.i("removefedtag", String.valueOf(fedtagid));
-    	       		   String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", fedtagid );
-    	    		   dbh.exec( cmd );
-    	    		   clearBtn( null );
+    	               // User clicked OK button -- remove the federal tag
+    	        	   // add a tag_date_off of today to the tag   	       		
+    	        	   	String today = TodayIs();
+    	        	   	Log.i("removefedtag", String.valueOf(fedtagid));
+    	        	   	String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", fedtagid );
+    	       		   	dbh.exec( cmd );
+//    	    		   	Clear the display of the tags
+    	    		   	TextView TV = (TextView) findViewById(R.id.fedText)	;
+    	           	    TV.setText(null);
+    	           	    TV = (TextView) findViewById(R.id.fed_colorText);
+    	           		TV.setText("");
+    	           		TV = (TextView) findViewById(R.id.fed_locationText);
+    	           		TV.setText("");
+    	           		fedtagid = 0;
     	               }
     	       });
     		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
@@ -594,15 +654,22 @@ public class ConvertToEID extends Activity {
     	           .setTitle( R.string.delete_warning );
     		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int idx) {
-    	               // User clicked OK button -- delete the farm tag
+    	               // User clicked OK button -- remove the farm tag
     	        	   //add a tag_date_off of today to the tag
     	        	   String today = TodayIs();
  //   	        	   Log.i("removefarmtag", today);
     	        	   Log.i("removefarmtag", String.valueOf(farmtagid));
     	       		   String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", farmtagid );
     	    		   dbh.exec( cmd );
-    	    		   clearBtn( null );
-    	               }
+//   	    		   	Clear the display of the tags
+   	    		   	TextView TV = (TextView) findViewById(R.id.farmText)	;
+   	           	    TV.setText(null);
+   	           		TV = (TextView) findViewById(R.id.farm_colorText);
+   	           		TV.setText("");
+   	           		TV = (TextView) findViewById(R.id.farm_locationText);
+   	           		TV.setText("");  
+   	           		farmtagid = 0;
+   	           		}
     	       });
     		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int idx) {
@@ -630,7 +697,6 @@ public class ConvertToEID extends Activity {
 	}
 //     user clicked 'Scan' button    
     public void scanEid( View v){
- //   	String LastEID ;
     	// Here is where I need to get a tag scanned and put the data into the variable LastEID
 		if (mService != null) {
 		try {
@@ -640,79 +706,380 @@ public class ConvertToEID extends Activity {
 			mService.send(msg);
 		   	//	make the scan eid button green
 	    	Button btn = (Button) findViewById( R.id.scan_eid_btn );
-	    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xFFCC0000));
-			
+//	    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xFFCC0000));
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xff00ff00));
 		} catch (RemoteException e) {
 			// In this case the service has crashed before we could even do anything with it
 		}
 		}    	    	
     }
     
-    public void updateTags( View v ){
-    	String      cmd;
-    	Object		crsr;
+    public void updateDatabase( View v ){
+    	Object crsr;
+    	String sheepnameText, fedText, fed_colorText, fed_locationText;
+    	String farmText, farm_colorText, farm_locationText, eidText, eid_colorText, eid_locationText;
+    	int		fed_colorid, farm_colorid, eid_colorid, fed_locationid, farm_locationid, eid_locationid;
+    	int		fed_number, farm_number;
+    	
+    	eid_colorid = 0;
+    	eid_locationid = 0;
+    	eidText = null;
+    	
     	// Get the values from the UI screen
     	TextView TV = (TextView) findViewById( R.id.sheepnameText );
-    	String	sheepnameText = TV.getText().toString();
-    	Log.i("update", sheepnameText);
+    	sheepnameText = TV.getText().toString();
+    	Log.i("update everything ", "sheep name " + sheepnameText);
     	
-	    TV  = (TextView) findViewById( R.id.eidText );
-	    String	eidText = TV.getText().toString();
-	    TV  = (TextView) findViewById( R.id.fedText );
-	    Integer fedText = Integer.parseInt (TV.getText().toString());	    
-	    TV  = (TextView) findViewById( R.id.farmText );
-	    Integer	farmText = Integer.parseInt (TV.getText().toString());
+    	Log.i("update everything ", "sheep_id is " + String.valueOf(thissheep_id));
+    	
+    	Log.i("update everything ", "fed info record " + fedtagid);
+    	TV  = (TextView) findViewById( R.id.fedText );
+	    fedText = TV.getText().toString();
+	    fed_number = Integer.valueOf(fedText);
+	    Log.i("update everything ", "fed tag " + fedText);
+	    Log.i("update everything ", "fed tag integer " + String.valueOf(fed_number));
+	    
 	    TV = (TextView) findViewById( R.id.fed_colorText );
-	    Integer	fed_colorText = Integer.parseInt (TV.getText().toString());
+	    fed_colorText = TV.getText().toString();
+	    Log.i("update everything ", "fed color " + fed_colorText);	    
+	    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
+    			"where tag_color_name='%s'", fed_colorText);
+    	crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+        fed_colorid = dbh.getInt(0);
+        Log.i("update everything ", "fed color integer " + String.valueOf(fed_colorid));
+        	    
 	    TV = (TextView) findViewById( R.id.fed_locationText );
-	    Integer	fed_locationText = Integer.parseInt (TV.getText().toString());
+	    fed_locationText = TV.getText().toString();
+	    Log.i("update everything ", "fed location " + fed_locationText);
+	    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
+    			"where id_location_abbrev='%s'", fed_locationText);
+    	crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+        fed_locationid = dbh.getInt(0);
+        Log.i("update everything ", "fed location integer " + String.valueOf(fed_locationid));
 	    
-//	    TV = (TextView) findViewById( R.id.farm_colorText );
-//	    Integer	farm_colorText = Integer.parseInt (TV.getText().toString());
-//	    TV = (TextView) findViewById( R.id.farm_locationText);
-//	    Integer	farm_locationText = Integer.parseInt (TV.getText().toString());
-//	    TV = (TextView) findViewById( R.id.eid_colorText );
-//	    Integer	eid_colorText = Integer.parseInt (TV.getText().toString());
-//	    TV = (TextView) findViewById( R.id.eid_locationText );
-//	    Integer	eid_locationText = Integer.parseInt (TV.getText().toString());
+	    Log.i("update everything ", "farm info record " + farmtagid);
+	    TV  = (TextView) findViewById( R.id.farmText );
+	    farmText = TV.getText().toString();
+	    farm_number = Integer.valueOf(farmText);
+	    Log.i("update everything ", "farm number " + farmText);
 	    
-	    //	Need to add tests to see what data we really have and only update if there is some
+	    TV = (TextView) findViewById( R.id.farm_locationText);
+	    farm_locationText = TV.getText().toString();
+	    Log.i("update everything ", "farm location " + farm_locationText);
+	    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
+    			"where id_location_abbrev='%s'", farm_locationText);
+    	crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+        farm_locationid = dbh.getInt(0);
+        Log.i("update everything ", "farm color integer " + String.valueOf(farm_locationid));
+        
+	    TV = (TextView) findViewById( R.id.farm_colorText );
+	    farm_colorText = TV.getText().toString();
+	    Log.i("update everything ", "farm color " + farm_colorText);
+	    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
+    			"where tag_color_name='%s'", farm_colorText);
+    	crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+        farm_colorid = dbh.getInt(0);
+        Log.i("update everything ", "farm location integer " + String.valueOf(farm_locationid));
 	    
-//	    if (fedtagid != 0) {
-//	    	// update the Federal tag data
-//	    	Log.i("epdatefed", "tag record is not zero, needs update here");
-//	    	cmd = String.format( "update id_info_table SET tag_number=%d, tag_color_male=%d, tag_location=%d where id_infoid=%d", fedText, fed_colorText, fed_locationText, fedtagid );
-//		    Log.i("updatefederal", cmd);
-//		    crsr = dbh.exec( cmd );
-//		    }
-//	    	else {
-//	    		// fedtagid is zero so need to test whether there is a federal tag and add a record if there is one
-//	    		if (fedText != null){
-//	    			//have a federal tag but no fedid so add a new record;
-//	    			Log.i("updatefed", "need to add a new record here");
-//	    		}
-//	    		else{
-//	    			// no federal tag to enter so return
-//	    			return;
-//	    		}
-//	    	}
-//	    
-//
-//	    
-//	    //Update the Farm Tag data
-//	    cmd = String.format( "update id_info_table SET tag_number=%d, tag_color_male=%d, tag_location=%d where id_infoid=%d", farmText, farm_colorText, farm_locationText, farmtagid );
-//	    Log.i("updatefarm", cmd);
-//	    crsr = dbh.exec( cmd );
-//	    if (eidtagid != 0) {
-//	    	// update the eid tag
-//	    	Log.i("epdateeid", "tag is not zero, needs update here");
-//	    }
-//	    	else {
-//	    		// eidtagid is zero so need to test whether there is an EID and add a record if there is one
-//	    		
-//	    		return;
-//	    	}
+	    Log.i("update everything ", "farm info record " + eidtagid);
+	    TV  = (TextView) findViewById( R.id.eidText );
+	    eidText = TV.getText().toString();	
+	    Log.i("update everything ", "EID Tag " + eidText);
+	    
+	    if (eidText != null && !eidText.isEmpty()){
+	    	// Get the data from the EID tag section of the screen
+	    	eid_tag_color_spinner = (Spinner) findViewById(R.id.eid_tag_color_spinner);
+	    	eid_tag_location_spinner = (Spinner) findViewById(R.id.eid_tag_location_spinner);
+	    	
+	     	eid_tag_color_label = eid_tag_color_spinner.getSelectedItem().toString();
+	    	Log.i("update everything ", "EID color is " + eid_tag_color_label);
+	    	cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
+	    			"where tag_color_name='%s'", eid_tag_color_label);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        eid_colorid = dbh.getInt(0);
+	        
+	    	eid_tag_location_label = eid_tag_location_spinner.getSelectedItem().toString();
+	    	Log.i("update everything ", "EID location is " + eid_tag_location_label);
+	    	cmd = String.format("select id_location_table.id_locationid from id_location_table " +
+	    			"where id_location_abbrev='%s'", eid_tag_location_label);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        eid_locationid = dbh.getInt(0);
 	    }
+	 
+	    //	Need to add tests to see what data we really have and only update if there is some
+	    String today = TodayIs();
+	    if (fedtagid != 0) {
+	    	// 	update the Federal tag data if it has changed?
+	    	//	not implemented at this time. Assumed we either are adding new tags or taking off tags first
+	    	//	no update of  an existing tag record is done.
+	    	Log.i("updatefed", " tag record id is not zero, but has data changed?");
+			// TODO update areas
+	    }
+	    	else {
+	    		// fedtagid is zero so need to test whether there is a federal tag and add a record if there is one
+	    		if (fedText != null && !fedText.isEmpty()){
+	    			//have a federal tag but no fedtagid so add a new record;
+	    			Log.i("updatefed", " tag record id is 0 but have fed tag data need to add a new record to id_info_table here");
+	    			Log.i("update everything ", "sheep_id is " + String.valueOf(thissheep_id));
+	    			Log.i("update everything ", "fed color integer " + String.valueOf(fed_colorid));
+	    			Log.i("update everything ", "farm location integer " + String.valueOf(farm_locationid));
+	    			Log.i("update everything ", "today " + today);
+	    			Log.i("update everything ", "fed tag integer " + String.valueOf(fed_number));
+	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_location, tag_date_on, tag_number) " +
+	    					"values ( %s, 1, %s, %s, '%s', %s )", thissheep_id, fed_colorid, fed_locationid, today, fed_number);
+	    			Log.i("update everything ", "before cmd " + cmd);
+	    			dbh.exec( cmd );	
+	    			Log.i("update everything ", "after cmd exec");
+	    		}
+	    		else{
+	    			// no federal tag to enter so return
+	    			Log.i("updatefed", " no federal tag so nothing to do");	
+	    		}
+	    	}
+	    
+//	    //Update the Farm Tag data
+	    if (farmtagid != 0) {
+	    	// update the Farm tag data
+	    	//	not implemented at this time. Assumed we either are adding new tags or taking off tags first
+	    	//	no update of an existing tag record is done.
+	    	Log.i("updatefarm", " tag record id is not zero, but has data changed?");
+		    }
+	    	else {
+	    		// farmtagid is zero so need to test whether there is a farm tag and add a record if there is one
+	    		if (farmText != null && !farmText.isEmpty()){
+	    			//have a farm tag but no farmtagid so add a new record;
+	    			Log.i("updatefarm", " tag record id is 0 but have farm tag data need to add a new record to id_info_table here");
+	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_location, tag_date_on, tag_number) " +
+	    					"values ( %s, 4, %s, %s, '%s', %s )", thissheep_id, farm_colorid, farm_locationid, today, farm_number);
+	    			dbh.exec( cmd );	
+	    		}
+	    		else{
+	    			// no farm tag to enter so return
+	    			Log.i("updatefarm", " no farm tag so nothing to do");
+	    			
+	    		}
+	    	}
+//	    //Update the EID Tag data
+	    if (eidtagid != 0) {
+	    	// update the EID tag data
+	    	Log.i("updateEID", " tag record id is not zero, needs update here");
+		    }
+	    	else {
+	    		// eidtagid is zero so need to test whether there is an EID tag and add a record if there is one
+	    		if (eidText != null && !eidText.isEmpty()){
+	    			//have an EID tag but no eidtagid so add a new record;
+	    			Log.i("updateEID", " tag record id is 0 need to add a new record to id_info_table here");
+	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_location, tag_date_on, tag_number) " +
+	    					"values ( %s, 2, %s, %s, '%s', '%s' )", thissheep_id, eid_colorid, eid_locationid, today, eidText);
+	    			dbh.exec( cmd );	
+	    		}
+	    		else{
+	    			// no farm tag to enter so return
+	    			Log.i("updateEID", " no eid tag so nothing to do");
+	    			return;
+	    		}
+	    	}
+	    cursor.close();
+	    }
+    public void addNewTag( View v ){
+ //   	String temp;
+    	Object crsr;
+       	// Fill the Tag Type Spinner
+    	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+    	tag_types = new ArrayList<String>();   
+    	
+    	btn = (Button) findViewById( R.id.update_display_btn );
+    	btn.setEnabled(true); 
+    	
+        // Select All fields from tag type to build the spinner
+//        cmd = "select * from id_type_table";
+//        Object crsr = dbh.exec( cmd );  
+//        cursor   = ( Cursor ) crsr;
+//    	dbh.moveToFirstRecord();
+//    	tag_types.add("Select a Type");
+//         // looping through all rows and adding to list
+//    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+//    		temp = cursor.getString(1);  		
+//    		if (temp.compareTo("Electronic") > 0){
+//    			tag_types.add(cursor.getString(1));
+//    			}
+//    		else {
+//    			Log.i("in for loop", temp);
+//    			}
+//    	}
+//    	cursor.close();
+    	//	Decided to only allow Federal and Farm as tag type options for this task
+    	tag_types.add("Select a Type");
+    	tag_types.add("Federal");
+    	tag_types.add("Farm");
+    	
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
+
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		tag_type_spinner.setAdapter (dataAdapter);
+		tag_type_spinner.setSelection(0);	
+    	
+    	// Fill the Tag Color Spinner
+    	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
+ //   	eid_tag_color_spinner = (Spinner) findViewById(R.id.eid_tag_color_spinner);
+    	tag_colors = new ArrayList<String>();        
+        // Select All fields from tag colors to build the spinner
+        cmd = "select * from tag_colors_table";
+        crsr = dbh.exec( cmd );  
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+    	tag_colors.add("Select a Color");
+         // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		tag_colors.add(cursor.getString(2));
+    	}
+    	cursor.close();
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_colors);
+
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		tag_color_spinner.setAdapter (dataAdapter);
+		tag_color_spinner.setSelection(0);
+				
+    	// Fill the Tag Location Spinner
+		tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
+		tag_locations = new ArrayList<String>();        
+        // Select All fields from tag location to build the spinner
+//        cmd = "select * from id_location_table";
+//        crsr = dbh.exec( cmd );  
+//        cursor   = ( Cursor ) crsr;
+//    	dbh.moveToFirstRecord();
+//    	tag_locations.add("Select a Location");
+//         // looping through all rows and adding to list
+//    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+//    		tag_locations.add(cursor.getString(1));
+//    	}
+//    	cursor.close();
+		// Only allow ear locations for tags for this task
+		tag_locations.add("Select a Location");
+		tag_locations.add("Right Ear");		
+		tag_locations.add("Left Ear");
+		
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_locations);
+
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		tag_location_spinner.setAdapter (dataAdapter);
+		tag_location_spinner.setSelection(0);
+	}
     
-    
+    public void updateTag( View v ){
+    	Object 			crsr;
+    	String 			cmd;
+    	TextView 		TV;
+    	// Get the data from the add tag section of the screen
+    	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+    	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
+    	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
+    	
+    	tag_type_label = tag_type_spinner.getSelectedItem().toString();
+    	Log.i("updateTag", "Tag type is " + tag_type_label);
+    	tag_color_label = tag_color_spinner.getSelectedItem().toString();
+    	Log.i("updateTag", "Tag color is " + tag_color_label);
+    	tag_location_label = tag_location_spinner.getSelectedItem().toString();
+    	Log.i("updateTag", "Tag location is " + tag_location_label);
+    	
+    	// 	Fill the new tag data with where it is in the database tables
+    	//	Integers to hold the info new_tag_type, new_tag_color, new_tag_location
+    	if (tag_type_label == "Select a Type") {
+    		new_tag_type = 0;
+    	}else
+    	{
+    		cmd = String.format("select id_type_table.id_typeid from id_type_table " +
+			"where idtype_name='%s'", tag_type_label);
+    		crsr = dbh.exec( cmd );
+    		cursor   = ( Cursor ) crsr;
+    		dbh.moveToFirstRecord();
+    		new_tag_type = dbh.getInt(0);
+    	}
+    	
+    	if (tag_location_label == "Select a Location") {
+    		new_tag_location = 0;
+    	}else
+    	{
+    		cmd = String.format("select id_location_table.id_locationid, id_location_table.id_location_abbrev from id_location_table " +
+			"where id_location_name='%s'", tag_location_label);
+    		crsr = dbh.exec( cmd );
+    		cursor   = ( Cursor ) crsr;
+    		dbh.moveToFirstRecord();
+    		new_tag_location = dbh.getInt(0);
+    		Log.i("New Location ID ", String.valueOf(new_tag_location));
+    		
+    		tag_location_label = dbh.getStr(1);
+    		Log.i("New Location ", tag_location_label);
+    	}
+    	
+    	if (tag_color_label == "Select a Color") {
+    		new_tag_color = 0;
+    	}else
+    	{
+    		cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
+			"where tag_color_name='%s'", tag_color_label);
+    		crsr = dbh.exec( cmd );
+    		cursor   = ( Cursor ) crsr;
+    		dbh.moveToFirstRecord();
+    		new_tag_color = dbh.getInt(0);
+    	}    	
+    	
+    	TV  = (TextView) findViewById( R.id.new_tag_number);
+    	new_tag_number = TV.getText().toString();
+    	Log.i("before if", " new tag number " + new_tag_number);
+    	
+    	//	Update the upper display
+    	if (new_tag_type == 1){
+    		//	Federal Tag so update federal section and set needs database update
+    		Log.i("in if", "Got a new federal tag type");
+    	    TV  = (TextView) findViewById( R.id.fedText );
+    	    TV.setText(new_tag_number);
+    	    TV = (TextView) findViewById( R.id.fed_colorText );
+    	    TV.setText(tag_color_label);
+    	    TV = (TextView) findViewById( R.id.fed_locationText );
+    	    TV.setText(tag_location_label);
+    	    fedtagid = 0;
+     	}
+    	if (new_tag_type == 4){
+    		//	Farm Tag so update farm section and set needs database update
+    		Log.i("in if", "Got a new farm tag type");
+    	    TV  = (TextView) findViewById( R.id.farmText );
+    	    TV.setText(new_tag_number);
+    	    TV = (TextView) findViewById( R.id.farm_colorText );
+    	    TV.setText(tag_color_label);
+    	    TV = (TextView) findViewById( R.id.farm_locationText );
+    	    TV.setText(tag_location_label);
+    	    farmtagid = 0;
+     	}
+     	//	Add or update an id_info record with the data
+    	
+    	
+    	//	Clear out the add tag section    	
+    	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+    	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
+    	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
+    	TV  = (TextView) findViewById( R.id.new_tag_number);
+
+    	tag_type_spinner.setSelection(0);
+    	tag_color_spinner.setSelection(0);
+    	tag_location_spinner.setSelection(0);
+    	TV.setText( "" );
+    	
+    }
+ 
 }
