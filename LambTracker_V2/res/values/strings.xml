@@ -36,14 +36,14 @@
     <string name="cancel_btn">Cancel</string>
     <string name="alert_btn">Alert</string>
     <string name="ok">OK</string>    
-    <string name="scan_eid_btn">Scan an EID</string>
+    <string name="scan_eid_btn">Scan to add EID Tag</string>
     <string name="remove_tag_btn">Remove Tag</string>
     <string name="remove_fedtag_btn">Remove Fed Tag</string>
     <string name="remove_farmtag_btn">Remove Farm Tag</string>
 	<string name="search_fed_btn">Search Federal Tag</string>
 	<string name="search_farm_btn">Search Farm Tag</string>
 	<string name="search_other_btn">Search Other ID</string>
-    <string name="add_new_tag_btn">Add New Tag</string>
+    <string name="add_new_tag_btn">Add Non EID Tag</string>
     <string name="save_evaluation_scores_btn">Save Scores</string>
     <string name="create_evaluation_task_btn">Create Evaluation</string>
    
@@ -73,6 +73,9 @@
         Farm or Scanning an EID tag. Then select the scores for each trait. When finished select Save Scores
         to write the data to the database with an evaluation date of today. </string>
     <string name="help_create_evaluate">Create a list of traits to evaluate on this run with the sheep. You may select 6 scored items and 2 real data items.</string>    
+    
+    
+    <string name="convert_fill_fields">Please Fill in all four fields.</string>
     
     <string-array name="sheep_task_array">
         <item>Choose a Flock Task</item>
@@ -123,7 +126,7 @@
     <string name="lambing_results2013_lbl">2013 Lambing Results</string>
          
     <string name="delete_sheep">Delete Sheep?</string>
-    <string name="delete_tag">Delete Tag?</string>
+    <string name="delete_tag">Remove Tag from this Sheep?</string>
     <string name="delete_warning">Delete Warning</string>
     
     <string name="action_settings">Settings</string>
