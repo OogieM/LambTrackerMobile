@@ -21,6 +21,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.TextView;
 
+
 public class LoadSheepList extends Activity {
 	
 	 int FILE_LIST = 1;
@@ -91,10 +92,18 @@ public class LoadSheepList extends Activity {
  		    	String 	dbfile = data.getStringExtra ("fileName") ;
  		    			
  		    	Log.i("LoadSheepList ", " got this as a file " + dbfile);
- 		    	DatabaseHandler dbh     = new DatabaseHandler( this, dbfile );
+		    	
+ 		        String outFileName = "/data/data/com.weyr_associates.lambtracker/databases/" + "lambtracker_db.sqlite";
+
+
+ 		        File dbInFile = new File(dbfile);
+   		        File dbOutFile = new File(outFileName);
+ 		      		        
+		    	DatabaseHandler dbh = new DatabaseHandler( this, outFileName ); 		    	
  		    	try {
  		    		Log.i("in try ", " before going to DBH");
- 		    		dbh.copyRealDataBase(dbfile);
+// 		    		dbh.copyRealDataBase(dbfile);
+ 	 		        dbh.copy(dbInFile,dbOutFile);
  		    	}
  		    	catch (IOException e) {
  		    		Log.i("in try ", " got an exception ");
@@ -174,4 +183,5 @@ public class LoadSheepList extends Activity {
     	TextView        txtView = (TextView) findViewById( R.id.editText1 );
     	txtView.setText("Real Data backed up to External Storage" );
         }
+
     }

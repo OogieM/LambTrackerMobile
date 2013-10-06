@@ -1,6 +1,7 @@
 package com.weyr_associates.lambtracker;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,7 +20,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -550,9 +550,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
         //Open the original local db pre-loaded into assets as the input stream
 //        InputStream myInput = context.getAssets().open("lambtracker_db.sqlite");
     	Log.i("DBH ", "filename= " + dbName);
-        InputStream myInput = context.getAssets().open(dbName);
-        
-//?        InputStream input = context.getAssets().openInputStream(dbName);
+        InputStream myInput = context.getAssets().open(dbName);       
         
         // Path to the just created empty db
         String outFileName = "/data/data/com.weyr_associates.lambtracker/databases/" + "lambtracker_db.sqlite";
@@ -573,4 +571,41 @@ public class DatabaseHandler extends SQLiteOpenHelper
         myInput.close();
         closeDB();
     }
+    
+    /////////////////////
+    public void copy(File src, File dst) throws IOException {
+    	
+	    	Log.i("Copy From", " source file " + src);
+	    	Log.i("Copy To", " destination file " + dst);
+	    	if( db == null ){
+	            db = this.getWritableDatabase();
+	        }
+	    	InputStream in;
+	    	OutputStream out;
+			try {
+		        in = new FileInputStream(src);
+			} catch (FileNotFoundException e) {
+				Log.i("DBH", "Input database file not found " + src);
+				return;
+			}
+			try {
+			    out = new FileOutputStream(dst);
+			} catch (FileNotFoundException e) {
+				Log.i("DBH", "Output database file not found " + dst);
+				return;
+			}
+
+        // Transfer bytes from in to out
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        out.flush();
+        out.close();
+        in.close();
+        closeDB();
+
+    }
+
     }
