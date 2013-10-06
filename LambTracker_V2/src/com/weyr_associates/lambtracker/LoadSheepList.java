@@ -13,6 +13,7 @@ import java.util.Calendar;
 
 import android.util.Log;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import android.view.View;
 import android.widget.TextView;
 
 public class LoadSheepList extends Activity {
+	
+	 int FILE_LIST = 1;
      
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +45,7 @@ public class LoadSheepList extends Activity {
     	DatabaseHandler dbh     = new DatabaseHandler( this, dbfile );
     	try {
     		Log.i("in try ", " before going to DBH");
-    		dbh.copyRealDataBase();
+    		dbh.copyRealDataBase(dbfile);
     	}
     	catch (IOException e) {
     		Log.i("in try ", " got an exception ");
@@ -62,6 +65,63 @@ public class LoadSheepList extends Activity {
         dbh.closeDB();
 	}
 
+  
+     public void selectFileDB( View v )
+		{
+
+    	 Log.i("in try ", " File DB");
+    	 
+    			Intent fileList = new Intent(this, FileList.class);
+
+    			CharSequence fileList_label = "";
+    			String path = fileList_label.toString();
+
+    			fileList.putExtra("fileName", path);
+    			startActivityForResult(fileList, FILE_LIST);	   	    	     	 
+	}
+  
+ 	@Override
+ 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+ 		super.onActivityResult(requestCode, resultCode, data);
+ 		if(requestCode == FILE_LIST){
+ 			if(resultCode == RESULT_OK){
+ 		    	String temp;
+ 		    	TextView        txtView = (TextView) findViewById( R.id.editText1 );
+//// 		    	Resources res = getResources();
+ 		    	String 	dbfile = data.getStringExtra ("fileName") ;
+ 		    			
+ 		    	Log.i("LoadSheepList ", " got this as a file " + dbfile);
+ 		    	DatabaseHandler dbh     = new DatabaseHandler( this, dbfile );
+ 		    	try {
+ 		    		Log.i("in try ", " before going to DBH");
+ 		    		dbh.copyRealDataBase(dbfile);
+ 		    	}
+ 		    	catch (IOException e) {
+ 		    		Log.i("in try ", " got an exception ");
+ 		    	}		    			
+ 		    			
+ 		    	temp = "Created Real Database from file in " + dbfile;
+ 		    	
+ 		    	String cmd = String.format( "select count(*) from %s", "demo_sheep_table" );
+ 		        Cursor crsr = ((Cursor) dbh.exec( cmd ));
+ 		        crsr.moveToFirst();
+ 		        temp = String.format(temp + "\n" +"Records created in demo_sheep_table = " + String.valueOf(crsr.getInt( 0 )));
+ 		        cmd = String.format( "select count(*) from %s", "sheep_table" );
+ 		        crsr = ((Cursor) dbh.exec( cmd ));
+ 		        crsr.moveToFirst();
+ 		        temp = String.format(temp + "\n" + "Records created in sheep_table = " + String.valueOf(crsr.getInt( 0 )));
+// 		        txtView.setText("Records created in sheep_table = " + String.valueOf(crsr.getInt( 0 )));
+ 		        txtView.setText(temp);
+ 		        dbh.closeDB();
+
+ 			}
+ 		}
+ 		else /*if(requestCode == TEMPLATE_EVENT){*/
+ 			if(resultCode == RESULT_OK){
+
+ 			}
+ 		}    
+    
     public void showRealDB( View v )
 	{
     	String 	dbfile = getString(R.string.real_database_file) ;

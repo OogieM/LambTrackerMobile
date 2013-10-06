@@ -5,10 +5,12 @@ import java.util.ArrayList;
 
 //import com.weyr_associates.printutility.R;
 
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -63,10 +65,13 @@ public class FileList extends ListActivity{
 			}else{
 				m_strDirPath = m_strDirPath + "/" + strItem;
 			}
-			Intent mainMenu = new Intent(this, MainActivity.class);
-			mainMenu.putExtra("fileName", m_strDirPath);
-			setResult(RESULT_OK, mainMenu);
+			
+			Intent fileList = new Intent(this, LoadSheepList.class);
+			fileList.putExtra("fileName", m_strDirPath);
+	    	 Log.i("in FileList ", " File =" + fileList.getStringExtra("fileName"));
+			setResult(RESULT_OK, fileList);
 			finish();
+			
 		}
 	}
 
@@ -97,9 +102,8 @@ public class FileList extends ListActivity{
 				String filename = file.getName();
 				String extention = filename.substring(filename.lastIndexOf(".", filename.length())+1,filename.length());
 
-				if((extention.equalsIgnoreCase("jpg")) || (extention.equalsIgnoreCase("jpeg")) || (extention.equalsIgnoreCase("bmp"))
-				|| (extention.equalsIgnoreCase("png")) || (extention.equalsIgnoreCase("prn")) || (extention.equalsIgnoreCase("gif"))
-				|| (extention.equalsIgnoreCase("pdf")) || (extention.equalsIgnoreCase("pdz"))){
+				if((extention.equalsIgnoreCase("sqlite"))) 
+				{
 					items.add(filename);
 				}
 			}

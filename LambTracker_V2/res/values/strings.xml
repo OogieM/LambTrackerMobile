@@ -16,6 +16,7 @@
     <string name="edit_db_btn">Edit DB</string>
     
     <string name="copy_real_db_btn">Copy Real DB</string>
+    <string name="select_file_db_btn">Select File DB</string>
     <string name="show_real_db_btn">Show Real DB</string>
     <string name="backup_real_db_btn">Backup Real DB</string>
     <string name="next_rec_btn">Next Record</string>
@@ -50,7 +51,8 @@
     <string name="load_sheeplist">Load Sheep Database</string>
     <string name="do_sheeptask">Do Sheep Tasks</string>
     <string name="look_up_sheep">Look up a Sheep by EID</string>
-   	<string name="copy_real_db_action">copyRealDB</string> 
+   	<string name="copy_real_db_action">copyRealDB</string>
+   	<string name="select_file_db_action">selectFileDB</string> 
     <string name="show_real_db_action">showRealDB</string>
       
     

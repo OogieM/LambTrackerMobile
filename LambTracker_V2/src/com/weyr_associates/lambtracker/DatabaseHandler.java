@@ -540,7 +540,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
     	return src.replaceAll( "'", "''" );
     	}
     
-    public void copyRealDataBase() throws IOException
+    public void copyRealDataBase(String dbName) throws IOException
     {
     	if( db == null ){
             db = this.getWritableDatabase();
@@ -548,7 +548,12 @@ public class DatabaseHandler extends SQLiteOpenHelper
 //    	Log.i("DBH ", "In copyRealDatabase");
     	
         //Open the original local db pre-loaded into assets as the input stream
-        InputStream myInput = context.getAssets().open("lambtracker_db.sqlite");
+//        InputStream myInput = context.getAssets().open("lambtracker_db.sqlite");
+    	Log.i("DBH ", "filename= " + dbName);
+        InputStream myInput = context.getAssets().open(dbName);
+        
+//?        InputStream input = context.getAssets().openInputStream(dbName);
+        
         // Path to the just created empty db
         String outFileName = "/data/data/com.weyr_associates.lambtracker/databases/" + "lambtracker_db.sqlite";
          //Open the empty db as the output stream
