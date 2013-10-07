@@ -15,10 +15,10 @@
     <string name="exec_sql_btn">Execute SQL</string>    
     <string name="edit_db_btn">Edit DB</string>
     
-    <string name="copy_real_db_btn">Copy Real DB</string>
-    <string name="select_file_db_btn">Select File DB</string>
-    <string name="show_real_db_btn">Show Real DB</string>
-    <string name="backup_real_db_btn">Backup Real DB</string>
+    <string name="copy_db_assets_btn">Copy DB in Assets</string>
+    <string name="select_db_file_btn">Select DB File</string>
+    <string name="show_db_btn">Show DB</string>
+    <string name="backup_db_btn">Backup DB</string>
     <string name="next_rec_btn">Next Record</string>
     <string name="prev_rec_btn">Prev. Record</string>
     <string name="clear_btn">Clear</string>

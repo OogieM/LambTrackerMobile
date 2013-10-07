@@ -9,7 +9,9 @@ import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.util.Log;
 import android.app.Activity;
@@ -51,7 +53,7 @@ public class LoadSheepList extends Activity {
     	catch (IOException e) {
     		Log.i("in try ", " got an exception ");
     	} 	
-    	temp = "Created Real Database from Copy in Assets.";
+    	temp = "Created Database from Copy in Assets.";
     	
     	String cmd = String.format( "select count(*) from %s", "demo_sheep_table" );
         Cursor crsr = ((Cursor) dbh.exec( cmd ));
@@ -109,7 +111,7 @@ public class LoadSheepList extends Activity {
  		    		Log.i("in try ", " got an exception ");
  		    	}		    			
  		    			
- 		    	temp = "Created Real Database from file in " + dbfile;
+ 		    	temp = "Created Database from file in " + dbfile;
  		    	
  		    	String cmd = String.format( "select count(*) from %s", "demo_sheep_table" );
  		        Cursor crsr = ((Cursor) dbh.exec( cmd ));
@@ -157,7 +159,9 @@ public class LoadSheepList extends Activity {
 			Log.i("backup", "input database file not found" + fullPath);
 			return;
 		}
-        String outFileName = Environment.getExternalStorageDirectory()+"/lambtracker_db_copy.sqlite";
+		String today = TodayIs();
+		String currentTimeString = new SimpleDateFormat("HH-mm-ss").format(new Date());
+        String outFileName = Environment.getExternalStorageDirectory()+"/lambtracker_db_"+today+"_"+currentTimeString+ ".sqlite";
         Log.i("backup", outFileName);
         // Open the empty db as the output stream
         OutputStream output;
@@ -181,7 +185,20 @@ public class LoadSheepList extends Activity {
         fis.close();
     
     	TextView        txtView = (TextView) findViewById( R.id.editText1 );
-    	txtView.setText("Real Data backed up to External Storage" );
+    	txtView.setText("Real Data backed up to External Storage as file "+ outFileName );
         }
-
+    private String TodayIs() {
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		int month = calendar.get(Calendar.MONTH);
+		int year = calendar.get(Calendar.YEAR);
+		return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
+	}
+    private String Make2Digits(int i) {
+		if (i < 10) {
+			return "0" + i;
+		} else {
+			return Integer.toString(i);
+		}
+	}
     }

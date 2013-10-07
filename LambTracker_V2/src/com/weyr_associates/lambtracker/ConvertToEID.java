@@ -756,56 +756,12 @@ public class ConvertToEID extends Activity {
 	    Log.i("update everything ", "fed tag " + fedText);
 //	    Log.i("update everything ", "fed tag integer " + String.valueOf(fed_number));
 	    
-//	    TV = (TextView) findViewById( R.id.fed_colorText );
-//	    fed_colorText = TV.getText().toString();
-//	    Log.i("update everything ", "fed color " + fed_colorText);	    
-//	    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
-//    			"where tag_color_name='%s'", fed_colorText);
-//    	crsr = dbh.exec( cmd );
-//        cursor   = ( Cursor ) crsr;
-//        dbh.moveToFirstRecord();
-//        fed_colorid = dbh.getInt(0);
-//        Log.i("update everything ", "fed color integer " + String.valueOf(fed_colorid));
-//        	    
-//	    TV = (TextView) findViewById( R.id.fed_locationText );
-//	    fed_locationText = TV.getText().toString();
-//	    Log.i("update everything ", "fed location " + fed_locationText);
-//	    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
-//    			"where id_location_abbrev='%s'", fed_locationText);
-//    	crsr = dbh.exec( cmd );
-//        cursor   = ( Cursor ) crsr;
-//        dbh.moveToFirstRecord();
-//        fed_locationid = dbh.getInt(0);
-//        Log.i("update everything ", "fed location integer " + String.valueOf(fed_locationid));
-	    
 	    Log.i("update everything ", "farm info record " + farmtagid);
 	    TV  = (TextView) findViewById( R.id.farmText );
 	    farmText = TV.getText().toString();
 //	    farm_number = Integer.valueOf(farmText);
 	    Log.i("update everything ", "farm number " + farmText);
-	    
-//	    TV = (TextView) findViewById( R.id.farm_locationText);
-//	    farm_locationText = TV.getText().toString();
-//	    Log.i("update everything ", "farm location " + farm_locationText);
-//	    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
-//    			"where id_location_abbrev='%s'", farm_locationText);
-//    	crsr = dbh.exec( cmd );
-//        cursor   = ( Cursor ) crsr;
-//        dbh.moveToFirstRecord();
-//        farm_locationid = dbh.getInt(0);
-//        Log.i("update everything ", "farm color integer " + String.valueOf(farm_locationid));
-//        
-//	    TV = (TextView) findViewById( R.id.farm_colorText );
-//	    farm_colorText = TV.getText().toString();
-//	    Log.i("update everything ", "farm color " + farm_colorText);
-//	    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
-//    			"where tag_color_name='%s'", farm_colorText);
-//    	crsr = dbh.exec( cmd );
-//        cursor   = ( Cursor ) crsr;
-//        dbh.moveToFirstRecord();
-//        farm_colorid = dbh.getInt(0);
-//        Log.i("update everything ", "farm location integer " + String.valueOf(farm_locationid));
-	    
+	    	    
 	    Log.i("update everything ", "eid info record " + eidtagid);
 	    TV  = (TextView) findViewById( R.id.eidText );
 	    eidText = TV.getText().toString();	
@@ -949,9 +905,8 @@ public class ConvertToEID extends Activity {
 	    			dbh.exec( cmd );	
 	    		}
 	    		else{
-	    			// no farm tag to enter so return
+	    			// no EID tag to enter so return
 	    			Log.i("updateEID", " no eid tag so nothing to do");
-	    			return;
 	    		}
 	    	}
 	    cursor.close();
@@ -997,7 +952,7 @@ public class ConvertToEID extends Activity {
 
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_color_spinner.setAdapter (dataAdapter);
-		tag_color_spinner.setSelection(0);
+		tag_color_spinner.setSelection(1);
 				
     	// Fill the Tag Location Spinner
 		// Only allow ear locations for tags for this task
@@ -1011,7 +966,7 @@ public class ConvertToEID extends Activity {
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_locations);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_location_spinner.setAdapter (dataAdapter);
-		tag_location_spinner.setSelection(0);
+		tag_location_spinner.setSelection(1);
 	}
     
     public void showAlert (View v)
