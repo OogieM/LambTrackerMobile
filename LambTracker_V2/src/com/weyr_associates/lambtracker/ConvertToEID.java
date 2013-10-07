@@ -258,25 +258,30 @@ public class ConvertToEID extends Activity {
     	
  //////////////////////////////////// 
 		CheckIfServiceIsRunning();
-//		Log.i("Convert", "back from isRunning");  	
+		Log.i("Convert", "back from isRunning");  	
 ////////////////////////////////////    	
     	   	
     	//	make the remove tag buttons red
+		Log.i("onCreate", " before setting remove tag buttons red");
     	btn = (Button) findViewById( R.id.remove_fedtag_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+    	Log.i("onCreate", " remove fed tag button is red");
     	btn = (Button) findViewById( R.id.remove_farmtag_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-
+    	Log.i("onCreate", " after setting remove tag buttons red");
+    	
     	//	Disable the alert button until we have an alert for this sheep
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
-    	btn.setEnabled(false); 
+    	btn.setEnabled(false);
+    	Log.i("onCreate", " after disable alert button");
+    	
     	
     	//	Disable the Next Record and Prev. Record button until we have multiple records
-    	btn = (Button) findViewById( R.id.next_rec_btn );
-    	btn.setEnabled(false); 
-    	btn = (Button) findViewById( R.id.prev_rec_btn );
-    	btn.setEnabled(false);
+//    	btn = (Button) findViewById( R.id.next_rec_btn );
+//    	btn.setEnabled(false); 
+//    	btn = (Button) findViewById( R.id.prev_rec_btn );
+//    	btn.setEnabled(false);
     	
     	//	Disable the bottom update tag button until we choose to add or update
        	btn = (Button) findViewById( R.id.update_display_btn );
@@ -575,13 +580,13 @@ public class ConvertToEID extends Activity {
     	String		cmd;
     	if (recNo == (nRecs-1)) {
     		// at end so disable next record button
-    		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
-        	btn2.setEnabled(false);   		
+//    		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
+//        	btn2.setEnabled(false);   		
     	}
     	if ( cursor.moveToNext() ){
     		// I've moved forward so I need to enable the previous record button
-    		Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
-    		btn3.setEnabled(true);
+//    		Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
+//    		btn3.setEnabled(true);
 //        	id = dbh.getInt( 0 ); // Get the primary key from the current record
 //        	Log.i ("DoSheepTask", "In if statement next button and the record id is " + String.valueOf(id) );
     		recNo         += 1;
@@ -589,8 +594,8 @@ public class ConvertToEID extends Activity {
  		}
     	else {
     		//At the end so disable the next button
-           	Button btn2 = (Button) findViewById( R.id.next_rec_btn );
-        	btn2.setEnabled(false); 
+//           	Button btn2 = (Button) findViewById( R.id.next_rec_btn );
+//        	btn2.setEnabled(false); 
         	recNo         -= 1;
     	}
     }
@@ -618,8 +623,8 @@ public class ConvertToEID extends Activity {
     	}
     	if (recNo == 1) {
     		// at beginning so disable prev record button
-    		Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
-        	btn3.setEnabled(false);   		
+//    		Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
+//        	btn3.setEnabled(false);   		
     	}
     }
 

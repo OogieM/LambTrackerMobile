@@ -63,7 +63,6 @@ public class LoadSheepList extends Activity {
         crsr = ((Cursor) dbh.exec( cmd ));
         crsr.moveToFirst();
         temp = String.format(temp + "\n" + "Records created in sheep_table = " + String.valueOf(crsr.getInt( 0 )));
-//        txtView.setText("Records created in sheep_table = " + String.valueOf(crsr.getInt( 0 )));
         txtView.setText(temp);
         dbh.closeDB();
 	}

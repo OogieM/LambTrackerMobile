@@ -98,13 +98,24 @@
             android:id="@+id/clear_form_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_column="3"
+            android:layout_column="0"
             android:layout_gravity="left|top"
-            android:layout_row="0"
+            android:layout_row="1"
             android:onClick="clearBtn"
             android:text="@string/clear_btn"
             android:textSize="14sp" />
           
+       <Button
+            android:id="@+id/alert_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_column="1"
+            android:layout_gravity="left|top"
+            android:layout_row="1"
+            android:onClick="showAlert"
+            android:text="@string/alert_btn"
+            android:textSize="14sp" /> 
+        
         <Button
             android:id="@+id/add_new_tag_btn"
             android:layout_width="100dp"
@@ -115,35 +126,14 @@
             android:onClick="addNewTag"
             android:text="@string/add_new_tag_btn"
             android:textSize="14sp" />
-        
-        <Button
-            android:id="@+id/prev_rec_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_column="0"
-            android:layout_gravity="left|top"
-            android:layout_row="1"
-            android:onClick="prevBtn"
-            android:text="@string/prev_rec_btn"
-            android:textSize="14sp" />
-        
-       <Button
-            android:id="@+id/next_rec_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_column="1"
-            android:layout_gravity="left|top"
-            android:layout_row="1"
-            android:onClick="nextBtn"
-            android:text="@string/next_rec_btn"
-            android:textSize="14sp" />
+               
        <Button
             android:id="@+id/update_database_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_column="3"
             android:layout_gravity="left|top"
-            android:layout_row="1"
+            android:layout_row="0"
             android:onClick="updateDatabase"
             android:text="@string/update_database_btn"
             android:textSize="14sp" />
@@ -385,14 +375,7 @@
             android:onClick="backBtn"
             android:text="@string/back_btn"
             android:textSize="14sp" />
-       	<Button
-            android:id="@+id/alert_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-           	android:layout_toRightOf="@+id/back_to_main_btn"
-            android:onClick="showAlert"
-            android:text="@string/alert_btn"
-            android:textSize="14sp" />
+       	
        	
        	<Button
            android:id="@+id/help_btn"
