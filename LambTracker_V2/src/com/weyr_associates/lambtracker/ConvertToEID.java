@@ -508,18 +508,6 @@ public class ConvertToEID extends Activity {
         	TV.setText( "Cannot find this sheep." );
         	return;
     		}
-//Need to add next and previous buttons if we have duplicate farm tags
-//    	if( dbh.getSize() >1){
-//// 			Enable the next record buttons
-//    		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
-//    		btn2.setEnabled(true);  
-//    		//	Set up the various pointers and cursor data needed to traverse the sequence
-//    		recNo    = 1;
-//    		cursor   = (Cursor) crsr;
-//    		nRecs    = cursor.getCount();
-////    		colNames = cursor.getColumnNames();
-//    		cursor.moveToFirst();
-//    	}
     	
     	farmtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
     	TV = (TextView) findViewById(R.id.sheepnameText);
@@ -537,7 +525,7 @@ public class ConvertToEID extends Activity {
        	String alert_text = dbh.getStr(8);
 //    	Now to test of the sheep has an alert and if so then set the alerts button to red
 		if (alert_text != null){
-	       	// make the alert button red
+	       	// make the alert button red and enable it
 	    	Button btn = (Button) findViewById( R.id.alert_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 	    	btn.setEnabled(true); 
@@ -572,61 +560,6 @@ public class ConvertToEID extends Activity {
     	}
     	}    
         
-    // user clicked the "next record" button
-    public void nextBtn( View v)
-    {
-    	TextView 	TV;
-    	Integer		ii;
-    	String		cmd;
-    	if (recNo == (nRecs-1)) {
-    		// at end so disable next record button
-//    		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
-//        	btn2.setEnabled(false);   		
-    	}
-    	if ( cursor.moveToNext() ){
-    		// I've moved forward so I need to enable the previous record button
-//    		Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
-//    		btn3.setEnabled(true);
-//        	id = dbh.getInt( 0 ); // Get the primary key from the current record
-//        	Log.i ("DoSheepTask", "In if statement next button and the record id is " + String.valueOf(id) );
-    		recNo         += 1;
-//display stuff here
- 		}
-    	else {
-    		//At the end so disable the next button
-//           	Button btn2 = (Button) findViewById( R.id.next_rec_btn );
-//        	btn2.setEnabled(false); 
-        	recNo         -= 1;
-    	}
-    }
-
-    // user clicked the "previous record" button
-    public void prevBtn( View v)
-    {
-    	TextView TV;
-    	Integer		ii;
-    	String		cmd;
-    	if ( cursor.moveToPrevious() ){
-    		// I've moved back so enable the next record button
-    		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
-    		btn2.setEnabled(true);  
-//        	id = dbh.getInt( 0 ); // Get the primary key from the current record
- //       	Log.i ("DoSheepTask", "In if statement prev button and the record id is " + String.valueOf(id) );
-    		recNo  -= 1;
- //display stuff here
- 		}
-    	else {
-    		// at beginning so disable the previous button
-        	Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
-        	btn3.setEnabled(false);
-        	recNo         += 1;
-    	}
-    	if (recNo == 1) {
-    		// at beginning so disable prev record button
-//    		Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
-//        	btn3.setEnabled(false);   		
-    	}
-    }
 
     // user clicked 'remove fed tag' button   
     public void removeFedTag( View v )
@@ -727,7 +660,6 @@ public class ConvertToEID extends Activity {
 			mService.send(msg);
 		   	//	make the scan eid button green
 	    	Button btn = (Button) findViewById( R.id.scan_eid_btn );
-//	    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xFFCC0000));
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xff00ff00));
 		} catch (RemoteException e) {
 			// In this case the service has crashed before we could even do anything with it
