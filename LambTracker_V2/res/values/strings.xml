@@ -117,7 +117,7 @@
     <string name="tag_date_off_lbl">Tag Date Off</string>
     <string name="new_tag_lbl">New Tag Number</string>
     
-    <string name="select_scored_traits.lbl">Select Traits Scored 0 to 5</string>
+    <string name="select_scored_traits.lbl">Select Traits Scored 1 to 5</string>
     <string name="select_value_traits.lbl">Select Traits with Real values</string>
        
 	<string name="sql_command_lbl">SQL Command</string>
