@@ -40,15 +40,22 @@ public class EvaluateSheep extends Activity {
 	String     	cmd;
 	Integer 	i;
 	
-	public int trait01, trait02, trait03, trait04, trait05, trait06, trait07, trait08;
-	public int trait06_units, trait07_units;
+	public int trait01, trait02, trait03, trait04, trait05, trait06, trait07, trait08, trait09, trait10;
+	public int trait11, trait12, trait13, trait14, trait15;
+	public int trait11_unitid, trait12_unitid, trait13_unitid, trait14_unitid, trait15_unitid;
+	public String trait01_label, trait02_label, trait03_label, trait04_label, trait05_label, trait06_label, 
+		trait07_label, trait08_label, trait09_label, trait10_label, trait11_label, trait12_label, 
+		trait13_label, trait14_label, trait15_label ; 
+	public String trait11_units, trait12_units, trait13_units, trait14_units, trait15_units; 
+	
 	public int sheep_id;
 	int 		id;
 	int   		fedtagid, farmtagid, eidtagid;
 	private int			    recNo;
 	private int             nRecs;
-	List<String> scored_evaluation_traits, data_evaluation_traits;
 	List<Integer> which_traits;
+	
+	public List<String> scored_evaluation_traits, data_evaluation_traits, trait_units;
 	
 	ArrayAdapter<String> dataAdapter;
 	
@@ -57,10 +64,15 @@ public class EvaluateSheep extends Activity {
 	public RatingBar trait03_ratingbar ;
 	public RatingBar trait04_ratingbar ;
 	public RatingBar trait05_ratingbar ;
+	public RatingBar trait06_ratingbar ;
+	public RatingBar trait07_ratingbar ;
 	public RatingBar trait08_ratingbar ;
+	public RatingBar trait09_ratingbar ;
+	public RatingBar trait10_ratingbar ;
 
-	public Float trait01_data, trait02_data, trait03_data, trait04_data, trait05_data, trait08_data;
-	public Float trait06_data, trait07_data;
+	public Float trait01_data, trait02_data, trait03_data, trait04_data, trait05_data, trait06_data, trait07_data ;
+	public Float trait08_data, trait09_data, trait10_data;
+	public Float trait11_data, trait12_data, trait13_data, trait14_data, trait15_data;
 	
 	private DatabaseHandler dbh;
 	private Cursor 	cursor;
@@ -234,152 +246,192 @@ public class EvaluateSheep extends Activity {
        
 		CheckIfServiceIsRunning();
 		
-        cmd = "select * from last_eval_table ";
-        crsr = dbh.exec( cmd );
+		cmd = "select * from last_eval_table";
+    	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
         
-        trait01 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait01 = " + String.valueOf(trait01));
-        cursor.moveToNext();
-        
-        trait02 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait02 = " + String.valueOf(trait02));
-        cursor.moveToNext();
-        
-        trait03 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait03 = " + String.valueOf(trait03));
-        cursor.moveToNext();
-        
-        trait04 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait04 = " + String.valueOf(trait04));
-        cursor.moveToNext();
-        
-        trait05 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait05 = " + String.valueOf(trait05));
-        cursor.moveToNext();
-        
-        trait06 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait06 = " + String.valueOf(trait06));
-        trait06_units = cursor.getInt(2);
-//        Log.i("EvaluateSheep ","units trait06 "+String.valueOf(trait06_units));
-        cursor.moveToNext();
-        
-        trait07 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait07 = " + String.valueOf(trait07));
-        trait07_units = cursor.getInt(2); 
-//        Log.i("EvaluateSheep ","units trait07 "+String.valueOf(trait07_units));
-        cursor.moveToNext();
-        
-        trait08 = cursor.getInt(1);
-//        Log.i("EvaluateSheep ", "trait08 = " + String.valueOf(trait08));
-           
-        cursor.close();
+    	trait01 = dbh.getInt(1);
+    	cursor.moveToNext();	
+    	trait02 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait03 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait04 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait05 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait06 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait07 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait08 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait09 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait10 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait11 = dbh.getInt(1);
+    	trait11_unitid = dbh.getInt(2);
+    	Log.i ("evaluate", " trait 11 units "+ String.valueOf(trait11_unitid));
+    	cursor.moveToNext();
+    	trait12 = dbh.getInt(1);
+    	trait12_unitid = dbh.getInt(2);
+    	cursor.moveToNext();
+    	trait13 = dbh.getInt(1);
+    	trait13_unitid = dbh.getInt(2);
+    	cursor.moveToNext();
+    	trait14 = dbh.getInt(1);
+    	trait14_unitid = dbh.getInt(2);
+    	cursor.moveToNext();
+    	trait15 = dbh.getInt(1);
+    	trait15_unitid = dbh.getInt(2);
+    	
+    	cursor.close();
            
         if (trait01!=0) {
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
         		"evaluation_trait_table.id_traitid=%s", trait01 );
-//        Log.i("get name ", cmd);
         crsr = dbh.exec( cmd );
-//        Log.i("EvaluateSheep ", "after get name");
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
-//        Log.i("EvaluateSheep ", "after move to first");
         TV = (TextView) findViewById( R.id.trait01_lbl );
         TV.setText(dbh.getStr(0));
-//        Log.i("EvaluateSheep ", "after get the text");
         }
         if (trait02!=0) {
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
         		"evaluation_trait_table.id_traitid=%s", trait02 );
-//        Log.i("EvaluateSheep ", cmd);
         crsr = dbh.exec( cmd );
-//        Log.i("EvaluateSheep ", "after");
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
-//        Log.i("EvaluateSheep ", "after move to first");
         TV = (TextView) findViewById( R.id.trait02_lbl );
         TV.setText(dbh.getStr(0));
-//        Log.i("EvaluateSheep ", "after get the text");
         }
         if (trait03!=0) {
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
         		"evaluation_trait_table.id_traitid=%s", trait03 );
-//        Log.i("EvaluateSheep ", cmd);
         crsr = dbh.exec( cmd );
-//        Log.i("EvaluateSheep ", "after");
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
-//        Log.i("EvaluateSheep ", "after move to first");
         TV = (TextView) findViewById( R.id.trait03_lbl );
         TV.setText(dbh.getStr(0));
-//        Log.i("EvaluateSheep ", "after get the text");
         }
         if (trait04!=0) {
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
         		"evaluation_trait_table.id_traitid=%s", trait04 );
-//        Log.i("EvaluateSheep ", cmd);
         crsr = dbh.exec( cmd );
-//        Log.i("EvaluateSheep ", "after");
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
-//        Log.i("EvaluateSheep ", "after move to first");
         TV = (TextView) findViewById( R.id.trait04_lbl );
         TV.setText(dbh.getStr(0));
-//        Log.i("EvaluateSheep ", "after get the text");
         }
         if (trait05!=0) {
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
         		"evaluation_trait_table.id_traitid=%s", trait05 );
-//        Log.i("EvaluateSheep ", cmd);
         crsr = dbh.exec( cmd );
-//        Log.i("EvaluateSheep ", "after");
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
-//        Log.i("EvaluateSheep ", "after move to first");
         TV = (TextView) findViewById( R.id.trait05_lbl );
         TV.setText(dbh.getStr(0));
-//        Log.i("EvaluateSheep ", "after get the text");
-        }
-        if (trait08!=0) {
-        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-        		"evaluation_trait_table.id_traitid=%s", trait08 );
-//        Log.i("EvaluateSheep ", cmd);
-        crsr = dbh.exec( cmd );
-//        Log.i("EvaluateSheep ", "after");
-        cursor   = ( Cursor ) crsr;
-        dbh.moveToFirstRecord();
-//        Log.i("EvaluateSheep ", "after move to first");
-        TV = (TextView) findViewById( R.id.trait08_lbl );
-        TV.setText(dbh.getStr(0));
-        Log.i("EvaluateSheep ", "after get the text " + TV);
         }
         if (trait06!=0) {
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
         		"evaluation_trait_table.id_traitid=%s", trait06 );
-//        Log.i("EvaluateSheep ", cmd);
         crsr = dbh.exec( cmd );
-//        Log.i("EvaluateSheep ", "after");
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
-//        Log.i("EvaluateSheep ", "after move to first");
         TV = (TextView) findViewById( R.id.trait06_lbl );
         TV.setText(dbh.getStr(0));
-//        Log.i("EvaluateSheep ", "after get the text");
         }
         if (trait07!=0) {
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
         		"evaluation_trait_table.id_traitid=%s", trait07 );
-//        Log.i("EvaluateSheep ", cmd);
         crsr = dbh.exec( cmd );
-//        Log.i("EvaluateSheep ", "after");
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
-//        Log.i("EvaluateSheep ", "after move to first");
         TV = (TextView) findViewById( R.id.trait07_lbl );
         TV.setText(dbh.getStr(0));
-//        Log.i("EvaluateSheep ", "after get the text");
         }
+        if (trait08!=0) {
+        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
+        		"evaluation_trait_table.id_traitid=%s", trait08 );
+        crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+        TV = (TextView) findViewById( R.id.trait08_lbl );
+        TV.setText(dbh.getStr(0));
+        Log.i("EvaluateSheep ", "after get the text " + TV);
+        }
+        if (trait09!=0) {
+        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
+        		"evaluation_trait_table.id_traitid=%s", trait09 );
+        crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+        TV = (TextView) findViewById( R.id.trait09_lbl );
+        TV.setText(dbh.getStr(0));
+        Log.i("EvaluateSheep ", "after get the text " + TV);
+        }
+        if (trait10!=0) {
+        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
+        		"evaluation_trait_table.id_traitid=%s", trait10 );
+        crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+        TV = (TextView) findViewById( R.id.trait10_lbl );
+        TV.setText(dbh.getStr(0));
+        Log.i("EvaluateSheep ", "after get the text " + TV);
+        }
+        if (trait11!=0) {
+            cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
+            		"evaluation_trait_table.id_traitid=%s", trait11 );
+            crsr = dbh.exec( cmd );
+            cursor   = ( Cursor ) crsr;
+            dbh.moveToFirstRecord();
+            TV = (TextView) findViewById( R.id.trait11_lbl );
+            TV.setText(dbh.getStr(0));
+            Log.i("EvaluateSheep ", "after get the text " + TV);
+            }
+        if (trait12!=0) {
+            cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
+            		"evaluation_trait_table.id_traitid=%s", trait12 );
+            crsr = dbh.exec( cmd );
+            cursor   = ( Cursor ) crsr;
+            dbh.moveToFirstRecord();
+            TV = (TextView) findViewById( R.id.trait12_lbl );
+            TV.setText(dbh.getStr(0));
+            Log.i("EvaluateSheep ", "after get the text " + TV);
+            }
+        if (trait13!=0) {
+            cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
+            		"evaluation_trait_table.id_traitid=%s", trait13 );
+            crsr = dbh.exec( cmd );
+            cursor   = ( Cursor ) crsr;
+            dbh.moveToFirstRecord();
+            TV = (TextView) findViewById( R.id.trait13_lbl );
+            TV.setText(dbh.getStr(0));
+            Log.i("EvaluateSheep ", "after get the text " + TV);
+            }
+        if (trait14!=0) {
+            cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
+            		"evaluation_trait_table.id_traitid=%s", trait14 );
+            crsr = dbh.exec( cmd );
+            cursor   = ( Cursor ) crsr;
+            dbh.moveToFirstRecord();
+            TV = (TextView) findViewById( R.id.trait14_lbl );
+            TV.setText(dbh.getStr(0));
+            Log.i("EvaluateSheep ", "after get the text " + TV);
+            }
+        if (trait15!=0) {
+            cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
+            		"evaluation_trait_table.id_traitid=%s", trait15 );
+            crsr = dbh.exec( cmd );
+            cursor   = ( Cursor ) crsr;
+            dbh.moveToFirstRecord();
+            TV = (TextView) findViewById( R.id.trait15_lbl );
+            TV.setText(dbh.getStr(0));
+            Log.i("EvaluateSheep ", "after get the text " + TV);
+            }
         cursor.close();
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
@@ -394,8 +446,11 @@ public class EvaluateSheep extends Activity {
         dbh = new DatabaseHandler( this, dbname );
     	TextView TV;
     	String temp_string;
-    	trait06_data = 0.0f;
-    	trait07_data = 0.0f;
+    	trait11_data = 0.0f;
+    	trait12_data = 0.0f;
+    	trait13_data = 0.0f;
+    	trait14_data = 0.0f;
+    	trait15_data = 0.0f;
     	// I got the sheep id from the search by federal or farm or EID tag
     	// it's in the sheep_id variable
     	
@@ -421,42 +476,104 @@ public class EvaluateSheep extends Activity {
     		trait05_data = trait05_ratingbar.getRating();
 //    		Log.i("trait05_ratingbar ", String.valueOf(trait05_data));
     		
+    		trait06_ratingbar = (RatingBar) findViewById(R.id.trait06_ratingbar);
+    		trait06_data = trait06_ratingbar.getRating();
+//    		Log.i("trait06_ratingbar ", String.valueOf(trait06_data));
+    		
+    		trait07_ratingbar = (RatingBar) findViewById(R.id.trait07_ratingbar);
+    		trait07_data = trait07_ratingbar.getRating();
+//    		Log.i("trait07_ratingbar ", String.valueOf(trait07_data));
+    		
        		trait08_ratingbar = (RatingBar) findViewById(R.id.trait08_ratingbar);
     		trait08_data = trait08_ratingbar.getRating();
 //    		Log.i("trait08_ratingbar ", String.valueOf(trait08s_data));
     		
+    		trait09_ratingbar = (RatingBar) findViewById(R.id.trait09_ratingbar);
+    		trait09_data = trait09_ratingbar.getRating();
+//    		Log.i("trait09_ratingbar ", String.valueOf(trait09_data));
+    		
+    		trait10_ratingbar = (RatingBar) findViewById(R.id.trait10_ratingbar);
+    		trait10_data = trait10_ratingbar.getRating();
+//    		Log.i("trait10_ratingbar ", String.valueOf(trait10_data));
+    		
     		// get the real data scores
     		
-    		TV = (TextView) findViewById(R.id.trait06_data);
+    		TV = (TextView) findViewById(R.id.trait11_data);
     		temp_string = TV.getText().toString();
     		if(TextUtils.isEmpty(temp_string)){
     	        // EditText was empty
     	        // so no real data collected just break out
-    			trait06_data = 0.0f;
-//    			Log.i("save trait6", "float data is " + String.valueOf(trait06_data));
-    			trait06_units = 0;
+    			trait11_data = 0.0f;
+//    			Log.i("save trait11", "float data is " + String.valueOf(trait11_data));
+    			trait11_unitid = 0;
     	    }
     		else {
-    			trait06_data = Float.valueOf(TV.getText().toString());
-//    			Log.i("save trait6", "float data is " + String.valueOf(trait06_data));
-//    			Log.i("trait06_units ", String.valueOf(trait06_units));
+    			trait11_data = Float.valueOf(TV.getText().toString());
+    			Log.i("save trait11", "float data is " + String.valueOf(trait11_data));
+    			Log.i("trait11_units ", String.valueOf(trait11_units));
     		}
     		
-    		TV = (TextView) findViewById(R.id.trait07_data);
+    		TV = (TextView) findViewById(R.id.trait12_data);
     		temp_string = TV.getText().toString();
     		if(TextUtils.isEmpty(temp_string)){
     	        // EditText was empty
     	        // so no real data collected just break out
-    			trait07_data = 0.0f;
-//    			Log.i("save trait7", "float data is " + String.valueOf(trait07_data));
-    			trait07_units = 0;
+    			trait12_data = 0.0f;
+//    			Log.i("save trait12", "float data is " + String.valueOf(trait12_data));
+    			trait12_unitid = 0;
     	    }
     		else {
-    			trait07_data = Float.valueOf(temp_string);
-//        		Log.i("save trait7", "float data is " + String.valueOf(trait07_data));
-//        		Log.i("trait07_units ", String.valueOf(trait07_units));
+    			trait12_data = Float.valueOf(temp_string);
+        		Log.i("save trait12", "float data is " + String.valueOf(trait12_data));
+        		Log.i("trait12_units ", String.valueOf(trait12_units));
+    		}
+    		
+       		TV = (TextView) findViewById(R.id.trait13_data);
+    		temp_string = TV.getText().toString();
+    		if(TextUtils.isEmpty(temp_string)){
+    	        // EditText was empty
+    	        // so no real data collected just break out
+    			trait13_data = 0.0f;
+//    			Log.i("save trait12", "float data is " + String.valueOf(trait12_data));
+    			trait13_unitid = 0;
+    	    }
+    		else {
+    			trait13_data = Float.valueOf(temp_string);
+//        		Log.i("save trait13", "float data is " + String.valueOf(trait13_data));
+//        		Log.i("trait13_units ", String.valueOf(trait13_units));
+    		}
+    		
+       		TV = (TextView) findViewById(R.id.trait14_data);
+    		temp_string = TV.getText().toString();
+    		if(TextUtils.isEmpty(temp_string)){
+    	        // EditText was empty
+    	        // so no real data collected just break out
+    			trait14_data = 0.0f;
+//    			Log.i("save trait14", "float data is " + String.valueOf(trait14_data));
+    			trait14_unitid = 0;
+    	    }
+    		else {
+    			trait14_data = Float.valueOf(temp_string);
+//        		Log.i("save trait14", "float data is " + String.valueOf(trait14_data));
+//        		Log.i("trait14_units ", String.valueOf(trait14_units));
+    		}
+    		
+       		TV = (TextView) findViewById(R.id.trait15_data);
+    		temp_string = TV.getText().toString();
+    		if(TextUtils.isEmpty(temp_string)){
+    	        // EditText was empty
+    	        // so no real data collected just break out
+    			trait15_data = 0.0f;
+//    			Log.i("save trait12", "float data is " + String.valueOf(trait15_data));
+    			trait15_unitid = 0;
+    	    }
+    		else {
+    			trait15_data = Float.valueOf(temp_string);
+//        		Log.i("save trait15", "float data is " + String.valueOf(trait15_data));
+//        		Log.i("trait15_units ", String.valueOf(trait15_units));
     		}
     		// I need to get the traits scored for this pass here:
+    		
     		String mytoday = TodayIs();
 //    		Log.i("Date is ", mytoday);
     		//	Set the alert for this sheep so there is a note that the evaluation is done
@@ -464,21 +581,49 @@ public class EvaluateSheep extends Activity {
     		
     		
     		// Now that I have all the data I need to write it into the sheep_evaluation_table
-       		
+    		
+//	    	Log.i("number ","eval trait01 "+String.valueOf(trait01));
+//	    	Log.i("number ","eval trait02 "+String.valueOf(trait02));
+//	    	Log.i("number ","eval trait03 "+String.valueOf(trait03));
+//	    	Log.i("number ","eval trait04 "+String.valueOf(trait04));
+//	    	Log.i("number ","eval trait05 "+String.valueOf(trait05));
+//	    	Log.i("number ","eval trait06 "+String.valueOf(trait06));
+//	    	Log.i("number ","eval trait07 "+String.valueOf(trait07));
+//	    	Log.i("number ","eval trait08 "+String.valueOf(trait08));
+//	    	Log.i("number ","eval trait09 "+String.valueOf(trait09));
+//	    	Log.i("number ","eval trait10 "+String.valueOf(trait10));
+//    		
+//	    	Log.i("number ","eval trait11 "+String.valueOf(trait11));
+//	    	Log.i("number ","eval trait11 units "+String.valueOf(trait11_unitid));
+//	    	Log.i("number ","eval trait12 "+String.valueOf(trait12));
+//	    	Log.i("number ","eval trait12 units "+String.valueOf(trait12_unitid));
+//	    	Log.i("number ","eval trait13 "+String.valueOf(trait13));
+//	    	Log.i("number ","eval trait13 units "+String.valueOf(trait13_unitid));
+//	    	Log.i("number ","eval trait14 "+String.valueOf(trait14));
+//	    	Log.i("number ","eval trait14 units "+String.valueOf(trait14_unitid));
+//	    	Log.i("number ","eval trait15 "+String.valueOf(trait15));
+//	    	Log.i("number ","eval trait15 units "+String.valueOf(trait15_unitid));
+    		       		
     		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
-    		"trait_name01, trait_score01, trait_name02,trait_score02, " +
-    		"trait_name03, trait_score03, trait_name04, trait_score04, trait_name05, trait_score05, " +
-    		"trait_name08, trait_score08, trait_name06, trait_score06, trait_name07, trait_score07, " +
-    		"trait_units06, trait_units07, eval_date) " +
-    		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s') ", 
+    		"trait_name01, trait_score01, trait_name02, trait_score02, trait_name03, trait_score03, " +
+    		"trait_name04, trait_score04, trait_name05, trait_score05, trait_name06, trait_score06," +
+    		"trait_name07, trait_score07, trait_name08, trait_score08, trait_name09, trait_score09, " +
+    		"trait_name10, trait_score10, trait_name11, trait_score11, trait_name12, trait_score12, " +
+    		"trait_name13, trait_score13, trait_name14, trait_score14, trait_name15, trait_score15, " +
+    		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date) " +
+    		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s," +
+    		"%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s') ", 
     				sheep_id, trait01, trait01_data, trait02, trait02_data, trait03, trait03_data,
-    				trait04, trait04_data, trait05, trait05_data, trait08, trait08_data, trait06, trait06_data,
-    				trait07, trait07_data, trait06_units, trait07_units, mytoday );
+    				trait04, trait04_data, trait05, trait05_data, trait06, trait06_data,
+    				trait07, trait07_data, trait08, trait08_data, trait09, trait09_data, 
+    				trait10, trait10_data, trait11, trait11_data, trait12, trait12_data, 
+    				trait13, trait13_data, trait14, trait14_data, trait15, trait15_data, 
+    				trait11_unitid, trait12_unitid, trait13_unitid, trait14_unitid, trait15_unitid, mytoday );
     		
 //    		Log.i("save eval ", cmd);
     		dbh.exec( cmd );
     		String alert_text = "Evaluation Done";
-    		cmd = String.format("update sheep_table set alert01='%s' where sheep_id=%d", alert_text, sheep_id);
+    		cmd = String.format("update sheep_table set alert02='%s' where sheep_id=%d", alert_text, sheep_id);
 //    		Log.i("test alert ", cmd);   
     		dbh.exec( cmd );
     		clearBtn( null );
@@ -502,7 +647,7 @@ public class EvaluateSheep extends Activity {
         	dbh = new DatabaseHandler( this, dbname );
 		// Display alerts here   	
 				AlertDialog.Builder builder = new AlertDialog.Builder( this );
-				cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_id =%d", sheep_id);
+				cmd = String.format("select sheep_table.alert02 from sheep_table where sheep_id =%d", sheep_id);
 //				Log.i("get alert ", cmd);  
 				crsr = dbh.exec( cmd );
 		        cursor   = ( Cursor ) crsr;
@@ -563,12 +708,26 @@ public class EvaluateSheep extends Activity {
 		trait04_ratingbar.setRating(0.0f);
 		trait05_ratingbar = (RatingBar) findViewById(R.id.trait05_ratingbar);
 		trait05_ratingbar.setRating(0.0f);
+		trait06_ratingbar = (RatingBar) findViewById(R.id.trait06_ratingbar);
+		trait06_ratingbar.setRating(0.0f);
+		trait07_ratingbar = (RatingBar) findViewById(R.id.trait07_ratingbar);
+		trait07_ratingbar.setRating(0.0f);
 		trait08_ratingbar = (RatingBar) findViewById(R.id.trait08_ratingbar);
 		trait08_ratingbar.setRating(0.0f);
+		trait09_ratingbar = (RatingBar) findViewById(R.id.trait09_ratingbar);
+		trait09_ratingbar.setRating(0.0f);
+		trait10_ratingbar = (RatingBar) findViewById(R.id.trait10_ratingbar);
+		trait10_ratingbar.setRating(0.0f);
 //		Log.i("Clear btn", "After clear rating bars");
-		TV = (TextView) findViewById( R.id.trait06_data );
+		TV = (TextView) findViewById( R.id.trait11_data );
 		TV.setText ( "" );
-		TV = (TextView) findViewById( R.id.trait07_data );
+		TV = (TextView) findViewById( R.id.trait12_data );
+		TV.setText ( "" );
+		TV = (TextView) findViewById( R.id.trait13_data );
+		TV.setText ( "" );
+		TV = (TextView) findViewById( R.id.trait14_data );
+		TV.setText ( "" );
+		TV = (TextView) findViewById( R.id.trait15_data );
 		TV.setText ( "" );
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
@@ -627,7 +786,7 @@ public class EvaluateSheep extends Activity {
 //    		assumes no duplicate federal tag numbers, ok for our flock not ok for the general case
     		
     		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off , sheep_table.alert01 " +
+    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off , sheep_table.alert02 " +
     				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +	
     				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
     				"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", fed);
@@ -721,7 +880,7 @@ public class EvaluateSheep extends Activity {
 //    		assumes no duplicate farm tag numbers, ok for our flock not ok for the general case  
     		
     		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off, sheep_table.alert01 " +
+    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off, sheep_table.alert02 " +
     				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
     				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
     				"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", farm);
