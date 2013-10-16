@@ -43,6 +43,7 @@
             android:name="com.weyr_associates.lambtracker.LoadSheepList"
             android:label="@string/title_activity_load_sheep_list" 
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation">
         </activity>
         <activity 
@@ -55,12 +56,14 @@
             android:name="com.weyr_associates.lambtracker.ConvertToEID"
             android:label="@string/title_activity_convert_to_eid"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible"
             android:configChanges="orientation">
         </activity>
         <activity
             android:name="com.weyr_associates.lambtracker.EvaluateSheep"
             android:label="@string/title_activity_evaluate_sheep" 
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible"
             android:configChanges="orientation">
         </activity>
         <activity

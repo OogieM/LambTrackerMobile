@@ -273,7 +273,7 @@ public class EvaluateSheep extends Activity {
     	cursor.moveToNext();
     	trait11 = dbh.getInt(1);
     	trait11_unitid = dbh.getInt(2);
-    	Log.i ("evaluate", " trait 11 units "+ String.valueOf(trait11_unitid));
+//    	Log.i ("evaluate", " trait 11 units "+ String.valueOf(trait11_unitid));
     	cursor.moveToNext();
     	trait12 = dbh.getInt(1);
     	trait12_unitid = dbh.getInt(2);
@@ -360,7 +360,7 @@ public class EvaluateSheep extends Activity {
         dbh.moveToFirstRecord();
         TV = (TextView) findViewById( R.id.trait08_lbl );
         TV.setText(dbh.getStr(0));
-        Log.i("EvaluateSheep ", "after get the text " + TV);
+//        Log.i("EvaluateSheep ", "after get the text " + TV);
         }
         if (trait09!=0) {
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
@@ -370,7 +370,7 @@ public class EvaluateSheep extends Activity {
         dbh.moveToFirstRecord();
         TV = (TextView) findViewById( R.id.trait09_lbl );
         TV.setText(dbh.getStr(0));
-        Log.i("EvaluateSheep ", "after get the text " + TV);
+//        Log.i("EvaluateSheep ", "after get the text " + TV);
         }
         if (trait10!=0) {
         cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
@@ -380,7 +380,7 @@ public class EvaluateSheep extends Activity {
         dbh.moveToFirstRecord();
         TV = (TextView) findViewById( R.id.trait10_lbl );
         TV.setText(dbh.getStr(0));
-        Log.i("EvaluateSheep ", "after get the text " + TV);
+//        Log.i("EvaluateSheep ", "after get the text " + TV);
         }
         if (trait11!=0) {
             cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
@@ -390,7 +390,7 @@ public class EvaluateSheep extends Activity {
             dbh.moveToFirstRecord();
             TV = (TextView) findViewById( R.id.trait11_lbl );
             TV.setText(dbh.getStr(0));
-            Log.i("EvaluateSheep ", "after get the text " + TV);
+//            Log.i("EvaluateSheep ", "after get the text " + TV);
             }
         if (trait12!=0) {
             cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
@@ -400,7 +400,7 @@ public class EvaluateSheep extends Activity {
             dbh.moveToFirstRecord();
             TV = (TextView) findViewById( R.id.trait12_lbl );
             TV.setText(dbh.getStr(0));
-            Log.i("EvaluateSheep ", "after get the text " + TV);
+//            Log.i("EvaluateSheep ", "after get the text " + TV);
             }
         if (trait13!=0) {
             cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
@@ -410,7 +410,7 @@ public class EvaluateSheep extends Activity {
             dbh.moveToFirstRecord();
             TV = (TextView) findViewById( R.id.trait13_lbl );
             TV.setText(dbh.getStr(0));
-            Log.i("EvaluateSheep ", "after get the text " + TV);
+//            Log.i("EvaluateSheep ", "after get the text " + TV);
             }
         if (trait14!=0) {
             cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
@@ -420,7 +420,7 @@ public class EvaluateSheep extends Activity {
             dbh.moveToFirstRecord();
             TV = (TextView) findViewById( R.id.trait14_lbl );
             TV.setText(dbh.getStr(0));
-            Log.i("EvaluateSheep ", "after get the text " + TV);
+//            Log.i("EvaluateSheep ", "after get the text " + TV);
             }
         if (trait15!=0) {
             cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
@@ -430,20 +430,23 @@ public class EvaluateSheep extends Activity {
             dbh.moveToFirstRecord();
             TV = (TextView) findViewById( R.id.trait15_lbl );
             TV.setText(dbh.getStr(0));
-            Log.i("EvaluateSheep ", "after get the text " + TV);
+//            Log.i("EvaluateSheep ", "after get the text " + TV);
             }
         cursor.close();
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
-    	btn.setEnabled(false);        
+    	btn.setEnabled(false);    
+    	
+    	
+
+    	
        	}
     public void saveScores( View v )
     {    	
     	String 			dbname = getString(R.string.real_database_file); 
         String          cmd;    
         Object 			crsr;
-        dbh = new DatabaseHandler( this, dbname );
     	TextView TV;
     	String temp_string;
     	trait11_data = 0.0f;
@@ -622,18 +625,31 @@ public class EvaluateSheep extends Activity {
     		
 //    		Log.i("save eval ", cmd);
     		dbh.exec( cmd );
-    		String alert_text = "Evaluation Done";
-    		cmd = String.format("update sheep_table set alert02='%s' where sheep_id=%d", alert_text, sheep_id);
+    		cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_table.sheep_id=%d", sheep_id);    		
+    		crsr = dbh.exec( cmd );
+            cursor   = ( Cursor ) crsr;
+            dbh.moveToFirstRecord();
+            
+            String alert_text = (dbh.getStr(0));
+            Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
+    		alert_text = alert_text + "\n" + "Evaluation Done";
+    		
+            Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
+
+    		cmd = String.format("update sheep_table set alert01='%s' where sheep_id=%d", alert_text, sheep_id);
 //    		Log.i("test alert ", cmd);   
     		dbh.exec( cmd );
+    		cursor.close();
     		clearBtn( null );
     }
 	
 	   public void backBtn( View v )
 	    {
-			doUnbindService();
+//		   	Log.i("evaluate", " Back button pressed before close DB");
+		   	dbh.closeDB();
+//		   	Log.i("evaluate", " Back button pressed after close DB");
+		   	doUnbindService();
 			stopService(new Intent(EvaluateSheep.this, eidService.class));
-			dbh.closeDB();
 			clearBtn( null );   	
 			finish();
 	    }
@@ -644,7 +660,7 @@ public class EvaluateSheep extends Activity {
 		String 			dbname = getString(R.string.real_database_file); 
         String          cmd;    
         Object 			crsr;
-        	dbh = new DatabaseHandler( this, dbname );
+ //       	dbh = new DatabaseHandler( this, dbname );
 		// Display alerts here   	
 				AlertDialog.Builder builder = new AlertDialog.Builder( this );
 				cmd = String.format("select sheep_table.alert02 from sheep_table where sheep_id =%d", sheep_id);

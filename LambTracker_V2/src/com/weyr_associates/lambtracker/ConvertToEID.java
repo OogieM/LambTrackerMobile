@@ -23,10 +23,12 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -276,7 +278,6 @@ public class ConvertToEID extends Activity {
     	btn.setEnabled(false);
     	Log.i("onCreate", " after disable alert button");
     	
-    	
     	//	Disable the Next Record and Prev. Record button until we have multiple records
 //    	btn = (Button) findViewById( R.id.next_rec_btn );
 //    	btn.setEnabled(false); 
@@ -290,6 +291,7 @@ public class ConvertToEID extends Activity {
     	farmtagid = 0;
     	eidtagid = 0;
     	new_tag_number = null;
+
        	}
     
     // user clicked the 'back' button
@@ -302,6 +304,77 @@ public class ConvertToEID extends Activity {
     	finish();
 	    }
     // user clicked the 'help' button
+    public void takeNote( View v )
+    {
+    	final Context context = this;
+    	// TODO
+    	//Implement take a note stuff here
+    	if (thissheep_id == 0) {
+    		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
+    	}
+    	else {
+    		Log.i ("takeNote", " got a sheep, need to get a note to add");
+    		
+    		LayoutInflater li = LayoutInflater.from(context);
+			View promptsView = li.inflate(R.layout.note_prompt, null);
+
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					context);
+
+			// set prompts.xml to alertdialog builder
+			alertDialogBuilder.setView(promptsView);
+
+			final EditText userInput = (EditText) promptsView
+					.findViewById(R.id.note_text);
+
+			// set dialog message
+			alertDialogBuilder
+				.setCancelable(false)
+				.setPositiveButton("Save Note",
+				  new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface dialog,int id) {
+					// get user input and set it to result
+					// edit text
+					String note_text = String.valueOf(userInput.getText());
+					cmd = String.format("insert into note_table (sheep_id, note_text, note_date) " +
+	    					"values ( %s, '%s', '%s' )", thissheep_id, note_text, TodayIs());
+	    			Log.i("update notes ", "before cmd " + cmd);
+	    			dbh.exec( cmd );	
+	    			Log.i("update notes ", "after cmd exec");
+				    }
+				  })
+				.setNegativeButton("Cancel",
+				  new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface dialog,int id) {
+					dialog.cancel();
+				    }
+				  });
+
+			// create alert dialog
+			AlertDialog alertDialog = alertDialogBuilder.create();
+
+			// show it
+			alertDialog.show();
+			
+			
+    	}
+    	
+//    	AlertDialog.Builder builder = new AlertDialog.Builder( this );
+//		builder.setMessage( R.string.help_convert )
+//	           .setTitle( R.string.help_warning );
+//		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+//	           public void onClick(DialogInterface dialog, int idx) {
+//	               // User clicked OK button 
+//	        	  
+//	    		   clearBtn( null );
+//	               }
+//	       });		
+//		AlertDialog dialog = builder.create();
+//		dialog.show();		    	
+    }
+    
+// user clicked the 'help' button
+    
     public void helpBtn( View v )
     {
    	// Display help here   	
@@ -912,7 +985,8 @@ public class ConvertToEID extends Activity {
     		String 			dbname = getString(R.string.real_database_file); 
             String          cmd;    
             Object 			crsr;
-            	dbh = new DatabaseHandler( this, dbname );
+//            	dbh = new DatabaseHandler( this, dbname );
+            // TODO
     		// Display alerts here   	
     				AlertDialog.Builder builder = new AlertDialog.Builder( this );
     				cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_id =%d", thissheep_id);
