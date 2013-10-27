@@ -91,7 +91,7 @@
             android:layout_gravity="left|top"
             android:layout_row="0"
             android:onClick="scanEid"
-            android:text="@string/scan_eid_btn"
+            android:text="@string/scan_add_eid_btn"
             android:textSize="14sp" />
         <Button
             android:id="@+id/clear_form_btn"

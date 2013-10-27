@@ -20,7 +20,7 @@
                android:scrollbarAlwaysDrawVerticalTrack="true"
                android:scrollbars="vertical"
                android:textAllCaps="false"
-               android:textSize="12sp"
+               android:textSize="18sp"
                android:typeface="monospace" >               
             </EditText>          
 	<Button

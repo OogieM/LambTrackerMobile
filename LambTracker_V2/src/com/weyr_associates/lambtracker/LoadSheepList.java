@@ -55,12 +55,8 @@ public class LoadSheepList extends Activity {
     	} 	
     	temp = "Created Database from Copy in Assets.";
     	
-    	String cmd = String.format( "select count(*) from %s", "demo_sheep_table" );
+    	String cmd = String.format( "select count(*) from %s", "sheep_table" );
         Cursor crsr = ((Cursor) dbh.exec( cmd ));
-        crsr.moveToFirst();
-        temp = String.format(temp + "\n" +"Records created in demo_sheep_table = " + String.valueOf(crsr.getInt( 0 )));
-        cmd = String.format( "select count(*) from %s", "sheep_table" );
-        crsr = ((Cursor) dbh.exec( cmd ));
         crsr.moveToFirst();
         temp = String.format(temp + "\n" + "Records created in sheep_table = " + String.valueOf(crsr.getInt( 0 )));
         txtView.setText(temp);
@@ -112,18 +108,13 @@ public class LoadSheepList extends Activity {
  		    			
  		    	temp = "Created Database from file in " + dbfile;
  		    	
- 		    	String cmd = String.format( "select count(*) from %s", "demo_sheep_table" );
+ 		    	String cmd = String.format( "select count(*) from %s", "sheep_table" );
  		        Cursor crsr = ((Cursor) dbh.exec( cmd ));
- 		        crsr.moveToFirst();
- 		        temp = String.format(temp + "\n" +"Records created in demo_sheep_table = " + String.valueOf(crsr.getInt( 0 )));
- 		        cmd = String.format( "select count(*) from %s", "sheep_table" );
- 		        crsr = ((Cursor) dbh.exec( cmd ));
  		        crsr.moveToFirst();
  		        temp = String.format(temp + "\n" + "Records created in sheep_table = " + String.valueOf(crsr.getInt( 0 )));
 // 		        txtView.setText("Records created in sheep_table = " + String.valueOf(crsr.getInt( 0 )));
  		        txtView.setText(temp);
  		        dbh.closeDB();
-
  			}
  		}
  		else /*if(requestCode == TEMPLATE_EVENT){*/
@@ -168,6 +159,7 @@ public class LoadSheepList extends Activity {
 			output = new FileOutputStream(outFileName);
 		} catch (FileNotFoundException e) {
 			Log.i("backup", "output database file not found");
+			fis.close();
 			return;
 		}
 

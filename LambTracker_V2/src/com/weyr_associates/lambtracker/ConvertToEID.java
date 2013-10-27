@@ -29,7 +29,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.database.Cursor;
@@ -39,8 +38,6 @@ public class ConvertToEID extends Activity {
 	int             fedtagid, farmtagid, eidtagid;
 	public Cursor 	cursor;
 	public int 		thissheep_id, new_tag_type, new_tag_color, new_tag_location;
-	private int		recNo;
-	private int     nRecs;
 	
 	public Button btn;
 	public String tag_type_label, tag_color_label, tag_location_label, new_tag_number, eid_tag_color_label ;
@@ -50,11 +47,8 @@ public class ConvertToEID extends Activity {
 	ArrayAdapter<String> dataAdapter;
 	String     	cmd;
 	Integer 	i;
-	
-//	private String[]        colNames; 
-	
+		
 /////////////////////////////////////////////////////
-
 	
 	Messenger mService = null;
 	boolean mIsBound;
@@ -307,7 +301,6 @@ public class ConvertToEID extends Activity {
     public void takeNote( View v )
     {
     	final Context context = this;
-    	// TODO
     	//Implement take a note stuff here
     	if (thissheep_id == 0) {
     		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
@@ -355,22 +348,7 @@ public class ConvertToEID extends Activity {
 
 			// show it
 			alertDialog.show();
-			
-			
-    	}
-    	
-//    	AlertDialog.Builder builder = new AlertDialog.Builder( this );
-//		builder.setMessage( R.string.help_convert )
-//	           .setTitle( R.string.help_warning );
-//		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
-//	           public void onClick(DialogInterface dialog, int idx) {
-//	               // User clicked OK button 
-//	        	  
-//	    		   clearBtn( null );
-//	               }
-//	       });		
-//		AlertDialog dialog = builder.create();
-//		dialog.show();		    	
+    	}   	
     }
     
 // user clicked the 'help' button
@@ -504,12 +482,14 @@ public class ConvertToEID extends Activity {
     	// Now we need to check and see if there is an alert for this sheep
        	String alert_text = dbh.getStr(8);
        	Log.i("in find fed ", "Alert Text is " + alert_text);
-//    	Now to test of the sheep has an alert and if so then set the alerts button to red
+//    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
 		if (alert_text != null){
 	       	// make the alert button red
 	    	Button btn = (Button) findViewById( R.id.alert_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 	    	btn.setEnabled(true); 
+	    	//	testing whether I can put up an alert box here without issues
+	    	showAlert(v);
 		}
      	
 //		Now we need to get the farm tag for that sheep and fill the display with data
@@ -598,10 +578,11 @@ public class ConvertToEID extends Activity {
        	String alert_text = dbh.getStr(8);
 //    	Now to test of the sheep has an alert and if so then set the alerts button to red
 		if (alert_text != null){
-	       	// make the alert button red and enable it
+	       	// make the alert button red and enable it and pop up the alert text
 	    	Button btn = (Button) findViewById( R.id.alert_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 	    	btn.setEnabled(true); 
+	    	showAlert(v);
 		}
 	
 //		Now we need to get the rest of the tags and fill the display with data
@@ -842,8 +823,8 @@ public class ConvertToEID extends Activity {
 	    			Log.i("update everything ", "fed location integer " + String.valueOf(fed_locationid));
 	    			Log.i("update everything ", "today " + today);
 	    			Log.i("update everything ", "fed tag integer " + String.valueOf(fed_number));
-	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_location, tag_date_on, tag_number) " +
-	    					"values ( %s, 1, %s, %s, '%s', %s )", thissheep_id, fed_colorid, fed_locationid, today, fed_number);
+	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
+	    					"values ( %s, 1, %s, %s, %s, '%s', %s )", thissheep_id, fed_colorid, fed_colorid, fed_locationid, today, fed_number);
 	    			Log.i("update everything ", "before cmd " + cmd);
 	    			dbh.exec( cmd );	
 	    			Log.i("update everything ", "after cmd exec");
@@ -890,8 +871,8 @@ public class ConvertToEID extends Activity {
 
 	    			//have a farm tag but no farmtagid so add a new record;
 	    			Log.i("updatefarm", " tag record id is 0 but have farm tag data need to add a new record to id_info_table here");
-	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_location, tag_date_on, tag_number) " +
-	    					"values ( %s, 4, %s, %s, '%s', %s )", thissheep_id, farm_colorid, farm_locationid, today, farm_number);
+	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
+	    					"values ( %s, 4, %s, %s, %s, '%s', %s )", thissheep_id, farm_colorid, farm_colorid, farm_locationid, today, farm_number);
 	    			dbh.exec( cmd );	
 	    		}
 	    		else{
@@ -910,8 +891,8 @@ public class ConvertToEID extends Activity {
 	    		if (eidText != null && !eidText.isEmpty()){
 	    			//have an EID tag but no eidtagid so add a new record;
 	    			Log.i("updateEID", " tag record id is 0 need to add a new record to id_info_table here");
-	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_location, tag_date_on, tag_number) " +
-	    					"values ( %s, 2, %s, %s, '%s', '%s' )", thissheep_id, eid_colorid, eid_locationid, today, eidText);
+	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
+	    					"values ( %s, 2, %s, %s, %s, '%s', '%s' )", thissheep_id, eid_colorid, eid_colorid, eid_locationid, today, eidText);
 	    			dbh.exec( cmd );	
 	    		}
 	    		else{
@@ -982,7 +963,6 @@ public class ConvertToEID extends Activity {
     public void showAlert (View v)
     {
     		String	alert_text;
-    		String 			dbname = getString(R.string.real_database_file); 
             String          cmd;    
             Object 			crsr;
 //            	dbh = new DatabaseHandler( this, dbname );
@@ -995,6 +975,7 @@ public class ConvertToEID extends Activity {
     		        cursor   = ( Cursor ) crsr;
     		        dbh.moveToFirstRecord();		       
     		        alert_text = (dbh.getStr(0));
+    		        Log.i("get alert ", alert_text); 
     				builder.setMessage( alert_text )
     			           .setTitle( R.string.alert_warning );
     				builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {

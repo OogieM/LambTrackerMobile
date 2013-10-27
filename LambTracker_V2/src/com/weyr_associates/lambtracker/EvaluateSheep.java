@@ -27,9 +27,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RatingBar;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.database.Cursor;
 
 
@@ -48,7 +46,8 @@ public class EvaluateSheep extends Activity {
 		trait13_label, trait14_label, trait15_label ; 
 	public String trait11_units, trait12_units, trait13_units, trait14_units, trait15_units; 
 	
-	public int sheep_id;
+	public int sheep_id, thissheep_id;
+	
 	int 		id;
 	int   		fedtagid, farmtagid, eidtagid;
 	private int			    recNo;
@@ -663,12 +662,13 @@ public class EvaluateSheep extends Activity {
  //       	dbh = new DatabaseHandler( this, dbname );
 		// Display alerts here   	
 				AlertDialog.Builder builder = new AlertDialog.Builder( this );
-				cmd = String.format("select sheep_table.alert02 from sheep_table where sheep_id =%d", sheep_id);
-//				Log.i("get alert ", cmd);  
+				cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_id =%d", sheep_id);
+				Log.i("evalGetAlert ", cmd);  
 				crsr = dbh.exec( cmd );
 		        cursor   = ( Cursor ) crsr;
 		        dbh.moveToFirstRecord();		       
 		        alert_text = (dbh.getStr(0));
+		        Log.i("evalShowAlert ", alert_text); 
 				builder.setMessage( alert_text )
 			           .setTitle( R.string.alert_warning );
 				builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
@@ -678,7 +678,7 @@ public class EvaluateSheep extends Activity {
 			       });		
 				AlertDialog dialog = builder.create();
 				dialog.show();
-				cursor.close();
+//				cursor.close();
 	}
 	
 	
@@ -802,7 +802,7 @@ public class EvaluateSheep extends Activity {
 //    		assumes no duplicate federal tag numbers, ok for our flock not ok for the general case
     		
     		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off , sheep_table.alert02 " +
+    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off , sheep_table.alert01 " +
     				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +	
     				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
     				"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", fed);
@@ -837,23 +837,25 @@ public class EvaluateSheep extends Activity {
 //    		cursor.moveToFirst();
 //    	}
     	fedtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database
-//		Log.i("Evaluate", String.valueOf(fedtagid));
+		Log.i("Evaluate", String.valueOf(fedtagid));
 		
     	TV = (TextView) findViewById(R.id.sheepnameText);
     	TV.setText(dbh.getStr(0));
     	sheep_id = dbh.getInt(1);
+    	thissheep_id = sheep_id;
     	TV = (TextView) findViewById(R.id.fedText)	;
     	TV.setText(dbh.getStr(3));
     	String alert_text = dbh.getStr(6);
+    	Log.i("Evaluate", alert_text);
 //    	Now to test of the sheep has an alert and if so then set the alerts button to red
 		if (alert_text != null){
-	       	// make the alert button red
+			// make the alert button red and enable it and pop up the alert text
 	    	Button btn = (Button) findViewById( R.id.alert_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-	    	btn.setEnabled(true);   
+	    	btn.setEnabled(true); 
+	    	showAlert(v);
 		}
 		
-    	ii = dbh.getInt(1);
     	
 //		Now we need to get the farm tag for that sheep and fill the display with data
     	
@@ -862,7 +864,7 @@ public class EvaluateSheep extends Activity {
 		"id_info_table.id_infoid, id_info_table.tag_date_off " +
 		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
 		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-		"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", ii);
+		"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", thissheep_id);
 
 //    	Log.i("Evaluate ", cmd);    	
     	crsr = dbh.exec( cmd );
@@ -896,7 +898,7 @@ public class EvaluateSheep extends Activity {
 //    		assumes no duplicate farm tag numbers, ok for our flock not ok for the general case  
     		
     		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off, sheep_table.alert02 " +
+    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off, sheep_table.alert01 " +
     				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
     				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
     				"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", farm);
@@ -941,10 +943,11 @@ public class EvaluateSheep extends Activity {
 //    	Now to test of the sheep has an alert and if so then set the alerts button to red
     	String alert_text = dbh.getStr(6);
     	if (alert_text != null){
-	       	// make the alert button red
+			// make the alert button red and enable it and pop up the alert text
 	    	Button btn = (Button) findViewById( R.id.alert_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-	    	btn.setEnabled(true);   
+	    	btn.setEnabled(true); 
+	    	showAlert(v);
 		}
 //		Now we need to get the rest of the tags and fill the display with data
 		

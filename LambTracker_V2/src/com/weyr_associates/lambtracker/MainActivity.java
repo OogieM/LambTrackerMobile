@@ -203,7 +203,7 @@ public class MainActivity extends Activity {
 					MainActivity.this.startActivity(i);
 			        break;
 				case 7:
-					i = new Intent(MainActivity.this, DoSheepTask.class);
+					i = new Intent(MainActivity.this, LookUpSheep.class);
 					MainActivity.this.startActivity(i);
 			        break;
 				

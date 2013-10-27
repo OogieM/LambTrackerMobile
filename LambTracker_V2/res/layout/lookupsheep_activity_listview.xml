@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    <TextView
+        android:id="@+id/tag_number"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" />
+  	<TextView
+        android:id="@+id/tag_color_name"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/tag_number"
+        android:textSize="18sp" />
+  	<TextView
+        android:id="@+id/id_location_abbrev"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/tag_color_name"
+        android:textSize="18sp" />
+  	<TextView
+        android:id="@+id/idtype_name"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/id_location_abbrev"
+        android:textSize="18sp" />
+       
+</RelativeLayout>

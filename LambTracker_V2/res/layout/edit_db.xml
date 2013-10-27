@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/sql_command_lbl"
-        android:textSize="14sp" />
+        android:textSize="18sp" />
                  
     <EditText
         android:id="@+id/sqlInput"
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/results_lbl" 
-        android:textSize="14sp" />
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/sqlOutput"
