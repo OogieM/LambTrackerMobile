@@ -11,7 +11,7 @@
        		android:rowCount="3">
         
            <TextView
-            android:layout_width="150dp"
+            android:layout_width="205dp"
             android:layout_height="wrap_content"     
             android:layout_gravity="left"
             android:layout_column="0"
@@ -21,7 +21,7 @@
            
            <EditText
             android:id="@+id/inputText"
-            android:layout_width="150dp"
+            android:layout_width="205dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_column="0"
@@ -30,11 +30,10 @@
             android:inputType="text"
             android:textSize="18sp"
             android:typeface="monospace" >
-
-            </EditText>
+			</EditText>
             
   			<TextView
-        	android:layout_width="200dp"
+        	android:layout_width="150dp"
        	 	android:layout_height="wrap_content"
         	android:layout_column="1"
             android:layout_gravity="left"
@@ -44,7 +43,7 @@
         
         <TextView
         	android:id="@+id/sheepnameText"
-        	android:layout_width="200dp"
+        	android:layout_width="150dp"
        	 	android:layout_height="wrap_content"
            	android:layout_column="1"
             android:layout_gravity="left"
@@ -77,78 +76,66 @@
             android:text="@string/scan_eid_btn"
             android:textSize="14sp" />
      
-  </RelativeLayout>  
-
-  		<ScrollView 
-  		    android:layout_width="match_parent" 
-  		    android:layout_height="200dp" >
-
-  		    <EditText
-		        android:id="@+id/test_tag_out"
-		        android:layout_width="match_parent"
-		        android:layout_height="200dp"
-		        android:layout_gravity="top"
-		        android:inputType="textMultiLine"
-		        android:textSize="18sp"
-		        android:typeface="monospace" />
-  		</ScrollView> 
+  </RelativeLayout>    		
   		
-	  		<ListView 
-	  		    android:id="@android:id/android:list" 
-	  		    android:layout_height="50dp"
-	  		    android:layout_width="fill_parent">
-	  		</ListView>
-  		
-      	<ScrollView
-   			android:layout_width="fill_parent"
-    		android:layout_height="100dp" >
-        
-	     	<GridLayout
+		<GridLayout
 	        android:id="@+id/grid2"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:columnCount="4">
+	        android:columnCount="5">
             
+     	    <TextView
+           		android:layout_width="25dp"
+            	android:layout_height="wrap_content"
+	            android:layout_column="0"
+	            android:layout_gravity="left|top"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:text="@string/tag_record_lbl" />
+	     	    
 	        <TextView
 	            android:layout_width="150dp"
 	            android:layout_height="wrap_content"
-	            android:layout_column="0"
+	            android:layout_column="1"
 	            android:layout_gravity="left|top"
 	            android:layout_row="0"
 	            android:inputType="none"
 	            android:text="@string/tag_number_lbl" />
 	        
 	        <TextView
-	            android:layout_width="60dp"
+	            android:layout_width="50dp"
 	            android:layout_height="wrap_content"
-	            android:layout_column="1"
+	            android:layout_column="2"
 	            android:layout_gravity="left"
 	            android:layout_row="0"
 	            android:inputType="none"
 	            android:text="@string/tag_color_abbrev_lbl" />
 	        
 	        <TextView
-	            android:layout_width="60dp"
+	            android:layout_width="50dp"
 	            android:layout_height="wrap_content"
-	            android:layout_column="2"
+	            android:layout_column="3"
 	            android:layout_gravity="left"
 	            android:layout_row="0"
 	            android:inputType="none"
 	            android:text="@string/tag_location_abbrev_lbl" />
 	        
 	        <TextView
-	            android:layout_width="60dp"
+	            android:layout_width="50dp"
 	            android:layout_height="wrap_content"
-	            android:layout_column="3"
+	            android:layout_column="4"
 	            android:layout_gravity="left"
 	            android:layout_row="0"
 	            android:inputType="none"
 	            android:text="@string/tag_type_abbrev_lbl" />
         
      	</GridLayout>
-    
-    </ScrollView>    
-       
+    	    
+       <ListView 
+			android:id="@+id/ListView1" 
+	  		android:layout_height="150dp"
+	  		android:layout_width="fill_parent">
+		</ListView>
 <RelativeLayout
     android:id="@+id/RelativeLayout03"
     android:orientation="horizontal" 

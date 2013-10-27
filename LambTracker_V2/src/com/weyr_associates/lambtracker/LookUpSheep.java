@@ -75,7 +75,7 @@ public class LookUpSheep extends Activity
       	String          cmd;
       	String 		results;
     	Boolean			exists;
-    	TextView TV = (TextView) findViewById( R.id.test_tag_out );
+    	
     	//	Disable the alert button until we have an alert for this sheep
 //    	btn = (Button) findViewById( R.id.alert_btn );
 //    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
@@ -114,29 +114,38 @@ public class LookUpSheep extends Activity
     			
 //		
 // 		here is where I put the actual rcvd eid into the eid variable
-//        TextView        TV  = (TextView) findViewById( R.id.eidText );
         String eid = this.getIntent().getExtras().getString("com.weyr_associates.lambtracker.LASTEID");
+        TextView TV = (TextView) findViewById( R.id.inputText );
+        TV.setText (eid);
         Log.i("LookUpSheep", eid);         
         exists = true;
+       
+//    	Log.i("LookUpSheep", " before formatting results");
+// 		String[] fromColumns = new String[ ]{"_id", "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+//		int[] toViews = new int[] {R.id.record_id, R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+//
+//		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list, cursor ,fromColumns, toViews);
+//		ListView list = (ListView) findViewById(R.id.ListView1);  		    
+		
+		
 //		added a way to verify the sheep_table exists here
         exists = tableExists("sheep_table");
         if (exists){
         	if( eid != null && eid.length() > 0 ){
+//        		Get the sheep id from the id table for this EID tag number
 	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s'", eid );      	
 	        	Log.i("LookUpSheep", cmd);
 	        	dbh.exec( cmd );
 	        	Log.i("LookUpSheep", " after the command");
 	        	dbh.moveToFirstRecord();
-	        	i = dbh.getInt(0);
-	        	thissheep_id = i;
+	        	thissheep_id = dbh.getInt(0);
+	        
 	        	Log.i("LookUpSheep", "This sheep is record " + String.valueOf(thissheep_id));
-	        	
-	        	//	Get the sheep data from sheep table
 	        	Log.i("LookUpSheep", " Before finding all tags");
 	        	
 	    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 	    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-	    				"id_info_table.id_infoid _id, id_info_table.tag_date_off, sheep_table.alert01 " +
+	    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01 " +
 	    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
 	    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 	    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
@@ -147,17 +156,28 @@ public class LookUpSheep extends Activity
 	    		cursor   = ( Cursor ) crsr; 
 	    		recNo    = 1;
 				nRecs    = cursor.getCount();
-				
 				colNames = cursor.getColumnNames();
 				nrCols   = colNames.length;
 				
-				for( int i = 0; i < nrCols; i++ )
-				{
-					Log.i("LookUpSheep", String.valueOf (colNames[i]));
-				}
+//				for( int i = 0; i < nrCols; i++ )
+//				{
+//					Log.i("LookUpSheep", String.valueOf (colNames[i]));
+//				}
 				cursor.moveToFirst();
 				Log.i("LookUpSheep", " After finding all tags");
-	    		
+				
+				TV = (TextView) findViewById( R.id.sheepnameText );
+		        TV.setText (dbh.getStr(0));
+		        
+		    	Log.i("LookUpSheep", " before formatting results");
+
+		        String[] fromColumns = new String[ ]{"_id", "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+				int[] toViews = new int[] {R.id.record_id, R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+
+				SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list, cursor ,fromColumns, toViews);
+				ListView list = (ListView) findViewById(R.id.ListView1);  		    
+				list.setAdapter(adapter);
+				
 				// Now we need to check and see if there is an alert for this sheep
 				alert_text = dbh.getStr(8);
 				Log.i("LookUpSheep", " alert text is " + alert_text);
@@ -170,57 +190,21 @@ public class LookUpSheep extends Activity
 	        	return;
 	        }
 	        Log.i("LookUpSheep", " out of the if statement");
-        	dbh.moveToFirstRecord();
-        	if( dbh.getSize() == 0 ){
+//        	dbh.moveToFirstRecord();
+//        	if( dbh.getSize() == 0 ){
 //        		TV = (TextView) findViewById( R.id.eidText );
 //            	TV.setText( eid );
-            	TV = (TextView) findViewById( R.id.sheepnameText );
-            	TV.setText( "Cannot find requested EID tag." );
-            	return;
-        	} 
- //       	Fill all the data on the screen here
-        	Log.i("LookUpSheep", " before formatting results");
-        	// display the results of the SQL execution
-        	// TODO
-        	
-//        	results = formatRecord( cursor );
-//			TV = (TextView) findViewById( R.id.test_tag_out );
-//			TV.setText( results );
-			       
-//			String[] this_sheeps_tags ;
-//			int[] tagViews;
-			Log.i("LookUpSheep", " before creating the string array with _id");
-//			String[] fromColumns = {"tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
-			String[] fromColumns = {"tag_number", "tag_color_name"};
-			for( int i = 0; i < nrCols; i++ )
-			{
-				Log.i("LookUpSheep", String.valueOf (fromColumns[i]));
-			}
-//			int[] toViews = {R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-			int[] toViews = {R.id.tag_number, R.id.tag_color_name};
-
-			SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
-			        android.R.layout.simple_list_item_2, 
-			        cursor ,fromColumns, toViews);
-			
-//			        new String[] { "tag_number", "tag_color_name"}, 
-//			        new int[] { android.R.id.text1, android.R.id.text2 });
-			
-//			SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
-//			        R.layout.lookupsheep_activity_listview, cursor, fromColumns, toViews);
-//			ListView lv = (ListView) findViewById(R.id.list);
-////			this.setListAdapter(adapter);
-//			lv.setAdapter(adapter);
-			
-			
+//            	TV = (TextView) findViewById( R.id.sheepnameText );
+//            	TV.setText( "Cannot find requested EID tag." );
+//            	return;
+//        	} 
         	}
     		else {
     			clearBtn( null );
             	TV = (TextView) findViewById( R.id.sheepnameText );
                 TV.setText( "Sheep Database does not exist." );    			
         	}
-        	
-        cursor.close();
+         cursor.close();
         }
     
 	public boolean tableExists (String table){

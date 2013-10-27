@@ -118,6 +118,7 @@
     <string name="input_id_lbl">Input Search String</string>
       
     <string name="tag_number_lbl">Tag Number</string>
+    <string name="tag_record_lbl">ID #</string>
     <string name="tag_type_lbl">Tag Type</string>
     <string name="tag_type_abbrev_lbl">Type</string>
     <string name="tag_color_lbl">Tag Color</string>
