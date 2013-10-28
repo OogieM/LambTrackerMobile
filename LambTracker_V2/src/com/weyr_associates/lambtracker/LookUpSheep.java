@@ -3,7 +3,7 @@ package com.weyr_associates.lambtracker;
 import java.util.ArrayList;
 import java.util.List;
 import android.app.ListActivity;
-
+import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 
 import com.weyr_associates.lambtracker.ConvertToEID.IncomingHandler;
@@ -73,7 +73,7 @@ public class LookUpSheep extends Activity
     	int     nrCols;
 //		Added the variable definitions here    	
       	String          cmd;
-      	String 		results;
+      	String 			results, results2;
     	Boolean			exists;
     	
     	//	Disable the alert button until we have an alert for this sheep
@@ -120,15 +120,6 @@ public class LookUpSheep extends Activity
         Log.i("LookUpSheep", eid);         
         exists = true;
        
-//    	Log.i("LookUpSheep", " before formatting results");
-// 		String[] fromColumns = new String[ ]{"_id", "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
-//		int[] toViews = new int[] {R.id.record_id, R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-//
-//		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list, cursor ,fromColumns, toViews);
-//		ListView list = (ListView) findViewById(R.id.ListView1);  		    
-		
-		
-//		added a way to verify the sheep_table exists here
         exists = tableExists("sheep_table");
         if (exists){
         	if( eid != null && eid.length() > 0 ){
@@ -153,16 +144,33 @@ public class LookUpSheep extends Activity
 	    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
 	    		Log.i("LookUpSheep", cmd);
 	    		crsr = dbh.exec( cmd ); 
+	    		//TODO
 	    		cursor   = ( Cursor ) crsr; 
+	    		Log.i("LookUpSheep", " Before FOR loop where I need to read the tag data from cursor and fill display");
+	    		
+	    		// Print a log of all the retrieved data here to see what we really got and make sure the query is correct
+	    		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(0));
+	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(1));
+	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(2));
+	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(3));
+	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(4));
+	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(5));
+	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(6));
+	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(7));
+	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(8));
+	    			
+        		}
+	    		
 	    		recNo    = 1;
 				nRecs    = cursor.getCount();
 				colNames = cursor.getColumnNames();
 				nrCols   = colNames.length;
 				
-//				for( int i = 0; i < nrCols; i++ )
-//				{
-//					Log.i("LookUpSheep", String.valueOf (colNames[i]));
-//				}
+				for( int i = 0; i < nrCols; i++ )
+				{
+					Log.i("LookUpSheep", String.valueOf (colNames[i]));
+				}
 				cursor.moveToFirst();
 				Log.i("LookUpSheep", " After finding all tags");
 				
@@ -170,14 +178,21 @@ public class LookUpSheep extends Activity
 		        TV.setText (dbh.getStr(0));
 		        
 		    	Log.i("LookUpSheep", " before formatting results");
-
-		        String[] fromColumns = new String[ ]{"_id", "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
-				int[] toViews = new int[] {R.id.record_id, R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-
-				SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list, cursor ,fromColumns, toViews);
-				ListView list = (ListView) findViewById(R.id.ListView1);  		    
-				list.setAdapter(adapter);
-				
+		    	// TODO
+		    	results = "";
+		    
+		    	results = formatRecord( cursor );
+		    	cursor.moveToNext();
+		    	results2 = formatRecord( cursor );
+//		    	results = results + results2;
+		    	TV = (TextView) findViewById( R.id.TextView1 );
+				TV.setText( results );
+//		        String[] fromColumns = new String[ ]{"_id", "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+//				int[] toViews = new int[] {R.id.record_id, R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+//
+//				SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list, cursor ,fromColumns, toViews);
+//				ListView list = (ListView) findViewById(R.id.ListView1);  		    
+//				list.setAdapter(adapter);
 				// Now we need to check and see if there is an alert for this sheep
 				alert_text = dbh.getStr(8);
 				Log.i("LookUpSheep", " alert text is " + alert_text);
@@ -190,14 +205,14 @@ public class LookUpSheep extends Activity
 	        	return;
 	        }
 	        Log.i("LookUpSheep", " out of the if statement");
-//        	dbh.moveToFirstRecord();
-//        	if( dbh.getSize() == 0 ){
-//        		TV = (TextView) findViewById( R.id.eidText );
-//            	TV.setText( eid );
-//            	TV = (TextView) findViewById( R.id.sheepnameText );
-//            	TV.setText( "Cannot find requested EID tag." );
-//            	return;
-//        	} 
+        	dbh.moveToFirstRecord();
+        	if( dbh.getSize() == 0 ){
+        		TV = (TextView) findViewById( R.id.eidText );
+            	TV.setText( eid );
+            	TV = (TextView) findViewById( R.id.sheepnameText );
+            	TV.setText( "Cannot find requested EID tag." );
+            	return;
+        	} 
         	}
     		else {
     			clearBtn( null );
@@ -215,50 +230,7 @@ public class LookUpSheep extends Activity
 			return false;
 	        		}
 	        	}
-//	 public void showTags( View v ){
-//		Object 	crsr; 
-//		Log.i("LookUpSheep", " Before finding all tags");
-//	
-//		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-//				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-//				"id_info_table.id_infoid, id_info_table.tag_date_off, sheep_table.alert01 " +
-//				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-//				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-//				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-//				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-//				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
-//	
-//		crsr = dbh.exec( cmd ); 
-//		Log.i("LookUpSheep", " After finding all tags");
-//		cursor   = ( Cursor ) crsr;
-//		dbh.moveToFirstRecord();
-//		
-//		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-//			Log.i("LookUpSheep", " In FOR loop where I need to read the tag data from cursor and fill display");
-//		public String[] this_sheeps_tags ;
-//		int[] tagViews;
-	//
-//		String[] fromColumns = {ContactsContract.Data.DISPLAY_NAME, 
-//	            ContactsContract.CommonDataKinds.Phone.NUMBER};
-	//int[] toViews = {R.id.display_name, R.id.phone_number};
-	//
 
-//		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
-//		        R.layout.person_name_and_number, cursor, fromColumns, toViews, 0);
-//		ListView listView = getListView();
-//		listView.setAdapter(adapter);
-//		}
-
-		// Now we need to check and see if there is an alert for this sheep
-//		String alert_text = dbh.getStr(8);
-		//	Now to test of the sheep has an alert and if so then set the alerts button to red
-//		if (alert_text != null){
-	       	// Show the alert
-//	    	showAlert(v);
-//		}
-//	
-//		cursor.close();
-//	}
     public void helpBtn( View v )
     {
    	// Display help here   	

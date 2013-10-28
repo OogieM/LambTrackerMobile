@@ -133,9 +133,17 @@
     	    
        <ListView 
 			android:id="@+id/ListView1" 
-	  		android:layout_height="150dp"
+	  		android:layout_height="50dp"
 	  		android:layout_width="fill_parent">
 		</ListView>
+		
+			<TextView 
+				android:id="@+id/TextView1" 
+		  		android:layout_height="150dp"
+		  		android:layout_width="fill_parent">
+		</TextView>
+		
+
 <RelativeLayout
     android:id="@+id/RelativeLayout03"
     android:orientation="horizontal" 
