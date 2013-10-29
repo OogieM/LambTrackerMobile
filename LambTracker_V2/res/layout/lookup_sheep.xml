@@ -132,17 +132,18 @@
      	</GridLayout>
     	    
        <ListView 
-			android:id="@+id/ListView1" 
-	  		android:layout_height="50dp"
+			android:id="@id/android:list" 
+	  		android:layout_height="150dp"
 	  		android:layout_width="fill_parent">
 		</ListView>
 		
-			<TextView 
-				android:id="@+id/TextView1" 
-		  		android:layout_height="150dp"
-		  		android:layout_width="fill_parent">
-		</TextView>
-		
+		<EditText 
+			android:id="@+id/TextView1" 
+	  		android:layout_height="250dp"
+	  		android:layout_width="fill_parent"
+	  		android:inputType="textMultiLine"
+	  		android:textSize="18sp" >
+		</EditText>
 
 <RelativeLayout
     android:id="@+id/RelativeLayout03"

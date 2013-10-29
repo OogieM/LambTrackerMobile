@@ -34,7 +34,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
-public class LookUpSheep extends Activity
+public class LookUpSheep extends ListActivity
 	{
 	private DatabaseHandler dbh;
 	int             id;
@@ -76,16 +76,6 @@ public class LookUpSheep extends Activity
       	String 			results, results2;
     	Boolean			exists;
     	
-    	//	Disable the alert button until we have an alert for this sheep
-//    	btn = (Button) findViewById( R.id.alert_btn );
-//    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
-//    	btn.setEnabled(false);
-//    	Log.i("onCreate", " after disable alert button");
-    	
-//    	fedtagid = 0;
-//    	farmtagid = 0;
-//    	eidtagid = 0;
-////    	new_tag_number = null;
 //    	//	make the scan button normal
 //    	btn = (Button) findViewById( R.id.scan_eid_btn );
 //    	btn.getBackground().setColorFilter(null);
@@ -127,7 +117,7 @@ public class LookUpSheep extends Activity
 	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s'", eid );      	
 	        	Log.i("LookUpSheep", cmd);
 	        	dbh.exec( cmd );
-	        	Log.i("LookUpSheep", " after the command");
+//	        	Log.i("LookUpSheep", " after the command");
 	        	dbh.moveToFirstRecord();
 	        	thissheep_id = dbh.getInt(0);
 	        
@@ -146,6 +136,7 @@ public class LookUpSheep extends Activity
 	    		crsr = dbh.exec( cmd ); 
 	    		//TODO
 	    		cursor   = ( Cursor ) crsr; 
+	    		startManagingCursor(cursor);
 	    		Log.i("LookUpSheep", " Before FOR loop where I need to read the tag data from cursor and fill display");
 	    		
 	    		// Print a log of all the retrieved data here to see what we really got and make sure the query is correct
@@ -159,9 +150,8 @@ public class LookUpSheep extends Activity
 	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(6));
 	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(7));
 	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(8));
-	    			
-        		}
-	    		
+	         		}
+	    		Log.i("LookUpSheep", " After finding all tags");
 	    		recNo    = 1;
 				nRecs    = cursor.getCount();
 				colNames = cursor.getColumnNames();
@@ -169,30 +159,37 @@ public class LookUpSheep extends Activity
 				
 				for( int i = 0; i < nrCols; i++ )
 				{
+					//	verify the column names are correct and that I have a _id field so I can use a cursorAdapter
 					Log.i("LookUpSheep", String.valueOf (colNames[i]));
 				}
-				cursor.moveToFirst();
-				Log.i("LookUpSheep", " After finding all tags");
-				
+				cursor.moveToFirst();				
 				TV = (TextView) findViewById( R.id.sheepnameText );
 		        TV.setText (dbh.getStr(0));
 		        
 		    	Log.i("LookUpSheep", " before formatting results");
 		    	// TODO
-		    	results = "";
-		    
-		    	results = formatRecord( cursor );
-		    	cursor.moveToNext();
-		    	results2 = formatRecord( cursor );
-//		    	results = results + results2;
+		    	//	Put this in to verify that the data really is there and can display in a regular textView
+		    	results = "";		    
+		    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+			    	results = results + formatRecord( cursor );
+			    	cursor.moveToNext();
+        		}
 		    	TV = (TextView) findViewById( R.id.TextView1 );
 				TV.setText( results );
-//		        String[] fromColumns = new String[ ]{"_id", "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
-//				int[] toViews = new int[] {R.id.record_id, R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-//
-//				SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list, cursor ,fromColumns, toViews);
-//				ListView list = (ListView) findViewById(R.id.ListView1);  		    
-//				list.setAdapter(adapter);
+				
+				//	Get set up to try to use the CursorAdapter to display all the tag data
+				cursor.moveToFirst();
+				//	Select only the columns I need for the tag display section
+		        String[] fromColumns = new String[ ]{"_id", "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+				//	Set the views for each column for each line. A tag takes up 1 line on the screen
+		        int[] toViews = new int[] {R.id.record_id, R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+				SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews);
+				
+				// various things I've tried but nothing is working
+//				ListView list = getListView();
+//				ListView list = (ListView) findViewById(R.id.list);  		    
+				setListAdapter(adapter);
+
 				// Now we need to check and see if there is an alert for this sheep
 				alert_text = dbh.getStr(8);
 				Log.i("LookUpSheep", " alert text is " + alert_text);
@@ -317,7 +314,7 @@ public class LookUpSheep extends Activity
 	Log.i("formatRecord", " After the String Builder definition");
 	int           nrCols   = colNames.length;
 	Log.i("formatRecord", " number of columns is " + String.valueOf (nrCols));
-//	String        line     = String.format( "Record %d of %d:\n", recNo, nRecs );
+//	line     = String.format( "Record %d of %d:\n", recNo, nRecs );
 	Log.i("formatRecord", " number of records is " + String.valueOf (nRecs));
 //	sb.append( line );
 	
@@ -330,28 +327,28 @@ public class LookUpSheep extends Activity
 			switch( cursor.getType(i) )
 				{
 				case Cursor.FIELD_TYPE_FLOAT:
-//					line = String.format( "  %s: %f\n", colNames[i], cursor.getFloat(i) );
-					line = String.format( "%f\n", cursor.getFloat(i) );
+					line = String.format( "  %s: %f\n", colNames[i], cursor.getFloat(i) );
+//					line = String.format( "%f\n", cursor.getFloat(i) );
 					break;
 				
 				case Cursor.FIELD_TYPE_INTEGER:
-//					line = String.format( "  %s: %d\n", colNames[i], cursor.getInt(i) );
-					line = String.format( "%d\n", cursor.getInt(i) );
+					line = String.format( "  %s: %d\n", colNames[i], cursor.getInt(i) );
+//					line = String.format( "%d\n", cursor.getInt(i) );
 					break;
 				
 				case Cursor.FIELD_TYPE_NULL:
-//					line = String.format( "  %s: null\n", colNames[i] );
-					line = String.format( "null\n", colNames[i] );
+					line = String.format( "  %s: null\n", colNames[i] );
+//					line = String.format( "null\n", colNames[i] );
 					break;
 				
 				case Cursor.FIELD_TYPE_STRING:
-//					line = String.format( "  %s: %s\n", colNames[i], cursor.getString(i) );
-					line = String.format( "%s\n", cursor.getString(i) );
+					line = String.format( "  %s: %s\n", colNames[i], cursor.getString(i) );
+//					line = String.format( "%s\n", cursor.getString(i) );
 					break;
 					
 				default:
-//					line = String.format( "  %s: ?? %s ??", colNames[i], cursor.getString(i) );
-					line = String.format( "%s ", cursor.getString(i) );
+					line = String.format( "  %s: ?? %s ??", colNames[i], cursor.getString(i) );
+//					line = String.format( "%s ", cursor.getString(i) );
 					break;
 				}			
 			sb.append( line );
