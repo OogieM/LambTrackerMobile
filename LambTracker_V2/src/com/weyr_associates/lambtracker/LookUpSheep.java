@@ -168,12 +168,8 @@ public class LookUpSheep extends ListActivity
 		        
 		    	Log.i("LookUpSheep", " before formatting results");
 		    	// TODO
-		    	//	Put this in to verify that the data really is there and can display in a regular textView
-		    	results = "";		    
-		    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-			    	results = results + formatRecord( cursor );
-			    	cursor.moveToNext();
-        		}
+		    	//	Put this in to verify that the data really is there and can display in a regular textView	
+		    	results = formatRecord( cursor );
 		    	TV = (TextView) findViewById( R.id.TextView1 );
 				TV.setText( results );
 				
@@ -183,14 +179,14 @@ public class LookUpSheep extends ListActivity
 		        String[] fromColumns = new String[ ]{"_id", "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
 				//	Set the views for each column for each line. A tag takes up 1 line on the screen
 		        int[] toViews = new int[] {R.id.record_id, R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-				SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews);
+				SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
 				
 				// various things I've tried but nothing is working
 //				ListView list = getListView();
 //				ListView list = (ListView) findViewById(R.id.list);  		    
 				setListAdapter(adapter);
 
-				// Now we need to check and see if there is an alert for this sheep
+				// Now we need to get the alert text for this sheep
 				alert_text = dbh.getStr(8);
 				Log.i("LookUpSheep", " alert text is " + alert_text);
 				//	Now to test of the sheep has an alert and if so then display the alert
@@ -216,7 +212,7 @@ public class LookUpSheep extends ListActivity
             	TV = (TextView) findViewById( R.id.sheepnameText );
                 TV.setText( "Sheep Database does not exist." );    			
         	}
-         cursor.close();
+     
         }
     
 	public boolean tableExists (String table){
@@ -249,6 +245,7 @@ public class LookUpSheep extends ListActivity
     public void backBtn( View v )
 	    {
     	// Added this to close the database if we go back to the main activity  	
+    	stopManagingCursor (cursor);
     	dbh.closeDB();
     	clearBtn( null );
     	//Go back to main
@@ -313,7 +310,7 @@ public class LookUpSheep extends ListActivity
 	StringBuilder sb       = new StringBuilder();
 	Log.i("formatRecord", " After the String Builder definition");
 	int           nrCols   = colNames.length;
-	Log.i("formatRecord", " number of columns is " + String.valueOf (nrCols));
+//	Log.i("formatRecord", " number of columns is " + String.valueOf (nrCols));
 //	line     = String.format( "Record %d of %d:\n", recNo, nRecs );
 	Log.i("formatRecord", " number of records is " + String.valueOf (nRecs));
 //	sb.append( line );
@@ -351,8 +348,11 @@ public class LookUpSheep extends ListActivity
 //					line = String.format( "%s ", cursor.getString(i) );
 					break;
 				}			
+			Log.i ("format record ", "Before building first line");
 			sb.append( line );
 			}
+		Log.i ("format record ", "Before cursor move to next");
+		cursor.moveToNext();
 	}
 	return sb.toString();
 	}   

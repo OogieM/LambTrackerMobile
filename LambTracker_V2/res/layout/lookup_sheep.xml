@@ -132,7 +132,7 @@
      	</GridLayout>
     	    
        <ListView 
-			android:id="@id/android:list" 
+			android:id="@+id/android:list" 
 	  		android:layout_height="150dp"
 	  		android:layout_width="fill_parent">
 		</ListView>
