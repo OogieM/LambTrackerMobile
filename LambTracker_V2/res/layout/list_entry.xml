@@ -3,29 +3,25 @@
     android:layout_width="fill_parent"
    	android:layout_height="wrap_content" 
    	android:orientation="horizontal">
-   	<TextView
-        android:id="@+id/record_id"
-        android:layout_width="25dp"
-        android:layout_height="wrap_content"
-        android:textSize="18sp" />
+   	
     <TextView
         android:id="@+id/tag_number"
-        android:layout_width="150dp"
+        android:layout_width="175dp"
         android:layout_height="wrap_content"
         android:textSize="18sp" />
   	<TextView
         android:id="@+id/tag_color_name"
-        android:layout_width="50dp"
+        android:layout_width="65dp"
         android:layout_height="wrap_content"
         android:textSize="18sp" />
   	<TextView
         android:id="@+id/id_location_abbrev"
-        android:layout_width="50dp"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:textSize="18sp" />
   	<TextView
         android:id="@+id/idtype_name"
-        android:layout_width="50dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:textSize="18sp" />
        

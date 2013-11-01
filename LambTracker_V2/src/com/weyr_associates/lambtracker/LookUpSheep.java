@@ -115,7 +115,7 @@ public class LookUpSheep extends ListActivity
         	if( eid != null && eid.length() > 0 ){
 //        		Get the sheep id from the id table for this EID tag number
 	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s'", eid );      	
-	        	Log.i("LookUpSheep", cmd);
+//	        	Log.i("LookUpSheep", cmd);
 	        	dbh.exec( cmd );
 //	        	Log.i("LookUpSheep", " after the command");
 	        	dbh.moveToFirstRecord();
@@ -137,58 +137,34 @@ public class LookUpSheep extends ListActivity
 	    		//TODO
 	    		cursor   = ( Cursor ) crsr; 
 	    		startManagingCursor(cursor);
-	    		Log.i("LookUpSheep", " Before FOR loop where I need to read the tag data from cursor and fill display");
-	    		
-	    		// Print a log of all the retrieved data here to see what we really got and make sure the query is correct
-	    		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(0));
-	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(1));
-	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(2));
-	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(3));
-	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(4));
-	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(5));
-	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(6));
-	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(7));
-	    			Log.i("LookUpSheep", " FOR Loop " + dbh.getStr(8));
-	         		}
-	    		Log.i("LookUpSheep", " After finding all tags");
+
 	    		recNo    = 1;
 				nRecs    = cursor.getCount();
 				colNames = cursor.getColumnNames();
 				nrCols   = colNames.length;
 				
-				for( int i = 0; i < nrCols; i++ )
-				{
-					//	verify the column names are correct and that I have a _id field so I can use a cursorAdapter
-					Log.i("LookUpSheep", String.valueOf (colNames[i]));
-				}
+//				for( int i = 0; i < nrCols; i++ ){
+//					//	verify the column names are correct and that I have a _id field so I can use a cursorAdapter
+//					Log.i("LookUpSheep", String.valueOf (colNames[i]));
+//				}
 				cursor.moveToFirst();				
 				TV = (TextView) findViewById( R.id.sheepnameText );
 		        TV.setText (dbh.getStr(0));
 		        
 		    	Log.i("LookUpSheep", " before formatting results");
-		    	// TODO
-		    	//	Put this in to verify that the data really is there and can display in a regular textView	
-		    	results = formatRecord( cursor );
-		    	TV = (TextView) findViewById( R.id.TextView1 );
-				TV.setText( results );
 				
 				//	Get set up to try to use the CursorAdapter to display all the tag data
-				cursor.moveToFirst();
+//				cursor.moveToFirst();
 				//	Select only the columns I need for the tag display section
-		        String[] fromColumns = new String[ ]{"_id", "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+		        String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
 				//	Set the views for each column for each line. A tag takes up 1 line on the screen
-		        int[] toViews = new int[] {R.id.record_id, R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+		        int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
 				SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
-				
-				// various things I've tried but nothing is working
-//				ListView list = getListView();
-//				ListView list = (ListView) findViewById(R.id.list);  		    
 				setListAdapter(adapter);
 
 				// Now we need to get the alert text for this sheep
 				alert_text = dbh.getStr(8);
-				Log.i("LookUpSheep", " alert text is " + alert_text);
+//				Log.i("LookUpSheep", " alert text is " + alert_text);
 				//	Now to test of the sheep has an alert and if so then display the alert
 				if (alert_text != null){
 			       	// Show the alert		  

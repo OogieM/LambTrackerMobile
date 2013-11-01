@@ -82,19 +82,10 @@
 	        android:id="@+id/grid2"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:columnCount="5">
-            
-     	    <TextView
-           		android:layout_width="25dp"
-            	android:layout_height="wrap_content"
-	            android:layout_column="0"
-	            android:layout_gravity="left|top"
-	            android:layout_row="0"
-	            android:inputType="none"
-	            android:text="@string/tag_record_lbl" />
+	        android:columnCount="5">   	    
 	     	    
 	        <TextView
-	            android:layout_width="150dp"
+	            android:layout_width="176dp"
 	            android:layout_height="wrap_content"
 	            android:layout_column="1"
 	            android:layout_gravity="left|top"
@@ -103,7 +94,7 @@
 	            android:text="@string/tag_number_lbl" />
 	        
 	        <TextView
-	            android:layout_width="50dp"
+	            android:layout_width="65dp"
 	            android:layout_height="wrap_content"
 	            android:layout_column="2"
 	            android:layout_gravity="left"
@@ -112,7 +103,7 @@
 	            android:text="@string/tag_color_abbrev_lbl" />
 	        
 	        <TextView
-	            android:layout_width="50dp"
+	            android:layout_width="40dp"
 	            android:layout_height="wrap_content"
 	            android:layout_column="3"
 	            android:layout_gravity="left"
@@ -121,7 +112,7 @@
 	            android:text="@string/tag_location_abbrev_lbl" />
 	        
 	        <TextView
-	            android:layout_width="50dp"
+	            android:layout_width="80dp"
 	            android:layout_height="wrap_content"
 	            android:layout_column="4"
 	            android:layout_gravity="left"
@@ -133,17 +124,9 @@
     	    
        <ListView 
 			android:id="@+id/android:list" 
-	  		android:layout_height="150dp"
+	  		android:layout_height="350dp"
 	  		android:layout_width="fill_parent">
 		</ListView>
-		
-		<EditText 
-			android:id="@+id/TextView1" 
-	  		android:layout_height="250dp"
-	  		android:layout_width="fill_parent"
-	  		android:inputType="textMultiLine"
-	  		android:textSize="18sp" >
-		</EditText>
 
 <RelativeLayout
     android:id="@+id/RelativeLayout03"
