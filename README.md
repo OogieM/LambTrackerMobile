@@ -7,7 +7,7 @@ We are shepherds, programming of this item is happening in modules as we need to
 
 First module that is working is ConvertToEID which allows the look up of a sheep based on official US federal or farm tags, adding and removing tags and adding an electronic tag.
 
-Second module that is in works is EvaluateSheep to do customized evaluations of a sheep flock including scoring traits, weights and scrotal circumference and other measured characteristics. I am working toadd some user defined scored traits where the optiosn are specified by the user. 
+Second module that is in works is EvaluateSheep to do customized evaluations of a sheep flock including scoring traits, weights and scrotal circumference and other measured characteristics. I am working to add some user defined scored traits where the options are specified by the user. 
 
 LookUpSheep is in process, it works for an EID tag but is failing to look up sheep based on other identification types right now. 
 
@@ -15,5 +15,5 @@ Pieces that are mostly working but have some issues include reading alerts for s
 
 System is based on an SQLite database for all flock data.
 
-Currently I set up the database on my desktop system by hand using various SQLite management tools. Then the databse is moved tothe Android and used there.
+Currently I set up the database on my desktop system by hand using various SQLite management tools. Then the database is moved to the Android and used there.
 
