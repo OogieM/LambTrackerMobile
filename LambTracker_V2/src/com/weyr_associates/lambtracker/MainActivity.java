@@ -150,6 +150,7 @@ public class MainActivity extends Activity {
 		textInfo1.setOnClickListener(ListenerToggleDisplayMsgType);
 		textInfo2.setOnClickListener(ListenerToggleDisplayMsgType);
 		
+		LastEID = "none read";
 		restoreMe(savedInstanceState);
 //		Log.i("LambTracker", "At Restore Prefs.");
 		CheckIfServiceIsRunning();		
@@ -160,7 +161,7 @@ public class MainActivity extends Activity {
 		adapter.setDropDownViewResource(R.layout.task_spinner);
 		select_sheep_task.setAdapter (adapter);
 		select_sheep_task.setSelection(0);
-//		Log.i("Activity", "In Spinner");
+		Log.i("Activity", " before onItems selected");
 		select_sheep_task.setOnItemSelectedListener(new SpinnerActivity());
 	}
 	
@@ -171,8 +172,8 @@ public class MainActivity extends Activity {
 
 //			Log.i("Activity", "In Spinner");
 			Intent i = null;
-//			String teststring = String.valueOf (parent.getSelectedItemPosition());
-//			Log.i("Spinner", "Position = "+teststring);
+			String teststring = String.valueOf (parent.getSelectedItemPosition());
+			Log.i("Spinner", "Position = "+teststring);
 
 				switch (parent.getSelectedItemPosition()){		
 				case 0:
@@ -183,7 +184,8 @@ public class MainActivity extends Activity {
 					MainActivity.this.startActivity(i);
 			        break;
 			    case 2:
-					i = new Intent(MainActivity.this, ConvertToEID.class);
+			    	Log.i ("Main case", " In main case statement selected 2");
+			    	i = new Intent(MainActivity.this, ConvertToEID.class);
 					MainActivity.this.startActivity(i);
 			        break;
 			    case 3:
@@ -191,7 +193,8 @@ public class MainActivity extends Activity {
 					MainActivity.this.startActivity(i);
 			        break;
 			    case 4:
-					i = new Intent(MainActivity.this, EvaluateSheep.class);
+			    	Log.i ("Main case", " In main case statement selected 4");
+			    	i = new Intent(MainActivity.this, EvaluateSheep.class);
 			        MainActivity.this.startActivity(i);
 			        break;
 			    case 5:
@@ -203,8 +206,15 @@ public class MainActivity extends Activity {
 					MainActivity.this.startActivity(i);
 			        break;
 				case 7:
-					i = new Intent(MainActivity.this, LookUpSheep.class);
-					MainActivity.this.startActivity(i);
+//					Log.i ("Main case", " In main case statement selected 7");
+					
+//					i = new Intent(MainActivity.this, LookUpSheep.class);
+//					Log.i ("Main case", " after new intent");
+					Bundle mybundle = new Bundle();
+					mybundle.putString ("com.weyr_associates.lambtracker.LastEID", LastEID);
+//					Log.i ("Main case", " after bundle with LastEID = " + LastEID);
+					lookUpSheep ();
+//					MainActivity.this.startActivity(i);
 			        break;
 				
 			}
