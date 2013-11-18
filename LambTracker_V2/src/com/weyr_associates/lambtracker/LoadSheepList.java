@@ -45,6 +45,7 @@ public class LoadSheepList extends Activity {
 //    	Resources res = getResources();
     	String 	dbfile = getString(R.string.real_database_file) ;
     	Log.i("LoadSheepList ", " got this as a file " + dbfile);
+    	// Moved this below the copy per note from Eric Coker on DXR
     	DatabaseHandler dbh     = new DatabaseHandler( this, dbfile );
     	try {
     		Log.i("in try ", " before going to DBH");
@@ -91,7 +92,6 @@ public class LoadSheepList extends Activity {
  		    	Log.i("LoadSheepList ", " got this as a file " + dbfile);
 		    	
  		        String outFileName = "/data/data/com.weyr_associates.lambtracker/databases/" + "lambtracker_db.sqlite";
-
 
  		        File dbInFile = new File(dbfile);
    		        File dbOutFile = new File(outFileName);
