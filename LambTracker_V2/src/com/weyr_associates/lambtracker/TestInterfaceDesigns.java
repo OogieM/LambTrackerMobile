@@ -1,6 +1,5 @@
 package com.weyr_associates.lambtracker;
 
-import com.weyr_associates.lambtracker.MainActivity.SpinnerActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -33,7 +32,7 @@ import android.widget.RadioGroup;
 public class TestInterfaceDesigns extends Activity{
 		private DatabaseHandler dbh;
 		private Cursor 	cursor;
-		
+		public RadioGroup radioGroup;
 		public Spinner test_dynamic_spinner, trait_spinner;
 		List<String> tag_colors, evaluation_traits;
 		List<Float> rating_scores;
@@ -49,6 +48,8 @@ public class TestInterfaceDesigns extends Activity{
 			setContentView(R.layout.test_interface_designs);
 			String dbname = getString(R.string.real_database_file); 
 	    	dbh = new DatabaseHandler( this, dbname );	
+	    	radioGroup = (RadioGroup) findViewById(R.id.radioGroup1);
+	    	addRadioButtons(3);
 	    	scored_evaluation_traits = new ArrayList<String>();
 	    	
 	    	test_dynamic_spinner = (Spinner) findViewById(R.id.test_dynamic_spinner);
@@ -124,7 +125,27 @@ public class TestInterfaceDesigns extends Activity{
 	    		rating_scores.add(ratingBar02.getRating());	
 	    		Log.i("RatingBar02 ", String.valueOf(ratingBar02.getRating()));
 	    }
-	     	        
+	    private void addRadioButtons(int numButtons) {
+	    	  int i;
+	    	  String[] radioBtnText = {"Engorgement", "Mucus","Both"};
+
+	    	  for(i = 0; i < numButtons; i++){
+	    	    //instantiate...
+	    	    RadioButton radioBtn = new RadioButton(this);
+
+	    	    //set the values that you would otherwise hardcode in the xml...
+	    	  	radioBtn.setLayoutParams 
+	    	      (new LayoutParams 
+	    	      (LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+	    	    //label the button...
+	    	  	radioBtn.setText(radioBtnText[i]);
+	    	  	radioBtn.setId(i);
+
+	    	    //add it to the group.
+	    	    radioGroup.addView(radioBtn, i);
+	    	  }
+	    	}        
 	private class SpinnerActivity extends Activity implements OnItemSelectedListener {
 		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
@@ -220,11 +241,9 @@ public class TestInterfaceDesigns extends Activity{
 
 		@Override
 		public void onNothingSelected(AdapterView<?> arg0) {
-			//  Auto-generated method stub
+			// TODO Auto-generated method stub
 			
 		}
-		
-	
 	}
 	  // user clicked the 'back' button
     public void backBtn( View v )
