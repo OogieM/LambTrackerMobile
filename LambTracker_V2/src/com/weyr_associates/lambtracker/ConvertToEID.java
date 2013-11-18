@@ -483,7 +483,7 @@ public class ConvertToEID extends Activity {
        	String alert_text = dbh.getStr(8);
        	Log.i("in find fed ", "Alert Text is " + alert_text);
 //    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
-		if (alert_text != null){
+		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
 	       	// make the alert button red
 	    	Button btn = (Button) findViewById( R.id.alert_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -577,7 +577,7 @@ public class ConvertToEID extends Activity {
     	// Now we need to check and see if there is an alert for this sheep
        	String alert_text = dbh.getStr(8);
 //    	Now to test of the sheep has an alert and if so then set the alerts button to red
-		if (alert_text != null){
+		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
 	       	// make the alert button red and enable it and pop up the alert text
 	    	Button btn = (Button) findViewById( R.id.alert_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -964,18 +964,16 @@ public class ConvertToEID extends Activity {
     {
     		String	alert_text;
             String          cmd;    
-            Object 			crsr;
-//            	dbh = new DatabaseHandler( this, dbname );
-            // TODO
+            Object 			crsr;        
     		// Display alerts here   	
     				AlertDialog.Builder builder = new AlertDialog.Builder( this );
     				cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_id =%d", thissheep_id);
-    				Log.i("get alert ", cmd);  
+//    				Log.i("get alert ", cmd);  
     				crsr = dbh.exec( cmd );
     		        cursor   = ( Cursor ) crsr;
     		        dbh.moveToFirstRecord();		       
     		        alert_text = (dbh.getStr(0));
-    		        Log.i("get alert ", alert_text); 
+//    		        Log.i("get alert ", alert_text); 
     				builder.setMessage( alert_text )
     			           .setTitle( R.string.alert_warning );
     				builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
@@ -998,15 +996,15 @@ public class ConvertToEID extends Activity {
     	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
     	
     	tag_type_label = tag_type_spinner.getSelectedItem().toString();
-    	Log.i("updateTag", "Tag type is " + tag_type_label);
+//    	Log.i("updateTag", "Tag type is " + tag_type_label);
     	tag_color_label = tag_color_spinner.getSelectedItem().toString();
-    	Log.i("updateTag", "Tag color is " + tag_color_label);
+//    	Log.i("updateTag", "Tag color is " + tag_color_label);
     	tag_location_label = tag_location_spinner.getSelectedItem().toString();
-    	Log.i("updateTag", "Tag location is " + tag_location_label);
+//    	Log.i("updateTag", "Tag location is " + tag_location_label);
     	
     	TV  = (TextView) findViewById( R.id.new_tag_number);
     	new_tag_number = TV.getText().toString();
-    	Log.i("before if", " new tag number " + new_tag_number);
+//    	Log.i("before if", " new tag number " + new_tag_number);
     	
     	// 	Fill the new tag data with where it is in the database tables
     	//	Integers to hold the info new_tag_type, new_tag_color, new_tag_location
@@ -1047,9 +1045,9 @@ public class ConvertToEID extends Activity {
     		cursor   = ( Cursor ) crsr;
     		dbh.moveToFirstRecord();
     		new_tag_location = dbh.getInt(0);
-    		Log.i("New Location ID ", String.valueOf(new_tag_location));
+//    		Log.i("New Location ID ", String.valueOf(new_tag_location));
      		tag_location_label = dbh.getStr(1);
-    		Log.i("New Location ", tag_location_label);
+//    		Log.i("New Location ", tag_location_label);
     		
         	if (new_tag_type == 1){
         		//	Federal Tag so update federal section and set needs database update
