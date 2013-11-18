@@ -62,11 +62,29 @@
      
      <Spinner
         android:id="@+id/tag_type_spinner"
-        android:layout_width="180dp"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:textSize="18sp" />
      
+     <Button
+            android:id="@+id/look_up_sheep_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/tag_type_spinner"
+            android:onClick="lookForSheep"
+            android:text="@string/look_up_sheep_btn"
+            android:textSize="14sp" />
+    
+     <Button
+            android:id="@+id/alert_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/look_up_sheep_btn"
+            android:onClick="showAlert"
+            android:text="@string/alert_btn"
+            android:textSize="14sp" /> 
+            
      <Button
             android:id="@+id/scan_eid_btn"
             android:layout_width="100dp"
@@ -147,11 +165,18 @@
             android:id="@+id/update_database_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/back_to_main_btn"
             android:onClick="updateDatabase"
             android:text="@string/update_database_btn"
             android:textSize="14sp" />
-       	
+       	<Button
+            android:id="@+id/clear_form_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/update_database_btn"
+            android:onClick="clearBtn"
+            android:text="@string/clear_btn"
+            android:textSize="14sp" />
        	<Button
            android:id="@+id/help_btn"
            android:layout_width="100dp"
