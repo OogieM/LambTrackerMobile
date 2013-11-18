@@ -64,7 +64,7 @@
             android:name="com.weyr_associates.lambtracker.EvaluateSheep"
             android:label="@string/title_activity_evaluate_sheep" 
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation">
         </activity>
         <activity
