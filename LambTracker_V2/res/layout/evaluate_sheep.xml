@@ -22,7 +22,7 @@
            
            <EditText
             android:id="@+id/inputText"
-            android:layout_width="150dp"
+            android:layout_width="205dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_column="0"
