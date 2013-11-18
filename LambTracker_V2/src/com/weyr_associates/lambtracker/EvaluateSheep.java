@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.weyr_associates.lambtracker.EvaluateSheep.IncomingHandler;
 
+import android.R.string;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -96,7 +97,7 @@ public class EvaluateSheep extends Activity {
 
 				LastEID = (b2.getString("info1"));
 //				We have a good whole EID number	
-				gotEID ();	
+				gotEID ( null);	
 				break;			
 			case eidService.MSG_UPDATE_LOG_APPEND:
 //				Bundle b3 = msg.getData();
@@ -219,17 +220,103 @@ public class EvaluateSheep extends Activity {
 	}    	
 	
 	// use EID reader to look up a sheep
-	public void gotEID( )
+	public void gotEID( View v )
    {
+		Integer ii;
 	   	//	make the scan eid button red
-   	Button btn = (Button) findViewById( R.id.scan_eid_btn );
-   	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-   	
-   	TextView TV = (TextView) findViewById (R.id.eidText);
-   	TV.setText( LastEID );
-//		Log.i("Evaluate", "Got EID");
+	   	Button btn = (Button) findViewById( R.id.scan_eid_btn );
+	   	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+	   	// TODO
+	   	clearBtn( null );  
+	   	TextView TV = (TextView) findViewById (R.id.eidText);
+	   	TV.setText( LastEID );
+		Log.i("Evaluate", "Got EID " + LastEID);
+		TV = (TextView) findViewById (R.id.inputText);
+		TV.setText( LastEID );
+		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off , sheep_table.alert01 " +
+				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +	
+				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+				"where id_type_table.id_typeid = 2 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", LastEID);
+		Log.i("Got EID", " ready for command " + cmd); 
+		Object crsr = dbh.exec( cmd ); 
+    	cursor   = (Cursor) crsr;
+    	dbh.moveToFirstRecord();
+    	if( dbh.getSize() == 0 )
+			{ // no sheep with that EID tag in the database so clear out and return
+			clearBtn( null );
+			TV = (TextView) findViewById( R.id.sheepnameText );
+	    	TV.setText( "Cannot find this sheep." );
+	    	return;
+		}
+    	TV = (TextView) findViewById(R.id.sheepnameText);
+    	TV.setText(dbh.getStr(0));
+    	Log.i("Got EID", " got sheep named  " + dbh.getStr(0)); 
+    	sheep_id = dbh.getInt(1);
+    	Log.i("Got EID", " sheep ID is " + String.valueOf(sheep_id));
+    	thissheep_id = sheep_id;
+    	Log.i("Got EID", " sheep ID is " + String.valueOf(thissheep_id));
+//    	TV = (TextView) findViewById(R.id.eidText)	;
+//    	TV.setText(dbh.getStr(3));
+    	String alert_text = dbh.getStr(6);
+    	Log.i("Got EID ", "Alert Text is " + alert_text);
+//    	Now to test of the sheep has an alert and if so then set the alerts button to red
+//    	if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+		if (alert_text != null && !alert_text.isEmpty() ){
+			// make the alert button red and enable it and pop up the alert text
+			btn = (Button) findViewById( R.id.alert_btn );
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+	    	btn.setEnabled(true); 
+	    	showAlert(v);
+		}
+//		Now we need to get the farm tag for that sheep and fill the display with data
+    	
+    	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+		"id_info_table.tag_number, " +
+		"id_info_table.id_infoid, id_info_table.tag_date_off " +
+		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+		"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", thissheep_id);
+
+//    	Log.i("Evaluate ", cmd);    	
+    	crsr = dbh.exec( cmd );
+    	dbh.moveToFirstRecord();
+		if( dbh.getSize() == 0 )
+		{ // This sheep does not have a farm tag installed
+			TV = (TextView) findViewById( R.id.farmText );
+			TV.setText( "No tag" );
+    	} else {
+    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
+    		TV5.setText(dbh.getStr(3));
+    		Log.i(" got EID ", "now got a farm tag " + dbh.getStr(3));
+//    		ii = dbh.getInt(1);
+    		farmtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database
+    	}
+//		Now we need to get the federal tag for the sheep
 		
-	}	
+    	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+		"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off " +
+		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+		"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", thissheep_id);
+    	
+    	crsr = dbh.exec( cmd );
+    	dbh.moveToFirstRecord();
+    	
+		if( dbh.getSize() == 0 )
+		{ // This sheep does not have a federal tag installed
+			TV = (TextView) findViewById( R.id.fedText );
+			TV.setText( "No tag" );
+    	} else {
+        	fedtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database   	
+        	TextView TV5 = (TextView) findViewById(R.id.fedText)	;
+        	Log.i(" got EID ", "now got a fed tag " + TV5);
+        	TV5.setText(dbh.getStr(3));
+        	ii = dbh.getInt(1);
+    	}
+		// TODO
+    	
+   }	
 
 	@Override
     public void onCreate(Bundle savedInstanceState)	
@@ -272,7 +359,6 @@ public class EvaluateSheep extends Activity {
     	cursor.moveToNext();
     	trait11 = dbh.getInt(1);
     	trait11_unitid = dbh.getInt(2);
-//    	Log.i ("evaluate", " trait 11 units "+ String.valueOf(trait11_unitid));
     	cursor.moveToNext();
     	trait12 = dbh.getInt(1);
     	trait12_unitid = dbh.getInt(2);
@@ -436,11 +522,7 @@ public class EvaluateSheep extends Activity {
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
     	btn.setEnabled(false);    
-    	
-    	
-
-    	
-       	}
+        	}
     public void saveScores( View v )
     {    	
     	String 			dbname = getString(R.string.real_database_file); 
@@ -577,11 +659,9 @@ public class EvaluateSheep extends Activity {
     		// I need to get the traits scored for this pass here:
     		
     		String mytoday = TodayIs();
+    		// added time stamp here for Dr. Purdy in finction TodayIs()
 //    		Log.i("Date is ", mytoday);
-    		//	Set the alert for this sheep so there is a note that the evaluation is done
-    		
-    		
-    		
+   		
     		// Now that I have all the data I need to write it into the sheep_evaluation_table
     		
 //	    	Log.i("number ","eval trait01 "+String.valueOf(trait01));
@@ -755,7 +835,14 @@ public class EvaluateSheep extends Activity {
 			int day = calendar.get(Calendar.DAY_OF_MONTH);
 			int month = calendar.get(Calendar.MONTH);
 			int year = calendar.get(Calendar.YEAR);
-			return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
+	        //12 hour format
+//			int hour = cal.get(Calendar.HOUR);
+	        //24 hour format
+			int hourofday = calendar.get(Calendar.HOUR_OF_DAY);
+			int minute = calendar.get(Calendar.MINUTE);
+			int second = calendar.get(Calendar.SECOND);
+			  
+			return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) + "_" + hourofday + ":" + minute + ":" + second ;
 		}
 	    private String Make2Digits(int i) {
 			if (i < 10) {
@@ -766,7 +853,6 @@ public class EvaluateSheep extends Activity {
 		}	
 //  user clicked 'Scan' button    
  public void scanEid( View v){
-//   	String LastEID ;
  	// Here is where I need to get a tag scanned and put the data into the variable LastEID
 		if (mService != null) {
 		try {
@@ -790,6 +876,7 @@ public class EvaluateSheep extends Activity {
     	String          cmd;
     	TextView		TV = (TextView) findViewById( R.id.inputText );
     	String			fed = TV.getText().toString();
+    	Log.i("Evaluate ", " federal tag is " + fed);
     	Integer			ii;
     	// Hide the keyboard when you click the button
     	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
@@ -836,19 +923,25 @@ public class EvaluateSheep extends Activity {
 //    		colNames = cursor.getColumnNames();
 //    		cursor.moveToFirst();
 //    	}
+		
+		// TODO
     	fedtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database
-		Log.i("Evaluate", String.valueOf(fedtagid));
+		Log.i("Evaluate", " id infor table id is " + String.valueOf(fedtagid));
 		
     	TV = (TextView) findViewById(R.id.sheepnameText);
     	TV.setText(dbh.getStr(0));
+    	Log.i("Evaluate", " sheep name is " + dbh.getStr(0));
     	sheep_id = dbh.getInt(1);
     	thissheep_id = sheep_id;
+    	Log.i("Evaluate", " sheep id is " + String.valueOf(thissheep_id));
     	TV = (TextView) findViewById(R.id.fedText)	;
     	TV.setText(dbh.getStr(3));
+    	Log.i("Evaluate", " sheep fed tag is " + dbh.getStr(3));
     	String alert_text = dbh.getStr(6);
-    	Log.i("Evaluate", alert_text);
+    	Log.i("Evaluate", " sheep alert text is " + alert_text);
 //    	Now to test of the sheep has an alert and if so then set the alerts button to red
-		if (alert_text != null){
+		if (alert_text != null && !alert_text.isEmpty() ){
+//		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
 			// make the alert button red and enable it and pop up the alert text
 	    	Button btn = (Button) findViewById( R.id.alert_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -866,7 +959,7 @@ public class EvaluateSheep extends Activity {
 		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
 		"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", thissheep_id);
 
-//    	Log.i("Evaluate ", cmd);    	
+    	Log.i("Evaluate ", "ready to get farm tags cmd is " + cmd);    	
     	crsr = dbh.exec( cmd );
     	dbh.moveToFirstRecord();
 		if( dbh.getSize() == 0 )
@@ -942,7 +1035,8 @@ public class EvaluateSheep extends Activity {
     	
 //    	Now to test of the sheep has an alert and if so then set the alerts button to red
     	String alert_text = dbh.getStr(6);
-    	if (alert_text != null){
+//    	if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+    	if (alert_text != null && !alert_text.isEmpty() ){
 			// make the alert button red and enable it and pop up the alert text
 	    	Button btn = (Button) findViewById( R.id.alert_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
