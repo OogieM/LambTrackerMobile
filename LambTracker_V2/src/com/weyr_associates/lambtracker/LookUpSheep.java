@@ -1,5 +1,6 @@
 package com.weyr_associates.lambtracker;
-
+// This should be the fixed LookUpSheep Class that doesn't leak when the user selects back.
+// I believe I've fixed the link to GitHub and will test with this as a new commit.
 import java.util.ArrayList;
 import java.util.List;
 
