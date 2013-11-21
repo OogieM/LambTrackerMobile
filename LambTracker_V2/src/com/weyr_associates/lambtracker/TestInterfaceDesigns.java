@@ -11,9 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
@@ -39,8 +42,14 @@ public class TestInterfaceDesigns extends Activity{
 		ArrayAdapter<String> dataAdapter;
 		List<String> scored_evaluation_traits, data_evaluation_traits;
 		private RatingBar ratingBar01 ;
-		private RatingBar ratingBar02 ;		
-		
+		private RatingBar ratingBar02 ;	
+		private int             nRecs;
+		String[] radioBtnText = {"Engorgement", "Mucus","Both"};
+		Object crsr;
+		List <Integer> scored_trait_numbers;
+		ArrayList<Item> data = new ArrayList<Item>(); 
+		GridView gridview;
+	    GridViewAdapter gridviewAdapter;
 		String          cmd;
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
@@ -48,10 +57,51 @@ public class TestInterfaceDesigns extends Activity{
 			setContentView(R.layout.test_interface_designs);
 			String dbname = getString(R.string.real_database_file); 
 	    	dbh = new DatabaseHandler( this, dbname );	
-	    	radioGroup = (RadioGroup) findViewById(R.id.radioGroup1);
-	    	addRadioButtons(3);
 	    	scored_evaluation_traits = new ArrayList<String>();
+	    	scored_trait_numbers = new ArrayList<Integer>();
+	    	cmd = "select * from last_eval_table";
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        nRecs    = cursor.getCount();
+	        dbh.moveToFirstRecord();
+	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+	        	scored_trait_numbers.add(cursor.getInt(1));
+	        	Log.i("test designs", String.valueOf(cursor.getInt(1)));
+	    	}
+	    	cursor.close();    	
+	        
+//	    	cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
+//	        		"evaluation_trait_table.id_traitid=%s", trait01 );
 	    	
+	    	
+	    	for( int ii = 0; ii < nRecs; ii++ )
+	    	{	
+	    		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
+		    	LayoutInflater inflater = getLayoutInflater();
+		    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_item_entry, table, false);
+		    	table.addView(row);
+		    	TextView myLabel = (TextView) findViewById (R.id.rb1_lbl);		    	
+		    	myLabel.setText (scored_evaluation_traits.get(ii));
+		    	Log.i ("test designs", String.valueOf(myLabel));
+		    	
+	    	}
+	    	TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
+	    	LayoutInflater inflater = getLayoutInflater();
+	    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_item_entry, table, false);
+	    	table.addView(row);
+	    	TextView myLabel = (TextView) findViewById (R.id.rb1_lbl);
+	    	myLabel.setText ("Set a characteristic Here");
+	    	
+//	    	gridview = (GridView) findViewById(R.id.grid1);
+//	    	data.add(new Item("First Characteristic", ratingBar01));
+//	        data.add(new Item("First Characteristic", ratingBar02));
+//	    	gridviewAdapter = new GridViewAdapter(getApplicationContext(), R.layout.eval_item_entry, data);
+//	        gridview.setAdapter(gridviewAdapter);
+	        
+	    	radioGroup = (RadioGroup) findViewById(R.id.radioGroup1);
+	    	addRadioButtons(3, radioBtnText);
+	    	
+	    	scored_evaluation_traits = new ArrayList<String>();	    	
 	    	test_dynamic_spinner = (Spinner) findViewById(R.id.test_dynamic_spinner);
 //	    	Log.i("testinterface", "in onCreate below test spinner");
 	    	tag_colors = new ArrayList<String>();
@@ -93,41 +143,41 @@ public class TestInterfaceDesigns extends Activity{
 	    		scored_evaluation_traits.add(cursor.getString(1));
 	    	}
 	    	cursor.close();
-//	        Log.i("createEval ", "below for loop");
-	    	
-	    	trait_spinner = (Spinner) findViewById(R.id.trait_spinner);	
-	    	dataAdapter = new ArrayAdapter<String>(this,
-		                android.R.layout.simple_spinner_item, scored_evaluation_traits);
-			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
-			trait_spinner.setAdapter (dataAdapter);
-			trait_spinner.setSelection(0);
-			trait_spinner.setOnItemSelectedListener(new SpinnerActivity());
-				        
-	        cmd = "select * from evaluation_trait_table where id_traitid = 2";
-	        crsr = dbh.exec( cmd );  
-	        cursor   = ( Cursor ) crsr;
-	    	dbh.moveToFirstRecord();    	
-	    	TextView TV = (TextView) findViewById(R.id.rb2_lbl);
-	        TV.setText( cursor.getString(1) );
-	        cursor.close();
+////	        Log.i("createEval ", "below for loop");
+//	    	
+//	    	trait_spinner = (Spinner) findViewById(R.id.trait_spinner);	
+//	    	dataAdapter = new ArrayAdapter<String>(this,
+//		                android.R.layout.simple_spinner_item, scored_evaluation_traits);
+//			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
+//			trait_spinner.setAdapter (dataAdapter);
+//			trait_spinner.setSelection(0);
+//			trait_spinner.setOnItemSelectedListener(new SpinnerActivity());
+//				        
+//	        cmd = "select * from evaluation_trait_table where id_traitid = 2";
+//	        crsr = dbh.exec( cmd );  
+//	        cursor   = ( Cursor ) crsr;
+//	    	dbh.moveToFirstRecord();    	
+//	    	TextView TV = (TextView) findViewById(R.id.rb2_lbl);
+//	        TV.setText( cursor.getString(1) );
+//	        cursor.close();
 			}
 	
 		  // user clicked the 'saveScores' button
 	    public void saveScores( View v )
 	    {
-	    		rating_scores = new ArrayList<Float>();
+//	    		rating_scores = new ArrayList<Float>();
 	    		
-	    		ratingBar01 = (RatingBar) findViewById(R.id.ratingBar01);
-	    		rating_scores.add(ratingBar01.getRating());
-	    		Log.i("RatingBar01 ", String.valueOf(ratingBar01.getRating()));
-	    		
-	    		ratingBar02 = (RatingBar) findViewById(R.id.ratingBar02);
-	    		rating_scores.add(ratingBar02.getRating());	
-	    		Log.i("RatingBar02 ", String.valueOf(ratingBar02.getRating()));
+//	    		ratingBar01 = (RatingBar) findViewById(R.id.ratingBar);
+//	    		rating_scores.add(ratingBar01.getRating());
+//	    		Log.i("RatingBar01 ", String.valueOf(ratingBar01.getRating()));
+//	    		
+//	    		ratingBar02 = (RatingBar) findViewById(R.id.ratingBar02);
+//	    		rating_scores.add(ratingBar02.getRating());	
+//	    		Log.i("RatingBar02 ", String.valueOf(ratingBar02.getRating()));
 	    }
-	    private void addRadioButtons(int numButtons) {
+	    private void addRadioButtons(int numButtons, String[] radioBtnText) {
 	    	  int i;
-	    	  String[] radioBtnText = {"Engorgement", "Mucus","Both"};
+//	    	  String[] radioBtnText = {"Engorgement", "Mucus","Both"};
 
 	    	  for(i = 0; i < numButtons; i++){
 	    	    //instantiate...
@@ -250,6 +300,14 @@ public class TestInterfaceDesigns extends Activity{
     {
     	dbh.closeDB();   	
     	finish();
+    }
+
+
+    // Set the Data Adapter
+    private void setDataAdapter()
+    {
+        gridviewAdapter = new GridViewAdapter(getApplicationContext(), R.layout.eval_item_entry, data);
+        gridview.setAdapter(gridviewAdapter);
     }
 
     }
