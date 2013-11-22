@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -41,7 +42,7 @@ public class TestInterfaceDesigns extends Activity{
 		List<Float> rating_scores;
 		ArrayAdapter<String> dataAdapter;
 		List<String> scored_evaluation_traits, data_evaluation_traits, user_evaluation_traits;
-		private int             nRecs;
+		private int	nRecs, nRecs2;
 		String[] radioBtnText = {"Engorgement", "Mucus","Both"};
 		Object crsr;
 		List <Integer> scored_trait_numbers, data_trait_numbers, user_trait_numbers;
@@ -104,7 +105,7 @@ public class TestInterfaceDesigns extends Activity{
 	    	Log.i("test designs", " cmd is " + cmd);
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
-	        nRecs    = cursor.getCount();
+	        nRecs2    = cursor.getCount();
 	        dbh.moveToFirstRecord();
 	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	        	data_trait_numbers.add(cursor.getInt(1));
@@ -117,7 +118,7 @@ public class TestInterfaceDesigns extends Activity{
 //	    	Log.i("test designs", "number of records in cursor is " + String.valueOf(nRecs));
 	    	inflater = getLayoutInflater();	
 //	    	Log.i ("test designs", scored_evaluation_traits.get(0));
-	    	for( int ii = 0; ii < nRecs; ii++ ){	
+	    	for( int ii = 0; ii < nRecs2; ii++ ){	
 	    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
 	    		Log.i ("in for loop", " trait name is " + data_evaluation_traits.get(ii));
     			TableLayout table = (TableLayout) findViewById(R.id.TableLayout02);	
@@ -133,7 +134,6 @@ public class TestInterfaceDesigns extends Activity{
 	    	radioGroup = (RadioGroup) findViewById(R.id.radioGroup1);
 	    	addRadioButtons(3, radioBtnText);
 	    	
-//	    	scored_evaluation_traits = new ArrayList<String>();	    	
 	    	test_dynamic_spinner = (Spinner) findViewById(R.id.test_dynamic_spinner);
 //	    	Log.i("testinterface", "in onCreate below test spinner");
 	    	tag_colors = new ArrayList<String>();
@@ -162,54 +162,36 @@ public class TestInterfaceDesigns extends Activity{
 			test_dynamic_spinner.setOnItemSelectedListener(new SpinnerActivity());	
 			
 			
-			// Select All fields from trait table that are score type and get set to fill the spinners
-	        cmd = "select * from evaluation_trait_table where trait_type = 1";
-	        crsr = dbh.exec( cmd ); ;
-//	       Log.i("testing", "executed command " + cmd);
-	        cursor   = ( Cursor ) crsr;
-	    	dbh.moveToFirstRecord();
-	    	scored_evaluation_traits.add("Select a Trait");
-//	    	 Log.i("testinterface", "in onCreate below got evaluation straits table");
-	        // looping through all rows and adding to list
-	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-	    		scored_evaluation_traits.add(cursor.getString(1));
-	    	}
-	    	cursor.close();
-////	        Log.i("createEval ", "below for loop");
-//	    	
-//	    	trait_spinner = (Spinner) findViewById(R.id.trait_spinner);	
-//	    	dataAdapter = new ArrayAdapter<String>(this,
-//		                android.R.layout.simple_spinner_item, scored_evaluation_traits);
-//			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
-//			trait_spinner.setAdapter (dataAdapter);
-//			trait_spinner.setSelection(0);
-//			trait_spinner.setOnItemSelectedListener(new SpinnerActivity());
-//				        
-//	        cmd = "select * from evaluation_trait_table where id_traitid = 2";
-//	        crsr = dbh.exec( cmd );  
-//	        cursor   = ( Cursor ) crsr;
-//	    	dbh.moveToFirstRecord();    	
-//	    	TextView TV = (TextView) findViewById(R.id.rb2_lbl);
-//	        TV.setText( cursor.getString(1) );
-//	        cursor.close();
 			}
 	
 		  // user clicked the 'saveScores' button
 	    public void saveScores( View v )
 	    {
-//	    		rating_scores = new ArrayList<Float>();
+	    		RatingBar ratingBar01;
+	    		Float realScore;
 	    		
-//	    		ratingBar01 = (RatingBar) findViewById(R.id.ratingBar);
-//	    		rating_scores.add(ratingBar01.getRating());
-//	    		Log.i("RatingBar01 ", String.valueOf(ratingBar01.getRating()));
-//	    		
-//	    		ratingBar02 = (RatingBar) findViewById(R.id.ratingBar02);
-//	    		rating_scores.add(ratingBar02.getRating());	
-//	    		Log.i("RatingBar02 ", String.valueOf(ratingBar02.getRating()));
+	    		rating_scores = new ArrayList<Float>();
+	    		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
+	    		for( int ii = 0; ii < nRecs; ii++ ){	
+	    			TableRow row1= (TableRow)table.getChildAt(ii);
+	    			ratingBar01 = (RatingBar) row1.getChildAt(1);
+	    			rating_scores.add(ratingBar01.getRating());
+	    			Log.i("RatingBar01 ", String.valueOf(ratingBar01.getRating()));    	
+	    		}
+	    		
+//	    		TV = (TextView) findViewById(R.id.trait11_data);
+//	    		temp_string = TV.getText().toString();
+	    		
+	    		table = (TableLayout) findViewById(R.id.TableLayout02);
+	    		for( int ii = 0; ii < nRecs2; ii++ ){	
+	    			TableRow row1= (TableRow)table.getChildAt(ii);
+	    			TV = (EditText ) row1.getChildAt(1);	    			
+	    			realScore = Float.valueOf(TV.getText().toString());
+	    			Log.i("realscores ", String.valueOf(realScore)); 
+	    		}
 	    }
 	    private void addRadioButtons(int numButtons, String[] radioBtnText) {
 	    	  int i;
-//	    	  String[] radioBtnText = {"Engorgement", "Mucus","Both"};
 
 	    	  for(i = 0; i < numButtons; i++){
 	    	    //instantiate...
