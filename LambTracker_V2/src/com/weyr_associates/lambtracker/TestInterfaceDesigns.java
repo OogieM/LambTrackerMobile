@@ -34,7 +34,7 @@ import android.widget.RadioGroup;
 
 public class TestInterfaceDesigns extends Activity{
 		private DatabaseHandler dbh;
-		private Cursor 	cursor;
+		private Cursor 	cursor, cursor2;
 		public RadioGroup radioGroup;
 		public Spinner test_dynamic_spinner, trait_spinner;
 		List<String> tag_colors, evaluation_traits;
@@ -43,14 +43,16 @@ public class TestInterfaceDesigns extends Activity{
 		List<String> scored_evaluation_traits, data_evaluation_traits;
 		private RatingBar ratingBar01 ;
 		private RatingBar ratingBar02 ;	
-		private int             nRecs;
+		private int             nRecs, tempTraitNumber;
 		String[] radioBtnText = {"Engorgement", "Mucus","Both"};
-		Object crsr;
+		Object crsr, crsr2;
 		List <Integer> scored_trait_numbers;
 		ArrayList<Item> data = new ArrayList<Item>(); 
 		GridView gridview;
+		TextView TV;
 	    GridViewAdapter gridviewAdapter;
 		String          cmd;
+		String	tempLabel;
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
@@ -59,38 +61,60 @@ public class TestInterfaceDesigns extends Activity{
 	    	dbh = new DatabaseHandler( this, dbname );	
 	    	scored_evaluation_traits = new ArrayList<String>();
 	    	scored_trait_numbers = new ArrayList<Integer>();
-	    	cmd = "select * from last_eval_table";
+//	    	cmd = "select * from last_eval_table";
+	    	cmd = String.format("select evaluation_trait_table.trait_name, evaluation_trait_table.id_traitid " +
+		        	"from evaluation_trait_table inner join last_eval_table where " +
+	        		" evaluation_trait_table.id_traitid = last_eval_table.id_traitid and evaluation_trait_table.trait_type = 1 ") ;
+	    	Log.i("test designs", " cmd is " + cmd);
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
 	        nRecs    = cursor.getCount();
 	        dbh.moveToFirstRecord();
 	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	        	scored_trait_numbers.add(cursor.getInt(1));
-	        	Log.i("test designs", String.valueOf(cursor.getInt(1)));
+//	        	tempTraitNumber = cursor.getInt(1);
+	        	Log.i("test designs", " trait number is " + String.valueOf(cursor.getInt(1)));
+//		    	cmd = String.format("select evaluation_trait_table.trait_name, evaluation_trait_table.id_traitid " +
+//	        	"from evaluation_trait_table inner join last_eval_table where " +
+//        		" evaluation_trait_table.id_traitid = last_eval_table.id_traitid") ;
+//		    	Log.i("test designs", " cmd is " + cmd);
+//		    	crsr2 = dbh.exec( cmd );
+//		    	cursor2  = ( Cursor ) crsr2;
+		    	scored_evaluation_traits.add(cursor.getString(0));
+		    	Log.i("test designs", " trait name is " + cursor.getString(0));
 	    	}
 	    	cursor.close();    	
-	        
-//	    	cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-//	        		"evaluation_trait_table.id_traitid=%s", trait01 );
-	    	
-	    	
+//	    	cursor2.close(); 
+	    	Log.i("test designs", "number of records in cursor is " + String.valueOf(nRecs));
+	    	LayoutInflater inflater = getLayoutInflater();	
+	    	Log.i ("test designs", scored_evaluation_traits.get(0));
 	    	for( int ii = 0; ii < nRecs; ii++ )
 	    	{	
-	    		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
-		    	LayoutInflater inflater = getLayoutInflater();
+	    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
+	    		Log.i ("in for loop", " trait name is " + scored_evaluation_traits.get(ii));
+    			TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);	
+    			Log.i("in for loop", " after TableLayout");
 		    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_item_entry, table, false);
+		    	Log.i("in for loop", " after TableRow");
+//		    	TV = (TextView) findViewById (R.id.rb1_lbl);	
+		    	Log.i("in for loop", " after get textview");
+		    	tempLabel = scored_evaluation_traits.get(ii);
+		    	Log.i("in for loop", " tempLabel is " + tempLabel);
+		    	TV = (TextView) findViewById (R.id.rb1_lbl);
+		    	Log.i("in for loop", " after got TV location rb1_lbl");
+		    	TV.setText (tempLabel);
+
+		    	Log.i("in for loop", " after set text view");
+		    	Log.i ("test designs", scored_evaluation_traits.get(ii));
 		    	table.addView(row);
-		    	TextView myLabel = (TextView) findViewById (R.id.rb1_lbl);		    	
-		    	myLabel.setText (scored_evaluation_traits.get(ii));
-		    	Log.i ("test designs", String.valueOf(myLabel));
-		    	
+//	    		}	
 	    	}
-	    	TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
-	    	LayoutInflater inflater = getLayoutInflater();
-	    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_item_entry, table, false);
-	    	table.addView(row);
-	    	TextView myLabel = (TextView) findViewById (R.id.rb1_lbl);
-	    	myLabel.setText ("Set a characteristic Here");
+//	    	TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
+//	    	LayoutInflater inflater = getLayoutInflater();
+//	    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_item_entry, table, false);
+//	    	table.addView(row);
+//	    	TextView myLabel = (TextView) findViewById (R.id.rb1_lbl);
+//	    	myLabel.setText ("Set a characteristic Here");
 	    	
 //	    	gridview = (GridView) findViewById(R.id.grid1);
 //	    	data.add(new Item("First Characteristic", ratingBar01));
@@ -101,7 +125,7 @@ public class TestInterfaceDesigns extends Activity{
 	    	radioGroup = (RadioGroup) findViewById(R.id.radioGroup1);
 	    	addRadioButtons(3, radioBtnText);
 	    	
-	    	scored_evaluation_traits = new ArrayList<String>();	    	
+//	    	scored_evaluation_traits = new ArrayList<String>();	    	
 	    	test_dynamic_spinner = (Spinner) findViewById(R.id.test_dynamic_spinner);
 //	    	Log.i("testinterface", "in onCreate below test spinner");
 	    	tag_colors = new ArrayList<String>();

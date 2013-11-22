@@ -21,8 +21,7 @@
 			<TableLayout
 		       android:id="@+id/TableLayout01"
 		       android:layout_width="fill_parent"
-		       android:layout_height="wrap_content"
-		       android:layout_below="@id/test_dynamic_spinner">
+		       android:layout_height="wrap_content">
 			</TableLayout>
   
   </ScrollView>   
