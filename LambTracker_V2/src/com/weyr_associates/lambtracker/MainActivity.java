@@ -198,14 +198,19 @@ public class MainActivity extends Activity {
 			        MainActivity.this.startActivity(i);
 			        break;
 			    case 5:
+			    	Log.i ("Main case", " In main case statement selected 5");
+			    	i = new Intent(MainActivity.this, EvaluateSheep2.class);
+			        MainActivity.this.startActivity(i);
+			        break;
+			    case 6:
 					i = new Intent(MainActivity.this, EditDB.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 6:
+				case 7:
 					i = new Intent(MainActivity.this, TestInterfaceDesigns.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 7:
+				case 8:
 //					Log.i ("Main case", " In main case statement selected 7");
 					
 //					i = new Intent(MainActivity.this, LookUpSheep.class);
