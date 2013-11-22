@@ -100,9 +100,11 @@ public class TestInterfaceDesigns extends Activity{
 		    	Log.i("in for loop", " after get textview");
 		    	tempLabel = scored_evaluation_traits.get(ii);
 		    	Log.i("in for loop", " tempLabel is " + tempLabel);
-		    	TV = (TextView) findViewById (R.id.rb1_lbl);
-		    	Log.i("in for loop", " after got TV location rb1_lbl");
-		    	TV.setText (tempLabel);
+		    	((TextView)row.findViewById(R.id.rb1_lbl)).setText(tempLabel);
+//		    	 ((TextView)row.findViewById(R.id.attrib_value)).setText(b.VALUE);
+//		    	TV = (TextView) findViewById (R.id.rb1_lbl);
+//		    	Log.i("in for loop", " after got TV location rb1_lbl");
+//		    	TV.setText (tempLabel);
 
 		    	Log.i("in for loop", " after set text view");
 		    	Log.i ("test designs", scored_evaluation_traits.get(ii));
