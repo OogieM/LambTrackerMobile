@@ -23,12 +23,18 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RatingBar;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 import android.database.Cursor;
 
 public class EvaluateSheep2 extends Activity {
@@ -36,6 +42,7 @@ public class EvaluateSheep2 extends Activity {
 	public Button button;
 	
 	String     	cmd;
+	String		tempLabel;
 	Integer 	i;
 	
 	public int trait01, trait02, trait03, trait04, trait05, trait06, trait07, trait08, trait09, trait10;
@@ -47,14 +54,16 @@ public class EvaluateSheep2 extends Activity {
 	public String trait11_units, trait12_units, trait13_units, trait14_units, trait15_units; 
 	
 	public int sheep_id, thissheep_id;
-	
+	public RadioGroup radioGroup;
 	int 		id;
 	int   		fedtagid, farmtagid, eidtagid;
 	private int			    recNo;
-	private int             nRecs;
+	private int             nRecs, nRecs2;
 	List<Integer> which_traits;
 	
 	public List<String> scored_evaluation_traits, data_evaluation_traits, trait_units;
+	public List <Integer> scored_trait_numbers, data_trait_numbers, user_trait_numbers;
+	
 	
 	ArrayAdapter<String> dataAdapter;
 	
@@ -331,197 +340,99 @@ public class EvaluateSheep2 extends Activity {
        
 		CheckIfServiceIsRunning();
 		
-		cmd = "select * from last_eval_table";
+    	//	Set up the scored traits and inflate the layout
+    	cmd = String.format("select evaluation_trait_table.trait_name, evaluation_trait_table.id_traitid " +
+	        	"from evaluation_trait_table inner join last_eval_table where " +
+        		" evaluation_trait_table.id_traitid = last_eval_table.id_traitid and evaluation_trait_table.trait_type = 1 ") ;
+    	Log.i("test designs", " cmd is " + cmd);
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
+        nRecs    = cursor.getCount();
         dbh.moveToFirstRecord();
-        
-    	trait01 = dbh.getInt(1);
-    	cursor.moveToNext();	
-    	trait02 = dbh.getInt(1);
-    	cursor.moveToNext();
-    	trait03 = dbh.getInt(1);
-    	cursor.moveToNext();
-    	trait04 = dbh.getInt(1);
-    	cursor.moveToNext();
-    	trait05 = dbh.getInt(1);
-    	cursor.moveToNext();
-    	trait06 = dbh.getInt(1);
-    	cursor.moveToNext();
-    	trait07 = dbh.getInt(1);
-    	cursor.moveToNext();
-    	trait08 = dbh.getInt(1);
-    	cursor.moveToNext();
-    	trait09 = dbh.getInt(1);
-    	cursor.moveToNext();
-    	trait10 = dbh.getInt(1);
-    	cursor.moveToNext();
-    	trait11 = dbh.getInt(1);
-    	trait11_unitid = dbh.getInt(2);
-    	cursor.moveToNext();
-    	trait12 = dbh.getInt(1);
-    	trait12_unitid = dbh.getInt(2);
-    	cursor.moveToNext();
-    	trait13 = dbh.getInt(1);
-    	trait13_unitid = dbh.getInt(2);
-    	cursor.moveToNext();
-    	trait14 = dbh.getInt(1);
-    	trait14_unitid = dbh.getInt(2);
-    	cursor.moveToNext();
-    	trait15 = dbh.getInt(1);
-    	trait15_unitid = dbh.getInt(2);
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+        	scored_trait_numbers.add(cursor.getInt(1));
+//        	tempTraitNumber = cursor.getInt(1);
+        	Log.i("test designs", " trait number is " + String.valueOf(cursor.getInt(1)));
+	    	scored_evaluation_traits.add(cursor.getString(0));
+	    	Log.i("test designs", " trait name is " + cursor.getString(0));
+    	}
+    	cursor.close();    	
+//    	Log.i("test designs", "number of records in cursor is " + String.valueOf(nRecs));
+    	LayoutInflater inflater = getLayoutInflater();	
+//    	Log.i ("test designs", scored_evaluation_traits.get(0));
+    	for( int ii = 0; ii < nRecs; ii++ ){	
+    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
+    		Log.i ("in for loop", " trait name is " + scored_evaluation_traits.get(ii));
+			TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);	
+			Log.i("in for loop", " after TableLayout");
+	    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_item_entry, table, false);
+	    	tempLabel = scored_evaluation_traits.get(ii);
+//	    	Log.i("in for loop", " tempLabel is " + tempLabel);
+	    	((TextView)row.findViewById(R.id.rb1_lbl)).setText(tempLabel);
+//	    	Log.i("in for loop", " after set text view");
+	    	table.addView(row);
+    	}
     	
-    	cursor.close();
-           
-        if (trait01!=0) {
-        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-        		"evaluation_trait_table.id_traitid=%s", trait01 );
-        crsr = dbh.exec( cmd );
+    	//	Set up the data traits and inflate the layout
+    	cmd = String.format("select evaluation_trait_table.trait_name, evaluation_trait_table.id_traitid " +
+	        	"from evaluation_trait_table inner join last_eval_table where " +
+        		" evaluation_trait_table.id_traitid = last_eval_table.id_traitid and evaluation_trait_table.trait_type = 2 ") ;
+    	Log.i("test designs", " cmd is " + cmd);
+    	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
+        nRecs2    = cursor.getCount();
         dbh.moveToFirstRecord();
-        TV = (TextView) findViewById( R.id.trait01_lbl );
-        TV.setText(dbh.getStr(0));
-        }
-        if (trait02!=0) {
-        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-        		"evaluation_trait_table.id_traitid=%s", trait02 );
-        crsr = dbh.exec( cmd );
-        cursor   = ( Cursor ) crsr;
-        dbh.moveToFirstRecord();
-        TV = (TextView) findViewById( R.id.trait02_lbl );
-        TV.setText(dbh.getStr(0));
-        }
-        if (trait03!=0) {
-        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-        		"evaluation_trait_table.id_traitid=%s", trait03 );
-        crsr = dbh.exec( cmd );
-        cursor   = ( Cursor ) crsr;
-        dbh.moveToFirstRecord();
-        TV = (TextView) findViewById( R.id.trait03_lbl );
-        TV.setText(dbh.getStr(0));
-        }
-        if (trait04!=0) {
-        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-        		"evaluation_trait_table.id_traitid=%s", trait04 );
-        crsr = dbh.exec( cmd );
-        cursor   = ( Cursor ) crsr;
-        dbh.moveToFirstRecord();
-        TV = (TextView) findViewById( R.id.trait04_lbl );
-        TV.setText(dbh.getStr(0));
-        }
-        if (trait05!=0) {
-        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-        		"evaluation_trait_table.id_traitid=%s", trait05 );
-        crsr = dbh.exec( cmd );
-        cursor   = ( Cursor ) crsr;
-        dbh.moveToFirstRecord();
-        TV = (TextView) findViewById( R.id.trait05_lbl );
-        TV.setText(dbh.getStr(0));
-        }
-        if (trait06!=0) {
-        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-        		"evaluation_trait_table.id_traitid=%s", trait06 );
-        crsr = dbh.exec( cmd );
-        cursor   = ( Cursor ) crsr;
-        dbh.moveToFirstRecord();
-        TV = (TextView) findViewById( R.id.trait06_lbl );
-        TV.setText(dbh.getStr(0));
-        }
-        if (trait07!=0) {
-        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-        		"evaluation_trait_table.id_traitid=%s", trait07 );
-        crsr = dbh.exec( cmd );
-        cursor   = ( Cursor ) crsr;
-        dbh.moveToFirstRecord();
-        TV = (TextView) findViewById( R.id.trait07_lbl );
-        TV.setText(dbh.getStr(0));
-        }
-        if (trait08!=0) {
-        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-        		"evaluation_trait_table.id_traitid=%s", trait08 );
-        crsr = dbh.exec( cmd );
-        cursor   = ( Cursor ) crsr;
-        dbh.moveToFirstRecord();
-        TV = (TextView) findViewById( R.id.trait08_lbl );
-        TV.setText(dbh.getStr(0));
-//        Log.i("EvaluateSheep ", "after get the text " + TV);
-        }
-        if (trait09!=0) {
-        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-        		"evaluation_trait_table.id_traitid=%s", trait09 );
-        crsr = dbh.exec( cmd );
-        cursor   = ( Cursor ) crsr;
-        dbh.moveToFirstRecord();
-        TV = (TextView) findViewById( R.id.trait09_lbl );
-        TV.setText(dbh.getStr(0));
-//        Log.i("EvaluateSheep ", "after get the text " + TV);
-        }
-        if (trait10!=0) {
-        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-        		"evaluation_trait_table.id_traitid=%s", trait10 );
-        crsr = dbh.exec( cmd );
-        cursor   = ( Cursor ) crsr;
-        dbh.moveToFirstRecord();
-        TV = (TextView) findViewById( R.id.trait10_lbl );
-        TV.setText(dbh.getStr(0));
-//        Log.i("EvaluateSheep ", "after get the text " + TV);
-        }
-        if (trait11!=0) {
-            cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-            		"evaluation_trait_table.id_traitid=%s", trait11 );
-            crsr = dbh.exec( cmd );
-            cursor   = ( Cursor ) crsr;
-            dbh.moveToFirstRecord();
-            TV = (TextView) findViewById( R.id.trait11_lbl );
-            TV.setText(dbh.getStr(0));
-//            Log.i("EvaluateSheep ", "after get the text " + TV);
-            }
-        if (trait12!=0) {
-            cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-            		"evaluation_trait_table.id_traitid=%s", trait12 );
-            crsr = dbh.exec( cmd );
-            cursor   = ( Cursor ) crsr;
-            dbh.moveToFirstRecord();
-            TV = (TextView) findViewById( R.id.trait12_lbl );
-            TV.setText(dbh.getStr(0));
-//            Log.i("EvaluateSheep ", "after get the text " + TV);
-            }
-        if (trait13!=0) {
-            cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-            		"evaluation_trait_table.id_traitid=%s", trait13 );
-            crsr = dbh.exec( cmd );
-            cursor   = ( Cursor ) crsr;
-            dbh.moveToFirstRecord();
-            TV = (TextView) findViewById( R.id.trait13_lbl );
-            TV.setText(dbh.getStr(0));
-//            Log.i("EvaluateSheep ", "after get the text " + TV);
-            }
-        if (trait14!=0) {
-            cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-            		"evaluation_trait_table.id_traitid=%s", trait14 );
-            crsr = dbh.exec( cmd );
-            cursor   = ( Cursor ) crsr;
-            dbh.moveToFirstRecord();
-            TV = (TextView) findViewById( R.id.trait14_lbl );
-            TV.setText(dbh.getStr(0));
-//            Log.i("EvaluateSheep ", "after get the text " + TV);
-            }
-        if (trait15!=0) {
-            cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table where " +
-            		"evaluation_trait_table.id_traitid=%s", trait15 );
-            crsr = dbh.exec( cmd );
-            cursor   = ( Cursor ) crsr;
-            dbh.moveToFirstRecord();
-            TV = (TextView) findViewById( R.id.trait15_lbl );
-            TV.setText(dbh.getStr(0));
-//            Log.i("EvaluateSheep ", "after get the text " + TV);
-            }
-        cursor.close();
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+        	data_trait_numbers.add(cursor.getInt(1));
+//        	tempTraitNumber = cursor.getInt(1);
+        	Log.i("test designs", " trait number is " + String.valueOf(cursor.getInt(1)));
+	    	data_evaluation_traits.add(cursor.getString(0));
+	    	Log.i("test designs", " trait name is " + cursor.getString(0));
+    	}
+    	cursor.close();    	
+//    	Log.i("test designs", "number of records in cursor is " + String.valueOf(nRecs));
+    	inflater = getLayoutInflater();	
+//    	Log.i ("test designs", scored_evaluation_traits.get(0));
+    	for( int ii = 0; ii < nRecs2; ii++ ){	
+    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
+    		Log.i ("in for loop", " trait name is " + data_evaluation_traits.get(ii));
+			TableLayout table = (TableLayout) findViewById(R.id.TableLayout02);	
+			Log.i("in for loop", " after TableLayout");
+	    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_data_item_entry, table, false);
+	    	tempLabel = data_evaluation_traits.get(ii);
+//	    	Log.i("in for loop", " tempLabel is " + tempLabel);
+	    	((TextView)row.findViewById(R.id.data_lbl)).setText(tempLabel);
+//	    	Log.i("in for loop", " after set text view");
+	    	table.addView(row);
+    	}
+       
+
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
     	btn.setEnabled(false);    
-        	}
+    }
+	
+    private void addRadioButtons(int numButtons, String[] radioBtnText) {
+  	  int i;
+
+  	  for(i = 0; i < numButtons; i++){
+  	    //instantiate...
+  	    RadioButton radioBtn = new RadioButton(this);
+
+  	    //set the values that you would otherwise hardcode in the xml...
+  	  	radioBtn.setLayoutParams 
+  	      (new LayoutParams 
+  	      (LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+  	    //label the button...
+  	  	radioBtn.setText(radioBtnText[i]);
+  	  	radioBtn.setId(i);
+
+  	    //add it to the group.
+  	    radioGroup.addView(radioBtn, i);
+  	  }
+  	}        
     public void saveScores( View v )
     {    	
     	String 			dbname = getString(R.string.real_database_file); 
