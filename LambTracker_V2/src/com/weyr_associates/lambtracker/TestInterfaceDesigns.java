@@ -228,7 +228,7 @@ public class TestInterfaceDesigns extends Activity{
 	    {
 	    		RatingBar ratingBar01;
 	    		Float realScore;
-	    		
+	    		// 	get the rating scores
 	    		rating_scores = new ArrayList<Float>();
 	    		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
 	    		for( int ii = 0; ii < nRecs; ii++ ){	
@@ -237,7 +237,7 @@ public class TestInterfaceDesigns extends Activity{
 	    			rating_scores.add(ratingBar01.getRating());
 	    			Log.i("RatingBar01 ", String.valueOf(ratingBar01.getRating()));    	
 	    		}
-	    			    		
+	    		//	get the real data values  		
 	    		table = (TableLayout) findViewById(R.id.TableLayout02);
 	    		for( int ii = 0; ii < nRecs2; ii++ ){	
 	    			TableRow row1= (TableRow)table.getChildAt(ii);
@@ -245,6 +245,7 @@ public class TestInterfaceDesigns extends Activity{
 	    			realScore = Float.valueOf(TV.getText().toString());
 	    			Log.i("realscores ", String.valueOf(realScore)); 
 	    		}
+	    		//	get the radiogroup button selected
 	    		
 //	    		RadioGroup rg=(RadioGroup)findViewById(R.id.youradio);
 //	    		  String radiovalue=  (RadioButton)this.findViewById(rg.getCheckedRadioButtonId())).getText().toString();
@@ -253,10 +254,28 @@ public class TestInterfaceDesigns extends Activity{
 //	    		View radioButton = radioButtonGroup.findViewById(radioButtonID);
 //	    		int idx = radioButtonGroup.indexOfChild(radioButton);
 	    		
+//	    		LinearLayout root = (LinearLayout) findViewById(R.id.linearLayout1);
+//	    		private void loopQuestions(ViewGroup parent) {
+//	    	        for(int i = 0; i < parent.getChildCount(); i++) {
+//	    	            View child = parent.getChildAt(i);
+//	    	            if(child instanceof RadioGroup ) {
+//	    	                //Support for RadioGroups
+//	    	                RadioGroup radio = (RadioGroup)child;
+//	    	                storeAnswer(radio.getId(), radio.getCheckedRadioButtonId());
+//	    	            }	
 	    		
 	    		table = (TableLayout) findViewById(R.id.TableLayout03);
 	    		for( int ii = 0; ii < nRecs3; ii++ ){	
 	    			TableRow row1= (TableRow)table.getChildAt(ii);
+	    			Log.i("radio button " , " index of row is " + String.valueOf(row1));
+	    			View child = table.getChildAt(ii);
+	    			int idx = row1.indexOfChild(child);
+	    			Log.i("radio button " , " index of child is " + String.valueOf(idx));
+	    			RadioGroup radio = (RadioGroup)child;
+	    			Log.i("radio button " , " checked button is " + String.valueOf(radio.getCheckedRadioButtonId()));
+	                
+//	    			int index = row1.indexOfChild(findViewById(radioGroup1.getCheckedRadioButtonId()));
+	    				    	            
 //	    			int radioButtonID = radioGroup.getCheckedRadioButtonId();
 //	    			View radioButton = radioGroup.findViewById(radioButtonID);
 //	    			int idx = radioGroup.indexOfChild(radioButton);
