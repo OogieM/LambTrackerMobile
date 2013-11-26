@@ -227,7 +227,6 @@ public class EvaluateSheep2 extends Activity {
 	   	//	make the scan eid button red
 	   	Button btn = (Button) findViewById( R.id.scan_eid_btn );
 	   	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-	   	// TODO
 	   	clearBtn( null );  
 	   	TextView TV = (TextView) findViewById (R.id.eidText);
 	   	TV.setText( LastEID );
@@ -315,8 +314,6 @@ public class EvaluateSheep2 extends Activity {
         	TV5.setText(dbh.getStr(3));
         	ii = dbh.getInt(1);
     	}
-		// TODO
-    	
    }	
 
 	@Override
@@ -465,8 +462,6 @@ public class EvaluateSheep2 extends Activity {
     	}
 
     	// Set up the user traits  
-    	// 	TODO
-    	
     	cmd = String.format("select evaluation_trait_table.trait_name, evaluation_trait_table.id_traitid, " +
 	        	"custom_evaluation_name_table.custom_eval_number " +
     			"from evaluation_trait_table inner join last_eval_table on " +
@@ -684,7 +679,7 @@ public class EvaluateSheep2 extends Activity {
 //	    	Log.i("number ","eval trait15 "+String.valueOf(trait15));
 //	    	Log.i("number ","eval trait15 units "+String.valueOf(trait15_unitid));
     		
-    		Log.i("number ","eval trait16 "+String.valueOf(trait16_data));
+//    		Log.i("number ","eval trait16 "+String.valueOf(trait16_data));
 //    		Log.i("number ","eval trait17 "+String.valueOf(trait17_data));
 //    		Log.i("number ","eval trait18 "+String.valueOf(trait18_data));
 //    		Log.i("number ","eval trait19 "+String.valueOf(trait19_data));
@@ -791,6 +786,7 @@ public class EvaluateSheep2 extends Activity {
     {
 		// clear out the display of everything
 		TextView TV ;
+		RatingBar ratingBar;
 		Button btn;
 		TV = (TextView) findViewById( R.id.inputText );
 		TV.setText( "" );		
@@ -802,38 +798,35 @@ public class EvaluateSheep2 extends Activity {
 		TV.setText( "" );
 		TV = (TextView) findViewById( R.id.eidText );
 		TV.setText( "" );
-//		Log.i("Clear btn", "Before clear rating bars");
-//		trait01_ratingbar = (RatingBar) findViewById(R.id.trait01_ratingbar);
-//		trait01_ratingbar.setRating(0.0f);
-//		trait02_ratingbar = (RatingBar) findViewById(R.id.trait02_ratingbar);
-//		trait02_ratingbar.setRating(0.0f);
-//		trait03_ratingbar = (RatingBar) findViewById(R.id.trait03_ratingbar);
-//		trait03_ratingbar.setRating(0.0f);
-//		trait04_ratingbar = (RatingBar) findViewById(R.id.trait04_ratingbar);
-//		trait04_ratingbar.setRating(0.0f);
-//		trait05_ratingbar = (RatingBar) findViewById(R.id.trait05_ratingbar);
-//		trait05_ratingbar.setRating(0.0f);
-//		trait06_ratingbar = (RatingBar) findViewById(R.id.trait06_ratingbar);
-//		trait06_ratingbar.setRating(0.0f);
-//		trait07_ratingbar = (RatingBar) findViewById(R.id.trait07_ratingbar);
-//		trait07_ratingbar.setRating(0.0f);
-//		trait08_ratingbar = (RatingBar) findViewById(R.id.trait08_ratingbar);
-//		trait08_ratingbar.setRating(0.0f);
-//		trait09_ratingbar = (RatingBar) findViewById(R.id.trait09_ratingbar);
-//		trait09_ratingbar.setRating(0.0f);
-//		trait10_ratingbar = (RatingBar) findViewById(R.id.trait10_ratingbar);
-//		trait10_ratingbar.setRating(0.0f);
-////		Log.i("Clear btn", "After clear rating bars");
-//		TV = (TextView) findViewById( R.id.trait11_data );
-//		TV.setText ( "" );
-//		TV = (TextView) findViewById( R.id.trait12_data );
-//		TV.setText ( "" );
-//		TV = (TextView) findViewById( R.id.trait13_data );
-//		TV.setText ( "" );
-//		TV = (TextView) findViewById( R.id.trait14_data );
-//		TV.setText ( "" );
-//		TV = (TextView) findViewById( R.id.trait15_data );
-//		TV.setText ( "" );
+		
+		//	Clear the rating bars
+		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
+		Log.i("in clear button", " number rating bars is " + String.valueOf(nRecs)); 
+		if (nRecs != 0) {
+			for( int ii = 0; ii < nRecs; ii++ ){	
+				Log.i("in clear button", " in 1st for loop ii is" + String.valueOf(ii)); 
+				TableRow row1= (TableRow)table.getChildAt(ii);
+				ratingBar = (RatingBar) row1.getChildAt(1);
+				ratingBar.setRating(0.0f);			
+//				Log.i("RatingBar01 ", String.valueOf(ratingBar.getRating()));  
+			}
+		}
+		//	Clear the real scored traits
+		Log.i("in clear button", " number scored traits is " + String.valueOf(nRecs2));
+		table = (TableLayout) findViewById(R.id.TableLayout02);
+		if (nRecs2 != 0) {
+			for( int ii = 0; ii < nRecs2; ii++ ){	
+			TableRow row1= (TableRow)table.getChildAt(ii);
+			TV = (EditText ) row1.getChildAt(1);
+			TV.setText ( "" );
+			}
+		}
+				
+		//	Clear the radio group checks
+		Log.i("in clear button", " ready to clear the radio group "); 
+		RadioGroup rg=(RadioGroup)findViewById(R.id.radioGroup1);
+		rg.clearCheck();
+		
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
@@ -933,7 +926,6 @@ public class EvaluateSheep2 extends Activity {
 //    		cursor.moveToFirst();
 //    	}
 		
-		// TODO
     	fedtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database
 		Log.i("Evaluate", " id infor table id is " + String.valueOf(fedtagid));
 		
