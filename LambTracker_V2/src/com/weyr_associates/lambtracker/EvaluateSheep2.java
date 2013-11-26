@@ -65,8 +65,6 @@ public class EvaluateSheep2 extends Activity {
 	List<Float> real_scores;
 	public List<String> scored_evaluation_traits, data_evaluation_traits, trait_units, user_evaluation_traits;
 	public List <Integer> scored_trait_numbers, data_trait_numbers, user_trait_numbers, user_trait_number_items;
-//	public List <Integer> eval_trait_numbers;
-	
 	
 	ArrayAdapter<String> dataAdapter;
 
@@ -173,7 +171,6 @@ public class EvaluateSheep2 extends Activity {
 
 		mIsBound = true;
 		
-
 		if (mService != null) {
 //			Log.i("Evaluate", "At doBind3.");
 			try {
@@ -217,7 +214,6 @@ public class EvaluateSheep2 extends Activity {
 			unbindService(mConnection);
 			mIsBound = false;
 		}
-
 	}    	
 	
 	// use EID reader to look up a sheep
@@ -336,7 +332,6 @@ public class EvaluateSheep2 extends Activity {
     	data_trait_numbers = new ArrayList<Integer>();
     	user_trait_numbers = new ArrayList<Integer>();
     	user_trait_number_items = new ArrayList<Integer>();
-//    	eval_trait_numbers = new ArrayList<Integer>();
     	
     	nRecs = 0; 	// Number of scored data items using rating bars
     	nRecs2 = 0;	// Number of real data items using float data
@@ -344,6 +339,7 @@ public class EvaluateSheep2 extends Activity {
     	nRecs4 = 0;	// Number of custom data items to fill the radio buttons
     	
 		CheckIfServiceIsRunning();
+		//	Fill the trait name variables from the last evaluation
 		cmd = "select * from last_eval_table";
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
@@ -406,7 +402,6 @@ public class EvaluateSheep2 extends Activity {
         dbh.moveToFirstRecord();
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
         	scored_trait_numbers.add(cursor.getInt(1));
-//        	tempTraitNumber = cursor.getInt(1);
 //        	Log.i("evaluate2", " trait number is " + String.valueOf(cursor.getInt(1)));
 	    	scored_evaluation_traits.add(cursor.getString(0));
 //	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
@@ -416,7 +411,6 @@ public class EvaluateSheep2 extends Activity {
     	LayoutInflater inflater = getLayoutInflater();	
 //    	Log.i ("evaluate2", scored_evaluation_traits.get(0));
     	for( int ii = 0; ii < nRecs; ii++ ){	
-//    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
 //    		Log.i ("in for loop", " trait name is " + scored_evaluation_traits.get(ii));
 			TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);	
 //			Log.i("in for loop", " after TableLayout");
@@ -439,13 +433,12 @@ public class EvaluateSheep2 extends Activity {
         dbh.moveToFirstRecord();
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
         	data_trait_numbers.add(cursor.getInt(1));
-//        	tempTraitNumber = cursor.getInt(1);
 //        	Log.i("evaluate2", " trait number is " + String.valueOf(cursor.getInt(1)));
 	    	data_evaluation_traits.add(cursor.getString(0));
 //	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
     	}
     	cursor.close();    	
-    	Log.i("evaluate2", "number of records in data traits cursor is " + String.valueOf(nRecs2));
+//    	Log.i("evaluate2", "number of records in data traits cursor is " + String.valueOf(nRecs2));
     	inflater = getLayoutInflater();	
 //    	Log.i ("evaluate2", scored_evaluation_traits.get(0));
     	for( int ii = 0; ii < nRecs2; ii++ ){	
@@ -475,11 +468,11 @@ public class EvaluateSheep2 extends Activity {
     	dbh.moveToFirstRecord();
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
         	user_evaluation_traits.add(cursor.getString(0));
-	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
+//	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
 	    	user_trait_numbers.add(cursor.getInt(1));
-	    	Log.i("evaluate2", " trait id number is " + String.valueOf(cursor.getInt(1)));
+//	    	Log.i("evaluate2", " trait id number is " + String.valueOf(cursor.getInt(1)));
 	    	user_trait_number_items.add(cursor.getInt(2));
-	    	Log.i("evaluate2", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
+//	    	Log.i("evaluate2", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
     	}
     	cursor.close();  
     	
@@ -539,7 +532,7 @@ public class EvaluateSheep2 extends Activity {
 
   	    //label the button...
   	  	radioBtn.setText(radioBtnText[i]);
-  	  	Log.i("addradiobuttons", radioBtnText[i]);
+//  	  	Log.i("addradiobuttons", radioBtnText[i]);
   	  	radioBtn.setId(i);
 
   	    //add it to the group.
@@ -557,24 +550,23 @@ public class EvaluateSheep2 extends Activity {
 
     	rating_scores = new ArrayList<Float>();
     	real_scores = new ArrayList<Float>();
-//    	eval_trait_numbers = new ArrayList<Integer>();
 		RatingBar ratingBar;
     	
     	// I got the sheep id from the search by federal or farm or EID tag
     	// it's in the sheep_id variable
     	
-    	Log.i("in save scores", " sheep id is " + String.valueOf(sheep_id));  
+//    	Log.i("in save scores", " sheep id is " + String.valueOf(sheep_id));  
     	
 		// 	get the rating bar scores and fill the rating_scores array
 		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
-		Log.i("in save scores", " number rating bars is " + String.valueOf(nRecs)); 
+//		Log.i("in save scores", " number rating bars is " + String.valueOf(nRecs)); 
 		if (nRecs != 0) {
 			for( int ii = 0; ii < nRecs; ii++ ){	
-				Log.i("in save scores", " in 1st for loop ii is" + String.valueOf(ii)); 
+//				Log.i("in save scores", " in 1st for loop ii is" + String.valueOf(ii)); 
 				TableRow row1= (TableRow)table.getChildAt(ii);
 				ratingBar = (RatingBar) row1.getChildAt(1);
 				rating_scores.add(ratingBar.getRating());			
-				Log.i("RatingBar01 ", String.valueOf(ratingBar.getRating()));  
+//				Log.i("RatingBar01 ", String.valueOf(ratingBar.getRating()));  
 			}
 			//	Fill the rest of the array with zeros
 			for( int ii = nRecs; ii < 10; ii++ ){	
@@ -589,25 +581,25 @@ public class EvaluateSheep2 extends Activity {
 		
     	// Fill the rating bar score variables from the rating_scores array			
     		trait01_data = rating_scores.get(0);
-    		Log.i("trait01_ratingbar ", String.valueOf(trait01_data));
+//    		Log.i("trait01_ratingbar ", String.valueOf(trait01_data));
      		trait02_data = rating_scores.get(1);
-    		Log.i("trait02_ratingbar ", String.valueOf(trait02_data));
+//    		Log.i("trait02_ratingbar ", String.valueOf(trait02_data));
     		trait03_data = rating_scores.get(2);	
-    		Log.i("trait03_ratingbar ", String.valueOf(trait03_data));    		
+//    		Log.i("trait03_ratingbar ", String.valueOf(trait03_data));    		
     		trait04_data = rating_scores.get(3);
-    		Log.i("trait04_ratingbar ", String.valueOf(trait04_data));    		
+//    		Log.i("trait04_ratingbar ", String.valueOf(trait04_data));    		
     		trait05_data = rating_scores.get(4);
-    		Log.i("trait05_ratingbar ", String.valueOf(trait05_data));    		
+//    		Log.i("trait05_ratingbar ", String.valueOf(trait05_data));    		
     		trait06_data = rating_scores.get(5);
-    		Log.i("trait06_ratingbar ", String.valueOf(trait06_data));    		
+//    		Log.i("trait06_ratingbar ", String.valueOf(trait06_data));    		
     		trait07_data = rating_scores.get(6);
-    		Log.i("trait07_ratingbar ", String.valueOf(trait07_data));    		
+//    		Log.i("trait07_ratingbar ", String.valueOf(trait07_data));    		
     		trait08_data = rating_scores.get(7);
-    		Log.i("trait08_ratingbar ", String.valueOf(trait08_data));    		
+//    		Log.i("trait08_ratingbar ", String.valueOf(trait08_data));    		
     		trait09_data = rating_scores.get(8);
-    		Log.i("trait09_ratingbar ", String.valueOf(trait09_data));    		
+//    		Log.i("trait09_ratingbar ", String.valueOf(trait09_data));    		
     		trait10_data = rating_scores.get(9);
-    		Log.i("trait10_ratingbar ", String.valueOf(trait10_data));    				
+//    		Log.i("trait10_ratingbar ", String.valueOf(trait10_data));    				
     		
     		//	get the real data values  	
 //    		Log.i("in save scores", " number real data points is " + String.valueOf(nRecs2));
@@ -633,20 +625,20 @@ public class EvaluateSheep2 extends Activity {
     		}
     		//	Fill the real score variables from the real_scores array
     		trait11_data = real_scores.get(0);
-    		Log.i("trait11_data ", String.valueOf(trait11_data));
+//    		Log.i("trait11_data ", String.valueOf(trait11_data));
     		trait12_data = real_scores.get(1);
-    		Log.i("trait12_data ", String.valueOf(trait12_data));
+//    		Log.i("trait12_data ", String.valueOf(trait12_data));
     		trait13_data = real_scores.get(2);
-       		Log.i("trait13_data ", String.valueOf(trait13_data));
+//       	Log.i("trait13_data ", String.valueOf(trait13_data));
     		trait14_data = real_scores.get(3);
-       		Log.i("trait14_data ", String.valueOf(trait14_data));
+//       	Log.i("trait14_data ", String.valueOf(trait14_data));
     		trait15_data = real_scores.get(4);
-       		Log.i("trait15_data ", String.valueOf(trait15_data));
+//       	Log.i("trait15_data ", String.valueOf(trait15_data));
  	    	
-    		//	Get the radiogroup selected for the user data 
+    		//	Get the radio group selected for the user data 
     		//	This will need to be fixed for more than one user defined group but will work for Dr. Purdy's test
     		RadioGroup rg=(RadioGroup)findViewById(R.id.radioGroup1);
-     		trait16_data = rg.getCheckedRadioButtonId();
+//     		trait16_data = rg.getCheckedRadioButtonId();
     		Log.i("trait16_data ", String.valueOf(trait16_data));
 //    		RadioButton b = (RadioButton)findViewById(selected);
 //    		b.getText().toString();    		
@@ -714,10 +706,9 @@ public class EvaluateSheep2 extends Activity {
             dbh.moveToFirstRecord();
             
             String alert_text = (dbh.getStr(0));
-//            Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
+//          Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
     		alert_text = alert_text + "\n" + "Evaluation Done";
-    		
-//            Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
+//          Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
 
     		cmd = String.format("update sheep_table set alert01='%s' where sheep_id=%d", alert_text, sheep_id);
 //    		Log.i("test alert ", cmd);   
@@ -728,9 +719,7 @@ public class EvaluateSheep2 extends Activity {
 	
 	   public void backBtn( View v )
 	    {
-//		   	Log.i("evaluate", " Back button pressed before close DB");
 		   	dbh.closeDB();
-//		   	Log.i("evaluate", " Back button pressed after close DB");
 		   	doUnbindService();
 			stopService(new Intent(EvaluateSheep2.this, eidService.class));
 			clearBtn( null );   	
@@ -743,8 +732,7 @@ public class EvaluateSheep2 extends Activity {
 		String 			dbname = getString(R.string.real_database_file); 
         String          cmd;    
         Object 			crsr;
- //       	dbh = new DatabaseHandler( this, dbname );
-		// Display alerts here   	
+ 		// Display alerts here   	
 				AlertDialog.Builder builder = new AlertDialog.Builder( this );
 				cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_id =%d", sheep_id);
 //				Log.i("evalGetAlert ", cmd);  
@@ -801,7 +789,7 @@ public class EvaluateSheep2 extends Activity {
 		
 		//	Clear the rating bars
 		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
-		Log.i("in clear button", " number rating bars is " + String.valueOf(nRecs)); 
+//		Log.i("in clear button", " number rating bars is " + String.valueOf(nRecs)); 
 		if (nRecs != 0) {
 			for( int ii = 0; ii < nRecs; ii++ ){	
 				Log.i("in clear button", " in 1st for loop ii is" + String.valueOf(ii)); 
@@ -812,7 +800,7 @@ public class EvaluateSheep2 extends Activity {
 			}
 		}
 		//	Clear the real scored traits
-		Log.i("in clear button", " number scored traits is " + String.valueOf(nRecs2));
+//		Log.i("in clear button", " number scored traits is " + String.valueOf(nRecs2));
 		table = (TableLayout) findViewById(R.id.TableLayout02);
 		if (nRecs2 != 0) {
 			for( int ii = 0; ii < nRecs2; ii++ ){	
@@ -878,7 +866,7 @@ public class EvaluateSheep2 extends Activity {
     	String          cmd;
     	TextView		TV = (TextView) findViewById( R.id.inputText );
     	String			fed = TV.getText().toString();
-    	Log.i("Evaluate ", " federal tag is " + fed);
+//    	Log.i("Evaluate ", " federal tag is " + fed);
     	Integer			ii;
     	// Hide the keyboard when you click the button
     	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
@@ -927,19 +915,19 @@ public class EvaluateSheep2 extends Activity {
 //    	}
 		
     	fedtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database
-		Log.i("Evaluate", " id infor table id is " + String.valueOf(fedtagid));
+//		Log.i("Evaluate", " id info table id is " + String.valueOf(fedtagid));
 		
     	TV = (TextView) findViewById(R.id.sheepnameText);
     	TV.setText(dbh.getStr(0));
-    	Log.i("Evaluate", " sheep name is " + dbh.getStr(0));
+//    	Log.i("Evaluate", " sheep name is " + dbh.getStr(0));
     	sheep_id = dbh.getInt(1);
     	thissheep_id = sheep_id;
-    	Log.i("Evaluate", " sheep id is " + String.valueOf(thissheep_id));
+//    	Log.i("Evaluate", " sheep id is " + String.valueOf(thissheep_id));
     	TV = (TextView) findViewById(R.id.fedText)	;
     	TV.setText(dbh.getStr(3));
-    	Log.i("Evaluate", " sheep fed tag is " + dbh.getStr(3));
+//    	Log.i("Evaluate", " sheep fed tag is " + dbh.getStr(3));
     	String alert_text = dbh.getStr(6);
-    	Log.i("Evaluate", " sheep alert text is " + alert_text);
+//    	Log.i("Evaluate", " sheep alert text is " + alert_text);
 //    	Now to test of the sheep has an alert and if so then set the alerts button to red
 		if (alert_text != null && !alert_text.isEmpty() ){
 //		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
