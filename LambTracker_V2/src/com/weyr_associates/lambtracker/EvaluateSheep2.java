@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
@@ -41,12 +42,13 @@ public class EvaluateSheep2 extends Activity {
 	
 	public Button button;
 	
-	String     	cmd;
+	String     	cmd, tempText;
 	String		tempLabel;
+	String[] radioBtnText;
 	Integer 	i;
 	
 	public int trait01, trait02, trait03, trait04, trait05, trait06, trait07, trait08, trait09, trait10;
-	public int trait11, trait12, trait13, trait14, trait15;
+	public int trait11, trait12, trait13, trait14, trait15, trait16, trait17, trait18, trait19, trait20;
 	public int trait11_unitid, trait12_unitid, trait13_unitid, trait14_unitid, trait15_unitid;
 	public String trait01_label, trait02_label, trait03_label, trait04_label, trait05_label, trait06_label, 
 		trait07_label, trait08_label, trait09_label, trait10_label, trait11_label, trait12_label, 
@@ -58,29 +60,20 @@ public class EvaluateSheep2 extends Activity {
 	int 		id;
 	int   		fedtagid, farmtagid, eidtagid;
 	private int			    recNo;
-	private int             nRecs, nRecs2;
+	public int             nRecs, nRecs2, nRecs3, nRecs4;
 	List<Integer> which_traits;
-	
-	public List<String> scored_evaluation_traits, data_evaluation_traits, trait_units;
-	public List <Integer> scored_trait_numbers, data_trait_numbers, user_trait_numbers;
+	List<Float> real_scores;
+	public List<String> scored_evaluation_traits, data_evaluation_traits, trait_units, user_evaluation_traits;
+	public List <Integer> scored_trait_numbers, data_trait_numbers, user_trait_numbers, user_trait_number_items;
+	public List <Integer> eval_trait_numbers;
 	
 	
 	ArrayAdapter<String> dataAdapter;
-	
-	public RatingBar trait01_ratingbar ;
-	public RatingBar trait02_ratingbar ;
-	public RatingBar trait03_ratingbar ;
-	public RatingBar trait04_ratingbar ;
-	public RatingBar trait05_ratingbar ;
-	public RatingBar trait06_ratingbar ;
-	public RatingBar trait07_ratingbar ;
-	public RatingBar trait08_ratingbar ;
-	public RatingBar trait09_ratingbar ;
-	public RatingBar trait10_ratingbar ;
 
 	public Float trait01_data, trait02_data, trait03_data, trait04_data, trait05_data, trait06_data, trait07_data ;
 	public Float trait08_data, trait09_data, trait10_data;
 	public Float trait11_data, trait12_data, trait13_data, trait14_data, trait15_data;
+	public int trait16_data, trait17_data, trait18_data, trait19_data, trait20_data;
 	
 	private DatabaseHandler dbh;
 	private Cursor 	cursor;
@@ -330,7 +323,7 @@ public class EvaluateSheep2 extends Activity {
     public void onCreate(Bundle savedInstanceState)	
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.evaluate_sheep);
+        setContentView(R.layout.evaluate_sheep2);
         String 			dbname = getString(R.string.real_database_file); 
         String          cmd;
         Button 			btn;
@@ -338,13 +331,78 @@ public class EvaluateSheep2 extends Activity {
         Object 			crsr;
         dbh = new DatabaseHandler( this, dbname );
        
+        scored_evaluation_traits = new ArrayList<String>();
+    	data_evaluation_traits = new ArrayList<String>();
+    	user_evaluation_traits = new ArrayList<String>();
+
+    	scored_trait_numbers = new ArrayList<Integer>();
+    	data_trait_numbers = new ArrayList<Integer>();
+    	user_trait_numbers = new ArrayList<Integer>();
+    	user_trait_number_items = new ArrayList<Integer>();
+    	eval_trait_numbers = new ArrayList<Integer>();
+    	
+    	nRecs = 0;
+    	nRecs2 = 0;
+    	nRecs3 = 0;
+    	nRecs4 = 0;
+    	
 		CheckIfServiceIsRunning();
+		cmd = "select * from last_eval_table";
+    	crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+        
+    	trait01 = dbh.getInt(1);
+    	cursor.moveToNext();	
+    	trait02 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait03 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait04 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait05 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait06 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait07 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait08 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait09 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait10 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait11 = dbh.getInt(1);
+    	trait11_unitid = dbh.getInt(2);
+    	cursor.moveToNext();
+    	trait12 = dbh.getInt(1);
+    	trait12_unitid = dbh.getInt(2);
+    	cursor.moveToNext();
+    	trait13 = dbh.getInt(1);
+    	trait13_unitid = dbh.getInt(2);
+    	cursor.moveToNext();
+    	trait14 = dbh.getInt(1);
+    	trait14_unitid = dbh.getInt(2);
+    	cursor.moveToNext();
+    	trait15 = dbh.getInt(1);
+    	trait15_unitid = dbh.getInt(2);
+    	cursor.moveToNext();
+    	trait16 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait17 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait18 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait19 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait20 = dbh.getInt(1);
+    	cursor.close();
 		
     	//	Set up the scored traits and inflate the layout
     	cmd = String.format("select evaluation_trait_table.trait_name, evaluation_trait_table.id_traitid " +
 	        	"from evaluation_trait_table inner join last_eval_table where " +
         		" evaluation_trait_table.id_traitid = last_eval_table.id_traitid and evaluation_trait_table.trait_type = 1 ") ;
-    	Log.i("test designs", " cmd is " + cmd);
+//    	Log.i("evaluate2", " cmd is " + cmd);
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
         nRecs    = cursor.getCount();
@@ -352,19 +410,19 @@ public class EvaluateSheep2 extends Activity {
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
         	scored_trait_numbers.add(cursor.getInt(1));
 //        	tempTraitNumber = cursor.getInt(1);
-        	Log.i("test designs", " trait number is " + String.valueOf(cursor.getInt(1)));
+//        	Log.i("evaluate2", " trait number is " + String.valueOf(cursor.getInt(1)));
 	    	scored_evaluation_traits.add(cursor.getString(0));
-	    	Log.i("test designs", " trait name is " + cursor.getString(0));
+//	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
     	}
     	cursor.close();    	
-//    	Log.i("test designs", "number of records in cursor is " + String.valueOf(nRecs));
+    	Log.i("evaluate2", "number of records in scored traits cursor is " + String.valueOf(nRecs));
     	LayoutInflater inflater = getLayoutInflater();	
-//    	Log.i ("test designs", scored_evaluation_traits.get(0));
+//    	Log.i ("evaluate2", scored_evaluation_traits.get(0));
     	for( int ii = 0; ii < nRecs; ii++ ){	
-    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
-    		Log.i ("in for loop", " trait name is " + scored_evaluation_traits.get(ii));
+//    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
+//    		Log.i ("in for loop", " trait name is " + scored_evaluation_traits.get(ii));
 			TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);	
-			Log.i("in for loop", " after TableLayout");
+//			Log.i("in for loop", " after TableLayout");
 	    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_item_entry, table, false);
 	    	tempLabel = scored_evaluation_traits.get(ii);
 //	    	Log.i("in for loop", " tempLabel is " + tempLabel);
@@ -377,7 +435,7 @@ public class EvaluateSheep2 extends Activity {
     	cmd = String.format("select evaluation_trait_table.trait_name, evaluation_trait_table.id_traitid " +
 	        	"from evaluation_trait_table inner join last_eval_table where " +
         		" evaluation_trait_table.id_traitid = last_eval_table.id_traitid and evaluation_trait_table.trait_type = 2 ") ;
-    	Log.i("test designs", " cmd is " + cmd);
+//    	Log.i("test designs", " cmd is " + cmd);
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
         nRecs2    = cursor.getCount();
@@ -385,19 +443,19 @@ public class EvaluateSheep2 extends Activity {
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
         	data_trait_numbers.add(cursor.getInt(1));
 //        	tempTraitNumber = cursor.getInt(1);
-        	Log.i("test designs", " trait number is " + String.valueOf(cursor.getInt(1)));
+//        	Log.i("evaluate2", " trait number is " + String.valueOf(cursor.getInt(1)));
 	    	data_evaluation_traits.add(cursor.getString(0));
-	    	Log.i("test designs", " trait name is " + cursor.getString(0));
+//	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
     	}
     	cursor.close();    	
-//    	Log.i("test designs", "number of records in cursor is " + String.valueOf(nRecs));
+    	Log.i("evaluate2", "number of records in data traits cursor is " + String.valueOf(nRecs2));
     	inflater = getLayoutInflater();	
-//    	Log.i ("test designs", scored_evaluation_traits.get(0));
+//    	Log.i ("evaluate2", scored_evaluation_traits.get(0));
     	for( int ii = 0; ii < nRecs2; ii++ ){	
-    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
-    		Log.i ("in for loop", " trait name is " + data_evaluation_traits.get(ii));
+//    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
+//    		Log.i ("in for loop", " trait name is " + data_evaluation_traits.get(ii));
 			TableLayout table = (TableLayout) findViewById(R.id.TableLayout02);	
-			Log.i("in for loop", " after TableLayout");
+//			Log.i("in for loop", " after TableLayout");
 	    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_data_item_entry, table, false);
 	    	tempLabel = data_evaluation_traits.get(ii);
 //	    	Log.i("in for loop", " tempLabel is " + tempLabel);
@@ -405,8 +463,68 @@ public class EvaluateSheep2 extends Activity {
 //	    	Log.i("in for loop", " after set text view");
 	    	table.addView(row);
     	}
-       
 
+    	// Set up the user traits  
+    	// 	TODO
+    	
+    	cmd = String.format("select evaluation_trait_table.trait_name, custom_evaluation_name_table.id_custom_eval_nameid , " +
+	        	"custom_evaluation_name_table.custom_eval_number, evaluation_trait_table.id_traitid " +
+    			"from evaluation_trait_table inner join last_eval_table on " +
+	        	" evaluation_trait_table.id_traitid = last_eval_table.id_traitid" +
+	        	" inner join custom_evaluation_name_table on evaluation_trait_table.trait_name = " +
+        		" custom_evaluation_name_table.custom_eval_name where evaluation_trait_table.trait_type = 3 ") ;
+//    	Log.i("evaluate2", " cmd is " + cmd);
+    	crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        nRecs3    = cursor.getCount();
+    	dbh.moveToFirstRecord();
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+        	user_evaluation_traits.add(cursor.getString(0));
+	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
+	    	user_trait_numbers.add(cursor.getInt(1));
+	    	eval_trait_numbers.add(cursor.getInt(3));
+        	Log.i("evaluate2", " trait id number is " + String.valueOf(cursor.getInt(1)));
+	    	user_trait_number_items.add(cursor.getInt(2));
+//	    	Log.i("evaluate2", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
+    	}
+    	cursor.close();  
+    	
+    	Log.i("evaluate2", "number of records in user traits cursor is " + String.valueOf(nRecs3));
+    	inflater = getLayoutInflater();	
+    	for( int ii = 0; ii < nRecs3; ii++ ){	
+//    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
+    		Log.i ("in for loop", " user trait number is " + String.valueOf(user_trait_numbers.get(ii)));
+//    		Log.i ("in for loop", " trait name is " + user_evaluation_traits.get(ii));
+    		Log.i ("in for loop", " number of trait entries is " + String.valueOf(user_trait_number_items.get(ii)));
+//			TableLayout table = (TableLayout) findViewById(R.id.TableLayout03);	
+//			Log.i("in for loop", " after TableLayout");		    	
+	    	//	Get the text for the buttons
+	    	tempText = String.valueOf(user_trait_numbers.get(ii));
+	    	Log.i("in for loop", "trait numbers is " + tempText);
+	    	cmd = String.format("select custom_evaluation_traits_table.custom_evaluation_item " +
+	    			" from custom_evaluation_traits_table " +
+	    			" where custom_evaluation_traits_table.custom_evaluation_id = '%s' "+
+	    			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ", tempText);
+//	    	Log.i("evaluate2", " cmd is " + cmd);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        nRecs4    = cursor.getCount();
+	        dbh.moveToFirstRecord();		        
+	        ArrayList buttons = new ArrayList();
+	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+	        	buttons.add (cursor.getString(0));
+		    	Log.i("evaluate2", " radio button text is " + cursor.getString(0));
+	    	}
+//	        TableRow row = (TableRow)inflater.inflate(R.layout.eval_custom_item, table, false);
+	        
+	        radioBtnText = (String[]) buttons.toArray(new String [buttons.size()]);
+	    	cursor.close();  
+	    	// Build the radio buttons here
+//	    	radioGroup = ((RadioGroup) row.findViewById(R.id.radioGroup1));
+	    	radioGroup = ((RadioGroup) findViewById(R.id.radioGroup1));
+	    	addRadioButtons(user_trait_number_items.get(ii), radioBtnText);
+    	}
+    	
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
@@ -427,6 +545,7 @@ public class EvaluateSheep2 extends Activity {
 
   	    //label the button...
   	  	radioBtn.setText(radioBtnText[i]);
+  	  	Log.i("addradiobuttons", radioBtnText[i]);
   	  	radioBtn.setId(i);
 
   	    //add it to the group.
@@ -438,138 +557,114 @@ public class EvaluateSheep2 extends Activity {
     	String 			dbname = getString(R.string.real_database_file); 
         String          cmd;    
         Object 			crsr;
-    	TextView TV;
-    	String temp_string;
+        List<Float> 	rating_scores;
+    	TextView 		TV;
+    	String 			temp_string;
+
+    	rating_scores = new ArrayList<Float>();
+    	real_scores = new ArrayList<Float>();
+		RatingBar ratingBar;
+		
+		//	Fill the data fields with zeros to be sure we have full data
+    	for( int ii = 0; ii < 5; ii++ ){	
+    		real_scores.add((float) 0.0);
+    		eval_trait_numbers.add(ii);
+		}
+		for( int ii = 0; ii < 10; ii++ ){	
+			rating_scores.add((float) 0.0);	
+		}
+    	trait16_data = 0;
+    	trait17_data = 0;
+    	trait18_data = 0;
+    	trait19_data = 0;
+    	trait20_data = 0;
+    	
     	trait11_data = 0.0f;
     	trait12_data = 0.0f;
     	trait13_data = 0.0f;
     	trait14_data = 0.0f;
     	trait15_data = 0.0f;
+    	
     	// I got the sheep id from the search by federal or farm or EID tag
     	// it's in the sheep_id variable
     	
-//    	Log.i("in save scores", " sheep id is " + String.valueOf(sheep_id));    
-    	// Get the rating bar scores
-    		trait01_ratingbar = (RatingBar) findViewById(R.id.trait01_ratingbar);
-    		trait01_data = trait01_ratingbar.getRating();
-//    		Log.i("trait01_ratingbar ", String.valueOf(trait01_data));
+    	Log.i("in save scores", " sheep id is " + String.valueOf(sheep_id));  
+    	
+		// 	get the rating scores
+
+		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
+		Log.i("in save scores", " number rating bars is " + String.valueOf(nRecs)); 
+		if (nRecs != 0) {
+			for( int ii = 0; ii < nRecs; ii++ ){	
+			Log.i("in save scores", " in 1st for loop ii is" + String.valueOf(ii)); 
+			TableRow row1= (TableRow)table.getChildAt(ii);
+			ratingBar = (RatingBar) row1.getChildAt(1);
+			rating_scores.add(ratingBar.getRating());			
+			Log.i("RatingBar01 ", String.valueOf(ratingBar.getRating()));  
+			}
+		}
+    	// Fill the rating bar score variables
+			
+    		trait01_data = rating_scores.get(0);
+    		Log.i("trait01_ratingbar ", String.valueOf(trait01_data));
+     		trait02_data = rating_scores.get(1);
+    		Log.i("trait02_ratingbar ", String.valueOf(trait02_data));
+    		trait03_data = rating_scores.get(2);	
+    		Log.i("trait03_ratingbar ", String.valueOf(trait03_data));    		
+    		trait04_data = rating_scores.get(3);
+    		Log.i("trait04_ratingbar ", String.valueOf(trait04_data));    		
+    		trait05_data = rating_scores.get(4);
+    		Log.i("trait05_ratingbar ", String.valueOf(trait05_data));    		
+    		trait06_data = rating_scores.get(5);
+    		Log.i("trait06_ratingbar ", String.valueOf(trait06_data));    		
+    		trait07_data = rating_scores.get(6);
+    		Log.i("trait07_ratingbar ", String.valueOf(trait07_data));    		
+    		trait08_data = rating_scores.get(7);
+    		Log.i("trait08_ratingbar ", String.valueOf(trait08_data));    		
+    		trait09_data = rating_scores.get(8);
+    		Log.i("trait09_ratingbar ", String.valueOf(trait09_data));    		
+    		trait10_data = rating_scores.get(9);
+    		Log.i("trait10_ratingbar ", String.valueOf(trait10_data));    				
     		
-    		trait02_ratingbar = (RatingBar) findViewById(R.id.trait02_ratingbar);
-    		trait02_data = trait02_ratingbar.getRating();
-//    		Log.i("trait02_ratingbar ", String.valueOf(trait02_data));
+    		//	get the real data values  	
+//    		Log.i("in save scores", " number real data points is " + String.valueOf(nRecs2));
+    		table = (TableLayout) findViewById(R.id.TableLayout02);
+//    		Log.i("in save scores", " after find tablelayout02 ");
+    		if (nRecs2 != 0) {
+    			for( int ii = 0; ii < nRecs2; ii++ ){	
+    			TableRow row1= (TableRow)table.getChildAt(ii);
+    			TV = (EditText ) row1.getChildAt(1);
+    			Float tempData = Float.valueOf(TV.getText().toString());
+    			real_scores.add(ii,tempData);
+//    			Log.i("index ii ", String.valueOf(ii));
+//    			Log.i("real_score ", String.valueOf(real_scores.get(ii)));
+//    			Log.i("realscore ", String.valueOf(tempData)); 
+    			}
+    		}    		
     		
-    		trait03_ratingbar = (RatingBar) findViewById(R.id.trait03_ratingbar);
-    		trait03_data = trait03_ratingbar.getRating();	
-//    		Log.i("trait03_ratingbar ", String.valueOf(trait03_data));
+    		trait11_data = real_scores.get(0);
+    		Log.i("trait11_data ", String.valueOf(trait11_data));
+    		trait12 = eval_trait_numbers.get(1);  
+    		trait12_data = real_scores.get(1);
+//    		Log.i("trait12_data ", String.valueOf(trait12_data));
+    		trait13 = eval_trait_numbers.get(2);  
+    		trait13_data = real_scores.get(2);
+    		trait14 = eval_trait_numbers.get(3);  
+    		trait14_data = real_scores.get(3);
+    		trait15 = eval_trait_numbers.get(4);  
+    		trait15_data = real_scores.get(4);
     		
-    		trait04_ratingbar = (RatingBar) findViewById(R.id.trait04_ratingbar);
-    		trait04_data = trait04_ratingbar.getRating();
-//    		Log.i("trait04_ratingbar ", String.valueOf(trait04_data));
-    		
-    		trait05_ratingbar = (RatingBar) findViewById(R.id.trait05_ratingbar);
-    		trait05_data = trait05_ratingbar.getRating();
-//    		Log.i("trait05_ratingbar ", String.valueOf(trait05_data));
-    		
-    		trait06_ratingbar = (RatingBar) findViewById(R.id.trait06_ratingbar);
-    		trait06_data = trait06_ratingbar.getRating();
-//    		Log.i("trait06_ratingbar ", String.valueOf(trait06_data));
-    		
-    		trait07_ratingbar = (RatingBar) findViewById(R.id.trait07_ratingbar);
-    		trait07_data = trait07_ratingbar.getRating();
-//    		Log.i("trait07_ratingbar ", String.valueOf(trait07_data));
-    		
-       		trait08_ratingbar = (RatingBar) findViewById(R.id.trait08_ratingbar);
-    		trait08_data = trait08_ratingbar.getRating();
-//    		Log.i("trait08_ratingbar ", String.valueOf(trait08s_data));
-    		
-    		trait09_ratingbar = (RatingBar) findViewById(R.id.trait09_ratingbar);
-    		trait09_data = trait09_ratingbar.getRating();
-//    		Log.i("trait09_ratingbar ", String.valueOf(trait09_data));
-    		
-    		trait10_ratingbar = (RatingBar) findViewById(R.id.trait10_ratingbar);
-    		trait10_data = trait10_ratingbar.getRating();
-//    		Log.i("trait10_ratingbar ", String.valueOf(trait10_data));
-    		
-    		// get the real data scores
-    		
-    		TV = (TextView) findViewById(R.id.trait11_data);
-    		temp_string = TV.getText().toString();
-    		if(TextUtils.isEmpty(temp_string)){
-    	        // EditText was empty
-    	        // so no real data collected just break out
-    			trait11_data = 0.0f;
-//    			Log.i("save trait11", "float data is " + String.valueOf(trait11_data));
-    			trait11_unitid = 0;
-    	    }
-    		else {
-    			trait11_data = Float.valueOf(TV.getText().toString());
-    			Log.i("save trait11", "float data is " + String.valueOf(trait11_data));
-    			Log.i("trait11_units ", String.valueOf(trait11_units));
-    		}
-    		
-    		TV = (TextView) findViewById(R.id.trait12_data);
-    		temp_string = TV.getText().toString();
-    		if(TextUtils.isEmpty(temp_string)){
-    	        // EditText was empty
-    	        // so no real data collected just break out
-    			trait12_data = 0.0f;
-//    			Log.i("save trait12", "float data is " + String.valueOf(trait12_data));
-    			trait12_unitid = 0;
-    	    }
-    		else {
-    			trait12_data = Float.valueOf(temp_string);
-        		Log.i("save trait12", "float data is " + String.valueOf(trait12_data));
-        		Log.i("trait12_units ", String.valueOf(trait12_units));
-    		}
-    		
-       		TV = (TextView) findViewById(R.id.trait13_data);
-    		temp_string = TV.getText().toString();
-    		if(TextUtils.isEmpty(temp_string)){
-    	        // EditText was empty
-    	        // so no real data collected just break out
-    			trait13_data = 0.0f;
-//    			Log.i("save trait12", "float data is " + String.valueOf(trait12_data));
-    			trait13_unitid = 0;
-    	    }
-    		else {
-    			trait13_data = Float.valueOf(temp_string);
-//        		Log.i("save trait13", "float data is " + String.valueOf(trait13_data));
-//        		Log.i("trait13_units ", String.valueOf(trait13_units));
-    		}
-    		
-       		TV = (TextView) findViewById(R.id.trait14_data);
-    		temp_string = TV.getText().toString();
-    		if(TextUtils.isEmpty(temp_string)){
-    	        // EditText was empty
-    	        // so no real data collected just break out
-    			trait14_data = 0.0f;
-//    			Log.i("save trait14", "float data is " + String.valueOf(trait14_data));
-    			trait14_unitid = 0;
-    	    }
-    		else {
-    			trait14_data = Float.valueOf(temp_string);
-//        		Log.i("save trait14", "float data is " + String.valueOf(trait14_data));
-//        		Log.i("trait14_units ", String.valueOf(trait14_units));
-    		}
-    		
-       		TV = (TextView) findViewById(R.id.trait15_data);
-    		temp_string = TV.getText().toString();
-    		if(TextUtils.isEmpty(temp_string)){
-    	        // EditText was empty
-    	        // so no real data collected just break out
-    			trait15_data = 0.0f;
-//    			Log.i("save trait12", "float data is " + String.valueOf(trait15_data));
-    			trait15_unitid = 0;
-    	    }
-    		else {
-    			trait15_data = Float.valueOf(temp_string);
-//        		Log.i("save trait15", "float data is " + String.valueOf(trait15_data));
-//        		Log.i("trait15_units ", String.valueOf(trait15_units));
-    		}
-    		// I need to get the traits scored for this pass here:
-    		
+    		//	Get the radiogroup selected for the user data 
+    		//	This will need to be fixed for more than one user defined group but will work for Dr. Purdy's test
+    		RadioGroup rg=(RadioGroup)findViewById(R.id.radioGroup1);
+    		trait16 = eval_trait_numbers.get(0); 
+    		trait16_data = rg.getCheckedRadioButtonId();
+    		Log.i("trait16_data ", String.valueOf(trait16_data));
+//    		RadioButton b = (RadioButton)findViewById(selected);
+//    		b.getText().toString();    		
+    		    		
     		String mytoday = TodayIs();
-    		// added time stamp here for Dr. Purdy in finction TodayIs()
+    		// added time stamp here for Dr. Purdy in function TodayIs()
 //    		Log.i("Date is ", mytoday);
    		
     		// Now that I have all the data I need to write it into the sheep_evaluation_table
@@ -595,6 +690,8 @@ public class EvaluateSheep2 extends Activity {
 //	    	Log.i("number ","eval trait14 units "+String.valueOf(trait14_unitid));
 //	    	Log.i("number ","eval trait15 "+String.valueOf(trait15));
 //	    	Log.i("number ","eval trait15 units "+String.valueOf(trait15_unitid));
+    		
+    		Log.i("number ","eval trait16 "+String.valueOf(trait16_data));
     		       		
     		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
     		"trait_name01, trait_score01, trait_name02, trait_score02, trait_name03, trait_score03, " +
@@ -602,14 +699,18 @@ public class EvaluateSheep2 extends Activity {
     		"trait_name07, trait_score07, trait_name08, trait_score08, trait_name09, trait_score09, " +
     		"trait_name10, trait_score10, trait_name11, trait_score11, trait_name12, trait_score12, " +
     		"trait_name13, trait_score13, trait_name14, trait_score14, trait_name15, trait_score15, " +
+    		"trait_name16, trait_score16, trait_name17, trait_score17, trait_name18, trait_score18, " +
+    		"trait_name19, trait_score19, trait_name20, trait_score20, " +
     		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date) " +
     		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s," +
-    		"%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s') ", 
+    		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s') ", 
     				sheep_id, trait01, trait01_data, trait02, trait02_data, trait03, trait03_data,
     				trait04, trait04_data, trait05, trait05_data, trait06, trait06_data,
     				trait07, trait07_data, trait08, trait08_data, trait09, trait09_data, 
     				trait10, trait10_data, trait11, trait11_data, trait12, trait12_data, 
     				trait13, trait13_data, trait14, trait14_data, trait15, trait15_data, 
+    				trait16, trait16_data, trait17, trait17_data, trait18, trait18_data,
+    				trait19, trait19_data, trait20, trait20_data, 
     				trait11_unitid, trait12_unitid, trait13_unitid, trait14_unitid, trait15_unitid, mytoday );
     		
 //    		Log.i("save eval ", cmd);
@@ -620,10 +721,10 @@ public class EvaluateSheep2 extends Activity {
             dbh.moveToFirstRecord();
             
             String alert_text = (dbh.getStr(0));
-            Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
+//            Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
     		alert_text = alert_text + "\n" + "Evaluation Done";
     		
-            Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
+//            Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
 
     		cmd = String.format("update sheep_table set alert01='%s' where sheep_id=%d", alert_text, sheep_id);
 //    		Log.i("test alert ", cmd);   
@@ -653,12 +754,12 @@ public class EvaluateSheep2 extends Activity {
 		// Display alerts here   	
 				AlertDialog.Builder builder = new AlertDialog.Builder( this );
 				cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_id =%d", sheep_id);
-				Log.i("evalGetAlert ", cmd);  
+//				Log.i("evalGetAlert ", cmd);  
 				crsr = dbh.exec( cmd );
 		        cursor   = ( Cursor ) crsr;
 		        dbh.moveToFirstRecord();		       
 		        alert_text = (dbh.getStr(0));
-		        Log.i("evalShowAlert ", alert_text); 
+//		        Log.i("evalShowAlert ", alert_text); 
 				builder.setMessage( alert_text )
 			           .setTitle( R.string.alert_warning );
 				builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
@@ -704,37 +805,37 @@ public class EvaluateSheep2 extends Activity {
 		TV = (TextView) findViewById( R.id.eidText );
 		TV.setText( "" );
 //		Log.i("Clear btn", "Before clear rating bars");
-		trait01_ratingbar = (RatingBar) findViewById(R.id.trait01_ratingbar);
-		trait01_ratingbar.setRating(0.0f);
-		trait02_ratingbar = (RatingBar) findViewById(R.id.trait02_ratingbar);
-		trait02_ratingbar.setRating(0.0f);
-		trait03_ratingbar = (RatingBar) findViewById(R.id.trait03_ratingbar);
-		trait03_ratingbar.setRating(0.0f);
-		trait04_ratingbar = (RatingBar) findViewById(R.id.trait04_ratingbar);
-		trait04_ratingbar.setRating(0.0f);
-		trait05_ratingbar = (RatingBar) findViewById(R.id.trait05_ratingbar);
-		trait05_ratingbar.setRating(0.0f);
-		trait06_ratingbar = (RatingBar) findViewById(R.id.trait06_ratingbar);
-		trait06_ratingbar.setRating(0.0f);
-		trait07_ratingbar = (RatingBar) findViewById(R.id.trait07_ratingbar);
-		trait07_ratingbar.setRating(0.0f);
-		trait08_ratingbar = (RatingBar) findViewById(R.id.trait08_ratingbar);
-		trait08_ratingbar.setRating(0.0f);
-		trait09_ratingbar = (RatingBar) findViewById(R.id.trait09_ratingbar);
-		trait09_ratingbar.setRating(0.0f);
-		trait10_ratingbar = (RatingBar) findViewById(R.id.trait10_ratingbar);
-		trait10_ratingbar.setRating(0.0f);
-//		Log.i("Clear btn", "After clear rating bars");
-		TV = (TextView) findViewById( R.id.trait11_data );
-		TV.setText ( "" );
-		TV = (TextView) findViewById( R.id.trait12_data );
-		TV.setText ( "" );
-		TV = (TextView) findViewById( R.id.trait13_data );
-		TV.setText ( "" );
-		TV = (TextView) findViewById( R.id.trait14_data );
-		TV.setText ( "" );
-		TV = (TextView) findViewById( R.id.trait15_data );
-		TV.setText ( "" );
+//		trait01_ratingbar = (RatingBar) findViewById(R.id.trait01_ratingbar);
+//		trait01_ratingbar.setRating(0.0f);
+//		trait02_ratingbar = (RatingBar) findViewById(R.id.trait02_ratingbar);
+//		trait02_ratingbar.setRating(0.0f);
+//		trait03_ratingbar = (RatingBar) findViewById(R.id.trait03_ratingbar);
+//		trait03_ratingbar.setRating(0.0f);
+//		trait04_ratingbar = (RatingBar) findViewById(R.id.trait04_ratingbar);
+//		trait04_ratingbar.setRating(0.0f);
+//		trait05_ratingbar = (RatingBar) findViewById(R.id.trait05_ratingbar);
+//		trait05_ratingbar.setRating(0.0f);
+//		trait06_ratingbar = (RatingBar) findViewById(R.id.trait06_ratingbar);
+//		trait06_ratingbar.setRating(0.0f);
+//		trait07_ratingbar = (RatingBar) findViewById(R.id.trait07_ratingbar);
+//		trait07_ratingbar.setRating(0.0f);
+//		trait08_ratingbar = (RatingBar) findViewById(R.id.trait08_ratingbar);
+//		trait08_ratingbar.setRating(0.0f);
+//		trait09_ratingbar = (RatingBar) findViewById(R.id.trait09_ratingbar);
+//		trait09_ratingbar.setRating(0.0f);
+//		trait10_ratingbar = (RatingBar) findViewById(R.id.trait10_ratingbar);
+//		trait10_ratingbar.setRating(0.0f);
+////		Log.i("Clear btn", "After clear rating bars");
+//		TV = (TextView) findViewById( R.id.trait11_data );
+//		TV.setText ( "" );
+//		TV = (TextView) findViewById( R.id.trait12_data );
+//		TV.setText ( "" );
+//		TV = (TextView) findViewById( R.id.trait13_data );
+//		TV.setText ( "" );
+//		TV = (TextView) findViewById( R.id.trait14_data );
+//		TV.setText ( "" );
+//		TV = (TextView) findViewById( R.id.trait15_data );
+//		TV.setText ( "" );
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
@@ -858,7 +959,6 @@ public class EvaluateSheep2 extends Activity {
 	    	btn.setEnabled(true); 
 	    	showAlert(v);
 		}
-		
     	
 //		Now we need to get the farm tag for that sheep and fill the display with data
     	
@@ -869,7 +969,7 @@ public class EvaluateSheep2 extends Activity {
 		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
 		"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", thissheep_id);
 
-    	Log.i("Evaluate ", "ready to get farm tags cmd is " + cmd);    	
+//    	Log.i("Evaluate ", "ready to get farm tags cmd is " + cmd);    	
     	crsr = dbh.exec( cmd );
     	dbh.moveToFirstRecord();
 		if( dbh.getSize() == 0 )

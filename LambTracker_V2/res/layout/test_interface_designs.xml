@@ -62,8 +62,7 @@
 		       android:layout_height="wrap_content">
 			</TableLayout>  
   	</ScrollView>   
-  	
-		
+ 		
   	<RadioGroup
         android:id="@+id/radioGroup1"
         android:orientation="horizontal"
@@ -89,7 +88,4 @@
         android:layout_alignParentBottom="true"
         android:onClick="saveScores"
         android:text="@string/save_evaluation_scores_btn" />
-
- 
-
 </RelativeLayout>

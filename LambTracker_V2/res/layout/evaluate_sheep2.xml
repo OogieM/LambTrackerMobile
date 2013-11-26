@@ -106,10 +106,8 @@
             android:layout_row="0"        	
             android:onClick="saveScores"
             android:text="@string/save_evaluation_scores_btn"
-            android:textSize="14sp" />
-        
-        
-       </GridLayout> 
+            android:textSize="14sp" />       
+  	</GridLayout> 
     
     <GridLayout
         android:id="@+id/grid3"
@@ -174,14 +172,17 @@
             android:layout_gravity="left|top"
             android:layout_row="1"
             android:textSize="14sp"
-            android:typeface="monospace" />
-        
+            android:typeface="monospace" />       
     </GridLayout>
-    <RelativeLayout >
+    
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
   <ScrollView
 	    android:id="@+id/scroll01"
 	    android:layout_width="fill_parent"
-	    android:layout_height="250dp">
+	    android:layout_height="75dp">
 			<TableLayout
 		       android:id="@+id/TableLayout01"
 		       android:layout_width="fill_parent"
@@ -200,7 +201,7 @@
     <ScrollView
 	    android:id="@+id/scroll02"
 	    android:layout_width="fill_parent"
-	    android:layout_height="100dp"
+	    android:layout_height="75dp"
 	   	android:layout_below="@id/dividerbar">
 			<TableLayout
 		       android:id="@+id/TableLayout02"
@@ -217,17 +218,14 @@
 	    android:layout_below="@id/scroll02">
 	</View>
 	
-	<ScrollView
-	    android:id="@+id/scroll03"
-	    android:layout_width="fill_parent"
-	    android:layout_height="100dp"
-	   	android:layout_below="@id/dividerbar02">
-			<TableLayout
-		       android:id="@+id/TableLayout03"
-		       android:layout_width="fill_parent"
-		       android:layout_height="wrap_content">
-			</TableLayout>  
-  	</ScrollView>   
+    <RadioGroup
+        android:id="@+id/radioGroup1"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="75dp"
+        android:layout_below="@id/dividerbar02">
+  	</RadioGroup>
+  
 	</RelativeLayout>
 	
     <RelativeLayout
