@@ -65,7 +65,7 @@ public class EvaluateSheep2 extends Activity {
 	List<Float> real_scores;
 	public List<String> scored_evaluation_traits, data_evaluation_traits, trait_units, user_evaluation_traits;
 	public List <Integer> scored_trait_numbers, data_trait_numbers, user_trait_numbers, user_trait_number_items;
-	public List <Integer> eval_trait_numbers;
+//	public List <Integer> eval_trait_numbers;
 	
 	
 	ArrayAdapter<String> dataAdapter;
@@ -339,12 +339,12 @@ public class EvaluateSheep2 extends Activity {
     	data_trait_numbers = new ArrayList<Integer>();
     	user_trait_numbers = new ArrayList<Integer>();
     	user_trait_number_items = new ArrayList<Integer>();
-    	eval_trait_numbers = new ArrayList<Integer>();
+//    	eval_trait_numbers = new ArrayList<Integer>();
     	
-    	nRecs = 0;
-    	nRecs2 = 0;
-    	nRecs3 = 0;
-    	nRecs4 = 0;
+    	nRecs = 0; 	// Number of scored data items using rating bars
+    	nRecs2 = 0;	// Number of real data items using float data
+    	nRecs3 = 0;	// Number of user defined data items using custom data
+    	nRecs4 = 0;	// Number of custom data items to fill the radio buttons
     	
 		CheckIfServiceIsRunning();
 		cmd = "select * from last_eval_table";
@@ -467,12 +467,12 @@ public class EvaluateSheep2 extends Activity {
     	// Set up the user traits  
     	// 	TODO
     	
-    	cmd = String.format("select evaluation_trait_table.trait_name, custom_evaluation_name_table.id_custom_eval_nameid , " +
-	        	"custom_evaluation_name_table.custom_eval_number, evaluation_trait_table.id_traitid " +
+    	cmd = String.format("select evaluation_trait_table.trait_name, evaluation_trait_table.id_traitid, " +
+	        	"custom_evaluation_name_table.custom_eval_number " +
     			"from evaluation_trait_table inner join last_eval_table on " +
 	        	" evaluation_trait_table.id_traitid = last_eval_table.id_traitid" +
-	        	" inner join custom_evaluation_name_table on evaluation_trait_table.trait_name = " +
-        		" custom_evaluation_name_table.custom_eval_name where evaluation_trait_table.trait_type = 3 ") ;
+	        	" inner join custom_evaluation_name_table on evaluation_trait_table.id_traitid = " +
+        		" custom_evaluation_name_table.id_traitid where evaluation_trait_table.trait_type = 3 ") ;
 //    	Log.i("evaluate2", " cmd is " + cmd);
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
@@ -482,10 +482,9 @@ public class EvaluateSheep2 extends Activity {
         	user_evaluation_traits.add(cursor.getString(0));
 	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
 	    	user_trait_numbers.add(cursor.getInt(1));
-	    	eval_trait_numbers.add(cursor.getInt(3));
-        	Log.i("evaluate2", " trait id number is " + String.valueOf(cursor.getInt(1)));
+	    	Log.i("evaluate2", " trait id number is " + String.valueOf(cursor.getInt(1)));
 	    	user_trait_number_items.add(cursor.getInt(2));
-//	    	Log.i("evaluate2", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
+	    	Log.i("evaluate2", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
     	}
     	cursor.close();  
     	
@@ -503,7 +502,7 @@ public class EvaluateSheep2 extends Activity {
 	    	Log.i("in for loop", "trait numbers is " + tempText);
 	    	cmd = String.format("select custom_evaluation_traits_table.custom_evaluation_item " +
 	    			" from custom_evaluation_traits_table " +
-	    			" where custom_evaluation_traits_table.custom_evaluation_id = '%s' "+
+	    			" where custom_evaluation_traits_table.id_traitid = '%s' "+
 	    			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ", tempText);
 //	    	Log.i("evaluate2", " cmd is " + cmd);
 	    	crsr = dbh.exec( cmd );
@@ -563,48 +562,37 @@ public class EvaluateSheep2 extends Activity {
 
     	rating_scores = new ArrayList<Float>();
     	real_scores = new ArrayList<Float>();
+//    	eval_trait_numbers = new ArrayList<Integer>();
 		RatingBar ratingBar;
-		
-		//	Fill the data fields with zeros to be sure we have full data
-    	for( int ii = 0; ii < 5; ii++ ){	
-    		real_scores.add((float) 0.0);
-    		eval_trait_numbers.add(ii);
-		}
-		for( int ii = 0; ii < 10; ii++ ){	
-			rating_scores.add((float) 0.0);	
-		}
-    	trait16_data = 0;
-    	trait17_data = 0;
-    	trait18_data = 0;
-    	trait19_data = 0;
-    	trait20_data = 0;
-    	
-    	trait11_data = 0.0f;
-    	trait12_data = 0.0f;
-    	trait13_data = 0.0f;
-    	trait14_data = 0.0f;
-    	trait15_data = 0.0f;
     	
     	// I got the sheep id from the search by federal or farm or EID tag
     	// it's in the sheep_id variable
     	
     	Log.i("in save scores", " sheep id is " + String.valueOf(sheep_id));  
     	
-		// 	get the rating scores
-
+		// 	get the rating bar scores and fill the rating_scores array
 		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
 		Log.i("in save scores", " number rating bars is " + String.valueOf(nRecs)); 
 		if (nRecs != 0) {
 			for( int ii = 0; ii < nRecs; ii++ ){	
-			Log.i("in save scores", " in 1st for loop ii is" + String.valueOf(ii)); 
-			TableRow row1= (TableRow)table.getChildAt(ii);
-			ratingBar = (RatingBar) row1.getChildAt(1);
-			rating_scores.add(ratingBar.getRating());			
-			Log.i("RatingBar01 ", String.valueOf(ratingBar.getRating()));  
+				Log.i("in save scores", " in 1st for loop ii is" + String.valueOf(ii)); 
+				TableRow row1= (TableRow)table.getChildAt(ii);
+				ratingBar = (RatingBar) row1.getChildAt(1);
+				rating_scores.add(ratingBar.getRating());			
+				Log.i("RatingBar01 ", String.valueOf(ratingBar.getRating()));  
+			}
+			//	Fill the rest of the array with zeros
+			for( int ii = nRecs; ii < 10; ii++ ){	
+				rating_scores.add((float) 0.0);	
+			}
+		}else{
+			//	Nothing to add so fill the entire thing with zeros
+			for( int ii = 0; ii < 10; ii++ ){	
+				rating_scores.add((float) 0.0);	
 			}
 		}
-    	// Fill the rating bar score variables
-			
+		
+    	// Fill the rating bar score variables from the rating_scores array			
     		trait01_data = rating_scores.get(0);
     		Log.i("trait01_ratingbar ", String.valueOf(trait01_data));
      		trait02_data = rating_scores.get(1);
@@ -640,25 +628,30 @@ public class EvaluateSheep2 extends Activity {
 //    			Log.i("real_score ", String.valueOf(real_scores.get(ii)));
 //    			Log.i("realscore ", String.valueOf(tempData)); 
     			}
-    		}    		
-    		
+    	    	for( int ii = nRecs2; ii < 5; ii++ ){	
+    	    		real_scores.add((float) 0.0);
+    			}
+    		}else {
+    			for( int ii = 0; ii < 5; ii++ ){	
+    	    		real_scores.add((float) 0.0);
+    			}
+    		}
+    		//	Fill the real score variables from the real_scores array
     		trait11_data = real_scores.get(0);
     		Log.i("trait11_data ", String.valueOf(trait11_data));
-    		trait12 = eval_trait_numbers.get(1);  
     		trait12_data = real_scores.get(1);
-//    		Log.i("trait12_data ", String.valueOf(trait12_data));
-    		trait13 = eval_trait_numbers.get(2);  
+    		Log.i("trait12_data ", String.valueOf(trait12_data));
     		trait13_data = real_scores.get(2);
-    		trait14 = eval_trait_numbers.get(3);  
+       		Log.i("trait13_data ", String.valueOf(trait13_data));
     		trait14_data = real_scores.get(3);
-    		trait15 = eval_trait_numbers.get(4);  
+       		Log.i("trait14_data ", String.valueOf(trait14_data));
     		trait15_data = real_scores.get(4);
-    		
+       		Log.i("trait15_data ", String.valueOf(trait15_data));
+ 	    	
     		//	Get the radiogroup selected for the user data 
     		//	This will need to be fixed for more than one user defined group but will work for Dr. Purdy's test
     		RadioGroup rg=(RadioGroup)findViewById(R.id.radioGroup1);
-    		trait16 = eval_trait_numbers.get(0); 
-    		trait16_data = rg.getCheckedRadioButtonId();
+     		trait16_data = rg.getCheckedRadioButtonId();
     		Log.i("trait16_data ", String.valueOf(trait16_data));
 //    		RadioButton b = (RadioButton)findViewById(selected);
 //    		b.getText().toString();    		
@@ -692,6 +685,11 @@ public class EvaluateSheep2 extends Activity {
 //	    	Log.i("number ","eval trait15 units "+String.valueOf(trait15_unitid));
     		
     		Log.i("number ","eval trait16 "+String.valueOf(trait16_data));
+//    		Log.i("number ","eval trait17 "+String.valueOf(trait17_data));
+//    		Log.i("number ","eval trait18 "+String.valueOf(trait18_data));
+//    		Log.i("number ","eval trait19 "+String.valueOf(trait19_data));
+//    		Log.i("number ","eval trait20 "+String.valueOf(trait20_data));
+    		
     		       		
     		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
     		"trait_name01, trait_score01, trait_name02, trait_score02, trait_name03, trait_score03, " +
