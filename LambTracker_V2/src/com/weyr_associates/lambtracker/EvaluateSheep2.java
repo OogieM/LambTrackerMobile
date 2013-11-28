@@ -249,7 +249,7 @@ public class EvaluateSheep2 extends Activity {
     	TV.setText(dbh.getStr(0));
     	Log.i("Got EID", " got sheep named  " + dbh.getStr(0)); 
     	sheep_id = dbh.getInt(1);
-    	Log.i("Got EID", " sheep ID is " + String.valueOf(sheep_id));
+//    	Log.i("Got EID", " sheep ID is " + String.valueOf(sheep_id));
     	thissheep_id = sheep_id;
     	Log.i("Got EID", " sheep ID is " + String.valueOf(thissheep_id));
 //    	TV = (TextView) findViewById(R.id.eidText)	;
@@ -547,7 +547,7 @@ public class EvaluateSheep2 extends Activity {
         List<Float> 	rating_scores;
     	TextView 		TV;
     	String 			temp_string;
-
+    	Float 			tempData;
     	rating_scores = new ArrayList<Float>();
     	real_scores = new ArrayList<Float>();
 		RatingBar ratingBar;
@@ -555,11 +555,11 @@ public class EvaluateSheep2 extends Activity {
     	// I got the sheep id from the search by federal or farm or EID tag
     	// it's in the sheep_id variable
     	
-//    	Log.i("in save scores", " sheep id is " + String.valueOf(sheep_id));  
+    	Log.i("in save scores", " sheep id is " + String.valueOf(sheep_id));  
     	
 		// 	get the rating bar scores and fill the rating_scores array
 		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
-//		Log.i("in save scores", " number rating bars is " + String.valueOf(nRecs)); 
+		Log.i("in save scores", " number rating bars is " + String.valueOf(nRecs)); 
 		if (nRecs != 0) {
 			for( int ii = 0; ii < nRecs; ii++ ){	
 //				Log.i("in save scores", " in 1st for loop ii is" + String.valueOf(ii)); 
@@ -570,18 +570,20 @@ public class EvaluateSheep2 extends Activity {
 			}
 			//	Fill the rest of the array with zeros
 			for( int ii = nRecs; ii < 10; ii++ ){	
-				rating_scores.add((float) 0.0);	
+				rating_scores.add((float) 0.0f);
+				Log.i("in save scores ", "Filling remainder of rating bar array with zeros");
 			}
 		}else{
 			//	Nothing to add so fill the entire thing with zeros
 			for( int ii = 0; ii < 10; ii++ ){	
-				rating_scores.add((float) 0.0);	
+				rating_scores.add((float) 0.0f);
+				Log.i("in save scores ", "Filling entire rating bar array with zeros");
 			}
 		}
 		
     	// Fill the rating bar score variables from the rating_scores array			
     		trait01_data = rating_scores.get(0);
-//    		Log.i("trait01_ratingbar ", String.valueOf(trait01_data));
+    		Log.i("trait01_ratingbar ", String.valueOf(trait01_data));
      		trait02_data = rating_scores.get(1);
 //    		Log.i("trait02_ratingbar ", String.valueOf(trait02_data));
     		trait03_data = rating_scores.get(2);	
@@ -599,33 +601,39 @@ public class EvaluateSheep2 extends Activity {
     		trait09_data = rating_scores.get(8);
 //    		Log.i("trait09_ratingbar ", String.valueOf(trait09_data));    		
     		trait10_data = rating_scores.get(9);
-//    		Log.i("trait10_ratingbar ", String.valueOf(trait10_data));    				
+    		Log.i("trait10_ratingbar ", String.valueOf(trait10_data));    				
     		
     		//	get the real data values  	
-//    		Log.i("in save scores", " number real data points is " + String.valueOf(nRecs2));
+    		Log.i("in save scores", " number real data points is " + String.valueOf(nRecs2));
     		table = (TableLayout) findViewById(R.id.TableLayout02);
 //    		Log.i("in save scores", " after find tablelayout02 ");
     		if (nRecs2 != 0) {
     			for( int ii = 0; ii < nRecs2; ii++ ){	
     			TableRow row1= (TableRow)table.getChildAt(ii);
     			TV = (EditText ) row1.getChildAt(1);
-    			Float tempData = Float.valueOf(TV.getText().toString());
-    			real_scores.add(ii,tempData);
+    			try {
+    				tempData = Float.valueOf(TV.getText().toString());
+				} catch (Exception ex) {
+					tempData = 0.0f;
+				}
+     			real_scores.add(ii,tempData);
 //    			Log.i("index ii ", String.valueOf(ii));
 //    			Log.i("real_score ", String.valueOf(real_scores.get(ii)));
 //    			Log.i("realscore ", String.valueOf(tempData)); 
     			}
     	    	for( int ii = nRecs2; ii < 5; ii++ ){	
-    	    		real_scores.add((float) 0.0);
+    	    		Log.i("in save scores ", "Filling remainder of real data array with zeros");
+    	    		real_scores.add((float) 0.0f);
     			}
     		}else {
-    			for( int ii = 0; ii < 5; ii++ ){	
-    	    		real_scores.add((float) 0.0);
+    			for( int ii = 0; ii < 5; ii++ ){
+    				Log.i("in save scores ", "Filling entire real data array with zeros");
+    	    		real_scores.add((float) 0.0f);
     			}
     		}
     		//	Fill the real score variables from the real_scores array
     		trait11_data = real_scores.get(0);
-//    		Log.i("trait11_data ", String.valueOf(trait11_data));
+    		Log.i("trait11_data ", String.valueOf(trait11_data));
     		trait12_data = real_scores.get(1);
 //    		Log.i("trait12_data ", String.valueOf(trait12_data));
     		trait13_data = real_scores.get(2);
@@ -633,12 +641,13 @@ public class EvaluateSheep2 extends Activity {
     		trait14_data = real_scores.get(3);
 //       	Log.i("trait14_data ", String.valueOf(trait14_data));
     		trait15_data = real_scores.get(4);
-//       	Log.i("trait15_data ", String.valueOf(trait15_data));
+       	Log.i("trait15_data ", String.valueOf(trait15_data));
  	    	
     		//	Get the radio group selected for the user data 
     		//	This will need to be fixed for more than one user defined group but will work for Dr. Purdy's test
+    		Log.i("before radio group", " getting ready to get the radio group buttons ");
     		RadioGroup rg=(RadioGroup)findViewById(R.id.radioGroup1);
-//     		trait16_data = rg.getCheckedRadioButtonId();
+     		trait16_data = rg.getCheckedRadioButtonId();
     		Log.i("trait16_data ", String.valueOf(trait16_data));
 //    		RadioButton b = (RadioButton)findViewById(selected);
 //    		b.getText().toString();    		
@@ -706,9 +715,9 @@ public class EvaluateSheep2 extends Activity {
             dbh.moveToFirstRecord();
             
             String alert_text = (dbh.getStr(0));
-//          Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
+            Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
     		alert_text = alert_text + "\n" + "Evaluation Done";
-//          Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
+    		Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
 
     		cmd = String.format("update sheep_table set alert01='%s' where sheep_id=%d", alert_text, sheep_id);
 //    		Log.i("test alert ", cmd);   
