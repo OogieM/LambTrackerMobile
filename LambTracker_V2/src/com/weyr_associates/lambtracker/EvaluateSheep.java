@@ -828,7 +828,15 @@ public class EvaluateSheep extends Activity {
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
-    	btn.setEnabled(false);  
+    	btn.setEnabled(false); 
+    	//Make the scan button normal
+    	btn = (Button) findViewById( R.id.scan_eid_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));  
+    	// Enable Save Scores button and make it normal to get set for next sheep
+    	btn = (Button) findViewById( R.id.save_evaluation_scores_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));        	
+    	btn.setEnabled(true);
+    	
     }
 	   private String TodayIs() {
 			Calendar calendar = Calendar.getInstance();
@@ -842,7 +850,7 @@ public class EvaluateSheep extends Activity {
 			int minute = calendar.get(Calendar.MINUTE);
 			int second = calendar.get(Calendar.SECOND);
 			  
-			return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) + "_" + hourofday + ":" + minute + ":" + second ;
+			return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) + "_" + Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
 		}
 	    private String Make2Digits(int i) {
 			if (i < 10) {
@@ -862,8 +870,7 @@ public class EvaluateSheep extends Activity {
 			mService.send(msg);
 		   	//	make the scan eid button green
 	    	Button btn = (Button) findViewById( R.id.scan_eid_btn );
-	    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xFFCC0000));
-			
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xff00ff00));			
 		} catch (RemoteException e) {
 			// In this case the service has crashed before we could even do anything with it
 		}
