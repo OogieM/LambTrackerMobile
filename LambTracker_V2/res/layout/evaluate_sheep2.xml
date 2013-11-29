@@ -218,12 +218,19 @@
 	    android:layout_below="@id/scroll02">
 	</View>
 	
+    <TextView
+        android:id="@+id/radioGroup1_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:typeface="monospace"
+        android:layout_below="@id/dividerbar02" />  
+            
     <RadioGroup
         android:id="@+id/radioGroup1"
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="75dp"
-        android:layout_below="@id/dividerbar02">
+        android:layout_height="175dp"
+        android:layout_below="@id/radioGroup1_lbl">
   	</RadioGroup>
   
 	</RelativeLayout>

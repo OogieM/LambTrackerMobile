@@ -475,13 +475,15 @@ public class EvaluateSheep2 extends Activity {
 //	    	Log.i("evaluate2", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
     	}
     	cursor.close();  
-    	
+        
     	Log.i("evaluate2", "number of records in user traits cursor is " + String.valueOf(nRecs3));
     	inflater = getLayoutInflater();	
     	for( int ii = 0; ii < nRecs3; ii++ ){	
 //    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
     		Log.i ("in for loop", " user trait number is " + String.valueOf(user_trait_numbers.get(ii)));
 //    		Log.i ("in for loop", " trait name is " + user_evaluation_traits.get(ii));
+    		TV = (TextView) findViewById(R.id.radioGroup1_lbl);       
+            TV.setText (user_evaluation_traits.get(ii));
     		Log.i ("in for loop", " number of trait entries is " + String.valueOf(user_trait_number_items.get(ii)));
 //			TableLayout table = (TableLayout) findViewById(R.id.TableLayout03);	
 //			Log.i("in for loop", " after TableLayout");		    	
@@ -492,7 +494,7 @@ public class EvaluateSheep2 extends Activity {
 	    			" from custom_evaluation_traits_table " +
 	    			" where custom_evaluation_traits_table.id_traitid = '%s' "+
 	    			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ", tempText);
-//	    	Log.i("evaluate2", " cmd is " + cmd);
+//	    	Log.i("evaluate2", " cmd is " + cmd);	    	
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
 	        nRecs4    = cursor.getCount();
