@@ -1,6 +1,7 @@
 package com.weyr_associates.lambtracker;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,14 +11,25 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.StringTokenizer;
 
+import android.R.string;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
- 
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /**
  * This class provides a set of methods to facilitate using the
  * SQLite database under Android. 
@@ -47,7 +59,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
     
     // the active database
     private SQLiteDatabase db = null;
-         
+    
     /**
      * Constructor for the DatabaseHandler
      * @param context the context of the caller (usually 'this')
@@ -81,11 +93,19 @@ public class DatabaseHandler extends SQLiteOpenHelper
         activeTable = tableName;
         buildTable  = createTableSQL;
         theCSVFile  = csvFile;
-        
-        if( db == null )
+//        Log.i("in DBH", " createTable the active table is: " + activeTable);
+//        Log.i("in DBH", " createTable the SQL command is: " +buildTable);
+//        Log.i("in DBH", " createTable the CSV file is: " + theCSVFile);
+//        Log.i("in DBH", " createTable the database is: " + String.valueOf(db));
+        if( db == null ){
             db = this.getWritableDatabase();
-        
+        }
+        Log.i("in DBH ", "the writable database is: " + String.valueOf(db));
+        if( db.isOpen()){
+        	db.close();
+        }
         db.execSQL( "drop table if exists " + tableName );
+        Log.i("DBH ", "Before the create table command");
         db.execSQL( createTableSQL );
         
         // load from .csv file in assets/
@@ -158,6 +178,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
     	StringTokenizer tok = new StringTokenizer(sqlStmt, " " );
     	String          cmd = tok.nextToken();
         
+ //   	Log.i("DBH Exec", "token is: " + tok);
         if( db == null )
             db = this.getWritableDatabase();
         
@@ -518,4 +539,73 @@ public class DatabaseHandler extends SQLiteOpenHelper
     	{
     	return src.replaceAll( "'", "''" );
     	}
+    
+    public void copyRealDataBase(String dbName) throws IOException
+    {
+    	if( db == null ){
+            db = this.getWritableDatabase();
+        }   	
+//    	Log.i("DBH ", "In copyRealDatabase");
+    	
+        //Open the original local db pre-loaded into assets as the input stream
+//        InputStream myInput = context.getAssets().open("lambtracker_db.sqlite");
+    	Log.i("DBH ", "filename= " + dbName);
+        InputStream myInput = context.getAssets().open(dbName);       
+        
+        // Path to the just created empty db
+        String outFileName = "/data/data/com.weyr_associates.lambtracker/databases/" + "lambtracker_db.sqlite";
+         //Open the empty db as the output stream
+        OutputStream myOutput = new FileOutputStream(outFileName);
+         //transfer bytes from the inputfile to the outputfile
+        byte[] buffer = new byte[1024];
+        int length;
+        length = 0;
+         while ((length = myInput.read(buffer))>0)
+        {
+            myOutput.write(buffer, 0, length);
+        }
+        //Close the streams
+         
+        myOutput.flush();
+        myOutput.close();
+        myInput.close();
+        closeDB();
+    }
+    
+    /////////////////////
+    public void copy(File src, File dst) throws IOException {
+    	
+	    	Log.i("Copy From", " source file " + src);
+	    	Log.i("Copy To", " destination file " + dst);
+	    	if( db == null ){
+	            db = this.getWritableDatabase();
+	        }
+	    	InputStream in;
+	    	OutputStream out;
+			try {
+		        in = new FileInputStream(src);
+			} catch (FileNotFoundException e) {
+				Log.i("DBH", "Input database file not found " + src);
+				return;
+			}
+			try {
+			    out = new FileOutputStream(dst);
+			} catch (FileNotFoundException e) {
+				Log.i("DBH", "Output database file not found " + dst);
+				return;
+			}
+
+        // Transfer bytes from in to out
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        out.flush();
+        out.close();
+        in.close();
+        closeDB();
+
+    }
+
     }

@@ -3,14 +3,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/TextView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="@string/title_Message"
-        android:textSize="14sp" />
-
     <GridLayout
         android:id="@+id/grid1"
         android:layout_width="wrap_content"
@@ -114,7 +106,7 @@
             android:layout_gravity="left"
             android:layout_row="0"
             android:inputType="none"
-            android:text="@string/sheep_birthtype_lbl" />
+            android:text="@string/sheep_birth_type_lbl" />
 
         <EditText
             android:id="@+id/sheepbirthtypeText"
@@ -135,7 +127,7 @@
             android:layout_gravity="left"
             android:layout_row="0"
             android:inputType="none"
-            android:text="@string/sheep_birthweight_lbl" />
+            android:text="@string/sheep_birth_weight_lbl" />
 
         <EditText
             android:id="@+id/sheepbirthweightText"
@@ -166,11 +158,7 @@
         android:inputType="textMultiLine"
         android:textSize="12sp"
         android:typeface="monospace" />
-<TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="none"
-        android:text="@string/lambing_results2012_lbl" />
+
 
     <EditText
         android:id="@+id/lambing2012Text"
@@ -181,11 +169,7 @@
         android:inputType="textMultiLine"
         android:textSize="12sp"
         android:typeface="monospace" />
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="none"
-        android:text="@string/lambing_results2013_lbl" />
+  
 
     <EditText
         android:id="@+id/lambing2013Text"
@@ -231,7 +215,7 @@
             android:layout_gravity="left|top"
             android:layout_row="0"
             android:onClick="enterBtn"
-            android:text="@string/enter_data" />
+            android:text="@string/enter_btn" />
         
         <Button
             android:id="@+id/clear_form_btn"
@@ -249,7 +233,7 @@
             android:layout_gravity="left|top"
             android:layout_row="0"
             android:onClick="closeTaskBtn"
-            android:text="@string/close_task_btn" />
+            android:text="@string/close_btn" />
      
         <Button
             android:id="@+id/back_to_main_btn"
@@ -260,7 +244,7 @@
             android:layout_marginBottom="4dp"
             android:layout_row="0"
             android:onClick="backBtn"
-            android:text="@string/backtomain" />
+            android:text="@string/back_btn" />
 
     </GridLayout>
 

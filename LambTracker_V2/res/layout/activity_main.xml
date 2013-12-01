@@ -1,72 +1,59 @@
-<RelativeLayout android:id="@+id/RelativeLayout01"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout  android:id="@+id/RelativeLayout01"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity" >
-
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".MainActivity" 
+    android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
+	
+    <Spinner
+  	  android:id="@+id/select_sheep_task"
+  	  android:layout_width="fill_parent"
+  	  android:layout_height="wrap_content"
+  	  />
+    
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/quit_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="29dp"
-        android:layout_marginTop="18dp"
-        android:onClick="loadSheepList"
-        android:text="@string/load_sheeplist" />
-
-    <Button
-        android:id="@+id/edit_db_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button2"
-        android:layout_below="@+id/button2"
-        android:onClick="editDB"
-        android:text="@string/edit_db_btn" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_below="@+id/button1"
-        android:onClick="doSheepTasks"
-        android:text="@string/do_sheeptask" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/edit_db_btn"
-        android:layout_below="@+id/edit_db_btn"
+        android:layout_alignLeft="@+id/select_sheep_task"
+        android:layout_marginLeft="29dp" 
+        android:layout_below="@+id/select_sheep_task"
         android:onClick="quitApp"
-        android:text="@string/quit_program" />
+        android:text="@string/quit_btn" />
+   
+	<TextView
+  	  android:id="@+id/textInfo2"
+  	  android:layout_width="wrap_content"
+  	  android:layout_height="wrap_content"
+  	  android:layout_alignParentRight="true"
+ 	  android:layout_below="@+id/quit_btn"
+  	  android:padding="2sp"
+  	  android:text="-"
+   	  android:textColor="#FF0000"
+  	  android:textSize="24sp" />
 
-
-<TextView
-    android:id="@+id/textInfo2"
+	<TextView
+    android:id="@+id/textInfo1"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_alignBottom="@+id/btnService"
+    android:layout_below="@+id/textInfo2"
     android:layout_alignParentRight="true"
     android:padding="1sp"
     android:text="-"
     android:textColor="#FF0000"
-    android:textSize="36sp" />
-
+    android:textSize="24sp" />
+	
 <TextView
     android:id="@+id/textStat"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentLeft="true"
-    android:layout_below="@+id/button3"
+    android:layout_below="@+id/textInfo1"
     android:layout_marginTop="15dp"
-    android:padding="1sp"
+    android:padding="2sp"
     android:text="Disconnected"
     android:textColor="#FF0000"
-    android:textSize="36sp" />
-
+    android:textSize="24sp" />
 
 <Button
     android:id="@+id/btnService"
@@ -76,17 +63,6 @@
     android:layout_below="@+id/textStat"
     android:text="Unknown"
     android:textSize="24sp" />
-
-<TextView
-    android:id="@+id/textInfo1"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_above="@+id/textInfo2"
-    android:layout_alignParentRight="true"
-    android:padding="1sp"
-    android:text="-"
-    android:textColor="#FF0000"
-    android:textSize="36sp" />
 
 <TextView
     android:id="@+id/textBytes"
@@ -99,32 +75,28 @@
     android:textColor="#FF0000"
     android:textSize="20sp" />
 
-<RelativeLayout
-    android:id="@+id/RelativeLayout04"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_alignTop="@+id/textBytes" >
-
 <ScrollView android:id="@+id/svLog" 
     android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" android:textColor="#FF0000">
+    android:layout_height="400dp" 
+    android:textColor="#FF0000" /> 
+
 <TextView android:id="@+id/textLog" 
     android:layout_width="wrap_content" 
     android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
     android:textSize="18sp"
     android:text="Loading..."
     android:textColor="#FF0000"/>
-</ScrollView>
 
-<ImageView 
-	android:id="@+id/logo_image"
-	android:src="@drawable/logo"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:scaleType="fitCenter"
-	android:layout_alignParentBottom="true"
-/>
+<ImageView
+    android:id="@+id/logo_image"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentRight="true"
+    android:src="@drawable/logo" />
+
 </RelativeLayout>
-</RelativeLayout>
+
 
         

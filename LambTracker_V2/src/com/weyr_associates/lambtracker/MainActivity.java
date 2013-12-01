@@ -19,30 +19,36 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Spinner;
+import android.widget.Toast;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-// import android.content.BroadcastReceiver; commented out becasue not used also testing GitHub push
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 
 public class MainActivity extends Activity {
+	
+	public Button button;
+	public Spinner select_sheep_task;
+	
 	Button btnService;
 	TextView textStat, textInfo1, textInfo2, textLog, textBytes;
 	
 	ScrollView svLog;
 	private Boolean KeepScreenOn = false;
+	private Boolean mIspaused = false;
 	DecimalFormat df = new DecimalFormat();
 	ImageView mLogoImage;
 	
 	Messenger mService = null;
 	boolean mIsBound;
-	
-	// added this to hold the statement I send with the intents
-//	public final static String LASTEID = "com.weyr_associates.lambtracker.LASTEID";
 	
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	// variable to hold the string
@@ -66,9 +72,11 @@ public class MainActivity extends Activity {
 				textInfo2.setText(b2.getString("info2")); // contains the time the tag was read
 				LastEID = (b2.getString("info1"));
 //				We have a good whole EID number so send it to the LookUpSheep component	
-				lookUpSheep ();	
-//		Test sending to doSheep instead
-//				doSheepTasks (v);
+
+				if (!mIspaused)  {
+					lookUpSheep ();
+				}
+				
 				break;			
 			case eidService.MSG_UPDATE_LOG_APPEND:
 				Bundle b3 = msg.getData();
@@ -142,9 +150,83 @@ public class MainActivity extends Activity {
 		textInfo1.setOnClickListener(ListenerToggleDisplayMsgType);
 		textInfo2.setOnClickListener(ListenerToggleDisplayMsgType);
 		
+		LastEID = "none read";
 		restoreMe(savedInstanceState);
-		Log.i("LambTracker", "At Restore Prefs.");
-		CheckIfServiceIsRunning();
+//		Log.i("LambTracker", "At Restore Prefs.");
+		CheckIfServiceIsRunning();		
+		
+		select_sheep_task = (Spinner) findViewById(R.id.select_sheep_task);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, 
+		R.array.sheep_task_array, R.layout.task_spinner);
+		adapter.setDropDownViewResource(R.layout.task_spinner);
+		select_sheep_task.setAdapter (adapter);
+		select_sheep_task.setSelection(0);
+		Log.i("Activity", " before onItems selected");
+		select_sheep_task.setOnItemSelectedListener(new SpinnerActivity());
+	}
+	
+	public class SpinnerActivity extends Activity implements OnItemSelectedListener {
+		//	@Override
+
+		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+
+//			Log.i("Activity", "In Spinner");
+			Intent i = null;
+			String teststring = String.valueOf (parent.getSelectedItemPosition());
+			Log.i("Spinner", "Position = "+teststring);
+
+				switch (parent.getSelectedItemPosition()){		
+				case 0:
+			        // Don't want to do anything until something is selected so just break at position zero
+					break;
+			    case 1:
+					i = new Intent(MainActivity.this, LoadSheepList.class);
+					MainActivity.this.startActivity(i);
+			        break;
+			    case 2:
+			    	Log.i ("Main case", " In main case statement selected 2");
+			    	i = new Intent(MainActivity.this, ConvertToEID.class);
+					MainActivity.this.startActivity(i);
+			        break;
+			    case 3:
+					i = new Intent(MainActivity.this, CreateSheepEvaluation.class);
+					MainActivity.this.startActivity(i);
+			        break;
+			    case 4:
+			    	Log.i ("Main case", " In main case statement selected 4");
+			    	i = new Intent(MainActivity.this, EvaluateSheep.class);
+			        MainActivity.this.startActivity(i);
+			        break;
+			    case 5:
+					i = new Intent(MainActivity.this, EditDB.class);
+					MainActivity.this.startActivity(i);
+			        break;
+				case 6:
+					i = new Intent(MainActivity.this, TestInterfaceDesigns.class);
+					MainActivity.this.startActivity(i);
+			        break;
+				case 7:
+//					Log.i ("Main case", " In main case statement selected 7");
+					
+//					i = new Intent(MainActivity.this, LookUpSheep.class);
+//					Log.i ("Main case", " after new intent");
+					Bundle mybundle = new Bundle();
+					mybundle.putString ("com.weyr_associates.lambtracker.LastEID", LastEID);
+//					Log.i ("Main case", " after bundle with LastEID = " + LastEID);
+					lookUpSheep ();
+//					MainActivity.this.startActivity(i);
+			        break;
+				
+			}
+			
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
 	}
 	private String SetDefaultStatusText() {
 		String t = "Contact: oogiem@desertweyr.com"; 
@@ -161,8 +243,8 @@ public class MainActivity extends Activity {
 		
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		KeepScreenOn = preferences.getBoolean("keepscreenon", false);
-		Log.i("Activity", "Resume" );
-		
+//		Log.i("Activity", "Resume" );
+		select_sheep_task.setSelection(0);
 		if (mIsBound) { // Request a status update.
 			if (mService != null) {
 				Log.i("Activity", "Resume Bound" );
@@ -171,6 +253,7 @@ public class MainActivity extends Activity {
 					Message msg = Message.obtain(null, eidService.MSG_RELOAD_PREFERENCES, 0, 0);
 					msg.replyTo = mMessenger;
 					mService.send(msg);
+					mIspaused = false;
 				} catch (RemoteException e) {}
 			}
 		}
@@ -201,6 +284,7 @@ public class MainActivity extends Activity {
 			Message msg = Message.obtain(null, eidService.MSG_NO_TAGS_PLEASE);
 			msg.replyTo = mMessenger;
 			mService.send(msg);
+			mIspaused = true;
 		} catch (RemoteException e) {
 			// In this case the service has crashed before we could even do anything with it
 		}
@@ -234,7 +318,7 @@ public class MainActivity extends Activity {
 
 	private void CheckIfServiceIsRunning() {
 		//If the service is running when the activity starts, we want to automatically bind to it.
-		Log.i("LambTracker", "At isRunning.");
+//		Log.i("LambTracker", "At isRunning.");
 		if (eidService.isRunning()) {
 			doBindService();
 			mLogoImage.setVisibility(View.GONE);		} else {
@@ -266,9 +350,6 @@ public class MainActivity extends Activity {
 		case 0: //Settings
 			startActivity(new Intent(this, EditPreferences.class));
 			return true;
-//		case 9: //Record Note Here
-//			AskUserAboutNote();
-//			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
@@ -285,7 +366,7 @@ public class MainActivity extends Activity {
 //					getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 //				}
 			} else {
-				Log.i("Activity", "Disconnect clicked");
+//				Log.i("Activity", "Disconnect clicked");
 				doUnbindService();
 				stopService(new Intent(MainActivity.this, eidService.class));
 				LogMessage("Service Stopped");
@@ -349,10 +430,10 @@ public class MainActivity extends Activity {
 		}
 	}
 	void doUnbindService() {
-		Log.i("Activity", "At DoUnbindservice");
+//		Log.i("Activity", "At DoUnbindservice");
 		if (mService != null) {
 		try {
-			//Stop tags eidService from sending tags
+			//Stop eidService from sending tags
 			Message msg = Message.obtain(null, eidService.MSG_NO_TAGS_PLEASE);
 			msg.replyTo = mMessenger;
 			mService.send(msg);
@@ -368,15 +449,12 @@ public class MainActivity extends Activity {
 					Message msg = Message.obtain(null, eidService.MSG_UNREGISTER_CLIENT);
 					msg.replyTo = mMessenger;
 					mService.send(msg);
-//					Log.i("Activity", "At Unregister");
 				} catch (RemoteException e) {
-//					Log.i("Activity", "At Exception");
 					// There is nothing special we need to do if the service has crashed.
 				}
 			}
 			// Detach our existing connection.
 			unbindService(mConnection);
-//			Log.i("Activity", "At Detaching");
 			mIsBound = false;
 		}
 		textStat.setText("Disconnected");
@@ -395,7 +473,7 @@ public class MainActivity extends Activity {
 		}
 		
 		try {
-			Log.i("Activity", "onDestroy");
+//			Log.i("Activity", "onDestroy");
 			doUnbindService();
 		} catch (Throwable t) {
 			Log.e("MainActivity", "Failed to unbind from the service", t);
@@ -417,6 +495,7 @@ public class MainActivity extends Activity {
 		startActivity(workSheep);
 		}
 
+	// use EID reader to look up a sheep
 	public void lookUpSheep( )
     {
 	Intent lookSheep = new Intent( this, LookUpSheep.class );
@@ -424,6 +503,13 @@ public class MainActivity extends Activity {
 	startActivity(lookSheep);
 	}
 
+	// Convert to EID by updating what tags are where on each sheep
+	public void convertToEID( )
+    {
+	Intent convertSheep = new Intent( this, ConvertToEID.class );
+	startActivity(convertSheep);
+	}
+	
 	// edit the database
 	public void editDB( View v )
 		{
@@ -434,15 +520,15 @@ public class MainActivity extends Activity {
  // quit the app
 	public void quitApp( View v )
 	{
-		Log.i("Activity", "Quit clicked");
+//		Log.i("Activity", "Quit clicked");
 		doUnbindService();
 		stopService(new Intent(MainActivity.this, eidService.class));
 		LogMessage("Service Stopped");
 		finish();
 		this.moveTaskToBack( true );
 	}
-		    	   		
-	}
+	
+}
 
 
 

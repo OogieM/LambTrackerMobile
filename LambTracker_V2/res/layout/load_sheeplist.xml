@@ -10,7 +10,7 @@
 	<EditText
 		android:id="@+id/editText1"
         android:layout_width="match_parent"
-               android:layout_height="175dp"
+               android:layout_height="150dp"
                android:clickable="false"
                android:ems="10"
                android:enabled="true"
@@ -20,40 +20,51 @@
                android:scrollbarAlwaysDrawVerticalTrack="true"
                android:scrollbars="vertical"
                android:textAllCaps="false"
-               android:textSize="12sp"
-               android:typeface="monospace" >
-                <requestFocus />
-            </EditText>
-    
+               android:textSize="18sp"
+               android:typeface="monospace" >               
+            </EditText>          
 	<Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
+        android:id="@+id/copy_db_assets_btn"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="10dp"
-        android:onClick="createDB"
-        android:text="@string/createdb" />
-
-	   <Button
-        android:id="@+id/dumpdb_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button5"
-        android:layout_alignBottom="@+id/button5"
-        android:layout_toRightOf="@+id/button5"
-        android:onClick="@string/dump_db_action"
-        android:text="@string/dump_db" />
-	   	
+        android:layout_below="@+id/editText1"
+     	android:layout_marginLeft="10dp"
+     	android:layout_alignLeft="@+id/editText1"
+        android:onClick="@string/copy_real_db_action"
+        android:text="@string/copy_db_assets_btn" />  
     <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
+        android:id="@+id/show_db_btn"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/dumpdb_btn"
-        android:layout_alignBottom="@+id/dumpdb_btn"
-        android:layout_toRightOf="@+id/dumpdb_btn"
+        android:layout_below="@+id/editText1"     
+        android:layout_toRightOf="@+id/copy_db_assets_btn"
+        android:onClick="@string/show_real_db_action"
+        android:text="@string/show_db_btn" />             
+	<Button
+        android:id="@+id/backup_db_btn"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText1"
+        android:layout_toRightOf="@+id/show_db_btn"
+        android:onClick="backupRealDB"
+        android:text="@string/backup_db_btn" />
+    <Button
+        android:id="@+id/back_btn"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText1"
+        android:layout_alignRight="@+id/editText1"
+        android:layout_toRightOf="@+id/backup_db_btn"
         android:onClick="allDone"
-        android:text="@string/backtomain" />
-    
+        android:text="@string/back_btn" />
+
+    <Button
+        android:id="@+id/select_db_file_btn"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/copy_db_assets_btn"
+        android:layout_below="@+id/copy_db_assets_btn"
+        android:onClick="@string/select_file_db_action"
+        android:text="@string/select_db_file_btn" />
+   
 </RelativeLayout>

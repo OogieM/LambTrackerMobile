@@ -138,11 +138,11 @@ public class eidService extends Service {
 				break;
 			case MSG_SEND_ME_TAGS:
 				sendTagsOK = true; // Client requested Tags
-//				Log.i("eidService", "sendTagsOK.");
+				Log.i("eidService", "sendTagsOK.");
 				break;
 			case MSG_NO_TAGS_PLEASE:
 				sendTagsOK = false; // Client requested No Tags
-//				Log.i("eidService", "No Tags.");
+				Log.i("eidService", "No Tags.");
 				break;
 			default:
 				super.handleMessage(msg);
@@ -274,7 +274,7 @@ public class eidService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		//Log.i("eidService", "Service Started.");
-		logmsgs = TheDateTimeIs() + "Service Started";
+//		logmsgs = TheDateTimeIs() + "Service Started";
 
 		isRunning = true;
 		LoadPreferences(false);
@@ -290,7 +290,7 @@ public class eidService extends Service {
 	}
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.i("eidService", "Received start id " + startId + ": " + intent);
+//		Log.i("eidService", "Received start id " + startId + ": " + intent);
 		return START_STICKY; // run until explicitly stopped.
 	}
 	private void LoadPreferences(Boolean NotifyOfChanges) {
@@ -401,7 +401,7 @@ public class eidService extends Service {
 	// Bluetooth Reader Stuff
 	
 	private synchronized void setBTState(int state) {
-        Log.i("eidService", "setBTState() " + mBTState + " -> " + state);
+//        Log.i("eidService", "setBTState() " + mBTState + " -> " + state);
         mBTState = state;
     }
 	public synchronized int getBTState() {
@@ -409,7 +409,7 @@ public class eidService extends Service {
 	    }
 	public synchronized void BTstart() {
 		SetDisplayMsgType(0);
-		Log.i("eidService", "BTstart");
+//		Log.i("eidService", "BTstart");
         // Cancel any thread attempting to make a connection
         if (mBTConnectThread != null) {mBTConnectThread.cancel(); mBTConnectThread = null;}
         // Cancel any thread currently running a connection
@@ -569,7 +569,7 @@ public class eidService extends Service {
                 	bytesread = mmInStream.read(buffer); //This is a blocking call
                     byte[] tempdata = new byte[bytesread];
                     System.arraycopy(buffer, 0, tempdata, 0, bytesread);
-                    Log.d("EidService", "Got Data: " + new String(tempdata));
+//                    Log.d("EidService", "Got Data: " + new String(tempdata));
                     handler.sendMessage(handler.obtainMessage(MSG_BT_GOT_DATA, tempdata));
                     //mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
                 } catch (IOException e) {
@@ -597,7 +597,7 @@ public class eidService extends Service {
         }
     }
 	public synchronized void BTstop() {
-        Log.i("eidService", "BTstop");
+//        Log.i("eidService", "BTstop");
         if (mBTConnectThread != null) {mBTConnectThread.cancel(); mBTConnectThread = null;}
         if (mBTConnectedThread != null) {mBTConnectedThread.cancel(); mBTConnectedThread = null;}
         setBTState(STATE_NONE);
@@ -615,7 +615,7 @@ public class eidService extends Service {
         r.write(buffer);
 	}
 	private void ParseBTDataStream(byte[] buffer) {
-		LogMessage("bytes from bt:" + buffer.length + ", " + new String(buffer));
+//		LogMessage("bytes from bt:" + buffer.length + ", " + new String(buffer));
 		ParseEIDStream(new String(buffer));
 // Save all data to file
 //			SaveRawDataToFile(buffer); // helpful for debugging 
@@ -629,16 +629,16 @@ public class eidService extends Service {
 		String[] lines = EID.split("\n"); // works for both
 
 
-		LogMessage("In Parse1" + " " + lines.length + ", " + new String(newdata) + ", " + EID);
+//		LogMessage("In Parse1" + " " + lines.length + ", " + new String(newdata) + ", " + EID);
 		if (lines.length > 0) {
 			for (int i = 0; i < lines.length; i++) {
 				completeline = false; // Reset this
 				if (lines.length > 0) { // There is some data here
-					LogMessage("In Parse2" + " " + i + " " + lines[i].length() + " " + lines[i].lastIndexOf("\r"));
+//					LogMessage("In Parse2" + " " + i + " " + lines[i].length() + " " + lines[i].lastIndexOf("\r"));
 					if (lines[i].lastIndexOf("\r") + 1 == lines[i].length()) { // Line ends with a \r 
 						completeline = true;
 							if (lines[i].substring(3, 4).equals("_")) {
-								LogMessage("eidService0, Priority1");
+//								LogMessage("eidService0, Priority1");
 							} else 
 							if (lines[i].substring(3, 4).equals(" ")) {
 									LogMessage("eidService0, Y-Tex Panel");
@@ -647,7 +647,7 @@ public class eidService extends Service {
 								LogMessage("eidService0, Y-Tex Wand");
 								EID = EID.substring(0, 3) + "_" + EID.substring(3,EID.length()-1);
 							}																				
-						LogMessage("eidService1, completeline true");				
+//						LogMessage("eidService1, completeline true");				
 						LastEID = EID.substring(0, EID.length() - 1);  //prune off end of line for the database
  						sendNewEIDMessageToUI();								
 						EID = ""; // Clear out EID for next one
@@ -666,7 +666,7 @@ public class eidService extends Service {
 			}
 
 			if (!completeline) { // Last line wasn't complete, put last incomplete line back
-				LogMessage("eidService2, completeline false but more data to come");
+//				LogMessage("eidService2, completeline false but more data to come");
 				if (lines[lines.length - 1].length() < 1000) { // Only if less than 1000 characters long.
 					EID = lines[lines.length - 1];
 				}
@@ -780,7 +780,7 @@ public class eidService extends Service {
 				LogMessage((String) msg.obj);
 				break;
 			case MSG_BT_FINISHED:
-				Log.i("handleMessage", "MSG_BT_FINISHED");
+//				Log.i("handleMessage", "MSG_BT_FINISHED");
 				BTstop();
 				break;
 			default:
@@ -799,7 +799,7 @@ public class eidService extends Service {
 		// Kill threads
 		if (timer != null) {timer.cancel();}
 
-		Log.i("eidService", "onDestroy.");
+//		Log.i("eidService", "onDestroy.");
 		BTstop();
 
 		
@@ -810,7 +810,7 @@ public class eidService extends Service {
 		}
 
 		stopForeground(true);
-		Log.i("eidService", "Service Stopped.");
+//		Log.i("eidService", "Service Stopped.");
 		isRunning = false;
 	}
 	

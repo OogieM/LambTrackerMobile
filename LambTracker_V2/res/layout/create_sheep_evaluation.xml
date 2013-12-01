@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+  
+    <TextView
+        android:id="@+id/TextView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/select_scored_traits.lbl"
+        android:textSize="18sp" />
+
+    <ScrollView
+		android:id="@+id/scroll1"
+		android:layout_width="fill_parent"
+    	android:layout_height="300dp" 
+    	android:layout_below="@id/TextView2">
+   		<GridLayout
+	   		android:id="@+id/grid1"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:columnCount="1">
+		    <Spinner
+	 	 	  android:id="@+id/trait01_spinner"
+		  	  android:layout_width="fill_parent"
+	 	 	  android:layout_height="wrap_content"
+		  	  android:layout_column="0"
+		  	  android:layout_row="0"
+	 	 	  android:textSize="24sp"/>
+		    <Spinner
+		  	  android:id="@+id/trait02_spinner"
+		  	  android:layout_width="fill_parent"
+		  	  android:layout_height="wrap_content"
+		  	  android:layout_column="0"
+		  	  android:layout_row="1"
+		  	  android:textSize="24sp" />
+		    <Spinner
+		  	  android:id="@+id/trait03_spinner"
+		  	  android:layout_width="fill_parent"
+		  	  android:layout_height="wrap_content"
+		  	  android:layout_column="0"
+		  	  android:layout_row="2"
+		  	  android:textSize="24sp" />
+		    <Spinner
+		  	  android:id="@+id/trait04_spinner"
+		  	  android:layout_width="fill_parent"
+		  	  android:layout_height="wrap_content"
+		  	  android:layout_column="0"
+		  	  android:layout_row="3"
+		  	  android:textSize="24sp" />
+		    <Spinner
+		  	  android:id="@+id/trait05_spinner"
+		  	  android:layout_width="fill_parent"
+		  	  android:layout_height="wrap_content"
+		  	  android:layout_column="0"
+		  	  android:layout_row="4"
+		  	  android:textSize="24sp" />
+		    <Spinner
+		  	  android:id="@+id/trait06_spinner"
+		  	  android:layout_width="fill_parent"
+		  	  android:layout_height="wrap_content"
+		  	  android:layout_column="0"
+		  	  android:layout_row="5"
+		  	  android:textSize="24sp"/>
+		  	  <Spinner
+		  	  android:id="@+id/trait07_spinner"
+		  	  android:layout_width="fill_parent"
+		  	  android:layout_height="wrap_content"
+		  	  android:layout_column="0"
+		  	  android:layout_row="6"
+		  	  android:textSize="24sp"/>
+		    <Spinner
+		  	  android:id="@+id/trait08_spinner"
+		  	  android:layout_width="fill_parent"
+		  	  android:layout_height="wrap_content"
+		  	  android:layout_column="0"
+		  	  android:layout_row="7"
+		  	  android:textSize="24sp"/>
+		    <Spinner
+		  	  android:id="@+id/trait09_spinner"
+		  	  android:layout_width="fill_parent"
+		  	  android:layout_height="wrap_content"
+		  	  android:layout_column="0"
+		  	  android:layout_row="8"
+		  	  android:textSize="24sp"/>
+		    <Spinner
+		  	  android:id="@+id/trait10_spinner"
+		  	  android:layout_width="fill_parent"
+		  	  android:layout_height="wrap_content"
+		  	  android:layout_column="0"
+		  	  android:layout_row="9"
+		  	  android:textSize="24sp"/>
+	    </GridLayout>
+     </ScrollView>
+<TextView
+        android:id="@+id/TextView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/select_value_traits.lbl"
+        android:textSize="18sp" 
+        android:layout_below="@id/scroll1"/>
+
+<ScrollView
+    	android:id="@+id/scroll2"
+    	android:layout_width="fill_parent"
+    	android:layout_height="185dp"
+    	android:layout_below="@id/TextView3">
+	<GridLayout
+        android:id="@+id/grid2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="4">
+        <Spinner
+	  	  android:id="@+id/trait11_spinner"
+	  	  android:layout_width="200dp"
+	  	  android:layout_height="wrap_content"
+	  	  android:layout_column="0"
+	  	  android:layout_row="0"
+	  	  android:textSize="24sp"/>
+		<Spinner
+	  	  android:id="@+id/trait11_units_spinner"
+	  	  android:layout_width="200dp"
+	  	  android:layout_height="wrap_content"
+	  	  android:layout_column="1"
+		  android:layout_row="0"
+	  	  android:textSize="24sp"/>
+	    <Spinner
+	  	  android:id="@+id/trait12_spinner"
+	  	  android:layout_width="200dp"
+	  	  android:layout_height="wrap_content"
+	  	  android:layout_column="0"
+		  android:layout_row="1"
+	  	  android:textSize="24sp"/>
+	    <Spinner
+	  	  android:id="@+id/trait12_units_spinner"
+	  	  android:layout_width="200dp"
+	  	  android:layout_height="wrap_content"
+	  	  android:layout_column="1"
+		  android:layout_row="1"
+	  	  android:textSize="24sp"/>
+	    <Spinner
+	  	  android:id="@+id/trait13_spinner"
+	  	  android:layout_width="200dp"
+	  	  android:layout_height="wrap_content"
+	  	  android:layout_column="0"
+	  	  android:layout_row="2"
+	  	  android:textSize="24sp"/>
+		<Spinner
+	  	  android:id="@+id/trait13_units_spinner"
+	  	  android:layout_width="200dp"
+	  	  android:layout_height="wrap_content"
+	  	  android:layout_column="1"
+		  android:layout_row="2"
+	  	  android:textSize="24sp"/>
+		<Spinner
+	  	  android:id="@+id/trait14_spinner"
+	  	  android:layout_width="200dp"
+	  	  android:layout_height="wrap_content"
+	  	  android:layout_column="0"
+	  	  android:layout_row="3"
+	  	  android:textSize="24sp"/>
+		<Spinner
+	  	  android:id="@+id/trait14_units_spinner"
+	  	  android:layout_width="200dp"
+	  	  android:layout_height="wrap_content"
+	  	  android:layout_column="1"
+		  android:layout_row="3"
+	  	  android:textSize="24sp"/>
+		<Spinner
+	  	  android:id="@+id/trait15_spinner"
+	  	  android:layout_width="200dp"
+	  	  android:layout_height="wrap_content"
+	  	  android:layout_column="0"
+	  	  android:layout_row="4"
+	  	  android:textSize="24sp"/>
+		<Spinner
+	  	  android:id="@+id/trait15_units_spinner"
+	  	  android:layout_width="200dp"
+	  	  android:layout_height="wrap_content"
+	  	  android:layout_column="1"
+		  android:layout_row="4"
+	  	  android:textSize="24sp"/>
+		
+	    </GridLayout>
+	</ScrollView>
+    <RelativeLayout
+    android:id="@+id/RelativeLayout02"
+    android:orientation="horizontal" 
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content"
+  	android:layout_below="@id/scroll2">
+        
+       	<Button
+            android:id="@+id/back_to_main_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_alignParentLeft="true"
+            android:onClick="backBtn"
+            android:text="@string/back_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+            android:id="@+id/create_evaluation_task_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:onClick="createEval"
+            android:layout_toRightOf="@+id/back_to_main_btn"
+            android:text="@string/create_evaluation_task_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+           android:id="@+id/help_btn"
+           android:layout_width="100dp"
+           android:layout_height="50dp"
+           android:layout_alignParentRight="true"
+           android:onClick="helpBtn"
+           android:text="@string/help_btn"
+           android:textSize="14sp" />
+  </RelativeLayout>        
+  
+</RelativeLayout>  
