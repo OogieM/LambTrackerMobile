@@ -468,11 +468,11 @@ public class EvaluateSheep2 extends Activity {
     	dbh.moveToFirstRecord();
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
         	user_evaluation_traits.add(cursor.getString(0));
-//	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
+	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
 	    	user_trait_numbers.add(cursor.getInt(1));
-//	    	Log.i("evaluate2", " trait id number is " + String.valueOf(cursor.getInt(1)));
+	    	Log.i("evaluate2", " trait id number is " + String.valueOf(cursor.getInt(1)));
 	    	user_trait_number_items.add(cursor.getInt(2));
-//	    	Log.i("evaluate2", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
+	    	Log.i("evaluate2", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
     	}
     	cursor.close();  
         
@@ -717,19 +717,21 @@ public class EvaluateSheep2 extends Activity {
     		
 //    		Log.i("save eval ", cmd);
     		dbh.exec( cmd );
-    		cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_table.sheep_id=%d", sheep_id);    		
-    		crsr = dbh.exec( cmd );
-            cursor   = ( Cursor ) crsr;
-            dbh.moveToFirstRecord();
-            
-            String alert_text = (dbh.getStr(0));
-            Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
-    		alert_text = alert_text + "\n" + "Evaluation Done";
-    		Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
-
-    		cmd = String.format("update sheep_table set alert01='%s' where sheep_id=%d", alert_text, sheep_id);
-//    		Log.i("test alert ", cmd);   
-    		dbh.exec( cmd );
+    		//Removed updating the alert until I get the clear alerts function working.
+    		
+//    		cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_table.sheep_id=%d", sheep_id);    		
+//    		crsr = dbh.exec( cmd );
+//            cursor   = ( Cursor ) crsr;
+//            dbh.moveToFirstRecord();
+//            
+//            String alert_text = (dbh.getStr(0));
+//            Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
+//    		alert_text = alert_text + "\n" + "Evaluation Done";
+//    		Log.i ("Evaluate Alert", " Alert Text is " + alert_text);
+//
+//    		cmd = String.format("update sheep_table set alert01='%s' where sheep_id=%d", alert_text, sheep_id);
+////    		Log.i("test alert ", cmd);   
+//    		dbh.exec( cmd );
     		cursor.close();         	
     		clearBtn( null );
     }
