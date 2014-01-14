@@ -476,6 +476,8 @@ public class EvaluateSheep2 extends Activity {
     	}
     	cursor.close();  
         
+    	
+    	
     	Log.i("evaluate2", "number of records in user traits cursor is " + String.valueOf(nRecs3));
     	inflater = getLayoutInflater();	
     	for( int ii = 0; ii < nRecs3; ii++ ){	
