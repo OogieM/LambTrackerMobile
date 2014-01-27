@@ -10,67 +10,65 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="24sp" />
-<ScrollView
-    android:id="@+id/scroll01"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" 
-    android:layout_marginBottom="50dp"
-   	android:layout_below="@id/test_dynamic_spinner">
-        
-    <GridLayout
-        android:id="@+id/grid1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="3">
-        
-      <Spinner
-        android:id="@+id/trait_spinner"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_column="0"
-        android:layout_gravity="right|center"
-        android:layout_row="0"
-        android:textSize="18sp" />
-       
-    <RatingBar
-        android:id="@+id/ratingBar01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:layout_gravity="right|center"
-        android:layout_row="0"
-        android:numStars="5"
-        android:rating="0.0"
-        android:stepSize="1.0" />
-    <TextView
-        android:id="@+id/rb2_lbl"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_column="0"
-        android:layout_gravity="left|center"
-        android:layout_row="1"
-        android:textSize="18sp"
-        android:typeface="monospace" />
-       
-    <RatingBar
-        android:id="@+id/ratingBar02"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:layout_gravity="right|center"
-        android:layout_row="1"
-        android:numStars="5"
-        android:rating="0.0"
-        android:stepSize="1.0" />
-    
-    </GridLayout>
-  </ScrollView>   
-  <RadioGroup
+	
+	<ScrollView
+	    android:id="@+id/scroll01"
+	    android:layout_width="fill_parent"
+	    android:layout_height="275dp"
+	   	android:layout_below="@id/test_dynamic_spinner">
+			<TableLayout
+		       android:id="@+id/TableLayout01"
+		       android:layout_width="fill_parent"
+		       android:layout_height="wrap_content">
+			</TableLayout>  
+  	</ScrollView> 
+  	  
+	<View
+	    android:id="@+id/dividerbar"
+	    android:layout_width="fill_parent"
+	    android:layout_height="2dp"
+	    android:background="@android:color/black"
+	    android:layout_below="@id/scroll01">
+	</View>
+	
+	<ScrollView
+	    android:id="@+id/scroll02"
+	    android:layout_width="fill_parent"
+	    android:layout_height="125dp"
+	   	android:layout_below="@id/dividerbar">
+			<TableLayout
+		       android:id="@+id/TableLayout02"
+		       android:layout_width="fill_parent"
+		       android:layout_height="wrap_content">
+			</TableLayout>  
+  	</ScrollView>   
+  	
+	<View
+	    android:id="@+id/dividerbar02"
+	    android:layout_width="fill_parent"
+	    android:layout_height="2dp"
+	    android:background="@android:color/black"
+	    android:layout_below="@id/scroll02">
+	</View>
+	
+	<ScrollView
+	    android:id="@+id/scroll03"
+	    android:layout_width="fill_parent"
+	    android:layout_height="100dp"
+	   	android:layout_below="@id/dividerbar02">
+			<TableLayout
+		       android:id="@+id/TableLayout03"
+		       android:layout_width="fill_parent"
+		       android:layout_height="wrap_content">
+			</TableLayout>  
+  	</ScrollView>   
+ 		
+  	<RadioGroup
         android:id="@+id/radioGroup1"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
-   		android:layout_below="@id/scroll01">
+   		android:layout_below="@id/scroll02">
   </RadioGroup>
     
     <Button
@@ -90,7 +88,4 @@
         android:layout_alignParentBottom="true"
         android:onClick="saveScores"
         android:text="@string/save_evaluation_scores_btn" />
-
- 
-
 </RelativeLayout>
