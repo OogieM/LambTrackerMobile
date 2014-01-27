@@ -95,9 +95,9 @@
         <item>Create a Sheep Evaluation Task</item>       
         <item>Evaluate Sheep</item>
         <item>Evaluate Sheep2</item>
+        <item>Look Up a Sheep</item>
         <item>Edit Database</item>
         <item>Test Interface Designs</item>
-        <item>Look Up a Sheep</item>
      </string-array>
    
     <string name="sheep_name_lbl">Sheep Name</string>

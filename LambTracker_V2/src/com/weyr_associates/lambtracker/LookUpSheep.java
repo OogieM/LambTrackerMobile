@@ -24,6 +24,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -206,19 +207,20 @@ public class LookUpSheep extends ListActivity
 	}    	
 
 	public void gotEID( )
-	{
+	{		
+//		View v = null;
 		Object crsr;
 		//	make the scan eid button red
 		btn = (Button) findViewById( R.id.scan_eid_btn );
 		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-		String eid = this.getIntent().getExtras().getString("com.weyr_associates.lambtracker.LastEID");
-    	Log.i("LookUpSheep", " before input text " + eid);  
-    	
+//		String eid = this.getIntent().getExtras().getString("com.weyr_associates.lambtracker.LastEID");
+//    	Log.i("LookUpSheep", " before input text " + eid);  
+//    	Log.i("LookUpSheep", " before input text " + LastEID);  
 		// 	Display the EID number
 		TextView TV = (TextView) findViewById (R.id.inputText);
 		TV.setText( LastEID );
 		Log.i("in gotEID ", "with LastEID of " + LastEID);
-		lookForSheep ();
+		
 	}	
 	/////////////////////////////////////////////////////	
 	@Override
@@ -243,130 +245,142 @@ public class LookUpSheep extends ListActivity
 		Log.i("Convert", "back from isRunning");  	
 		////////////////////////////////////    	
 		
-     	// Fill the Tag Type Spinner
-     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
-    	tag_types = new ArrayList<String>();      	
-    	
-    	// Select All fields from id types to build the spinner
-        cmd = "select * from id_type_table";
-        crsr = dbh.exec( cmd );  
-        cursor   = ( Cursor ) crsr;
-    	dbh.moveToFirstRecord();
-    	tag_types.add("Select a Type");
-         // looping through all rows and adding to list
-    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-    		tag_types.add(cursor.getString(1));
-    	}
-    	cursor.close();    	
-    	
-    	// Creating adapter for spinner
-    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		tag_type_spinner.setAdapter (dataAdapter);
-		tag_type_spinner.setSelection(1);	
+//     	// Fill the Tag Type Spinner
+//     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+//    	tag_types = new ArrayList<String>();      	
+//    	
+//    	// Select All fields from id types to build the spinner
+//        cmd = "select * from id_type_table";
+//        crsr = dbh.exec( cmd );  
+//        cursor   = ( Cursor ) crsr;
+//    	dbh.moveToFirstRecord();
+//    	tag_types.add("Select a Type");
+//         // looping through all rows and adding to list
+//    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+//    		tag_types.add(cursor.getString(1));
+//    	}
+//    	cursor.close();    	
+//    	
+//    	// Creating adapter for spinner
+//    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
+//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		tag_type_spinner.setAdapter (dataAdapter);
+//		tag_type_spinner.setSelection(2);	
 
 		// 		here is where I put the actual rcvd eid into the eid variable
 //    	Log.i("LookUpSheep", " Before get extras");
-    	String eid = this.getIntent().getExtras().getString("com.weyr_associates.lambtracker.LastEID");
-    	Log.i("LookUpSheep", " before input text " + eid);  
-        TextView TV = (TextView) findViewById( R.id.inputText );
-        TV.setText (eid);
-        eidText = eid;
+//    	String eid = this.getIntent().getExtras().getString("com.weyr_associates.lambtracker.LastEID");
+//    	Log.i("LookUpSheep", " before input text " + eid);  
+//        TextView TV = (TextView) findViewById( R.id.inputText );
+//        TV.setText (eid);
+//        eidText = eid;
        
         // Moved the rest of the code into a separate method so I can call it from several places.
         
-        Log.i("LookUpSheep", " after set text " + eid);         
-        exists = true;
+//        Log.i("LookUpSheep", " after set text " + eid);         
+//        exists = true;
        
-        exists = tableExists("sheep_table");
-        if (exists){
-        	if( eid != null && eid.length() > 0 ){
-//        		Get the sheep id from the id table for this EID tag number
-	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s'", eid );  
-	        	
-	        	dbh.exec( cmd );
-	        	dbh.moveToFirstRecord();
-	        	thissheep_id = dbh.getInt(0);
-	        
-	        	Log.i("LookUpSheep", "This sheep is record " + String.valueOf(thissheep_id));
-	        	Log.i("LookUpSheep", " Before finding all tags");
-	        	
-	    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-	    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-	    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01 " +
-	    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-	    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-	    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-	    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-	    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
-
-	    		crsr = dbh.exec( cmd ); 
-	    		
-	    		cursor   = ( Cursor ) crsr; 
-	    		startManagingCursor(cursor);
-
-	    		recNo    = 1;
-				nRecs    = cursor.getCount();
-				colNames = cursor.getColumnNames();
-				nrCols   = colNames.length;
-				
-				cursor.moveToFirst();				
-				TV = (TextView) findViewById( R.id.sheepnameText );
-		        TV.setText (dbh.getStr(0));
-		        
-		    	Log.i("LookUpSheep", " before formatting results");
+//        exists = tableExists("sheep_table");
+//        if (exists){
+//        	if( eid != null && eid.length() > 0 ){
+////        		Get the sheep id from the id table for this EID tag number
+//	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s'", eid );  
+//	        	
+//	        	dbh.exec( cmd );
+//	        	dbh.moveToFirstRecord();
+//	        	thissheep_id = dbh.getInt(0);
+//	        
+//	        	Log.i("LookUpSheep", "This sheep is record " + String.valueOf(thissheep_id));
+//	        	Log.i("LookUpSheep", " Before finding all tags");
+//	        	
+//	    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+//	    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+//	    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01 " +
+//	    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+//	    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+//	    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+//	    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+//	    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
+//
+//	    		crsr = dbh.exec( cmd ); 
+//	    		
+//	    		cursor   = ( Cursor ) crsr; 
+//	    		startManagingCursor(cursor);
+//
+//	    		recNo    = 1;
+//				nRecs    = cursor.getCount();
+//				colNames = cursor.getColumnNames();
+//				nrCols   = colNames.length;
+//				
+//				cursor.moveToFirst();				
+//				TV = (TextView) findViewById( R.id.sheepnameText );
+//		        TV.setText (dbh.getStr(0));
+//		        
+//		    	Log.i("LookUpSheep", " before formatting results");
 				
 				//	Get set up to try to use the CursorAdapter to display all the tag data
 				//	Select only the columns I need for the tag display section
-		        String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+//		        String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
 				//	Set the views for each column for each line. A tag takes up 1 line on the screen
-		        int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-				SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
-				setListAdapter(adapter);
+//		        int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+//				SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
+//				setListAdapter(adapter);
 
 				// Now we need to get the alert text for this sheep
-				alert_text = dbh.getStr(8);
-				//	Now to test of the sheep has an alert and if so then display the alert
-				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-			       	// Show the alert		  
-					showAlert(v);
-	        	}
-        	}else{
-	        	return;
-	        }
-	        Log.i("LookUpSheep", " out of the if statement");
-        	dbh.moveToFirstRecord();
-        	if( dbh.getSize() == 0 ){
-        		TV = (TextView) findViewById( R.id.eidText );
-            	TV.setText( eid );
-            	TV = (TextView) findViewById( R.id.sheepnameText );
-            	TV.setText( "Cannot find requested EID tag." );
-            	return;
-        	} 
-        	}
-    		else {
-    			clearBtn( null );
-            	TV = (TextView) findViewById( R.id.sheepnameText );
-                TV.setText( "Sheep Database does not exist." );    			
-        	}
+//				alert_text = dbh.getStr(8);
+//				//	Now to test of the sheep has an alert and if so then display the alert
+//				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+//			       	// Show the alert		  
+//					showAlert(v);
+//	        	}
+//        	}else{
+//	        	return;
+//	        }
+//	        Log.i("LookUpSheep", " out of the if statement");
+//        	dbh.moveToFirstRecord();
+//        	if( dbh.getSize() == 0 ){
+//        		TV = (TextView) findViewById( R.id.eidText );
+//            	TV.setText( eid );
+//            	TV = (TextView) findViewById( R.id.sheepnameText );
+//            	TV.setText( "Cannot find requested EID tag." );
+//            	return;
+//        	} 
+//        	}
+//    		else {
+//    			clearBtn( null );
+//            	TV = (TextView) findViewById( R.id.sheepnameText );
+//                TV.setText( "Sheep Database does not exist." );    			
+//        	}
 //        	lookForSheep ();
         }
-	public void lookForSheep (){
-		View v = null;
+	public void lookForSheep (View v){
+
 		int     nrCols;
 		Object crsr;
 		Boolean exists;
 		TextView TV;
         exists = true;
-        Log.i("LookForSheep", " got to lookForSheep with EID text of " + LastEID);
+     // Hide the keyboard when you click the button
+    	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+    	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    	
+        TV = (TextView) findViewById( R.id.inputText );
+    	String	tag_num = TV.getText().toString();
+        Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
         exists = tableExists("sheep_table");
         if (exists){
-        	if( LastEID != null && LastEID.length() > 0 ){
-//        		Get the sheep id from the id table for this EID tag number
-	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s'", LastEID );  
-	        	
+        	if( tag_num != null && tag_num.length() > 0 ){
+//        		Get the sheep id from the id table for this tag number
+	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s'", tag_num );  	        	
 	        	dbh.exec( cmd );
 	        	dbh.moveToFirstRecord();
+	        	if( dbh.getSize() == 0 )
+		    		{ // no sheep with that  tag in the database so clear out and return
+		    		clearBtn( v );
+		    		TV = (TextView) findViewById( R.id.sheepnameText );
+		        	TV.setText( "Cannot find this sheep." );
+		        	return;
+		    		}
 	        	thissheep_id = dbh.getInt(0);
 	        
 	        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));
@@ -402,35 +416,27 @@ public class LookUpSheep extends ListActivity
 		        String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
 				//	Set the views for each column for each line. A tag takes up 1 line on the screen
 		        int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-				SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
-				setListAdapter(adapter);
+				SimpleCursorAdapter myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
+				setListAdapter(myadapter);
 
 				// Now we need to get the alert text for this sheep
 				alert_text = dbh.getStr(8);
 				//	Now to test of the sheep has an alert and if so then display the alert
 				if (alert_text != null && !alert_text.isEmpty()){
 //				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-						// Show the alert		  
-					
+						// Show the alert		  			
 					showAlert(v);
 	        	}
         	}else{
 	        	return;
 	        }
-	        Log.i("lookForSheep", " out of the if statement");
-        	dbh.moveToFirstRecord();
-        	if( dbh.getSize() == 0 ){
-        		TV = (TextView) findViewById( R.id.eidText );
-            	TV.setText( LastEID );
-            	TV = (TextView) findViewById( R.id.sheepnameText );
-            	TV.setText( "Cannot find requested EID tag." );
-            	return;
-        	} 
+//	        Log.i("lookForSheep", " out of the if statement");
         	}
     		else {
     			clearBtn( null );
             	TV = (TextView) findViewById( R.id.sheepnameText );
-                TV.setText( "Sheep Database does not exist." );    			
+                TV.setText( "Sheep Database does not exist." ); 
+                
         	}
 	}
 //  user clicked 'Scan' button    
@@ -515,12 +521,21 @@ public class LookUpSheep extends ListActivity
     public void clearBtn( View v )
 	    {
 		TextView TV ;
+		ListView LV ;
 		Button btn;
 		TV = (TextView) findViewById( R.id.inputText );
 		TV.setText( "" );		
 		TV = (TextView) findViewById( R.id.sheepnameText );
 		TV.setText( "" );
 		//	Need to clear out the rest of the tags here as well but not sure how to do that
+//		Get set up to try to use the CursorAdapter to display all the tag data
+		//	Select only the columns I need for the tag display section
+//        String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+//		//	Set the views for each column for each line. A tag takes up 1 line on the screen
+//        int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+//		final SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
+//		setListAdapter(adapter);
+		
 		
     }
     private String formatRecord( Cursor crsr )
