@@ -63,6 +63,8 @@ public class LookUpSheep extends ListActivity
 	String     	cmd;
 	Integer 	i;	
 	public Button btn;
+	
+	public SimpleCursorAdapter myadapter;
 
 	/////////////////////////////////////////////////////
 	Messenger mService = null;
@@ -245,27 +247,27 @@ public class LookUpSheep extends ListActivity
 		Log.i("Convert", "back from isRunning");  	
 		////////////////////////////////////    	
 		
-//     	// Fill the Tag Type Spinner
-//     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
-//    	tag_types = new ArrayList<String>();      	
-//    	
-//    	// Select All fields from id types to build the spinner
-//        cmd = "select * from id_type_table";
-//        crsr = dbh.exec( cmd );  
-//        cursor   = ( Cursor ) crsr;
-//    	dbh.moveToFirstRecord();
-//    	tag_types.add("Select a Type");
-//         // looping through all rows and adding to list
-//    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-//    		tag_types.add(cursor.getString(1));
-//    	}
-//    	cursor.close();    	
-//    	
-//    	// Creating adapter for spinner
-//    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
-//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//		tag_type_spinner.setAdapter (dataAdapter);
-//		tag_type_spinner.setSelection(2);	
+     	// Fill the Tag Type Spinner
+     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+    	tag_types = new ArrayList<String>();      	
+    	
+    	// Select All fields from id types to build the spinner
+        cmd = "select * from id_type_table";
+        crsr = dbh.exec( cmd );  
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+    	tag_types.add("Select a Type");
+         // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		tag_types.add(cursor.getString(1));
+    	}
+    	cursor.close();    	
+    	
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		tag_type_spinner.setAdapter (dataAdapter);
+		tag_type_spinner.setSelection(2);	
 
 		// 		here is where I put the actual rcvd eid into the eid variable
 //    	Log.i("LookUpSheep", " Before get extras");
@@ -366,12 +368,14 @@ public class LookUpSheep extends ListActivity
     	
         TV = (TextView) findViewById( R.id.inputText );
     	String	tag_num = TV.getText().toString();
+    	
         Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
         exists = tableExists("sheep_table");
         if (exists){
         	if( tag_num != null && tag_num.length() > 0 ){
-//        		Get the sheep id from the id table for this tag number
-	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s'", tag_num );  	        	
+//        		Get the sheep id from the id table for this tag number and selected tag type
+	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
+	        			"and id_info_table.tag_type='%s' ", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
 	        	dbh.exec( cmd );
 	        	dbh.moveToFirstRecord();
 	        	if( dbh.getSize() == 0 )
@@ -416,7 +420,7 @@ public class LookUpSheep extends ListActivity
 		        String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
 				//	Set the views for each column for each line. A tag takes up 1 line on the screen
 		        int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-				SimpleCursorAdapter myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
+				myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
 				setListAdapter(myadapter);
 
 				// Now we need to get the alert text for this sheep
@@ -442,7 +446,9 @@ public class LookUpSheep extends ListActivity
 //  user clicked 'Scan' button    
  public void scanEid( View v){
  	// Here is where I need to get a tag scanned and put the data into the variable LastEID
-		if (mService != null) {
+	 clearBtn( v );
+	 tag_type_spinner.setSelection(2);
+	 if (mService != null) {
 		try {
 			//Start eidService sending tags
 			Message msg = Message.obtain(null, eidService.MSG_SEND_ME_TAGS);
@@ -535,7 +541,7 @@ public class LookUpSheep extends ListActivity
 //        int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
 //		final SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
 //		setListAdapter(adapter);
-		
+		myadapter.changeCursor(null);
 		
     }
     private String formatRecord( Cursor crsr )
