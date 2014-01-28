@@ -527,21 +527,19 @@ public class LookUpSheep extends ListActivity
     public void clearBtn( View v )
 	    {
 		TextView TV ;
-		ListView LV ;
-		Button btn;
 		TV = (TextView) findViewById( R.id.inputText );
 		TV.setText( "" );		
 		TV = (TextView) findViewById( R.id.sheepnameText );
 		TV.setText( "" );
-		//	Need to clear out the rest of the tags here as well but not sure how to do that
-//		Get set up to try to use the CursorAdapter to display all the tag data
-		//	Select only the columns I need for the tag display section
-//        String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
-//		//	Set the views for each column for each line. A tag takes up 1 line on the screen
-//        int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-//		final SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
-//		setListAdapter(adapter);
-		myadapter.changeCursor(null);
+		//	Need to clear out the rest of the tags here 
+		Log.i("clear btn", "before changing myadapter");
+		try {
+			myadapter.changeCursor(null);
+		}
+		catch (Exception e) {
+			// In this case there is no adapter so do nothing
+		}
+		Log.i("clear btn", "after changing myadapter");
 		
     }
     private String formatRecord( Cursor crsr )

@@ -69,6 +69,7 @@
     <string name="title_activity_evaluate_sheep">Evaluate Sheep</string>
     <string name="title_activity_test_interface_designs">Test Interface Designs</string>
     <string name="title_activity_create_sheep_evaluation">Create Evaluation Task</string>
+    <string name="title_activity_lambing_sheep">Lambing Sheep</string>
     
     <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
@@ -96,6 +97,7 @@
         <item>Evaluate Sheep</item>
         <item>Evaluate Sheep2</item>
         <item>Look Up a Sheep</item>
+        <item>Lambing</item>
         <item>Print Labels</item>
         <item>Edit Database</item>
         <item>Test Interface Designs</item>
