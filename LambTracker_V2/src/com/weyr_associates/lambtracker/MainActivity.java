@@ -206,11 +206,15 @@ public class MainActivity extends Activity {
 					i = new Intent(MainActivity.this, LookUpSheep.class);
 					MainActivity.this.startActivity(i);
 					break;
-				case 7:
+			    case 7:
+					i = new Intent(MainActivity.this, PrintLabels.class);
+					MainActivity.this.startActivity(i);
+			        break;
+				case 8:
 					i = new Intent(MainActivity.this, EditDB.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 8:		
+				case 9:		
 					i = new Intent(MainActivity.this, TestInterfaceDesigns.class);
 					MainActivity.this.startActivity(i);
 			        break;
