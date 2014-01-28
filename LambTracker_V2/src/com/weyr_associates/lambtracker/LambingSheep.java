@@ -474,7 +474,7 @@ public class LambingSheep extends ListActivity
 	    {
 	   	// Display help here   	
 			AlertDialog.Builder builder = new AlertDialog.Builder( this );
-			builder.setMessage( R.string.help_ground_truth_tags )
+			builder.setMessage( R.string.help_lambing_sheep )
 		           .setTitle( R.string.help_warning );
 			builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int idx) {
@@ -500,11 +500,7 @@ public class LambingSheep extends ListActivity
 	      	finish();
 		    }
 	 
-	    public void showAlert (View v){
-//	    		String	alert_text;
-	            String          cmd;    
-	            Object 			crsr2;
-	            
+	    public void showAlert (View v){    		
 	    		// Display alerts here   	
 	    				AlertDialog.Builder builder = new AlertDialog.Builder( this );
 	    				Log.i("ShowAlert", "Alert Text is" + alert_text);
@@ -516,8 +512,7 @@ public class LambingSheep extends ListActivity
 	    			               }
 	    			       });		
 	    				AlertDialog dialog = builder.create();
-	    				dialog.show();
-//	    				cursor2.close();	
+	    				dialog.show();    		
 	    	}
 
 	   
@@ -529,67 +524,14 @@ public class LambingSheep extends ListActivity
 			TV.setText( "" );		
 			TV = (TextView) findViewById( R.id.sheepnameText );
 			TV.setText( "" );
-			//	Need to clear out the rest of the tags here 
+			//	Need to clear out the rest of the tags here but only if we've actually looked for tags.
 			try {
 				myadapter.changeCursor(null);
 			}
 			catch (Exception e) {
 				// In this case there is no adapter so do nothing
 			}		
-	    }
-	    private String formatRecord( Cursor crsr )
-		{
-	    	String        line;
-	    	Log.i("formatRecord", " Got to the format record section");
-		StringBuilder sb       = new StringBuilder();
-		Log.i("formatRecord", " After the String Builder definition");
-		int           nrCols   = colNames.length;
-//		Log.i("formatRecord", " number of columns is " + String.valueOf (nrCols));
-//		line     = String.format( "Record %d of %d:\n", recNo, nRecs );
-		Log.i("formatRecord", " number of records is " + String.valueOf (nRecs));
-//		sb.append( line );
-		
-		Log.i("formatRecord", " number of columns is " + String.valueOf (nrCols));
-		
-		for( int ii = 0; ii < nRecs; ii++ )
-		{	
-			for( int i = 0; i < nrCols; i++ )
-				{
-				switch( cursor.getType(i) )
-					{
-					case Cursor.FIELD_TYPE_FLOAT:
-						line = String.format( "  %s: %f\n", colNames[i], cursor.getFloat(i) );
-//						line = String.format( "%f\n", cursor.getFloat(i) );
-						break;
-					
-					case Cursor.FIELD_TYPE_INTEGER:
-						line = String.format( "  %s: %d\n", colNames[i], cursor.getInt(i) );
-//						line = String.format( "%d\n", cursor.getInt(i) );
-						break;
-					
-					case Cursor.FIELD_TYPE_NULL:
-						line = String.format( "  %s: null\n", colNames[i] );
-//						line = String.format( "null\n", colNames[i] );
-						break;
-					
-					case Cursor.FIELD_TYPE_STRING:
-						line = String.format( "  %s: %s\n", colNames[i], cursor.getString(i) );
-//						line = String.format( "%s\n", cursor.getString(i) );
-						break;
-						
-					default:
-						line = String.format( "  %s: ?? %s ??", colNames[i], cursor.getString(i) );
-//						line = String.format( "%s ", cursor.getString(i) );
-						break;
-					}			
-				Log.i ("format record ", "Before building first line");
-				sb.append( line );
-				}
-			Log.i ("format record ", "Before cursor move to next");
-			cursor.moveToNext();
-		}
-		return sb.toString();
-		}   
+	    }   
 	    
 }
 

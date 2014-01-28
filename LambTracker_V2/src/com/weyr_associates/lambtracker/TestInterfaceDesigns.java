@@ -71,7 +71,7 @@ public class TestInterfaceDesigns extends Activity{
 	    	cmd = String.format("select evaluation_trait_table.trait_name, evaluation_trait_table.id_traitid " +
 		        	"from evaluation_trait_table inner join last_eval_table where " +
 	        		" evaluation_trait_table.id_traitid = last_eval_table.id_traitid and evaluation_trait_table.trait_type = 1 ") ;
-	    	Log.i("test designs", " cmd is " + cmd);
+	    	Log.i("scored traits", " cmd is " + cmd);
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
 	        nRecs    = cursor.getCount();
@@ -79,9 +79,9 @@ public class TestInterfaceDesigns extends Activity{
 	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	        	scored_trait_numbers.add(cursor.getInt(1));
 //	        	tempTraitNumber = cursor.getInt(1);
-	        	Log.i("test designs", " trait number is " + String.valueOf(cursor.getInt(1)));
+	        	Log.i("1st for loop ", "scored traits trait number is " + String.valueOf(cursor.getInt(1)));
 		    	scored_evaluation_traits.add(cursor.getString(0));
-		    	Log.i("test designs", " trait name is " + cursor.getString(0));
+		    	Log.i("1st for loop ", "scored traits trait name is " + cursor.getString(0));
 	    	}
 	    	cursor.close();    	
 //	    	Log.i("test designs", "number of records in cursor is " + String.valueOf(nRecs));
@@ -89,9 +89,9 @@ public class TestInterfaceDesigns extends Activity{
 //	    	Log.i ("test designs", scored_evaluation_traits.get(0));
 	    	for( int ii = 0; ii < nRecs; ii++ ){	
 	    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
-	    		Log.i ("in for loop", " trait name is " + scored_evaluation_traits.get(ii));
+	    		Log.i ("in for loop", " scored trait name is " + scored_evaluation_traits.get(ii));
     			TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);	
-    			Log.i("in for loop", " after TableLayout");
+    			Log.i("scored traits", " after TableLayout");
 		    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_item_entry, table, false);
 		    	tempLabel = scored_evaluation_traits.get(ii);
 //		    	Log.i("in for loop", " tempLabel is " + tempLabel);
@@ -104,7 +104,7 @@ public class TestInterfaceDesigns extends Activity{
 	    	cmd = String.format("select evaluation_trait_table.trait_name, evaluation_trait_table.id_traitid " +
 		        	"from evaluation_trait_table inner join last_eval_table where " +
 	        		" evaluation_trait_table.id_traitid = last_eval_table.id_traitid and evaluation_trait_table.trait_type = 2 ") ;
-	    	Log.i("test designs", " cmd is " + cmd);
+	    	Log.i("data traits", " cmd is " + cmd);
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
 	        nRecs2    = cursor.getCount();
@@ -112,9 +112,9 @@ public class TestInterfaceDesigns extends Activity{
 	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	        	data_trait_numbers.add(cursor.getInt(1));
 //	        	tempTraitNumber = cursor.getInt(1);
-	        	Log.i("test designs", " trait number is " + String.valueOf(cursor.getInt(1)));
+	        	Log.i("data traits", " trait number is " + String.valueOf(cursor.getInt(1)));
 		    	data_evaluation_traits.add(cursor.getString(0));
-		    	Log.i("test designs", " trait name is " + cursor.getString(0));
+		    	Log.i("data traits", " trait name is " + cursor.getString(0));
 	    	}
 	    	cursor.close();    	
 //	    	Log.i("test designs", "number of records in cursor is " + String.valueOf(nRecs));
@@ -122,9 +122,9 @@ public class TestInterfaceDesigns extends Activity{
 //	    	Log.i ("test designs", scored_evaluation_traits.get(0));
 	    	for( int ii = 0; ii < nRecs2; ii++ ){	
 	    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
-	    		Log.i ("in for loop", " trait name is " + data_evaluation_traits.get(ii));
+	    		Log.i ("in for loop", "data trait name is " + data_evaluation_traits.get(ii));
     			TableLayout table = (TableLayout) findViewById(R.id.TableLayout02);	
-    			Log.i("in for loop", " after TableLayout");
+    			Log.i("data traits", " after TableLayout");
 		    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_data_item_entry, table, false);
 		    	tempLabel = data_evaluation_traits.get(ii);
 //		    	Log.i("in for loop", " tempLabel is " + tempLabel);
@@ -135,24 +135,24 @@ public class TestInterfaceDesigns extends Activity{
 	        
 	    	// Set up the user traits
 	  
-	    	cmd = String.format("select evaluation_trait_table.trait_name, custom_evaluation_name_table.id_custom_eval_nameid , " +
+	    	cmd = String.format("select evaluation_trait_table.trait_name, custom_evaluation_name_table.id_traitid , " +
 		        	"custom_evaluation_name_table.custom_eval_number " +
 	    			"from evaluation_trait_table inner join last_eval_table on " +
 		        	" evaluation_trait_table.id_traitid = last_eval_table.id_traitid" +
-		        	" inner join custom_evaluation_name_table on evaluation_trait_table.trait_name = " +
-	        		" custom_evaluation_name_table.custom_eval_name where evaluation_trait_table.trait_type = 3 ") ;
-	    	Log.i("test designs", " cmd is " + cmd);
+		        	" inner join custom_evaluation_name_table on evaluation_trait_table.id_traitid = " +
+	        		" custom_evaluation_name_table.id_traitid where evaluation_trait_table.trait_type = 3 ") ;
+	    	Log.i("user traits", " cmd is " + cmd);
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
 	        nRecs3    = cursor.getCount();
 	        dbh.moveToFirstRecord();
 	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	        	user_evaluation_traits.add(cursor.getString(0));
-		    	Log.i("test designs", " trait name is " + cursor.getString(0));
+		    	Log.i("user traits", " trait name is " + cursor.getString(0));
 		    	user_trait_numbers.add(cursor.getInt(1));
-	        	Log.i("test designs", " trait id number is " + String.valueOf(cursor.getInt(1)));
+	        	Log.i("user traits", " trait id number is " + String.valueOf(cursor.getInt(1)));
 		    	user_trait_number_items.add(cursor.getInt(2));
-		    	Log.i("test designs", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
+		    	Log.i("user traits", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
 	    	}
 	    	cursor.close();  
 	    	
@@ -160,18 +160,18 @@ public class TestInterfaceDesigns extends Activity{
 	    	inflater = getLayoutInflater();	
 //	    	Log.i ("test designs", scored_evaluation_traits.get(0));
 	    	for( int ii = 0; ii < nRecs3; ii++ ){	
-	    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
+	    		Log.i("user traits" , " ii is " + String.valueOf(ii));
 	    		Log.i ("in for loop", " user trait number is " + String.valueOf(user_trait_numbers.get(ii)));
-	    		Log.i ("in for loop", " trait name is " + user_evaluation_traits.get(ii));
+	    		Log.i ("in for loop", " user trait name is " + user_evaluation_traits.get(ii));
 	    		Log.i ("in for loop", " number of trait entries is " + String.valueOf(user_trait_number_items.get(ii)));
     			TableLayout table = (TableLayout) findViewById(R.id.TableLayout03);	
-    			Log.i("in for loop", " after TableLayout");		    	
+    			Log.i("user traits", " after TableLayout");		    	
 		    	//	Get the text for the buttons
 		    	tempText = String.valueOf(user_trait_numbers.get(ii));
 		    	Log.i("in for loop", "trait numbers is " + tempText);
 		    	cmd = String.format("select custom_evaluation_traits_table.custom_evaluation_item " +
 		    			" from custom_evaluation_traits_table " +
-		    			" where custom_evaluation_traits_table.custom_evaluation_id = '%s' "+
+		    			" where custom_evaluation_traits_table.id_traitid = '%s' "+
 		    			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ", tempText);
 		    	Log.i("test designs", " cmd is " + cmd);
 		    	crsr = dbh.exec( cmd );
@@ -181,7 +181,7 @@ public class TestInterfaceDesigns extends Activity{
 		        ArrayList buttons = new ArrayList();
 		        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 		        	buttons.add (cursor.getString(0));
-			    	Log.i("test designs", " radio button text is " + cursor.getString(0));
+			    	Log.i("user traits", " radio button text is " + cursor.getString(0));
 		    	}
 		        TableRow row = (TableRow)inflater.inflate(R.layout.eval_custom_item, table, false);
 		        
