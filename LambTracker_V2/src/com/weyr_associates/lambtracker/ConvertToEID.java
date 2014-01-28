@@ -1,13 +1,8 @@
 package com.weyr_associates.lambtracker;
 
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-
-//import com.weyr_associates.lambtracker.MainActivity.IncomingHandler;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
