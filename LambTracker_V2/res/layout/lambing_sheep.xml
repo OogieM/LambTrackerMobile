@@ -140,18 +140,40 @@
         
      	</GridLayout>
     	    
-       <ListView 
+      	<ListView 
 			android:id="@+id/android:list" 
-	  		android:layout_height="350dp"
+	  		android:layout_height="wrap_content"
 	  		android:layout_width="fill_parent">
 		</ListView>
-
+	<View
+	    android:id="@+id/dividerbar02"
+	    android:layout_width="fill_parent"
+	    android:layout_height="2dp"
+	    android:background="@android:color/black">
+	</View>
+	
+<RelativeLayout
+    android:id="@+id/RelativeLayout04"
+    android:orientation="horizontal" 
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content">
+	        
+      	<Button
+            android:id="@+id/add_lamb_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_alignParentLeft="true"
+            android:onClick="addLamb"
+            android:text="@string/add_lamb_btn"
+            android:textSize="14sp" />
+	</RelativeLayout>
+	      	
 <RelativeLayout
     android:id="@+id/RelativeLayout03"
     android:orientation="horizontal" 
   	android:layout_width="fill_parent"
   	android:layout_height="wrap_content">
-        
+    	
        	<Button
             android:id="@+id/back_to_main_btn"
             android:layout_width="100dp"

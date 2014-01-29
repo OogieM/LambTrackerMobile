@@ -50,6 +50,7 @@
     <string name="save_evaluation_scores_btn">Save Scores</string>
     <string name="create_evaluation_task_btn">Create Evaluation</string>
     <string name="look_up_sheep_btn">Look Up Sheep</string>
+    <string name="add_lamb_btn">Add a Lamb</string>
    
     <string name="load_sheeplist">Load Sheep Database</string>
     <string name="do_sheeptask">Do Sheep Tasks</string>

@@ -227,7 +227,7 @@ public class LambingSheep extends ListActivity
 	    public void onCreate(Bundle savedInstanceState)	
 	    {
 	        super.onCreate(savedInstanceState);
-	        setContentView(R.layout.lookup_sheep);
+	        setContentView(R.layout.lambing_sheep);
 	        Log.i("LookUpSheep", " after set content view");
 	        View v = null;
 	        String 	dbfile = getString(R.string.real_database_file) ;
@@ -440,6 +440,14 @@ public class LambingSheep extends ListActivity
 	                TV.setText( "Sheep Database does not exist." ); 
 	                
 	        	}
+		}
+		
+		public void addLamb (View v){
+			Log.i("addLamb", " at the beginning");
+			// Decide whether to go to a separate screen to fill in data or not
+			
+			
+			
 		}
 	//  user clicked 'Scan' button    
 	 public void scanEid( View v){

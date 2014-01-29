@@ -917,7 +917,7 @@ public class ConvertToEID extends Activity {
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_type_spinner.setAdapter (dataAdapter);
-		tag_type_spinner.setSelection(0);	
+		tag_type_spinner.setSelection(1);	
     	
     	// Fill the Tag Color Spinner
     	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
@@ -938,7 +938,7 @@ public class ConvertToEID extends Activity {
 
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_color_spinner.setAdapter (dataAdapter);
-		tag_color_spinner.setSelection(1);
+		tag_color_spinner.setSelection(5);
 				
     	// Fill the Tag Location Spinner
 		// Only allow ear locations for tags for this task
@@ -952,7 +952,7 @@ public class ConvertToEID extends Activity {
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_locations);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_location_spinner.setAdapter (dataAdapter);
-		tag_location_spinner.setSelection(1);
+		tag_location_spinner.setSelection(2);
 	}
     
     public void showAlert (View v)
