@@ -721,7 +721,7 @@ public class ConvertToEID extends Activity {
     	String sheepnameText, fedText, fed_colorText, fed_locationText;
     	String farmText, farm_colorText, farm_locationText, eidText, eid_colorText, eid_locationText;
     	int		fed_colorid, farm_colorid, eid_colorid, fed_locationid, farm_locationid, eid_locationid;
-    	int		fed_number, farm_number;
+    	int		fed_number, farm_number, flock_id;
     	
     	eid_colorid = 0;
     	eid_locationid = 0;
@@ -810,16 +810,21 @@ public class ConvertToEID extends Activity {
 	    	        cursor   = ( Cursor ) crsr;
 	    	        dbh.moveToFirstRecord();
 	    	        fed_locationid = dbh.getInt(0);
+	    	        // Set the flock ID to be the desert Weyr Flock.
+	    	        // Will have to change to handle the general case. 
+	    	        // In our case we assume all  federal tags being applied are with out CODL01 flock ID
+	    	        flock_id = 1;
+	    	        
 	    	        Log.i("update everything ", "fed location integer " + String.valueOf(fed_locationid));
-	    	      
 	    			Log.i("updatefed", " tag record id is 0 but have fed tag data need to add a new record to id_info_table here");
 	    			Log.i("update everything ", "sheep_id is " + String.valueOf(thissheep_id));
 	    			Log.i("update everything ", "fed color integer " + String.valueOf(fed_colorid));
 	    			Log.i("update everything ", "fed location integer " + String.valueOf(fed_locationid));
 	    			Log.i("update everything ", "today " + today);
 	    			Log.i("update everything ", "fed tag integer " + String.valueOf(fed_number));
-	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
-	    					"values ( %s, 1, %s, %s, %s, '%s', %s )", thissheep_id, fed_colorid, fed_colorid, fed_locationid, today, fed_number);
+	    			Log.i("update everything ", "flock ID " + String.valueOf(flock_id));
+	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) " +
+	    					"values ( %s, 1, %s, %s, %s, '%s', %s, %s )", thissheep_id, fed_colorid, fed_colorid, fed_locationid, today, fed_number, flock_id);
 	    			Log.i("update everything ", "before cmd " + cmd);
 	    			dbh.exec( cmd );	
 	    			Log.i("update everything ", "after cmd exec");
