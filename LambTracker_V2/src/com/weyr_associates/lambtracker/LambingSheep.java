@@ -423,10 +423,10 @@ public class LambingSheep extends ListActivity
 					//TODO
 					//	Add section here to find all lambs and display them
 					
-					cmd = String.format( "select lambing_history_table.lambing_historyid as _id, lambing_history_table.lambing_date, lambing_history_table.lambing_notes " +
-							"from lambing_history_table inner join sheep_table on lambing_history_table.dam_id = '%s' " +
-							" order by lambing_history_table.lambing_date desc", thissheep_id );
-					
+//					cmd = String.format( "select lambing_history_table.lambing_historyid as _id, lambing_history_table.lambing_date, lambing_history_table.lambing_notes " +
+//							"from lambing_history_table inner join sheep_table on lambing_history_table.dam_id = '%s' " +
+//							" order by lambing_history_table.lambing_date desc", thissheep_id );
+//					
 //					crsr2 = dbh.exec( cmd ); 		    		
 //		    		cursor2   = ( Cursor ) crsr2; 
 //		    		startManagingCursor(cursor);
@@ -438,7 +438,7 @@ public class LambingSheep extends ListActivity
 //					
 //						String[] fromColumns2 = new String[ ]{ "lambing_date", "lambing_notes"};
 //						int[] toViews2 = new int[] { R.id.lambing_date, R.id.lambing_notes};
-//						myadapter2 = new SimpleCursorAdapter(this, R.layout.list_entry2, cursor ,fromColumns, toViews, 0);
+//						myadapter2 = new SimpleCursorAdapter(this, R.layout.list_entry2, cursor ,fromColumns2, toViews2, 0);
 //						setListAdapter(myadapter2);
 //						};
 					// Now we need to get the alert text for this sheep
