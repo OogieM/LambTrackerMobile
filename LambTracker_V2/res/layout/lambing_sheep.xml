@@ -27,7 +27,6 @@
             android:layout_column="0"
             android:layout_row="1"
             android:enabled="true"
-            android:inputType="text"
             android:textSize="18sp"
             android:typeface="monospace" >
 			</EditText>
@@ -139,25 +138,34 @@
 	            android:text="@string/tag_type_abbrev_lbl" />
         
      	</GridLayout>
-    	    
+  	    
       	<ListView 
 			android:id="@+id/android:list" 
 	  		android:layout_height="wrap_content"
 	  		android:layout_width="fill_parent">
-		</ListView>
-	<View
-	    android:id="@+id/dividerbar02"
-	    android:layout_width="fill_parent"
-	    android:layout_height="2dp"
-	    android:background="@android:color/black">
-	</View>
-    
-    <ListView 
-			android:id="@+id/android:list2" 
-	  		android:layout_height="wrap_content"
+		</ListView>     	
+		<View
+		    android:id="@+id/dividerbar02"
+		    android:layout_width="fill_parent"
+		    android:layout_height="2dp"
+		    android:background="@android:color/black">
+		</View>
+	    <ListView 
+			android:id="@+id/list2" 
+	  		android:layout_height="100dp"
 	  		android:layout_width="fill_parent">
-	</ListView>
-    
+		</ListView>
+		<View
+		    android:id="@+id/dividerbar03"
+		    android:layout_width="fill_parent"
+		    android:layout_height="2dp"
+		    android:background="@android:color/black">
+		</View>
+	    <ListView 
+			android:id="@+id/list3" 
+	  		android:layout_height="150dp"
+	  		android:layout_width="fill_parent">
+		</ListView>		
 
 <RelativeLayout
     android:id="@+id/RelativeLayout04"

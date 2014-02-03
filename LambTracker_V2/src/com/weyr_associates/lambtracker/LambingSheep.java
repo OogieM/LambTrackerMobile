@@ -19,6 +19,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -30,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
@@ -266,92 +268,7 @@ public class LambingSheep extends ListActivity
 			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			tag_type_spinner.setAdapter (dataAdapter);
 			tag_type_spinner.setSelection(2);	
-
-			// 		here is where I put the actual rcvd eid into the eid variable
-//	    	Log.i("LookUpSheep", " Before get extras");
-//	    	String eid = this.getIntent().getExtras().getString("com.weyr_associates.lambtracker.LastEID");
-//	    	Log.i("LookUpSheep", " before input text " + eid);  
-//	        TextView TV = (TextView) findViewById( R.id.inputText );
-//	        TV.setText (eid);
-//	        eidText = eid;
-	       
-	        // Moved the rest of the code into a separate method so I can call it from several places.
-	        
-//	        Log.i("LookUpSheep", " after set text " + eid);         
-//	        exists = true;
-	       
-//	        exists = tableExists("sheep_table");
-//	        if (exists){
-//	        	if( eid != null && eid.length() > 0 ){
-////	        		Get the sheep id from the id table for this EID tag number
-//		        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s'", eid );  
-//		        	
-//		        	dbh.exec( cmd );
-//		        	dbh.moveToFirstRecord();
-//		        	thissheep_id = dbh.getInt(0);
-//		        
-//		        	Log.i("LookUpSheep", "This sheep is record " + String.valueOf(thissheep_id));
-//		        	Log.i("LookUpSheep", " Before finding all tags");
-//		        	
-//		    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-//		    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-//		    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01 " +
-//		    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-//		    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-//		    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-//		    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-//		    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
-	//
-//		    		crsr = dbh.exec( cmd ); 
-//		    		
-//		    		cursor   = ( Cursor ) crsr; 
-//		    		startManagingCursor(cursor);
-	//
-//		    		recNo    = 1;
-//					nRecs    = cursor.getCount();
-//					colNames = cursor.getColumnNames();
-//					nrCols   = colNames.length;
-//					
-//					cursor.moveToFirst();				
-//					TV = (TextView) findViewById( R.id.sheepnameText );
-//			        TV.setText (dbh.getStr(0));
-//			        
-//			    	Log.i("LookUpSheep", " before formatting results");
-					
-					//	Get set up to try to use the CursorAdapter to display all the tag data
-					//	Select only the columns I need for the tag display section
-//			        String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
-					//	Set the views for each column for each line. A tag takes up 1 line on the screen
-//			        int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-//					SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
-//					setListAdapter(adapter);
-
-					// Now we need to get the alert text for this sheep
-//					alert_text = dbh.getStr(8);
-//					//	Now to test of the sheep has an alert and if so then display the alert
-//					if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-//				       	// Show the alert		  
-//						showAlert(v);
-//		        	}
-//	        	}else{
-//		        	return;
-//		        }
-//		        Log.i("LookUpSheep", " out of the if statement");
-//	        	dbh.moveToFirstRecord();
-//	        	if( dbh.getSize() == 0 ){
-//	        		TV = (TextView) findViewById( R.id.eidText );
-//	            	TV.setText( eid );
-//	            	TV = (TextView) findViewById( R.id.sheepnameText );
-//	            	TV.setText( "Cannot find requested EID tag." );
-//	            	return;
-//	        	} 
-//	        	}
-//	    		else {
-//	    			clearBtn( null );
-//	            	TV = (TextView) findViewById( R.id.sheepnameText );
-//	                TV.setText( "Sheep Database does not exist." );    			
-//	        	}
-//	        	lookForSheep ();
+			TextView TV = (TextView) findViewById( R.id.inputText );
 	        }
 		public void lookForSheep (View v){
 
@@ -359,15 +276,18 @@ public class LambingSheep extends ListActivity
 			Object crsr, crsr2;
 			Boolean exists;
 			TextView TV;
+			
 	        exists = true;
 	     // Hide the keyboard when you click the button
 	    	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
 	    	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 	    	
-	        TV = (TextView) findViewById( R.id.inputText );
+	        TV = (TextView) findViewById( R.id.inputText );	        
 	    	String	tag_num = TV.getText().toString();
-	    	
-	        Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
+
+	    	ListView historylist = (ListView) findViewById(R.id.list2);
+
+	    	Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
 	        exists = tableExists("sheep_table");
 	        if (exists){
 	        	if( tag_num != null && tag_num.length() > 0 ){
@@ -405,11 +325,11 @@ public class LambingSheep extends ListActivity
 					nRecs    = cursor.getCount();
 					colNames = cursor.getColumnNames();
 					nrCols   = colNames.length;
-					
 					cursor.moveToFirst();				
 					TV = (TextView) findViewById( R.id.sheepnameText );
 			        TV.setText (dbh.getStr(0));
-			        
+					// Now we need to get the alert text for this sheep
+			        alert_text = dbh.getStr(8);
 			    	Log.i("lookForSheep", " before formatting results");
 					
 					//	Get set up to try to use the CursorAdapter to display all the tag data
@@ -420,32 +340,40 @@ public class LambingSheep extends ListActivity
 					myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
 					setListAdapter(myadapter);
 					
-					//TODO
-					//	Add section here to find all lambs and display them
-					
-//					cmd = String.format( "select lambing_history_table.lambing_historyid as _id, lambing_history_table.lambing_date, lambing_history_table.lambing_notes " +
-//							"from lambing_history_table inner join sheep_table on lambing_history_table.dam_id = '%s' " +
-//							" order by lambing_history_table.lambing_date desc", thissheep_id );
-//					
-//					crsr2 = dbh.exec( cmd ); 		    		
-//		    		cursor2   = ( Cursor ) crsr2; 
-//		    		startManagingCursor(cursor);
-//					nRecs    = cursor2.getCount();
-//					colNames = cursor2.getColumnNames();
-//					nrCols   = colNames.length;					
-//					cursor2.moveToFirst();			
-//					if (nRecs > 0) {
-//					
-//						String[] fromColumns2 = new String[ ]{ "lambing_date", "lambing_notes"};
-//						int[] toViews2 = new int[] { R.id.lambing_date, R.id.lambing_notes};
-//						myadapter2 = new SimpleCursorAdapter(this, R.layout.list_entry2, cursor ,fromColumns2, toViews2, 0);
-//						setListAdapter(myadapter2);
-//						};
-					// Now we need to get the alert text for this sheep
-					alert_text = dbh.getStr(8);
+					Log.i("lookForSheep", " after filling tag data");
+
+					//	Add display the lambing history for this ewe here					
+					cmd = String.format( "select lambing_history_table.lambing_historyid as _id, lambing_history_table.lambing_date, " +
+							"lambing_history_table.lambing_notes " +
+							"from lambing_history_table inner join sheep_table on sheep_table.sheep_id = lambing_history_table.dam_id " +
+							" where lambing_history_table.dam_id = '%s'  " +
+							"order by lambing_history_table.lambing_date desc", thissheep_id );					
+					crsr2 = dbh.exec( cmd ); 	
+					Log.i("lookForSheep", " after run 2nd sqlite command");
+		    		cursor2   = ( Cursor ) crsr2; 
+		    		startManagingCursor(cursor2);
+					nRecs    = cursor2.getCount();
+					Log.i("lookForSheep", " nRecs is " + String.valueOf(nRecs));
+					colNames = cursor2.getColumnNames();
+					nrCols   = colNames.length;					
+					cursor2.moveToFirst();			
+					if (nRecs > 0) {					
+						String[] fromColumns2 = new String[ ]{ "lambing_date", "lambing_notes"};
+						Log.i("lookForSheep", " after set string array second time");
+						int[] toViews2 = new int[] { R.id.lambing_date, R.id.lambing_notes};
+						Log.i("lookForSheep", " after set integer array second time");
+						myadapter2 = new SimpleCursorAdapter(this, R.layout.list_entry2, cursor2 ,fromColumns2, toViews2, 0);
+						Log.i("lookForSheep", " after set myadapter2");
+						historylist.setAdapter(myadapter2);
+						};
+	//TODO		
+					// Add display current year lambs here if there are any
+						
+						
+						
+						
 					//	Now to test of the sheep has an alert and if so then display the alert
-					if (alert_text != null && !alert_text.isEmpty()){
-//					if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+					if (alert_text != null && !alert_text.isEmpty()){//					if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
 							// Show the alert		  			
 						showAlert(v);
 		        	}
@@ -555,6 +483,7 @@ public class LambingSheep extends ListActivity
 			//	Need to clear out the rest of the tags here but only if we've actually looked for tags.
 			try {
 				myadapter.changeCursor(null);
+				myadapter2.changeCursor(null);
 			}
 			catch (Exception e) {
 				// In this case there is no adapter so do nothing
