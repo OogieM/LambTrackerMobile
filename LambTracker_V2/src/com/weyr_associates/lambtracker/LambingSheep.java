@@ -62,7 +62,7 @@ public class LambingSheep extends ListActivity
 		Integer 	i;	
 		public Button btn;
 		
-		public SimpleCursorAdapter myadapter;
+		public SimpleCursorAdapter myadapter, myadapter2;
 
 		/////////////////////////////////////////////////////
 		Messenger mService = null;
@@ -356,7 +356,7 @@ public class LambingSheep extends ListActivity
 		public void lookForSheep (View v){
 
 			int     nrCols;
-			Object crsr;
+			Object crsr, crsr2;
 			Boolean exists;
 			TextView TV;
 	        exists = true;
@@ -397,8 +397,7 @@ public class LambingSheep extends ListActivity
 		    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
 		    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
 
-		    		crsr = dbh.exec( cmd ); 
-		    		
+		    		crsr = dbh.exec( cmd ); 	    		
 		    		cursor   = ( Cursor ) crsr; 
 		    		startManagingCursor(cursor);
 
@@ -420,7 +419,28 @@ public class LambingSheep extends ListActivity
 			        int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
 					myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
 					setListAdapter(myadapter);
-
+					
+					//TODO
+					//	Add section here to find all lambs and display them
+					
+					cmd = String.format( "select lambing_history_table.lambing_historyid as _id, lambing_history_table.lambing_date, lambing_history_table.lambing_notes " +
+							"from lambing_history_table inner join sheep_table on lambing_history_table.dam_id = '%s' " +
+							" order by lambing_history_table.lambing_date desc", thissheep_id );
+					
+//					crsr2 = dbh.exec( cmd ); 		    		
+//		    		cursor2   = ( Cursor ) crsr2; 
+//		    		startManagingCursor(cursor);
+//					nRecs    = cursor2.getCount();
+//					colNames = cursor2.getColumnNames();
+//					nrCols   = colNames.length;					
+//					cursor2.moveToFirst();			
+//					if (nRecs > 0) {
+//					
+//						String[] fromColumns2 = new String[ ]{ "lambing_date", "lambing_notes"};
+//						int[] toViews2 = new int[] { R.id.lambing_date, R.id.lambing_notes};
+//						myadapter2 = new SimpleCursorAdapter(this, R.layout.list_entry2, cursor ,fromColumns, toViews, 0);
+//						setListAdapter(myadapter2);
+//						};
 					// Now we need to get the alert text for this sheep
 					alert_text = dbh.getStr(8);
 					//	Now to test of the sheep has an alert and if so then display the alert

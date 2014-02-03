@@ -151,7 +151,14 @@
 	    android:layout_height="2dp"
 	    android:background="@android:color/black">
 	</View>
-	
+    
+    <ListView 
+			android:id="@+id/android:list2" 
+	  		android:layout_height="wrap_content"
+	  		android:layout_width="fill_parent">
+	</ListView>
+    
+
 <RelativeLayout
     android:id="@+id/RelativeLayout04"
     android:orientation="horizontal" 
