@@ -41,12 +41,12 @@ public class LambingSheep extends ListActivity
 		private DatabaseHandler dbh;
 		int             id;
 		String 			logmessages;
-		public int 		thissheep_id;
+		public int 		thissheep_id, lamb01_id, lamb02_id, lamb03_id;
 		int             fedtagid, farmtagid, eidtagid;
 		
 		public String 	tag_type_label, tag_color_label, tag_location_label, eid_tag_color_label ;
 		public String 	eid_tag_location_label, eidText, alert_text;
-		public Cursor 	cursor, cursor2;
+		public Cursor 	cursor, cursor2, cursor3;
 
 		public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
 		public List<String> tag_types, tag_locations, tag_colors;
@@ -64,7 +64,7 @@ public class LambingSheep extends ListActivity
 		Integer 	i;	
 		public Button btn;
 		
-		public SimpleCursorAdapter myadapter, myadapter2;
+		public SimpleCursorAdapter myadapter, myadapter2, myadapter3;
 
 		/////////////////////////////////////////////////////
 		Messenger mService = null;
@@ -273,7 +273,7 @@ public class LambingSheep extends ListActivity
 		public void lookForSheep (View v){
 
 			int     nrCols;
-			Object crsr, crsr2;
+			Object crsr, crsr2, crsr3;
 			Boolean exists;
 			TextView TV;
 			
@@ -286,7 +286,8 @@ public class LambingSheep extends ListActivity
 	    	String	tag_num = TV.getText().toString();
 
 	    	ListView historylist = (ListView) findViewById(R.id.list2);
-
+	    	ListView taglist = (ListView) findViewById(R.id.list3);
+	    	
 	    	Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
 	        exists = tableExists("sheep_table");
 	        if (exists){
@@ -344,7 +345,7 @@ public class LambingSheep extends ListActivity
 
 					//	Add display the lambing history for this ewe here					
 					cmd = String.format( "select lambing_history_table.lambing_historyid as _id, lambing_history_table.lambing_date, " +
-							"lambing_history_table.lambing_notes " +
+							"lambing_history_table.lambing_notes, lambing_history_table.lamb01_id, lambing_history_table.lamb02_id, lambing_history_table.lamb03_id " +
 							"from lambing_history_table inner join sheep_table on sheep_table.sheep_id = lambing_history_table.dam_id " +
 							" where lambing_history_table.dam_id = '%s'  " +
 							"order by lambing_history_table.lambing_date desc", thissheep_id );					
@@ -356,7 +357,12 @@ public class LambingSheep extends ListActivity
 					Log.i("lookForSheep", " nRecs is " + String.valueOf(nRecs));
 					colNames = cursor2.getColumnNames();
 					nrCols   = colNames.length;					
-					cursor2.moveToFirst();			
+					cursor2.moveToFirst();	
+					lamb01_id = dbh.getInt(3);
+					Log.i("lookForSheep", " nRecs is " + String.valueOf(lamb01_id));
+					lamb02_id = dbh.getInt(4);
+					Log.i("lookForSheep", " nRecs is " + String.valueOf(lamb02_id));
+					lamb03_id = dbh.getInt(5);
 					if (nRecs > 0) {					
 						String[] fromColumns2 = new String[ ]{ "lambing_date", "lambing_notes"};
 						Log.i("lookForSheep", " after set string array second time");
@@ -368,9 +374,36 @@ public class LambingSheep extends ListActivity
 						};
 	//TODO		
 					// Add display current year lambs here if there are any
+						cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+			    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+			    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01 " +
+			    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+			    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+			    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+			    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+			    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb01_id);
+
+			    		crsr3 = dbh.exec( cmd ); 	    		
+			    		cursor3   = ( Cursor ) crsr3; 
+			    		startManagingCursor(cursor);
+
+			    		recNo    = 1;
+						nRecs    = cursor3.getCount();
+						colNames = cursor3.getColumnNames();
+						nrCols   = colNames.length;
+						cursor.moveToFirst();				
 						
+						// Now we need to get the alert text for this sheep
+//				        alert_text = dbh.getStr(8);
+//				    	Log.i("lookForSheep", " before formatting results");
 						
-						
+						//	Get set up to try to use the CursorAdapter to display all the tag data
+						//	Select only the columns I need for the tag display section
+				        String[] fromColumns3 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+						//	Set the views for each column for each line. A tag takes up 1 line on the screen
+				        int[] toViews3 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+						myadapter3 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor3 ,fromColumns3, toViews3, 0);
+						taglist.setAdapter(myadapter3);						
 						
 					//	Now to test of the sheep has an alert and if so then display the alert
 					if (alert_text != null && !alert_text.isEmpty()){//					if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
@@ -484,6 +517,7 @@ public class LambingSheep extends ListActivity
 			try {
 				myadapter.changeCursor(null);
 				myadapter2.changeCursor(null);
+				myadapter3.changeCursor(null);
 			}
 			catch (Exception e) {
 				// In this case there is no adapter so do nothing
