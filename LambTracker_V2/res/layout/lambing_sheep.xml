@@ -163,9 +163,31 @@
 		</View>
 	    <ListView 
 			android:id="@+id/list3" 
-	  		android:layout_height="150dp"
+	  		android:layout_height="wrap_content"
 	  		android:layout_width="fill_parent">
-		</ListView>		
+		</ListView>	
+		<View
+		    android:id="@+id/dividerbar04"
+		    android:layout_width="fill_parent"
+		    android:layout_height="2dp"
+		    android:background="@android:color/black">
+		</View>
+	    <ListView 
+			android:id="@+id/list4" 
+	  		android:layout_height="wrap_content"
+	  		android:layout_width="fill_parent">
+		</ListView>
+		<View
+		    android:id="@+id/dividerbar05"
+		    android:layout_width="fill_parent"
+		    android:layout_height="2dp"
+		    android:background="@android:color/black">
+		</View>
+	    <ListView 
+			android:id="@+id/list5" 
+	  		android:layout_height="wrap_content"
+	  		android:layout_width="fill_parent">
+		</ListView>	
 
 <RelativeLayout
     android:id="@+id/RelativeLayout04"

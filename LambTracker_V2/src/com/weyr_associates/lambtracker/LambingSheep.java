@@ -46,7 +46,7 @@ public class LambingSheep extends ListActivity
 		
 		public String 	tag_type_label, tag_color_label, tag_location_label, eid_tag_color_label ;
 		public String 	eid_tag_location_label, eidText, alert_text;
-		public Cursor 	cursor, cursor2, cursor3;
+		public Cursor 	cursor, cursor2, cursor3, cursor4, cursor5;
 
 		public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
 		public List<String> tag_types, tag_locations, tag_colors;
@@ -64,7 +64,7 @@ public class LambingSheep extends ListActivity
 		Integer 	i;	
 		public Button btn;
 		
-		public SimpleCursorAdapter myadapter, myadapter2, myadapter3;
+		public SimpleCursorAdapter myadapter, myadapter2, myadapter3, myadapter4, myadapter5;
 
 		/////////////////////////////////////////////////////
 		Messenger mService = null;
@@ -273,7 +273,7 @@ public class LambingSheep extends ListActivity
 		public void lookForSheep (View v){
 
 			int     nrCols;
-			Object crsr, crsr2, crsr3;
+			Object crsr, crsr2, crsr3, crsr4, crsr5;
 			Boolean exists;
 			TextView TV;
 			
@@ -286,7 +286,9 @@ public class LambingSheep extends ListActivity
 	    	String	tag_num = TV.getText().toString();
 
 	    	ListView historylist = (ListView) findViewById(R.id.list2);
-	    	ListView taglist = (ListView) findViewById(R.id.list3);
+	    	ListView lambtags01 = (ListView) findViewById(R.id.list3);
+	    	ListView lambtags02 = (ListView) findViewById(R.id.list4);
+	    	ListView lambtags03 = (ListView) findViewById(R.id.list5);
 	    	
 	    	Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
 	        exists = tableExists("sheep_table");
@@ -374,6 +376,8 @@ public class LambingSheep extends ListActivity
 						};
 	//TODO		
 					// Add display current year lambs here if there are any
+						
+						// First lamb
 						cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
 			    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
 			    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off " +
@@ -383,7 +387,7 @@ public class LambingSheep extends ListActivity
 			    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
 			    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid " +
 			    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb01_id);
-						Log.i("lookForSheep", " command is" + cmd);
+//						Log.i("lookForSheep", " command is" + cmd);
 			    		crsr3 = dbh.exec( cmd ); 
 			    		Log.i("lookForSheep", " after run 3rd sqlite command");
 			    		cursor3   = ( Cursor ) crsr3; 
@@ -407,9 +411,80 @@ public class LambingSheep extends ListActivity
 							//	Set the views for each column for each line. A tag takes up 1 line on the screen
 					        int[] toViews3 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
 							myadapter3 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor3 ,fromColumns3, toViews3, 0);
-							taglist.setAdapter(myadapter3);	
+							lambtags01.setAdapter(myadapter3);	
 						}
-						
+						// second lamb
+						cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
+			    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+			    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off " +
+			    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+			    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+			    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+			    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+			    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid " +
+			    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb02_id);
+//						Log.i("lookForSheep", " command is" + cmd);
+			    		crsr4 = dbh.exec( cmd ); 
+			    		Log.i("lookForSheep", " after run 4th sqlite command");
+			    		cursor4   = ( Cursor ) crsr4; 
+			    		startManagingCursor(cursor4);
+						nRecs    = cursor4.getCount();
+						Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
+//						colNames = cursor3.getColumnNames();
+//						nrCols   = colNames.length;
+						cursor4.moveToFirst();				
+						if (nRecs > 0) {
+							// put the lamb name up and perhaps the lamb's sex
+							// lambs name is dbh.getStr (0)
+							Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
+							Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
+							// lambs sex is dbh.getStr (2)
+							
+							
+							//	Get set up to try to use the CursorAdapter to display all the tag data
+							//	Select only the columns I need for the tag display section
+					        String[] fromColumns4 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+							//	Set the views for each column for each line. A tag takes up 1 line on the screen
+					        int[] toViews4 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+							myadapter4 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns4, toViews4, 0);
+							lambtags02.setAdapter(myadapter4);	
+						}
+						// third lamb
+						cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
+			    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+			    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off " +
+			    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+			    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+			    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+			    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+			    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid " +
+			    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb03_id);
+//						Log.i("lookForSheep", " command is" + cmd);
+			    		crsr5 = dbh.exec( cmd ); 
+			    		Log.i("lookForSheep", " after run 4th sqlite command");
+			    		cursor5   = ( Cursor ) crsr5; 
+			    		startManagingCursor(cursor5);
+						nRecs    = cursor5.getCount();
+						Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
+//						colNames = cursor3.getColumnNames();
+//						nrCols   = colNames.length;
+						cursor5.moveToFirst();				
+						if (nRecs > 0) {
+							// put the lamb name up and perhaps the lamb's sex
+							// lambs name is dbh.getStr (0)
+							Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
+							Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
+							// lambs sex is dbh.getStr (2)
+							
+							
+							//	Get set up to try to use the CursorAdapter to display all the tag data
+							//	Select only the columns I need for the tag display section
+					        String[] fromColumns5 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+							//	Set the views for each column for each line. A tag takes up 1 line on the screen
+					        int[] toViews5 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+							myadapter5 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns5, toViews5, 0);
+							lambtags03.setAdapter(myadapter5);	
+						}
 					//	Now to test of the sheep has an alert and if so then display the alert
 					if (alert_text != null && !alert_text.isEmpty()){
 						// if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
@@ -524,6 +599,8 @@ public class LambingSheep extends ListActivity
 				myadapter.changeCursor(null);
 				myadapter2.changeCursor(null);
 				myadapter3.changeCursor(null);
+				myadapter4.changeCursor(null);
+				myadapter5.changeCursor(null);
 			}
 			catch (Exception e) {
 				// In this case there is no adapter so do nothing
