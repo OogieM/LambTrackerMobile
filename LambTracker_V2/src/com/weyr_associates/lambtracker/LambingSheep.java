@@ -41,7 +41,7 @@ public class LambingSheep extends ListActivity
 		private DatabaseHandler dbh;
 		int             id;
 		String 			logmessages;
-		public int 		thissheep_id, lamb01_id, lamb02_id, lamb03_id;
+		public int 		thissheep_id;
 		int             fedtagid, farmtagid, eidtagid;
 		
 		public String 	tag_type_label, tag_color_label, tag_location_label, eid_tag_color_label ;
@@ -273,6 +273,7 @@ public class LambingSheep extends ListActivity
 		public void lookForSheep (View v){
 
 			int     nrCols;
+			int 	lamb01_id, lamb02_id, lamb03_id;
 			Object crsr, crsr2, crsr3, crsr4, crsr5;
 			Boolean exists;
 			TextView TV;
@@ -281,6 +282,10 @@ public class LambingSheep extends ListActivity
 	     // Hide the keyboard when you click the button
 	    	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
 	    	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+	    	//	empty the lamb records
+	    	lamb01_id = 0;
+	    	lamb02_id = 0;
+	    	lamb03_id = 0;
 	    	
 	        TV = (TextView) findViewById( R.id.inputText );	        
 	    	String	tag_num = TV.getText().toString();
@@ -323,7 +328,6 @@ public class LambingSheep extends ListActivity
 		    		crsr = dbh.exec( cmd ); 	    		
 		    		cursor   = ( Cursor ) crsr; 
 		    		startManagingCursor(cursor);
-
 		    		recNo    = 1;
 					nRecs    = cursor.getCount();
 					colNames = cursor.getColumnNames();
@@ -360,12 +364,13 @@ public class LambingSheep extends ListActivity
 //					colNames = cursor2.getColumnNames();
 					nrCols   = colNames.length;					
 					cursor2.moveToFirst();	
-					lamb01_id = dbh.getInt(3);
-					Log.i("lookForSheep", " first lamb is id " + String.valueOf(lamb01_id));
-					lamb02_id = dbh.getInt(4);
-					Log.i("lookForSheep", " second lamb is id " + String.valueOf(lamb02_id));
-					lamb03_id = dbh.getInt(5);
-					if (nRecs > 0) {					
+					if (nRecs > 0) {
+						lamb01_id = dbh.getInt(3);
+						Log.i("lookForSheep", " first lamb is id " + String.valueOf(lamb01_id));
+						lamb02_id = dbh.getInt(4);
+						Log.i("lookForSheep", " second lamb is id " + String.valueOf(lamb02_id));
+						lamb03_id = dbh.getInt(5);
+						Log.i("lookForSheep", " third lamb is id " + String.valueOf(lamb03_id));
 						String[] fromColumns2 = new String[ ]{ "lambing_date", "lambing_notes"};
 						Log.i("lookForSheep", " after set string array second time");
 						int[] toViews2 = new int[] { R.id.lambing_date, R.id.lambing_notes};
