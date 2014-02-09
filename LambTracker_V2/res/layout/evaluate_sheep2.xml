@@ -106,7 +106,18 @@
             android:layout_row="0"        	
             android:onClick="saveScores"
             android:text="@string/save_evaluation_scores_btn"
-            android:textSize="14sp" />       
+            android:textSize="14sp" /> 
+             
+   		<Button
+            android:id="@+id/alert_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="1"  
+            android:onClick="showAlert"
+            android:text="@string/alert_btn"
+            android:textSize="14sp" />     
   	</GridLayout> 
     
     <GridLayout
@@ -235,12 +246,12 @@
   
 	</RelativeLayout>
 	
-    <RelativeLayout
-    	android:id="@+id/RelativeLayout02"
-    	android:orientation="horizontal" 
-  		android:layout_width="fill_parent"
-  		android:layout_height="wrap_content">
-        
+<RelativeLayout
+    android:id="@+id/BottomButtonBar"
+    android:orientation="horizontal" 
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content">
+    	
        	<Button
             android:id="@+id/back_to_main_btn"
             android:layout_width="100dp"
@@ -251,30 +262,31 @@
             android:textSize="14sp" />
        	
        	<Button
-            android:id="@+id/alert_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-           	android:layout_toRightOf="@+id/back_to_main_btn"
-            android:onClick="showAlert"
-            android:text="@string/alert_btn"
-            android:textSize="14sp" />
-       	<Button
             android:id="@+id/clear_form_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_toRightOf="@+id/alert_btn"
+            android:layout_toRightOf="@+id/back_to_main_btn"
             android:onClick="clearBtn"
             android:text="@string/clear_btn"
             android:textSize="14sp" />
-       		
+       	
+       	<Button
+            android:id="@+id/take_note"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_toRightOf="@+id/clear_form_btn"
+            android:onClick="takeNote"
+            android:text="@string/take_note_btn"
+            android:textSize="14sp" />
+       	
        	<Button
            android:id="@+id/help_btn"
            android:layout_width="100dp"
            android:layout_height="50dp"
-           android:layout_alignParentRight="true"
+           android:layout_toRightOf="@+id/take_note"
            android:onClick="helpBtn"
            android:text="@string/help_btn"
            android:textSize="14sp" />
-  </RelativeLayout>        
+</RelativeLayout>
   
 </LinearLayout>

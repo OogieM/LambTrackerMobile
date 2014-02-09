@@ -206,7 +206,7 @@
 	</RelativeLayout>
 	      	
 <RelativeLayout
-    android:id="@+id/RelativeLayout03"
+    android:id="@+id/BottomButtonBar"
     android:orientation="horizontal" 
   	android:layout_width="fill_parent"
   	android:layout_height="wrap_content">
@@ -228,14 +228,24 @@
             android:onClick="clearBtn"
             android:text="@string/clear_btn"
             android:textSize="14sp" />
+       	
+       	<Button
+            android:id="@+id/take_note"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_toRightOf="@+id/clear_form_btn"
+            android:onClick="takeNote"
+            android:text="@string/take_note_btn"
+            android:textSize="14sp" />
+       	
        	<Button
            android:id="@+id/help_btn"
            android:layout_width="100dp"
            android:layout_height="50dp"
-           android:layout_alignParentRight="true"
+           android:layout_toRightOf="@+id/take_note"
            android:onClick="helpBtn"
            android:text="@string/help_btn"
            android:textSize="14sp" />
-       	</RelativeLayout>
+</RelativeLayout>
 
 </LinearLayout>
