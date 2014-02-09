@@ -269,6 +269,12 @@ public class LambingSheep extends ListActivity
 			tag_type_spinner.setAdapter (dataAdapter);
 			tag_type_spinner.setSelection(2);	
 			TextView TV = (TextView) findViewById( R.id.inputText );
+			
+	       	// make the alert button normal and disabled
+	    	btn = (Button) findViewById( R.id.alert_btn );
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+	    	btn.setEnabled(false);  
+	    	
 	        }
 		public void lookForSheep (View v){
 

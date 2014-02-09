@@ -32,6 +32,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -65,7 +66,8 @@ public class EvaluateSheep2 extends Activity {
 	List<Float> real_scores;
 	public List<String> scored_evaluation_traits, data_evaluation_traits, trait_units, user_evaluation_traits;
 	public List <Integer> scored_trait_numbers, data_trait_numbers, user_trait_numbers, user_trait_number_items;
-	
+	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
+	public List<String> tag_types, tag_locations, tag_colors;
 	ArrayAdapter<String> dataAdapter;
 
 	public Float trait01_data, trait02_data, trait03_data, trait04_data, trait05_data, trait06_data, trait07_data ;
@@ -339,6 +341,28 @@ public class EvaluateSheep2 extends Activity {
     	nRecs4 = 0;	// Number of custom data items to fill the radio buttons
     	
 		CheckIfServiceIsRunning();
+		
+     	// Fill the Tag Type Spinner
+     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+    	tag_types = new ArrayList<String>();      	
+    	
+    	// Select All fields from id types to build the spinner
+        cmd = "select * from id_type_table";
+        crsr = dbh.exec( cmd );  
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+    	tag_types.add("Select a Type");
+         // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		tag_types.add(cursor.getString(1));
+    	}
+    	cursor.close();    	
+    	
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		tag_type_spinner.setAdapter (dataAdapter);
+		tag_type_spinner.setSelection(2);	
 		//	Fill the trait name variables from the last evaluation
 		cmd = "select * from last_eval_table";
     	crsr = dbh.exec( cmd );
@@ -476,9 +500,7 @@ public class EvaluateSheep2 extends Activity {
     	}
     	cursor.close();  
         
-    	
-    	
-    	Log.i("evaluate2", "number of records in user traits cursor is " + String.valueOf(nRecs3));
+     	Log.i("evaluate2", "number of records in user traits cursor is " + String.valueOf(nRecs3));
     	inflater = getLayoutInflater();	
     	for( int ii = 0; ii < nRecs3; ii++ ){	
 //    		Log.i("in for loop" , " ii is " + String.valueOf(ii));

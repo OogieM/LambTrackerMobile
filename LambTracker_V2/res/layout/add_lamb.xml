@@ -4,5 +4,48 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-
+    
+    
+<RelativeLayout
+    android:id="@+id/BottomButtonBar"
+    android:orientation="horizontal" 
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content">
+    	
+       	<Button
+            android:id="@+id/back_to_main_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_alignParentLeft="true"
+            android:onClick="backBtn"
+            android:text="@string/back_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+            android:id="@+id/clear_form_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/back_to_main_btn"
+            android:onClick="clearBtn"
+            android:text="@string/clear_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+            android:id="@+id/take_note"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_toRightOf="@+id/clear_form_btn"
+            android:onClick="takeNote"
+            android:text="@string/take_note_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+           android:id="@+id/help_btn"
+           android:layout_width="100dp"
+           android:layout_height="50dp"
+           android:layout_toRightOf="@+id/take_note"
+           android:onClick="helpBtn"
+           android:text="@string/help_btn"
+           android:textSize="14sp" />
+</RelativeLayout>
 </LinearLayout>

@@ -54,7 +54,7 @@
        </GridLayout>  
        
  <RelativeLayout
-    android:id="@+id/RelativeLayout02"
+    android:id="@+id/TopButtonRow"
     android:orientation="horizontal" 
   	android:layout_width="fill_parent"
   	android:layout_height="wrap_content">    
@@ -64,8 +64,7 @@
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:textSize="18sp" />
-     
+        android:textSize="18sp" />     
      <Button
             android:id="@+id/look_up_sheep_btn"
             android:layout_width="100dp"
@@ -73,8 +72,7 @@
             android:layout_toRightOf="@+id/tag_type_spinner"
             android:onClick="lookForSheep"
             android:text="@string/look_up_sheep_btn"
-            android:textSize="14sp" />
-    
+            android:textSize="14sp" />  
      <Button
             android:id="@+id/alert_btn"
             android:layout_width="100dp"
@@ -82,8 +80,7 @@
             android:layout_toRightOf="@+id/look_up_sheep_btn"
             android:onClick="showAlert"
             android:text="@string/alert_btn"
-            android:textSize="14sp" /> 
-            
+            android:textSize="14sp" />           
      <Button
             android:id="@+id/scan_eid_btn"
             android:layout_width="100dp"
@@ -91,8 +88,7 @@
             android:layout_alignParentRight="true"
             android:onClick="scanEid"
             android:text="@string/scan_eid_btn"
-            android:textSize="14sp" />
-     
+            android:textSize="14sp" />    
   </RelativeLayout>
   		
 		<GridLayout
