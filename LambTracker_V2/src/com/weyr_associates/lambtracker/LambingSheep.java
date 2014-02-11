@@ -275,6 +275,11 @@ public class LambingSheep extends ListActivity
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
 	    	btn.setEnabled(false);  
 	    	
+	       	//	Disable the Next Record and Prev. Record button until we have multiple records
+	    	btn = (Button) findViewById( R.id.next_rec_btn );
+	    	btn.setEnabled(false); 
+	    	btn = (Button) findViewById( R.id.prev_rec_btn );
+	    	btn.setEnabled(false);
 	        }
 		public void lookForSheep (View v){
 

@@ -119,7 +119,6 @@
             android:onClick="nextRecord"
             android:text="@string/next_rec_btn"
             android:textSize="14sp" />
-   
                
        <Button
             android:id="@+id/save_evaluation_scores_btn"
@@ -131,11 +130,8 @@
             android:onClick="saveScores"
             android:text="@string/save_evaluation_scores_btn"
             android:textSize="14sp" /> 
-            
   
- 
     </GridLayout>   
-        
     
     <GridLayout
         android:id="@+id/grid3"
