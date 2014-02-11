@@ -694,6 +694,7 @@ public class EvaluateSheep2 extends Activity {
 //    		b.getText().toString();    		
     		    		
     		String mytoday = TodayIs();
+    		String mytime = TimeIs();
     		// added time stamp here for Dr. Purdy in function TodayIs()
 //    		Log.i("Date is ", mytoday);
    		
@@ -736,9 +737,9 @@ public class EvaluateSheep2 extends Activity {
     		"trait_name13, trait_score13, trait_name14, trait_score14, trait_name15, trait_score15, " +
     		"trait_name16, trait_score16, trait_name17, trait_score17, trait_name18, trait_score18, " +
     		"trait_name19, trait_score19, trait_name20, trait_score20, " +
-    		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date) " +
+    		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date, eval_time) " +
     		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s," +
-    		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s') ", 
+    		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s','%s') ", 
     				sheep_id, trait01, trait01_data, trait02, trait02_data, trait03, trait03_data,
     				trait04, trait04_data, trait05, trait05_data, trait06, trait06_data,
     				trait07, trait07_data, trait08, trait08_data, trait09, trait09_data, 
@@ -746,7 +747,7 @@ public class EvaluateSheep2 extends Activity {
     				trait13, trait13_data, trait14, trait14_data, trait15, trait15_data, 
     				trait16, trait16_data, trait17, trait17_data, trait18, trait18_data,
     				trait19, trait19_data, trait20, trait20_data, 
-    				trait11_unitid, trait12_unitid, trait13_unitid, trait14_unitid, trait15_unitid, mytoday );
+    				trait11_unitid, trait12_unitid, trait13_unitid, trait14_unitid, trait15_unitid, mytoday, mytime );
     		
 //    		Log.i("save eval ", cmd);
     		dbh.exec( cmd );
@@ -885,14 +886,8 @@ public class EvaluateSheep2 extends Activity {
 			int day = calendar.get(Calendar.DAY_OF_MONTH);
 			int month = calendar.get(Calendar.MONTH);
 			int year = calendar.get(Calendar.YEAR);
-	        //12 hour format
-//			int hour = cal.get(Calendar.HOUR);
-	        //24 hour format
-			int hourofday = calendar.get(Calendar.HOUR_OF_DAY);
-			int minute = calendar.get(Calendar.MINUTE);
-			int second = calendar.get(Calendar.SECOND);
 			  
-			return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) + "_" + Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
+			return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
 		}
 	    private String Make2Digits(int i) {
 			if (i < 10) {
@@ -901,6 +896,18 @@ public class EvaluateSheep2 extends Activity {
 				return Integer.toString(i);
 			}
 		}	
+		   private String TimeIs() {
+				Calendar calendar = Calendar.getInstance();
+		        //12 hour format
+//				int hour = cal.get(Calendar.HOUR);
+		        //24 hour format
+				int hourofday = calendar.get(Calendar.HOUR_OF_DAY);
+				int minute = calendar.get(Calendar.MINUTE);
+				int second = calendar.get(Calendar.SECOND);
+				  
+				return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
+			}
+
 //  user clicked 'Scan' button    
  public void scanEid( View v){
  	// Here is where I need to get a tag scanned and put the data into the variable LastEID
