@@ -2,14 +2,8 @@ package com.weyr_associates.lambtracker;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.app.ListActivity;
 import android.widget.ArrayAdapter;
-import android.widget.AdapterView;
-
-import com.weyr_associates.lambtracker.ConvertToEID.IncomingHandler;
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
@@ -25,14 +19,11 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
@@ -274,10 +265,15 @@ public class LookUpSheep extends ListActivity
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
     	btn.setEnabled(false);  
     	
+       	//	Disable the Next Record and Prev. Record button until we have multiple records
+    	btn = (Button) findViewById( R.id.next_rec_btn );
+    	btn.setEnabled(false); 
+    	btn = (Button) findViewById( R.id.prev_rec_btn );
+    	btn.setEnabled(false);
+    	
         }
 	public void lookForSheep (View v){
 
-		int     nrCols;
 		Object crsr;
 		Boolean exists;
 		TextView TV;
@@ -290,13 +286,15 @@ public class LookUpSheep extends ListActivity
     	String	tag_num = TV.getText().toString();
     	
         Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
+        Log.i("LookForSheep", " got to lookForSheep with Tag type of " + tag_type_spinner.getSelectedItemPosition());
         exists = tableExists("sheep_table");
         if (exists){
         	if( tag_num != null && tag_num.length() > 0 ){
 //        		Get the sheep id from the id table for this tag number and selected tag type
 	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
-	        			"and id_info_table.tag_type='%s' ", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
-	        	dbh.exec( cmd );
+	        			"and id_info_table.tag_type='%s' and id_info_table.tag_date_off is null", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
+	        	 Log.i("LookForSheep", " command is  " + cmd);
+	        	 dbh.exec( cmd );
 	        	dbh.moveToFirstRecord();
 	        	if( dbh.getSize() == 0 )
 		    		{ // no sheep with that  tag in the database so clear out and return
@@ -327,7 +325,7 @@ public class LookUpSheep extends ListActivity
 	    		recNo    = 1;
 				nRecs    = cursor.getCount();
 				colNames = cursor.getColumnNames();
-				nrCols   = colNames.length;
+//				nrCols   = colNames.length;
 				
 				cursor.moveToFirst();				
 				TV = (TextView) findViewById( R.id.sheepnameText );
@@ -343,14 +341,27 @@ public class LookUpSheep extends ListActivity
 				myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
 				setListAdapter(myadapter);
 
-				// Now we need to get the alert text for this sheep
-				alert_text = dbh.getStr(8);
-				//	Now to test of the sheep has an alert and if so then display the alert
-				if (alert_text != null && !alert_text.isEmpty()){
-//				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-						// Show the alert		  			
-					showAlert(v);
-	        	}
+		    	// Now we need to check and see if there is an alert for this sheep
+		       	String alert_text = dbh.getStr(8);
+		       	Log.i("in find fed ", "Alert Text is " + alert_text);
+//		    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
+				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+			       	// make the alert button red
+			    	Button btn = (Button) findViewById( R.id.alert_btn );
+			    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+			    	btn.setEnabled(true); 
+			    	//	testing whether I can put up an alert box here without issues
+			    	showAlert(v);
+				}
+				
+//				// Now we need to get the alert text for this sheep
+//				alert_text = dbh.getStr(8);
+//				//	Now to test of the sheep has an alert and if so then display the alert
+//				if (alert_text != null && !alert_text.isEmpty()){
+////				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+//						// Show the alert		  			
+//					showAlert(v);
+//	        	}
         	}else{
 	        	return;
 	        }

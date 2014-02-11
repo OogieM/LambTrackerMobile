@@ -91,15 +91,51 @@
             android:text="@string/scan_eid_btn"
             android:textSize="14sp" />    
   </RelativeLayout>
+      <GridLayout
+        android:id="@+id/secondRowButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="4"
+        android:rowCount="2" >
         
-        <Button
+     <Button
+            android:id="@+id/prev_rec_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
+            android:onClick="previousRecord"
+            android:text="@string/prev_rec_btn"
+            android:textSize="14sp" />
+     
+      <Button
+            android:id="@+id/next_rec_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_column="1"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
+            android:onClick="nextRecord"
+            android:text="@string/next_rec_btn"
+            android:textSize="14sp" />
+   
+               
+       <Button
             android:id="@+id/save_evaluation_scores_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
+            android:layout_column="3"
             android:layout_gravity="left|top"
+            android:layout_row="0"
             android:onClick="saveScores"
             android:text="@string/save_evaluation_scores_btn"
             android:textSize="14sp" /> 
+            
+  
+ 
+    </GridLayout>   
+        
     
     <GridLayout
         android:id="@+id/grid3"

@@ -1,6 +1,8 @@
 package com.weyr_associates.lambtracker;
 
 import java.util.ArrayList;
+import android.widget.ArrayAdapter;
+
 import java.util.Calendar;
 import java.util.List;
 import android.app.Activity;
@@ -21,28 +23,35 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
+
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 
 public class ConvertToEID extends Activity {
 	private DatabaseHandler dbh;
 	int             fedtagid, farmtagid, eidtagid;
-	public Cursor 	cursor;
+	public Cursor 	cursor, cursor2;
 	public int 		thissheep_id, new_tag_type, new_tag_color, new_tag_location;
 	
 	public Button btn;
 	public String tag_type_label, tag_color_label, tag_location_label, new_tag_number, eid_tag_color_label ;
-	public String eid_tag_location_label, eidText;
+	public String eid_tag_location_label, eidText, alert_text;
 	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner, eid_tag_color_spinner, eid_tag_location_spinner;
 	public List<String> tag_types, tag_locations, tag_colors;
+	
 	ArrayAdapter<String> dataAdapter;
 	String     	cmd;
 	Integer 	i;
-		
+	private int             nRecs;
+	private int			    recNo;
+	private String[]        colNames;
+	public SimpleCursorAdapter myadapter;	
+	
 /////////////////////////////////////////////////////
 	
 	Messenger mService = null;
@@ -246,7 +255,7 @@ public class ConvertToEID extends Activity {
         setContentView(R.layout.convert_to_eid);
         String dbname = getString(R.string.real_database_file); 
     	dbh = new DatabaseHandler( this, dbname );
-    	
+    	Object crsr;
  //////////////////////////////////// 
 		CheckIfServiceIsRunning();
 		Log.i("Convert", "back from isRunning");  	
@@ -268,10 +277,10 @@ public class ConvertToEID extends Activity {
     	Log.i("onCreate", " after disable alert button");
     	
     	//	Disable the Next Record and Prev. Record button until we have multiple records
-//    	btn = (Button) findViewById( R.id.next_rec_btn );
-//    	btn.setEnabled(false); 
-//    	btn = (Button) findViewById( R.id.prev_rec_btn );
-//    	btn.setEnabled(false);
+    	btn = (Button) findViewById( R.id.next_rec_btn );
+    	btn.setEnabled(false); 
+    	btn = (Button) findViewById( R.id.prev_rec_btn );
+    	btn.setEnabled(false);
     	
     	//	Disable the bottom update tag button until we choose to add or update
        	btn = (Button) findViewById( R.id.update_display_btn );
@@ -280,7 +289,27 @@ public class ConvertToEID extends Activity {
     	farmtagid = 0;
     	eidtagid = 0;
     	new_tag_number = null;
-
+    	// Fill the Tag Type Spinner
+     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+    	tag_types = new ArrayList<String>();      	
+    	
+    	// Select All fields from id types to build the spinner
+        cmd = "select * from id_type_table";
+        crsr = dbh.exec( cmd );  
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+    	tag_types.add("Select a Type");
+         // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		tag_types.add(cursor.getString(1));
+    	}
+    	cursor.close();    	
+    	
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		tag_type_spinner.setAdapter (dataAdapter);
+		tag_type_spinner.setSelection(1);	
        	}
     
     // user clicked the 'back' button
@@ -406,209 +435,366 @@ public class ConvertToEID extends Activity {
     	btn.getBackground().setColorFilter(null);
     	
     }
- // user clicked 'Search Fed' button
-    public void searchFedTag( View v )
-    	{
-    	String          cmd;
-    	TextView		TV = (TextView) findViewById( R.id.inputText );
-    	String			fed = TV.getText().toString();
-    	Integer			ii;
-    	// Hide the keyboard when you click the button
-    	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-    	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-    	
-// 		Start of the actual code to process the button click
-    	if( fed != null && fed.length() > 0 )
-    		{
-//			Search for the sheep with the entered federal tag number. 
-//    		assumes no duplicate federal tag numbers, ok for our flock not ok for the general case
-    		
-    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-    				"id_info_table.id_infoid, id_info_table.tag_date_off, sheep_table.alert01 " +
-    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-    				"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", fed);
- //   		Log.i("Convert", cmd);
-    		}	
-    	else
-    	{
-    		return;
-     	}
-    	Object crsr = dbh.exec( cmd );   	
-    	dbh.moveToFirstRecord();
-		if( dbh.getSize() == 0 )
-    		{ // no sheep with that federal tag in the database so clear out and return
-    		clearBtn( v );
-    		TV = (TextView) findViewById( R.id.sheepnameText );
-        	TV.setText( "Cannot find this sheep." );
-        	return;
-    		}
-// This section would allow for multiple sheep with same tag if we implement next and previous
-//    	buttons but is commented out for now as our sheep have unique federal tags
-//    	if( dbh.getSize() >1){
-//
-// 			Enable the previous and next record buttons
-//    		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
-//    		btn2.setEnabled(true);  
-//    		//	Set up the various pointers and cursor data needed to traverse the sequence
-//    		recNo    = 1;
-//    		cursor   = (Cursor) crsr;
-//    		nRecs    = cursor.getCount();
-//    		colNames = cursor.getColumnNames();
-//    		cursor.moveToFirst();
-//    	}
-    	fedtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
-		Log.i("Convert", String.valueOf(fedtagid));
-		
-    	TV = (TextView) findViewById(R.id.sheepnameText);
-    	TV.setText(dbh.getStr(0));
-    	TextView TV2 = (TextView) findViewById(R.id.fedText)	;
-    	TV2.setText(dbh.getStr(4));
-    	TextView TV3 = (TextView) findViewById(R.id.fed_colorText);
-    	TV3.setText(dbh.getStr(3));
-    	TextView TV4 = (TextView) findViewById(R.id.fed_locationText);
-    	TV4.setText(dbh.getStr(5));
-    	ii = dbh.getInt(1);
-    	thissheep_id = ii;
-    	
-    	// Now we need to check and see if there is an alert for this sheep
-       	String alert_text = dbh.getStr(8);
-       	Log.i("in find fed ", "Alert Text is " + alert_text);
-//    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
-		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-	       	// make the alert button red
-	    	Button btn = (Button) findViewById( R.id.alert_btn );
-	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-	    	btn.setEnabled(true); 
-	    	//	testing whether I can put up an alert box here without issues
-	    	showAlert(v);
-		}
-     	
-//		Now we need to get the farm tag for that sheep and fill the display with data
-    	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-		"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-		"id_info_table.id_infoid, id_info_table.tag_date_off " +
-		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-		"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-		"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-		"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", ii);
+	public void lookForSheep (View v){
 
-    	//   	Log.i("Convert", cmd);    	
-    	crsr = dbh.exec( cmd );
-    	dbh.moveToFirstRecord();
-		if( dbh.getSize() == 0 )
-		{ // This sheep does not have a farm tag installed
-			TV = (TextView) findViewById( R.id.farm_colorText );
-			TV.setText( "No tag" );
-    	} else {
-    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
-    		TV5.setText(dbh.getStr(4));
-    		TextView TV6 = (TextView) findViewById(R.id.farm_colorText);
-    		TV6.setText(dbh.getStr(3));
-    		TextView TV7 = (TextView) findViewById(R.id.farm_locationText);
-    		TV7.setText(dbh.getStr(5));
-    		ii = dbh.getInt(1);
-    		farmtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
-    	}
-    	}
-// 	user clicked 'Search Farm Tag' button
-    public void searchFarmTag( View v )
-    	{
-    	String          cmd;
-    	TextView		TV = (TextView) findViewById( R.id.inputText );
-    	String			farm = TV.getText().toString();
-    	Integer			ii;
-    	// Hide the keyboard when you click the button
+		Object crsr;
+		Boolean exists;
+		TextView TV;
+        exists = true;
+     // Hide the keyboard when you click the button
     	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
     	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     	
-// 		Start of the actual code to process the button click
-    	if( farm != null && farm.length() > 0 )
-    		{
-//			Search for the sheep with the entered farm tag number. 
-//    		assumes no duplicate farm tag numbers, ok for our flock not ok for the general case
-    		
-    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-    				"id_info_table.id_infoid, id_info_table.tag_date_off, sheep_table.alert01 " +
-    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-    				"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", farm);
-    		
-//    		Log.i("Convert", "building command ");
-    		}	
-    	else
-    	{
-    		return;
-     	}
-    	Object crsr = dbh.exec( cmd );   	
-    	dbh.moveToFirstRecord();
-    	if( dbh.getSize() == 0 )
-    		{ // no sheep with that farm tag in the database so clear out and return
-    		clearBtn( v );
-    		TV = (TextView) findViewById( R.id.sheepnameText );
-        	TV.setText( "Cannot find this sheep." );
-        	return;
-    		}
+        TV = (TextView) findViewById( R.id.inputText );
+    	String	tag_num = TV.getText().toString();
     	
-    	farmtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
-    	TV = (TextView) findViewById(R.id.sheepnameText);
-    	TV.setText(dbh.getStr(0));
-    	TV = (TextView) findViewById(R.id.farmText)	;
-    	TV.setText(dbh.getStr(4));
-    	TV = (TextView) findViewById(R.id.farm_colorText);
-    	TV.setText(dbh.getStr(3));
-    	TV = (TextView) findViewById(R.id.farm_locationText);
-    	TV.setText(dbh.getStr(5));
-    	ii = dbh.getInt(1);
-    	thissheep_id = ii;
-    	
-    	// Now we need to check and see if there is an alert for this sheep
-       	String alert_text = dbh.getStr(8);
-//    	Now to test of the sheep has an alert and if so then set the alerts button to red
-		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-	       	// make the alert button red and enable it and pop up the alert text
-	    	Button btn = (Button) findViewById( R.id.alert_btn );
-	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-	    	btn.setEnabled(true); 
-	    	showAlert(v);
-		}
+        Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
+        exists = tableExists("sheep_table");
+        if (exists){
+        	if( tag_num != null && tag_num.length() > 0 ){
+//        		Get the sheep id from the id table for this tag number and selected tag type
+	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
+	        			"and id_info_table.tag_type='%s' and id_info_table.tag_date_off is null "
+	        			, tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
+	        	dbh.exec( cmd );
+	        	dbh.moveToFirstRecord();
+	        	if( dbh.getSize() == 0 )
+		    		{ // no sheep with that  tag in the database so clear out and return
+		    		clearBtn( v );
+		    		TV = (TextView) findViewById( R.id.sheepnameText );
+		        	TV.setText( "Cannot find this sheep." );
+		        	return;
+		    		}
+	        	thissheep_id = dbh.getInt(0);
+	        
+	        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));
+	        	Log.i("LookForSheep", " Before finding all tags");
+	        	
+	    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.id_typeid, " +
+	    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+	    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01 " +
+	    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+	    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+	    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+	    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+	    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
+
+	    		crsr = dbh.exec( cmd ); 
+	    		
+	    		cursor   = ( Cursor ) crsr; 
+	    		startManagingCursor(cursor);
+
+	    		recNo    = 1;
+				nRecs    = cursor.getCount();
+				colNames = cursor.getColumnNames();
+//				nrCols   = colNames.length;
+				
+				cursor.moveToFirst();				
+				TV = (TextView) findViewById( R.id.sheepnameText );
+		        TV.setText (dbh.getStr(0));
+		        
+		    	// Now we need to check and see if there is an alert for this sheep
+		       	String alert_text = dbh.getStr(8);
+		       	Log.i("in find fed ", "Alert Text is " + alert_text);
+//		    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
+				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+			       	// make the alert button red
+			    	Button btn = (Button) findViewById( R.id.alert_btn );
+			    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+			    	btn.setEnabled(true); 
+			    	//	testing whether I can put up an alert box here without issues
+			    	showAlert(v);
+				}
+		    	Log.i("lookForSheep", " before formatting results");
+				// Need to fill the federal and farm tag info from the returned cursor here
+		        // looping through all rows and adding to list
+		    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+		    		// get the tag type of the first record
+		    		i = dbh.getInt(2);
+		    		Log.i("in for loop", " tag type is " + String.valueOf(i));
+		    		switch (i){		
+				    case 1:
+						//Got a federal tag
+				    	TextView TV2 = (TextView) findViewById(R.id.fedText)	;
+				    	TV2.setText(dbh.getStr(4));
+				    	TextView TV3 = (TextView) findViewById(R.id.fed_colorText);
+				    	TV3.setText(dbh.getStr(3));
+				    	TextView TV4 = (TextView) findViewById(R.id.fed_locationText);
+				    	TV4.setText(dbh.getStr(5));
+				        break;
+				    case 2:
+//				    	// Got an electronic tag
+				    	
+				        break;
+				    case 3:
+						// Got a paint brand
+				    	
+				        break;
+				    case 4:
+				    	// got a farm tag
+			    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
+			    		TV5.setText(dbh.getStr(4));
+			    		TextView TV6 = (TextView) findViewById(R.id.farm_colorText);
+			    		TV6.setText(dbh.getStr(3));
+			    		TextView TV7 = (TextView) findViewById(R.id.farm_locationText);
+			    		TV7.setText(dbh.getStr(5));
+				        break;
+				    case 5:
+//				    	got a tattoo
+				    	
+				        break;
+				    case 6:
+//				    	got a split
+				    	
+				        break;
+				    case 7:
+//				    	got a notch
+				    	
+				        break;
+		    		}
+		    	}
+		    	
+
+		
+	        	
+        	}else{
+	        	return;
+	        }
+//	        Log.i("lookForSheep", " out of the if statement");
+        	}
+    		else {
+    			clearBtn( null );
+            	TV = (TextView) findViewById( R.id.sheepnameText );
+                TV.setText( "Sheep Database does not exist." ); 
+                
+        	}
+	}
 	
-//		Now we need to get the rest of the tags and fill the display with data
-    	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-		"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-		"id_info_table.id_infoid, id_info_table.tag_date_off " +
-		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-		"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-		"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-		"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", ii);
-    	
-    	crsr = dbh.exec( cmd );
-    	dbh.moveToFirstRecord();
-    	
-		if( dbh.getSize() == 0 )
-		{ // This sheep does not have a federal tag installed
-			TV = (TextView) findViewById( R.id.fed_colorText );
-			TV.setText( "No tag" );
-    	} else {
-        	fedtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database   	
-        	TV = (TextView) findViewById(R.id.fedText)	;
-        	TV.setText(dbh.getStr(4));
-        	TV = (TextView) findViewById(R.id.fed_colorText);
-        	TV.setText(dbh.getStr(3));
-        	TV = (TextView) findViewById(R.id.fed_locationText);
-        	TV.setText(dbh.getStr(5));
-        	ii = dbh.getInt(1);
-    	}
-    	}    
-        
+  //	Was in the xml file pulled out until I test the new code  
+//    <Button
+//         android:id="@+id/search_fed_btn"
+//         android:layout_width="100dp"
+//         android:layout_height="50dp"
+//         android:layout_column="0"
+//         android:layout_gravity="left|top"
+//         android:layout_row="1"
+//         android:onClick="searchFedTag"
+//         android:text="@string/search_fed_btn"
+//         android:textSize="14sp" />
+//    <Button
+//         android:id="@+id/search_farm_btn"
+//         android:layout_width="100dp"
+//         android:layout_height="50dp"
+//         android:layout_column="1"
+//         android:layout_gravity="left|top"
+//         android:layout_row="1"
+//         android:onClick="searchFarmTag"
+//         android:text="@string/search_farm_btn"
+//         android:textSize="14sp" />
+    
+ // user clicked 'Search Fed' button
+//    public void searchFedTag( View v )
+//    	{
+//    	String          cmd;
+//    	TextView		TV = (TextView) findViewById( R.id.inputText );
+//    	String			fed = TV.getText().toString();
+//    	Integer			ii;
+//    	// Hide the keyboard when you click the button
+//    	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+//    	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//    	
+//// 		Start of the actual code to process the button click
+//    	if( fed != null && fed.length() > 0 )
+//    		{
+////			Search for the sheep with the entered federal tag number. 
+////    		assumes no duplicate federal tag numbers, ok for our flock not ok for the general case
+//    		
+//    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+//    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+//    				"id_info_table.id_infoid, id_info_table.tag_date_off, sheep_table.alert01 " +
+//    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+//    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+//    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+//    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+//    				"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", fed);
+// //   		Log.i("Convert", cmd);
+//    		}	
+//    	else
+//    	{
+//    		return;
+//     	}
+//    	Object crsr = dbh.exec( cmd );   	
+//    	dbh.moveToFirstRecord();
+//		if( dbh.getSize() == 0 )
+//    		{ // no sheep with that federal tag in the database so clear out and return
+//    		clearBtn( v );
+//    		TV = (TextView) findViewById( R.id.sheepnameText );
+//        	TV.setText( "Cannot find this sheep." );
+//        	return;
+//    		}
+//// This section would allow for multiple sheep with same tag if we implement next and previous
+////    	buttons but is commented out for now as our sheep have unique federal tags
+////    	if( dbh.getSize() >1){
+////
+//// 			Enable the previous and next record buttons
+////    		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
+////    		btn2.setEnabled(true);  
+////    		//	Set up the various pointers and cursor data needed to traverse the sequence
+////    		recNo    = 1;
+////    		cursor   = (Cursor) crsr;
+////    		nRecs    = cursor.getCount();
+////    		colNames = cursor.getColumnNames();
+////    		cursor.moveToFirst();
+////    	}
+//    	fedtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
+//		Log.i("Convert", String.valueOf(fedtagid));
+//		
+//    	TV = (TextView) findViewById(R.id.sheepnameText);
+//    	TV.setText(dbh.getStr(0));
+//    	TextView TV2 = (TextView) findViewById(R.id.fedText)	;
+//    	TV2.setText(dbh.getStr(4));
+//    	TextView TV3 = (TextView) findViewById(R.id.fed_colorText);
+//    	TV3.setText(dbh.getStr(3));
+//    	TextView TV4 = (TextView) findViewById(R.id.fed_locationText);
+//    	TV4.setText(dbh.getStr(5));
+//    	ii = dbh.getInt(1);
+//    	thissheep_id = ii;
+//    	
+//    	// Now we need to check and see if there is an alert for this sheep
+//       	String alert_text = dbh.getStr(8);
+//       	Log.i("in find fed ", "Alert Text is " + alert_text);
+////    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
+//		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+//	       	// make the alert button red
+//	    	Button btn = (Button) findViewById( R.id.alert_btn );
+//	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+//	    	btn.setEnabled(true); 
+//	    	//	testing whether I can put up an alert box here without issues
+//	    	showAlert(v);
+//		}
+//     	
+////		Now we need to get the farm tag for that sheep and fill the display with data
+//    	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+//		"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+//		"id_info_table.id_infoid, id_info_table.tag_date_off " +
+//		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+//		"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+//		"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+//		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+//		"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", ii);
+//
+//    	//   	Log.i("Convert", cmd);    	
+//    	crsr = dbh.exec( cmd );
+//    	dbh.moveToFirstRecord();
+//		if( dbh.getSize() == 0 )
+//		{ // This sheep does not have a farm tag installed
+//			TV = (TextView) findViewById( R.id.farm_colorText );
+//			TV.setText( "No tag" );
+//    	} else {
+//    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
+//    		TV5.setText(dbh.getStr(4));
+//    		TextView TV6 = (TextView) findViewById(R.id.farm_colorText);
+//    		TV6.setText(dbh.getStr(3));
+//    		TextView TV7 = (TextView) findViewById(R.id.farm_locationText);
+//    		TV7.setText(dbh.getStr(5));
+//    		ii = dbh.getInt(1);
+//    		farmtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
+//    	}
+//    	}
+//// 	user clicked 'Search Farm Tag' button
+//    public void searchFarmTag( View v )
+//    	{
+//    	String          cmd;
+//    	TextView		TV = (TextView) findViewById( R.id.inputText );
+//    	String			farm = TV.getText().toString();
+//    	Integer			ii;
+//    	// Hide the keyboard when you click the button
+//    	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+//    	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//    	
+//// 		Start of the actual code to process the button click
+//    	if( farm != null && farm.length() > 0 )
+//    		{
+////			Search for the sheep with the entered farm tag number. 
+////    		assumes no duplicate farm tag numbers, ok for our flock not ok for the general case
+//    		
+//    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+//    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+//    				"id_info_table.id_infoid, id_info_table.tag_date_off, sheep_table.alert01 " +
+//    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+//    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+//    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+//    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+//    				"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", farm);
+//    		
+////    		Log.i("Convert", "building command ");
+//    		}	
+//    	else
+//    	{
+//    		return;
+//     	}
+//    	Object crsr = dbh.exec( cmd );   	
+//    	dbh.moveToFirstRecord();
+//    	if( dbh.getSize() == 0 )
+//    		{ // no sheep with that farm tag in the database so clear out and return
+//    		clearBtn( v );
+//    		TV = (TextView) findViewById( R.id.sheepnameText );
+//        	TV.setText( "Cannot find this sheep." );
+//        	return;
+//    		}
+//    	
+//    	farmtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database
+//    	TV = (TextView) findViewById(R.id.sheepnameText);
+//    	TV.setText(dbh.getStr(0));
+//    	TV = (TextView) findViewById(R.id.farmText)	;
+//    	TV.setText(dbh.getStr(4));
+//    	TV = (TextView) findViewById(R.id.farm_colorText);
+//    	TV.setText(dbh.getStr(3));
+//    	TV = (TextView) findViewById(R.id.farm_locationText);
+//    	TV.setText(dbh.getStr(5));
+//    	ii = dbh.getInt(1);
+//    	thissheep_id = ii;
+//    	
+//    	// Now we need to check and see if there is an alert for this sheep
+//       	String alert_text = dbh.getStr(8);
+////    	Now to test of the sheep has an alert and if so then set the alerts button to red
+//		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+//	       	// make the alert button red and enable it and pop up the alert text
+//	    	Button btn = (Button) findViewById( R.id.alert_btn );
+//	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+//	    	btn.setEnabled(true); 
+//	    	showAlert(v);
+//		}
+//	
+////		Now we need to get the rest of the tags and fill the display with data
+//    	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+//		"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+//		"id_info_table.id_infoid, id_info_table.tag_date_off " +
+//		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+//		"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+//		"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+//		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+//		"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", ii);
+//    	
+//    	crsr = dbh.exec( cmd );
+//    	dbh.moveToFirstRecord();
+//    	
+//		if( dbh.getSize() == 0 )
+//		{ // This sheep does not have a federal tag installed
+//			TV = (TextView) findViewById( R.id.fed_colorText );
+//			TV.setText( "No tag" );
+//    	} else {
+//        	fedtagid = dbh.getInt( 6 ); // Get the id_info_table.id_infoid from the database   	
+//        	TV = (TextView) findViewById(R.id.fedText)	;
+//        	TV.setText(dbh.getStr(4));
+//        	TV = (TextView) findViewById(R.id.fed_colorText);
+//        	TV.setText(dbh.getStr(3));
+//        	TV = (TextView) findViewById(R.id.fed_locationText);
+//        	TV.setText(dbh.getStr(5));
+//        	ii = dbh.getInt(1);
+//    	}
+//    	}    
+//        
 
     // user clicked 'remove fed tag' button   
     public void removeFedTag( View v )
@@ -912,7 +1098,7 @@ public class ConvertToEID extends Activity {
     	new_tag_number = null;
        	// Fill the Tag Type Spinner
      	//	Decided to only allow Federal and Farm as tag type options for this task
-    	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+    	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner2);
     	tag_types = new ArrayList<String>();      	
     	tag_types.add("Select a Type");
     	tag_types.add("Federal");
@@ -991,7 +1177,7 @@ public class ConvertToEID extends Activity {
     	String 			cmd;
     	TextView 		TV;
     	// Get the data from the add tag section of the screen
-    	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+    	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner2);
     	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
     	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
     	
@@ -1072,7 +1258,7 @@ public class ConvertToEID extends Activity {
         	    farmtagid = 0;
         	}
         	//	Clear out the add tag section    	
-        	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+        	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner2);
         	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
         	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
         	TV  = (TextView) findViewById( R.id.new_tag_number);
@@ -1082,4 +1268,13 @@ public class ConvertToEID extends Activity {
         	TV.setText( "" );
         	}
      	}
+	public boolean tableExists (String table){
+		try {
+	        dbh.exec("select * from "+ table);   
+	        return true;
+		} catch (SQLiteException e) {
+			return false;
+	        		}
+	        	}
+
 }
