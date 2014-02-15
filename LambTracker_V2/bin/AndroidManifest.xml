@@ -94,6 +94,13 @@
             android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation">
         </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.AddLamb"
+            android:label="@string/title_activity_add_lamb" 
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="orientation">
+        </activity>
         <activity 
             android:name="com.weyr_associates.lambtracker.MyOnItemSelectedListener" >
         </activity>

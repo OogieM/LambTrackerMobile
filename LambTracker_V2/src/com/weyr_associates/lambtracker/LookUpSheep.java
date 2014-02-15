@@ -32,12 +32,13 @@ public class LookUpSheep extends ListActivity
 	private DatabaseHandler dbh;
 	int             id;
 	String 			logmessages;
-	public int 		thissheep_id;
+	public int 		thissheep_id, thissire_id, thisdam_id;
 	int             fedtagid, farmtagid, eidtagid;
 	
 	public String 	tag_type_label, tag_color_label, tag_location_label, eid_tag_color_label ;
 	public String 	eid_tag_location_label, eidText, alert_text;
-	public Cursor 	cursor, cursor2;
+	public String 	thissire_name, thisdam_name;
+	public Cursor 	cursor, cursor2, cursor3;
 
 	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
 	public List<String> tag_types, tag_locations, tag_colors;
@@ -51,7 +52,7 @@ public class LookUpSheep extends ListActivity
 	int[] tagViews;
 
 	ArrayAdapter<String> dataAdapter;
-	String     	cmd;
+	String     	cmd, cmd2;
 	Integer 	i;	
 	public Button btn;
 	
@@ -206,9 +207,6 @@ public class LookUpSheep extends ListActivity
 		//	make the scan eid button red
 		btn = (Button) findViewById( R.id.scan_eid_btn );
 		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-//		String eid = this.getIntent().getExtras().getString("com.weyr_associates.lambtracker.LastEID");
-//    	Log.i("LookUpSheep", " before input text " + eid);  
-//    	Log.i("LookUpSheep", " before input text " + LastEID);  
 		// 	Display the EID number
 		TextView TV = (TextView) findViewById (R.id.inputText);
 		TV.setText( LastEID );
@@ -258,7 +256,7 @@ public class LookUpSheep extends ListActivity
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_type_spinner.setAdapter (dataAdapter);
-		tag_type_spinner.setSelection(2);	
+		tag_type_spinner.setSelection(1);	
 
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
@@ -274,7 +272,7 @@ public class LookUpSheep extends ListActivity
         }
 	public void lookForSheep (View v){
 
-		Object crsr;
+		Object crsr, crsr3;
 		Boolean exists;
 		TextView TV;
         exists = true;
@@ -310,7 +308,8 @@ public class LookUpSheep extends ListActivity
 	        	
 	    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 	    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-	    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01 " +
+	    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
+	    				"sheep_table.sire_id, sheep_table.dam_id " +
 	    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
 	    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 	    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
@@ -330,20 +329,58 @@ public class LookUpSheep extends ListActivity
 				cursor.moveToFirst();				
 				TV = (TextView) findViewById( R.id.sheepnameText );
 		        TV.setText (dbh.getStr(0));
+		        alert_text = dbh.getStr(8);
+		    	
+		        //	Get the sire and dam id numbers
+		        thissire_id = dbh.getInt(9);
+		        Log.i("LookForSheep", " Sire is " + String.valueOf(thissire_id));
+		        thisdam_id = dbh.getInt(10);
+		        Log.i("LookForSheep", " Dam is " + String.valueOf(thisdam_id));
 		        
+		        //	Go get the sire name
+		        if (thissire_id != 0){
+			        cmd2 = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thissire_id);
+			        Log.i("LookForSheep", " cmd is " + cmd2);		        
+			        crsr3 = dbh.exec( cmd2);
+			        Log.i("LookForSheep", " after second db lookup");
+			        cursor3   = ( Cursor ) crsr3; 
+		    		startManagingCursor(cursor3);
+		    		cursor3.moveToFirst();
+		    		TV = (TextView) findViewById( R.id.sireName );
+		    		thissire_name = dbh.getStr(0);
+		    		TV.setText (thissire_name);	 
+		    		Log.i("lookForSheep", " Sire is " + thissire_name);
+			        Log.i("LookForSheep", " Sire is " + String.valueOf(thissire_id));
+		        }
+		        if(thisdam_id != 0){
+			        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thisdam_id);
+			        crsr3 = dbh.exec( cmd);
+			        cursor3   = ( Cursor ) crsr3; 
+	//	    		startManagingCursor(cursor3);
+		    		cursor3.moveToFirst();
+		    		TV = (TextView) findViewById( R.id.damName );
+		    		thisdam_name = dbh.getStr(0);
+		    		TV.setText (thisdam_name);	
+		    		Log.i("lookForSheep", " Dam is " + thisdam_name);
+			        Log.i("LookForSheep", " Dam is " + String.valueOf(thisdam_id));
+		        }    		
 		    	Log.i("lookForSheep", " before formatting results");
 				
 				//	Get set up to try to use the CursorAdapter to display all the tag data
 				//	Select only the columns I need for the tag display section
 		        String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+				Log.i("LookForSheep", "after setting string array fromColumns");
 				//	Set the views for each column for each line. A tag takes up 1 line on the screen
 		        int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-				myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
-				setListAdapter(myadapter);
+		        Log.i("LookForSheep", "after setting string array toViews");
+		        myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
+		        Log.i("LookForSheep", "after setting myadapter");
+		        setListAdapter(myadapter);
+		        Log.i("LookForSheep", "after setting list adapter");
 
 		    	// Now we need to check and see if there is an alert for this sheep
-		       	String alert_text = dbh.getStr(8);
-		       	Log.i("in find fed ", "Alert Text is " + alert_text);
+//		       	String alert_text = dbh.getStr(8);
+//		       	Log.i("Alert Text is " , alert_text);
 //		    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
 				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
 			       	// make the alert button red
@@ -353,19 +390,30 @@ public class LookUpSheep extends ListActivity
 			    	//	testing whether I can put up an alert box here without issues
 			    	showAlert(v);
 				}
-				
-//				// Now we need to get the alert text for this sheep
-//				alert_text = dbh.getStr(8);
-//				//	Now to test of the sheep has an alert and if so then display the alert
-//				if (alert_text != null && !alert_text.isEmpty()){
-////				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-//						// Show the alert		  			
-//					showAlert(v);
-//	        	}
+////		        cmd = String.format( "select sheep_table.sheep_name where sheep_table.sheep_id = '%s'", thissire_id);
+//		        crsr3 = dbh.exec( cmd);
+//		        cursor3   = ( Cursor ) crsr3; 
+//	    		startManagingCursor(cursor3);
+//	    		cursor3.moveToFirst();
+//	    		TV = (TextView) findViewById( R.id.sireName );
+//	    		thissire_name = dbh.getStr(0);
+//	    		TV.setText (thissire_name);	
+//	    		Log.i("lookForSheep", " Sire is " + thissire_name);
+//	    		
+//		        cmd = String.format( "select sheep_table.sheep_name where sheep_table.sheep_id = '%s'", thisdam_id);
+//		        crsr3 = dbh.exec( cmd);
+//		        cursor3   = ( Cursor ) crsr3; 
+//	    		startManagingCursor(cursor3);
+//	    		cursor3.moveToFirst();
+//	    		TV = (TextView) findViewById( R.id.damName );
+//	    		thisdam_name = dbh.getStr(0);
+//	    		TV.setText (thisdam_name);	 
+//	    		Log.i("lookForSheep", " Dam is " + thisdam_name);
+	    		
         	}else{
 	        	return;
 	        }
-//	        Log.i("lookForSheep", " out of the if statement");
+	        Log.i("lookForSheep", " out of the if statement");
         	}
     		else {
     			clearBtn( null );
@@ -461,6 +509,10 @@ public class LookUpSheep extends ListActivity
 		TV = (TextView) findViewById( R.id.inputText );
 		TV.setText( "" );		
 		TV = (TextView) findViewById( R.id.sheepnameText );
+		TV.setText( "" );
+		TV = (TextView) findViewById( R.id.sireName );
+		TV.setText( "" );
+		TV = (TextView) findViewById( R.id.damName );
 		TV.setText( "" );
 		//	Need to clear out the rest of the tags here 
 		Log.i("clear btn", "before changing myadapter");

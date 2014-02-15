@@ -521,10 +521,12 @@ public class LambingSheep extends ListActivity
 		}
 		
 		public void addLamb (View v){
+			Intent i = null;
 			Log.i("addLamb", " at the beginning");
 			// Decide whether to go to a separate screen to fill in data or not
 			
-			
+			i = new Intent(LambingSheep.this, AddLamb.class);
+			LambingSheep.this.startActivity(i);
 			
 		}
 	//  user clicked 'Scan' button    

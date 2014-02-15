@@ -523,6 +523,7 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
            	android:layout_alignParentLeft="true"
+           	android:layout_alignParentBottom="true"
             android:onClick="backBtn"
             android:text="@string/back_btn"
             android:textSize="14sp" />
@@ -532,6 +533,7 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_toRightOf="@+id/back_to_main_btn"
+            android:layout_alignParentBottom="true"
             android:onClick="clearBtn"
             android:text="@string/clear_btn"
             android:textSize="14sp" />
@@ -541,6 +543,7 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
            	android:layout_toRightOf="@+id/clear_form_btn"
+           	android:layout_alignParentBottom="true"
             android:onClick="takeNote"
             android:text="@string/take_note_btn"
             android:textSize="14sp" />
@@ -550,6 +553,7 @@
            android:layout_width="100dp"
            android:layout_height="50dp"
            android:layout_toRightOf="@+id/take_note"
+           android:layout_alignParentBottom="true"
            android:onClick="helpBtn"
            android:text="@string/help_btn"
            android:textSize="14sp" />
