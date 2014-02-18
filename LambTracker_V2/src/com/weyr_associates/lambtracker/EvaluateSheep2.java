@@ -361,13 +361,13 @@ public class EvaluateSheep2 extends Activity {
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		tag_types.add(cursor.getString(1));
     	}
-    	cursor.close();    	
-    	
+    	cursor.close();    	   	
     	// Creating adapter for spinner
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_type_spinner.setAdapter (dataAdapter);
 		tag_type_spinner.setSelection(2);	
+		
 		//	Fill the trait name variables from the last evaluation
 		cmd = "select * from last_eval_table";
     	crsr = dbh.exec( cmd );
@@ -515,7 +515,6 @@ public class EvaluateSheep2 extends Activity {
     		TV = (TextView) findViewById(R.id.radioGroup1_lbl);       
             TV.setText (user_evaluation_traits.get(ii));
     		Log.i ("in for loop", " number of trait entries is " + String.valueOf(user_trait_number_items.get(ii)));
-//			TableLayout table = (TableLayout) findViewById(R.id.TableLayout03);	
 //			Log.i("in for loop", " after TableLayout");		    	
 	    	//	Get the text for the buttons
 	    	tempText = String.valueOf(user_trait_numbers.get(ii));
@@ -539,7 +538,6 @@ public class EvaluateSheep2 extends Activity {
 	        radioBtnText = (String[]) buttons.toArray(new String [buttons.size()]);
 	    	cursor.close();  
 	    	// Build the radio buttons here
-//	    	radioGroup = ((RadioGroup) row.findViewById(R.id.radioGroup1));
 	    	radioGroup = ((RadioGroup) findViewById(R.id.radioGroup1));
 	    	addRadioButtons(user_trait_number_items.get(ii), radioBtnText);
     	}

@@ -28,8 +28,12 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 public class AddLamb extends Activity {
 	private DatabaseHandler dbh;
@@ -38,10 +42,11 @@ public class AddLamb extends Activity {
 	public Button btn;
 	public String alert_text;
 	public Cursor 	cursor;
-	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
-	public List<String> tag_types, tag_locations, tag_colors;
+	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner, lamb_ease_spinner;
+	public List<String> tag_types, tag_locations, tag_colors, lambing_ease;
 	ArrayAdapter<String> dataAdapter;
 	public int 		thissheep_id;
+	public RadioGroup radioGroup;
 	
 	/////////////////////////////////////////////////////
 	Messenger mService = null;
@@ -210,7 +215,8 @@ public class AddLamb extends Activity {
         Log.i("AddLamb", " after get database file");
     	dbh = new DatabaseHandler( this, dbfile );
     	Object crsr;
-    	
+    	ArrayList radiobtnlist;
+    	String[] radioBtnText;
        	Boolean			exists;
 
    	 //////////////////////////////////// 
@@ -251,8 +257,91 @@ public class AddLamb extends Activity {
    	btn = (Button) findViewById( R.id.prev_rec_btn );
    	btn.setEnabled(false);
 
+ 	//	Disable the Take Note button
+	btn = (Button) findViewById( R.id.take_note );
+	btn.setEnabled(false);
+	
+   	//	Fill the lamb sex radio group
+   		radiobtnlist = new ArrayList();  
+   		radiobtnlist.add ("Ram");
+   		radiobtnlist.add ("Ewe");
+   		radiobtnlist.add ("Unknown");
+	    radioBtnText = (String[]) radiobtnlist.toArray(new String [radiobtnlist.size()]);
+		cursor.close();  
+		// Build the radio buttons here
+		radioGroup = ((RadioGroup) findViewById(R.id.radioGroupSex));
+		addRadioButtons(3, radioBtnText);
+		radiobtnlist.clear ();
+		
+	//	Fill the birth and rear type radio group
+//   		radiobtnlist = new ArrayList();  
+   		radiobtnlist.add ("Single");
+   		radiobtnlist.add ("Twin");
+   		radiobtnlist.add ("Triplet");
+	    radioBtnText = (String[]) radiobtnlist.toArray(new String [radiobtnlist.size()]);
+		 
+		// Build the radio buttons here
+		radioGroup = ((RadioGroup) findViewById(R.id.radioBirthType));
+		addRadioButtons(3, radioBtnText);
+		//	Fill the rear type radio group   		
+//	    radioBtnText = (String[]) radiobtnlist.toArray(new String [radiobtnlist.size()]);
+//		cursor.close();  
+		// Build the radio buttons here
+		radioGroup = ((RadioGroup) findViewById(R.id.radioRearType));
+		addRadioButtons(3, radioBtnText);
+		radiobtnlist.clear ();
+		
+    	//	Get the text for the lamb ease buttons  
+		lamb_ease_spinner = (Spinner) findViewById(R.id.lamb_ease_spinner);
+    	cmd = String.format("select custom_evaluation_traits_table.custom_evaluation_item " +
+    			" from custom_evaluation_traits_table " +
+    			" where custom_evaluation_traits_table.id_traitid = '%s' "+
+    			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ", 24);
+//    	Log.i("evaluate2", " cmd is " + cmd);	    	
+    	crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+        lambing_ease = new ArrayList<String>();
+        lambing_ease.add("Lambing Ease");
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+        	lambing_ease.add (cursor.getString(0));
+	    	Log.i("addlamb", " Lambing ease text is " + cursor.getString(0));
+    	}        
+     	cursor.close();  
+    	// Creating adapter for spinner
+     	Log.i("addlamb", " before create lambing ease adapter" );    	
+     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, lambing_ease);
+     	Log.i("addlamb", " after create lambing ease adapter" );
+     	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+     	Log.i("addlamb", " after set resource" );
+     	lamb_ease_spinner.setAdapter (dataAdapter);
+     	Log.i("addlamb", " after set adapter" );
+		lamb_ease_spinner.setSelection(0);
+		Log.i("addlamb", " after set selection" );
+    }
+    public void updateDatabase( View v ){
+
+    	
+    	
     	
     }
+    public void addNewTag( View v ){
+    	
+   
+	//	Get set up to try to use the CursorAdapter to display all the tag data
+	//	Select only the columns I need for the tag display section
+//    String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+//	Log.i("LookForSheep", "after setting string array fromColumns");
+//	//	Set the views for each column for each line. A tag takes up 1 line on the screen
+//    int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+//    Log.i("LookForSheep", "after setting string array toViews");
+//    myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
+//    Log.i("LookForSheep", "after setting myadapter");
+//    setListAdapter(myadapter);
+//    Log.i("LookForSheep", "after setting list adapter");
+    
+    }
+
 	public boolean tableExists (String table){
 		try {
 	        dbh.exec("select * from "+ table);   
@@ -261,7 +350,27 @@ public class AddLamb extends Activity {
 			return false;
 	        		}
 	        	}
+	private void addRadioButtons(int numButtons, String[] radioBtnText) {
+	  	  int i;
 
+	  	  for(i = 0; i < numButtons; i++){
+	  	    //instantiate...
+	  	    RadioButton radioBtn = new RadioButton(this);
+
+	  	    //set the values that you would otherwise hardcode in the xml...
+	  	  	radioBtn.setLayoutParams 
+	  	      (new LayoutParams 
+	  	      (LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+	  	    //label the button...
+	  	  	radioBtn.setText(radioBtnText[i]);
+//	  	  	Log.i("addradiobuttons", radioBtnText[i]);
+	  	  	radioBtn.setId(i);
+
+	  	    //add it to the group.
+	  	    radioGroup.addView(radioBtn, i);
+	  	  }
+	  	}        
     public void helpBtn( View v )
     {
    	// Display help here   	
