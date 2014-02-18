@@ -309,7 +309,7 @@ public class ConvertToEID extends Activity {
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_type_spinner.setAdapter (dataAdapter);
-		tag_type_spinner.setSelection(1);	
+		tag_type_spinner.setSelection(4);	
        	}
     
     // user clicked the 'back' button
@@ -495,16 +495,7 @@ public class ConvertToEID extends Activity {
 		        
 		    	// Now we need to check and see if there is an alert for this sheep
 		       	String alert_text = dbh.getStr(8);
-		       	Log.i("in find fed ", "Alert Text is " + alert_text);
-//		    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
-				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-			       	// make the alert button red
-			    	Button btn = (Button) findViewById( R.id.alert_btn );
-			    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-			    	btn.setEnabled(true); 
-			    	//	testing whether I can put up an alert box here without issues
-			    	showAlert(v);
-				}
+		       	Log.i("lookForSheep ", "Alert Text is " + alert_text);
 		    	Log.i("lookForSheep", " before formatting results");
 				// Need to fill the federal and farm tag info from the returned cursor here
 		        // looping through all rows and adding to list
@@ -524,6 +515,23 @@ public class ConvertToEID extends Activity {
 				        break;
 				    case 2:
 //				    	// Got an electronic tag
+				    	TV2 = (TextView) findViewById(R.id.eidText)	;
+				    	TV2.setText(dbh.getStr(4));
+				    	Log.i("in for loop", " got EID tag ");	
+				    	//	This part isn't working. I want to set the EID tag color spinner but this isn't working
+//				    	ArrayAdapter myAdap = (ArrayAdapter) eid_tag_color_spinner.getAdapter(); //cast to an ArrayAdapter
+//				    	Log.i("in for loop", " after myAdap ");	
+				    	//				    	int spinnerPosition = myAdap.getPosition(dbh.getStr(3));
+				    	Log.i("in for loop", " position to look for is " + dbh.getStr(3));
+				    	//set the default according to value
+//				    	eid_tag_color_spinner.setSelection(spinnerPosition);
+				    	
+//				    	This part isn't working. I want to set the EID tag location spinner but this isn't working
+//				    	myAdap = (ArrayAdapter) eid_tag_location_spinner.getAdapter(); //cast to an ArrayAdapter
+//				    	spinnerPosition = myAdap.getPosition(dbh.getStr(5));
+				    	Log.i("in for loop", " position to look for is " + dbh.getStr(5));
+				    	//set the default according to value
+//				    	eid_tag_location_spinner.setSelection(spinnerPosition);
 				    	
 				        break;
 				    case 3:
@@ -532,6 +540,7 @@ public class ConvertToEID extends Activity {
 				        break;
 				    case 4:
 				    	// got a farm tag
+				    	Log.i("in for loop", " got Farm tag ");	
 			    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
 			    		TV5.setText(dbh.getStr(4));
 			    		TextView TV6 = (TextView) findViewById(R.id.farm_colorText);
@@ -553,11 +562,16 @@ public class ConvertToEID extends Activity {
 				        break;
 		    		}
 		    	}
-		    	
-
-		
-	        	
-        	}else{
+//		    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
+				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+			       	// make the alert button red
+			    	Button btn = (Button) findViewById( R.id.alert_btn );
+			    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+			    	btn.setEnabled(true); 
+			    	//	testing whether I can put up an alert box here without issues
+			    	showAlert(v);
+				}
+       	}else{
 	        	return;
 	        }
 //	        Log.i("lookForSheep", " out of the if statement");
@@ -1129,7 +1143,7 @@ public class ConvertToEID extends Activity {
 
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_color_spinner.setAdapter (dataAdapter);
-		tag_color_spinner.setSelection(5);
+		tag_color_spinner.setSelection(1);
 				
     	// Fill the Tag Location Spinner
 		// Only allow ear locations for tags for this task

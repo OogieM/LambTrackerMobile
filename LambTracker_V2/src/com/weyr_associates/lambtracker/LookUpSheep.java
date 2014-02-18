@@ -1,6 +1,7 @@
 package com.weyr_associates.lambtracker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import android.app.ListActivity;
 import android.widget.ArrayAdapter;
@@ -17,9 +18,11 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -525,58 +528,124 @@ public class LookUpSheep extends ListActivity
 		Log.i("clear btn", "after changing myadapter");
 		
     }
-    private String formatRecord( Cursor crsr )
-	{
-    	String        line;
-    	Log.i("formatRecord", " Got to the format record section");
-	StringBuilder sb       = new StringBuilder();
-	Log.i("formatRecord", " After the String Builder definition");
-	int           nrCols   = colNames.length;
+    private String TodayIs() {
+ 		Calendar calendar = Calendar.getInstance();
+ 		int day = calendar.get(Calendar.DAY_OF_MONTH);
+ 		int month = calendar.get(Calendar.MONTH);
+ 		int year = calendar.get(Calendar.YEAR);
+ 		return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
+ 	}
+     private String Make2Digits(int i) {
+ 		if (i < 10) {
+ 			return "0" + i;
+ 		} else {
+ 			return Integer.toString(i);
+ 		}
+ 	}
+    public void takeNote( View v )
+    {
+    	final Context context = this;
+    	//Implement take a note stuff here
+    	if (thissheep_id == 0) {
+    		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
+    	}
+    	else {
+    		Log.i ("takeNote", " got a sheep, need to get a note to add");
+    		
+    		LayoutInflater li = LayoutInflater.from(context);
+			View promptsView = li.inflate(R.layout.note_prompt, null);
+
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					context);
+
+			// set prompts.xml to alertdialog builder
+			alertDialogBuilder.setView(promptsView);
+
+			final EditText userInput = (EditText) promptsView
+					.findViewById(R.id.note_text);
+
+			// set dialog message
+			alertDialogBuilder
+				.setCancelable(false)
+				.setPositiveButton("Save Note",
+				  new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface dialog,int id) {
+					// get user input and set it to result
+					// edit text
+					String note_text = String.valueOf(userInput.getText());
+					cmd = String.format("insert into note_table (sheep_id, note_text, note_date) " +
+	    					"values ( %s, '%s', '%s' )", thissheep_id, note_text, TodayIs());
+	    			Log.i("update notes ", "before cmd " + cmd);
+	    			dbh.exec( cmd );	
+	    			Log.i("update notes ", "after cmd exec");
+				    }
+				  })
+				.setNegativeButton("Cancel",
+				  new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface dialog,int id) {
+					dialog.cancel();
+				    }
+				  });
+
+			// create alert dialog
+			AlertDialog alertDialog = alertDialogBuilder.create();
+
+			// show it
+			alertDialog.show();
+    	}   	
+    }
+//    private String formatRecord( Cursor crsr )
+//	{
+//    	String        line;
+//    	Log.i("formatRecord", " Got to the format record section");
+//	StringBuilder sb       = new StringBuilder();
+//	Log.i("formatRecord", " After the String Builder definition");
+//	int           nrCols   = colNames.length;
+////	Log.i("formatRecord", " number of columns is " + String.valueOf (nrCols));
+////	line     = String.format( "Record %d of %d:\n", recNo, nRecs );
+//	Log.i("formatRecord", " number of records is " + String.valueOf (nRecs));
+////	sb.append( line );
+//	
 //	Log.i("formatRecord", " number of columns is " + String.valueOf (nrCols));
-//	line     = String.format( "Record %d of %d:\n", recNo, nRecs );
-	Log.i("formatRecord", " number of records is " + String.valueOf (nRecs));
-//	sb.append( line );
-	
-	Log.i("formatRecord", " number of columns is " + String.valueOf (nrCols));
-	
-	for( int ii = 0; ii < nRecs; ii++ )
-	{	
-		for( int i = 0; i < nrCols; i++ )
-			{
-			switch( cursor.getType(i) )
-				{
-				case Cursor.FIELD_TYPE_FLOAT:
-					line = String.format( "  %s: %f\n", colNames[i], cursor.getFloat(i) );
-//					line = String.format( "%f\n", cursor.getFloat(i) );
-					break;
-				
-				case Cursor.FIELD_TYPE_INTEGER:
-					line = String.format( "  %s: %d\n", colNames[i], cursor.getInt(i) );
-//					line = String.format( "%d\n", cursor.getInt(i) );
-					break;
-				
-				case Cursor.FIELD_TYPE_NULL:
-					line = String.format( "  %s: null\n", colNames[i] );
-//					line = String.format( "null\n", colNames[i] );
-					break;
-				
-				case Cursor.FIELD_TYPE_STRING:
-					line = String.format( "  %s: %s\n", colNames[i], cursor.getString(i) );
-//					line = String.format( "%s\n", cursor.getString(i) );
-					break;
-					
-				default:
-					line = String.format( "  %s: ?? %s ??", colNames[i], cursor.getString(i) );
-//					line = String.format( "%s ", cursor.getString(i) );
-					break;
-				}			
-			Log.i ("format record ", "Before building first line");
-			sb.append( line );
-			}
-		Log.i ("format record ", "Before cursor move to next");
-		cursor.moveToNext();
-	}
-	return sb.toString();
-	}   
+//	
+//	for( int ii = 0; ii < nRecs; ii++ )
+//	{	
+//		for( int i = 0; i < nrCols; i++ )
+//			{
+//			switch( cursor.getType(i) )
+//				{
+//				case Cursor.FIELD_TYPE_FLOAT:
+//					line = String.format( "  %s: %f\n", colNames[i], cursor.getFloat(i) );
+////					line = String.format( "%f\n", cursor.getFloat(i) );
+//					break;
+//				
+//				case Cursor.FIELD_TYPE_INTEGER:
+//					line = String.format( "  %s: %d\n", colNames[i], cursor.getInt(i) );
+////					line = String.format( "%d\n", cursor.getInt(i) );
+//					break;
+//				
+//				case Cursor.FIELD_TYPE_NULL:
+//					line = String.format( "  %s: null\n", colNames[i] );
+////					line = String.format( "null\n", colNames[i] );
+//					break;
+//				
+//				case Cursor.FIELD_TYPE_STRING:
+//					line = String.format( "  %s: %s\n", colNames[i], cursor.getString(i) );
+////					line = String.format( "%s\n", cursor.getString(i) );
+//					break;
+//					
+//				default:
+//					line = String.format( "  %s: ?? %s ??", colNames[i], cursor.getString(i) );
+////					line = String.format( "%s ", cursor.getString(i) );
+//					break;
+//				}			
+//			Log.i ("format record ", "Before building first line");
+//			sb.append( line );
+//			}
+//		Log.i ("format record ", "Before cursor move to next");
+//		cursor.moveToNext();
+//	}
+//	return sb.toString();
+//	}   
     
 	}
