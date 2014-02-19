@@ -476,6 +476,10 @@ public class ConvertToEID extends Activity {
      // Hide the keyboard when you click the button
     	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
     	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    	crsr = null;
+    	fedtagid = 0;
+    	farmtagid = 0;
+    	eidtagid = 0;
     	
         TV = (TextView) findViewById( R.id.inputText );
     	String	tag_num = TV.getText().toString();
@@ -487,9 +491,14 @@ public class ConvertToEID extends Activity {
 //        		Get the sheep id from the id table for this tag number and selected tag type
 	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
 	        			"and id_info_table.tag_type='%s' and id_info_table.tag_date_off is null "
-	        			, tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
+	        			, tag_num , tag_type_spinner.getSelectedItemPosition());  
+	        	Log.i("lookForSheep", "command is " + cmd);
 	        	dbh.exec( cmd );
+	    		cursor   = ( Cursor ) crsr; 
+	    		startManagingCursor(cursor);
+	        	Log.i("lookForSheep", " after first query to get sheep id " + String.valueOf(dbh.getInt(0)));
 	        	dbh.moveToFirstRecord();
+	        	Log.i("lookForSheep", " the cursor is of size " + String.valueOf(dbh.getSize()));
 	        	if( dbh.getSize() == 0 )
 		    		{ // no sheep with that  tag in the database so clear out and return
 		    		clearBtn( v );
@@ -510,9 +519,10 @@ public class ConvertToEID extends Activity {
 	    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 	    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
 	    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
-
+	    		Log.i("lookForSheep", "command is " + cmd);
 	    		crsr = dbh.exec( cmd ); 
-	    		
+	    		Log.i("lookForSheep", " after second query to get all tags. found  " + String.valueOf(dbh.getSize()));
+	        	
 	    		cursor   = ( Cursor ) crsr; 
 	    		startManagingCursor(cursor);
 
@@ -901,7 +911,7 @@ public class ConvertToEID extends Activity {
     	        	   //add a tag_date_off of today to the tag
     	        	   String today = TodayIs();
  //   	        	   Log.i("removefarmtag", today);
-    	        	   Log.i("removefarmtag", String.valueOf(farmtagid)+ " farm tag number "  );
+    	        	   Log.i("removefarmtag", " farm tag record is " + String.valueOf(farmtagid) );
     	       		   String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", farmtagid );
     	       		   Log.i("removefarmtag", " command is " + cmd);
     	       			dbh.exec( cmd );
@@ -1070,6 +1080,7 @@ public class ConvertToEID extends Activity {
 	    			Log.i("update everything ", "before cmd " + cmd);
 	    			dbh.exec( cmd );	
 	    			Log.i("update everything ", "after cmd exec");
+	    			cursor.close();
 	    		}
 	    		else{
 	    			// no federal tag to enter so return
@@ -1091,7 +1102,7 @@ public class ConvertToEID extends Activity {
 	    		    farm_number = Integer.valueOf(farmText);
 	    		    TV = (TextView) findViewById( R.id.farm_locationText);
 	    		    farm_locationText = TV.getText().toString();
-	    		    Log.i("update everything ", "farm location " + farm_locationText);
+	    		    Log.i("update farm ", "farm location " + farm_locationText);
 	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
 	    	    			"where id_location_abbrev='%s'", farm_locationText);
 	    	    	crsr = dbh.exec( cmd );
@@ -1116,6 +1127,7 @@ public class ConvertToEID extends Activity {
 	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
 	    					"values ( %s, 4, %s, %s, %s, '%s', %s )", thissheep_id, farm_colorid, farm_colorid, farm_locationid, today, farm_number);
 	    			dbh.exec( cmd );	
+	    			cursor.close();
 	    		}
 	    		else{
 	    			// no farm tag to enter so return
@@ -1136,6 +1148,7 @@ public class ConvertToEID extends Activity {
 	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
 	    					"values ( %s, 2, %s, %s, %s, '%s', '%s' )", thissheep_id, eid_colorid, eid_colorid, eid_locationid, today, eidText);
 	    			dbh.exec( cmd );	
+	    			cursor.close();
 	    		}
 	    		else{
 	    			// no EID tag to enter so return
