@@ -47,9 +47,9 @@ public class ConvertToEID extends Activity {
 	ArrayAdapter<String> dataAdapter;
 	String     	cmd;
 	Integer 	i;
-	private int             nRecs;
-	private int			    recNo;
-	private String[]        colNames;
+//	private int             nRecs;
+//	private int			    recNo;
+//	private String[]        colNames;
 	public SimpleCursorAdapter myadapter;	
 	
 /////////////////////////////////////////////////////
@@ -199,8 +199,7 @@ public class ConvertToEID extends Activity {
 	// use EID reader to look up a sheep
 	public void gotEID( )
     {
-		Object crsr;
-		
+		Object crsr;		
 	   	//	make the scan eid button red
     	btn = (Button) findViewById( R.id.scan_eid_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -209,40 +208,40 @@ public class ConvertToEID extends Activity {
     	TV.setText( LastEID );
     	
 		Log.i("Convert", "Got EID");
-    	//	Set up the location and color spinners for EID  
-    	eid_tag_color_spinner = (Spinner) findViewById(R.id.eid_tag_color_spinner);
-    	tag_colors = new ArrayList<String>();        
-        // Select All fields from tag colors to build the spinner
-        cmd = "select * from tag_colors_table";
-        crsr = dbh.exec( cmd );  
-        cursor   = ( Cursor ) crsr;
-    	dbh.moveToFirstRecord();
-    	tag_colors.add("Select a Color");
-         // looping through all rows and adding to list
-    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-    		tag_colors.add(cursor.getString(2));
-    	}
-    	cursor.close();
-    	// Creating adapter for spinner
-    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_colors);
-    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		eid_tag_color_spinner.setAdapter (dataAdapter);
-		eid_tag_color_spinner.setSelection(1);
-		Log.i("Convert", " Got color spinner set");
-		
-		eid_tag_location_spinner = (Spinner) findViewById(R.id.eid_tag_location_spinner);
-		tag_locations = new ArrayList<String>(); 
-		tag_locations.add("Select a Location");
-		tag_locations.add("RE");		
-		tag_locations.add("LE");
-		
-    	// Creating adapter for spinner
-    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_locations);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		eid_tag_location_spinner.setAdapter (dataAdapter);
-		eid_tag_location_spinner.setSelection(1);
-		
-		Log.i("Convert", " Got location spinner set");
+//    	//	Set up the location and color spinners for EID  
+//    	eid_tag_color_spinner = (Spinner) findViewById(R.id.eid_tag_color_spinner);
+//    	tag_colors = new ArrayList<String>();        
+//        // Select All fields from tag colors to build the spinner
+//        cmd = "select * from tag_colors_table";
+//        crsr = dbh.exec( cmd );  
+//        cursor   = ( Cursor ) crsr;
+//    	dbh.moveToFirstRecord();
+//    	tag_colors.add("Select a Color");
+//         // looping through all rows and adding to list
+//    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+//    		tag_colors.add(cursor.getString(2));
+//    	}
+//    	cursor.close();
+//    	// Creating adapter for spinner
+//    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_colors);
+//    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		eid_tag_color_spinner.setAdapter (dataAdapter);
+//		eid_tag_color_spinner.setSelection(1);
+//		Log.i("Convert", " Got color spinner set");
+//		
+//		eid_tag_location_spinner = (Spinner) findViewById(R.id.eid_tag_location_spinner);
+//		tag_locations = new ArrayList<String>(); 
+//		tag_locations.add("Select a Location");
+//		tag_locations.add("RE");		
+//		tag_locations.add("LE");
+//		
+//    	// Creating adapter for spinner
+//    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_locations);
+//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		eid_tag_location_spinner.setAdapter (dataAdapter);
+//		eid_tag_location_spinner.setSelection(1);
+//		
+//		Log.i("Convert", " Got location spinner set");
 		
 	}	
 	
@@ -285,9 +284,9 @@ public class ConvertToEID extends Activity {
     	//	Disable the bottom update tag button until we choose to add or update
        	btn = (Button) findViewById( R.id.update_display_btn );
     	btn.setEnabled(false); 
-    	fedtagid = 0;
-    	farmtagid = 0;
-    	eidtagid = 0;
+//    	fedtagid = 0;
+//    	farmtagid = 0;
+//    	eidtagid = 0;
     	new_tag_number = null;
     	// Fill the Tag Type Spinner
      	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
@@ -310,6 +309,41 @@ public class ConvertToEID extends Activity {
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_type_spinner.setAdapter (dataAdapter);
 		tag_type_spinner.setSelection(4);	
+		
+    	//	Set up the location and color spinners for EID  
+    	eid_tag_color_spinner = (Spinner) findViewById(R.id.eid_tag_color_spinner);
+    	tag_colors = new ArrayList<String>();        
+        // Select All fields from tag colors to build the spinner
+        cmd = "select * from tag_colors_table";
+        crsr = dbh.exec( cmd );  
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+    	tag_colors.add("Select a Color");
+         // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		tag_colors.add(cursor.getString(2));
+    	}
+    	cursor.close();
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_colors);
+    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		eid_tag_color_spinner.setAdapter (dataAdapter);
+		eid_tag_color_spinner.setSelection(1);
+		Log.i("Convert", " Got color spinner set");
+		
+		eid_tag_location_spinner = (Spinner) findViewById(R.id.eid_tag_location_spinner);
+		tag_locations = new ArrayList<String>(); 
+		tag_locations.add("Select a Location");
+		tag_locations.add("RE");		
+		tag_locations.add("LE");
+		
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_locations);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		eid_tag_location_spinner.setAdapter (dataAdapter);
+		eid_tag_location_spinner.setSelection(1);
+		
+		Log.i("Convert", " Got location spinner set");
        	}
     
     // user clicked the 'back' button
@@ -321,7 +355,7 @@ public class ConvertToEID extends Activity {
     	clearBtn( null );   	
     	finish();
 	    }
-    // user clicked the 'help' button
+    // user clicked the 'Take Note' button
     public void takeNote( View v )
     {
     	final Context context = this;
@@ -422,7 +456,6 @@ public class ConvertToEID extends Activity {
 		eid_tag_location_spinner = (Spinner) findViewById(R.id.eid_tag_location_spinner);
 		eid_tag_location_spinner.setSelection(0);
 
-
 	    fedtagid = 0;
     	farmtagid = 0;
     	eidtagid = 0;
@@ -436,7 +469,6 @@ public class ConvertToEID extends Activity {
     	
     }
 	public void lookForSheep (View v){
-
 		Object crsr;
 		Boolean exists;
 		TextView TV;
@@ -484,9 +516,9 @@ public class ConvertToEID extends Activity {
 	    		cursor   = ( Cursor ) crsr; 
 	    		startManagingCursor(cursor);
 
-	    		recNo    = 1;
-				nRecs    = cursor.getCount();
-				colNames = cursor.getColumnNames();
+//	    		recNo    = 1;
+//				nRecs    = cursor.getCount();
+//				colNames = cursor.getColumnNames();
 //				nrCols   = colNames.length;
 				
 				cursor.moveToFirst();				
@@ -506,33 +538,36 @@ public class ConvertToEID extends Activity {
 		    		switch (i){		
 				    case 1:
 						//Got a federal tag
+				    	Log.i("in for loop", " got fed tag " + dbh.getStr(4));
 				    	TextView TV2 = (TextView) findViewById(R.id.fedText)	;
 				    	TV2.setText(dbh.getStr(4));
 				    	TextView TV3 = (TextView) findViewById(R.id.fed_colorText);
 				    	TV3.setText(dbh.getStr(3));
 				    	TextView TV4 = (TextView) findViewById(R.id.fed_locationText);
 				    	TV4.setText(dbh.getStr(5));
+				    	fedtagid = dbh.getInt(2);
+				    	Log.i("in for loop", " fed tag id is " + String.valueOf(fedtagid));
 				        break;
 				    case 2:
 //				    	// Got an electronic tag
-				    	TV2 = (TextView) findViewById(R.id.eidText)	;
-				    	TV2.setText(dbh.getStr(4));
-				    	Log.i("in for loop", " got EID tag ");	
+//				    	TV2 = (TextView) findViewById(R.id.eidText)	;
+//				    	TV2.setText(dbh.getStr(4));
+//				    	Log.i("in for loop", " got EID tag ");	
 				    	//	This part isn't working. I want to set the EID tag color spinner but this isn't working
 //				    	ArrayAdapter myAdap = (ArrayAdapter) eid_tag_color_spinner.getAdapter(); //cast to an ArrayAdapter
 //				    	Log.i("in for loop", " after myAdap ");	
 				    	//				    	int spinnerPosition = myAdap.getPosition(dbh.getStr(3));
-				    	Log.i("in for loop", " position to look for is " + dbh.getStr(3));
+//				    	Log.i("in for loop", " position to look for is " + dbh.getStr(3));
 				    	//set the default according to value
 //				    	eid_tag_color_spinner.setSelection(spinnerPosition);
 				    	
 //				    	This part isn't working. I want to set the EID tag location spinner but this isn't working
 //				    	myAdap = (ArrayAdapter) eid_tag_location_spinner.getAdapter(); //cast to an ArrayAdapter
 //				    	spinnerPosition = myAdap.getPosition(dbh.getStr(5));
-				    	Log.i("in for loop", " position to look for is " + dbh.getStr(5));
+//				    	Log.i("in for loop", " position to look for is " + dbh.getStr(5));
 				    	//set the default according to value
 //				    	eid_tag_location_spinner.setSelection(spinnerPosition);
-				    	
+//				    	eidtagid = dbh.getInt(2);
 				        break;
 				    case 3:
 						// Got a paint brand
@@ -540,13 +575,15 @@ public class ConvertToEID extends Activity {
 				        break;
 				    case 4:
 				    	// got a farm tag
-				    	Log.i("in for loop", " got Farm tag ");	
+				    	Log.i("in for loop", " got Farm tag " + dbh.getStr(4));	
 			    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
 			    		TV5.setText(dbh.getStr(4));
 			    		TextView TV6 = (TextView) findViewById(R.id.farm_colorText);
 			    		TV6.setText(dbh.getStr(3));
 			    		TextView TV7 = (TextView) findViewById(R.id.farm_locationText);
 			    		TV7.setText(dbh.getStr(5));
+			    		farmtagid = dbh.getInt(2);
+			    		Log.i("in for loop", " farm tag id is " + String.valueOf(farmtagid));
 				        break;
 				    case 5:
 //				    	got a tattoo
@@ -574,7 +611,7 @@ public class ConvertToEID extends Activity {
        	}else{
 	        	return;
 	        }
-//	        Log.i("lookForSheep", " out of the if statement");
+	        Log.i("lookForSheep", " out of the if statement");
         	}
     		else {
     			clearBtn( null );
@@ -673,7 +710,9 @@ public class ConvertToEID extends Activity {
 //    	TV4.setText(dbh.getStr(5));
 //    	ii = dbh.getInt(1);
 //    	thissheep_id = ii;
-//    	
+//TODO
+	
+	//    	
 //    	// Now we need to check and see if there is an alert for this sheep
 //       	String alert_text = dbh.getStr(8);
 //       	Log.i("in find fed ", "Alert Text is " + alert_text);
@@ -861,7 +900,7 @@ public class ConvertToEID extends Activity {
     	        	   //add a tag_date_off of today to the tag
     	        	   String today = TodayIs();
  //   	        	   Log.i("removefarmtag", today);
-    	        	   Log.i("removefarmtag", String.valueOf(farmtagid));
+    	        	   Log.i("removefarmtag", String.valueOf(farmtagid)+ " farm tag number "  );
     	       		   String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", farmtagid );
     	    		   dbh.exec( cmd );
 //   	    		   	Clear the display of the tags
