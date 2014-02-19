@@ -284,9 +284,9 @@ public class ConvertToEID extends Activity {
     	//	Disable the bottom update tag button until we choose to add or update
        	btn = (Button) findViewById( R.id.update_display_btn );
     	btn.setEnabled(false); 
-//    	fedtagid = 0;
-//    	farmtagid = 0;
-//    	eidtagid = 0;
+    	fedtagid = 0;
+    	farmtagid = 0;
+    	eidtagid = 0;
     	new_tag_number = null;
     	// Fill the Tag Type Spinner
      	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
@@ -545,7 +545,7 @@ public class ConvertToEID extends Activity {
 				    	TV3.setText(dbh.getStr(3));
 				    	TextView TV4 = (TextView) findViewById(R.id.fed_locationText);
 				    	TV4.setText(dbh.getStr(5));
-				    	fedtagid = dbh.getInt(2);
+				    	fedtagid = dbh.getInt(6);
 				    	Log.i("in for loop", " fed tag id is " + String.valueOf(fedtagid));
 				        break;
 				    case 2:
@@ -582,7 +582,7 @@ public class ConvertToEID extends Activity {
 			    		TV6.setText(dbh.getStr(3));
 			    		TextView TV7 = (TextView) findViewById(R.id.farm_locationText);
 			    		TV7.setText(dbh.getStr(5));
-			    		farmtagid = dbh.getInt(2);
+			    		farmtagid = dbh.getInt(6);
 			    		Log.i("in for loop", " farm tag id is " + String.valueOf(farmtagid));
 				        break;
 				    case 5:
@@ -864,7 +864,8 @@ public class ConvertToEID extends Activity {
     	        	   	String today = TodayIs();
     	        	   	Log.i("removefedtag", String.valueOf(fedtagid));
     	        	   	String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", fedtagid );
-    	       		   	dbh.exec( cmd );
+    	        	   	Log.i("removefedtag", " command is " + cmd);
+    	        	   	dbh.exec( cmd );
 //    	    		   	Clear the display of the tags
     	    		   	TextView TV = (TextView) findViewById(R.id.fedText)	;
     	           	    TV.setText(null);
@@ -902,7 +903,9 @@ public class ConvertToEID extends Activity {
  //   	        	   Log.i("removefarmtag", today);
     	        	   Log.i("removefarmtag", String.valueOf(farmtagid)+ " farm tag number "  );
     	       		   String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", farmtagid );
-    	    		   dbh.exec( cmd );
+    	       		   Log.i("removefarmtag", " command is " + cmd);
+    	       			dbh.exec( cmd );
+    	    		  
 //   	    		   	Clear the display of the tags
    	    		   	TextView TV = (TextView) findViewById(R.id.farmText)	;
    	           	    TV.setText(null);

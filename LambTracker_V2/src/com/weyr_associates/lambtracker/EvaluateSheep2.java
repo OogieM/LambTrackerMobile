@@ -226,6 +226,7 @@ public class EvaluateSheep2 extends Activity {
 	public void gotEID( View v )
    {
 		Integer ii;
+		
 	   	//	make the scan eid button red
 	   	Button btn = (Button) findViewById( R.id.scan_eid_btn );
 	   	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
