@@ -41,7 +41,7 @@ public class ConvertToEID extends Activity {
 	public Button btn;
 	public String tag_type_label, tag_color_label, tag_location_label, new_tag_number, eid_tag_color_label ;
 	public String eid_tag_location_label, eidText, alert_text;
-	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner, eid_tag_color_spinner, eid_tag_location_spinner;
+	public Spinner tag_type_spinner, tag_type_spinner2, tag_location_spinner, tag_color_spinner, eid_tag_color_spinner, eid_tag_location_spinner;
 	public List<String> tag_types, tag_locations, tag_colors;
 	
 	ArrayAdapter<String> dataAdapter;
@@ -873,7 +873,7 @@ public class ConvertToEID extends Activity {
     	new_tag_number = null;
        	// Fill the Tag Type Spinner
      	//	Decided to only allow Federal and Farm as tag type options for this task
-    	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner2);
+    	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
     	tag_types = new ArrayList<String>();      	
     	tag_types.add("Select a Type");
     	tag_types.add("Federal");
@@ -881,8 +881,8 @@ public class ConvertToEID extends Activity {
     	// Creating adapter for spinner
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		tag_type_spinner.setAdapter (dataAdapter);
-		tag_type_spinner.setSelection(1);	
+		tag_type_spinner2.setAdapter (dataAdapter);
+		tag_type_spinner2.setSelection(1);	
     	
     	// Fill the Tag Color Spinner
     	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
@@ -951,11 +951,11 @@ public class ConvertToEID extends Activity {
     	String 			cmd;
     	TextView 		TV;
     	// Get the data from the add tag section of the screen
-    	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner2);
+    	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
     	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
     	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
     	
-    	tag_type_label = tag_type_spinner.getSelectedItem().toString();
+    	tag_type_label = tag_type_spinner2.getSelectedItem().toString();
 //    	Log.i("updateTag", "Tag type is " + tag_type_label);
     	tag_color_label = tag_color_spinner.getSelectedItem().toString();
 //    	Log.i("updateTag", "Tag color is " + tag_color_label);
@@ -1040,11 +1040,11 @@ public class ConvertToEID extends Activity {
         	    farmtagid = 0;
         	}
         	//	Clear out the add tag section    	
-        	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner2);
+        	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
         	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
         	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
         	TV  = (TextView) findViewById( R.id.new_tag_number);
-        	tag_type_spinner.setSelection(1);
+        	tag_type_spinner2.setSelection(1);
         	tag_color_spinner.setSelection(1);
         	tag_location_spinner.setSelection(2);
         	TV.setText( "" );
