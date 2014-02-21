@@ -205,8 +205,6 @@ public class LookUpSheep extends ListActivity
 
 	public void gotEID( )
 	{		
-//		View v = null;
-		Object crsr;
 		//	make the scan eid button red
 		btn = (Button) findViewById( R.id.scan_eid_btn );
 		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -272,6 +270,10 @@ public class LookUpSheep extends ListActivity
     	btn = (Button) findViewById( R.id.prev_rec_btn );
     	btn.setEnabled(false);
     	
+		//	make the scan eid button red
+		btn = (Button) findViewById( R.id.scan_eid_btn );
+		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+
         }
 	public void lookForSheep (View v){
 
@@ -295,7 +297,9 @@ public class LookUpSheep extends ListActivity
 	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
 	        			"and id_info_table.tag_type='%s' and id_info_table.tag_date_off is null", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
 	        	 Log.i("LookForSheep", " command is  " + cmd);
-	        	 dbh.exec( cmd );
+	        	crsr = dbh.exec( cmd );
+	        	cursor   = ( Cursor ) crsr; 
+	    		startManagingCursor(cursor);
 	        	dbh.moveToFirstRecord();
 	        	if( dbh.getSize() == 0 )
 		    		{ // no sheep with that  tag in the database so clear out and return
@@ -305,7 +309,7 @@ public class LookUpSheep extends ListActivity
 		        	return;
 		    		}
 	        	thissheep_id = dbh.getInt(0);
-	        
+	        	
 	        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));
 	        	Log.i("LookForSheep", " Before finding all tags");
 	        	
@@ -319,16 +323,12 @@ public class LookUpSheep extends ListActivity
 	    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
 	    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
 
-	    		crsr = dbh.exec( cmd ); 
-	    		
+	    		crsr = dbh.exec( cmd ); 	    		
 	    		cursor   = ( Cursor ) crsr; 
 	    		startManagingCursor(cursor);
-
 	    		recNo    = 1;
 				nRecs    = cursor.getCount();
 				colNames = cursor.getColumnNames();
-//				nrCols   = colNames.length;
-				
 				cursor.moveToFirst();				
 				TV = (TextView) findViewById( R.id.sheepnameText );
 		        TV.setText (dbh.getStr(0));
@@ -342,9 +342,9 @@ public class LookUpSheep extends ListActivity
 		        
 		        //	Go get the sire name
 		        if (thissire_id != 0){
-			        cmd2 = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thissire_id);
-			        Log.i("LookForSheep", " cmd is " + cmd2);		        
-			        crsr3 = dbh.exec( cmd2);
+			        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thissire_id);
+			        Log.i("LookForSheep", " cmd is " + cmd);		        
+			        crsr3 = dbh.exec( cmd);
 			        Log.i("LookForSheep", " after second db lookup");
 			        cursor3   = ( Cursor ) crsr3; 
 		    		startManagingCursor(cursor3);
@@ -354,18 +354,20 @@ public class LookUpSheep extends ListActivity
 		    		TV.setText (thissire_name);	 
 		    		Log.i("lookForSheep", " Sire is " + thissire_name);
 			        Log.i("LookForSheep", " Sire is " + String.valueOf(thissire_id));
+			        cursor3.close();
 		        }
 		        if(thisdam_id != 0){
 			        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thisdam_id);
 			        crsr3 = dbh.exec( cmd);
 			        cursor3   = ( Cursor ) crsr3; 
-	//	    		startManagingCursor(cursor3);
+		    		startManagingCursor(cursor3);
 		    		cursor3.moveToFirst();
 		    		TV = (TextView) findViewById( R.id.damName );
 		    		thisdam_name = dbh.getStr(0);
 		    		TV.setText (thisdam_name);	
 		    		Log.i("lookForSheep", " Dam is " + thisdam_name);
 			        Log.i("LookForSheep", " Dam is " + String.valueOf(thisdam_id));
+			        cursor3.close();
 		        }    		
 		    	Log.i("lookForSheep", " before formatting results");
 				
@@ -382,7 +384,6 @@ public class LookUpSheep extends ListActivity
 		        Log.i("LookForSheep", "after setting list adapter");
 
 		    	// Now we need to check and see if there is an alert for this sheep
-//		       	String alert_text = dbh.getStr(8);
 //		       	Log.i("Alert Text is " , alert_text);
 //		    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
 				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
@@ -393,27 +394,7 @@ public class LookUpSheep extends ListActivity
 			    	//	testing whether I can put up an alert box here without issues
 			    	showAlert(v);
 				}
-////		        cmd = String.format( "select sheep_table.sheep_name where sheep_table.sheep_id = '%s'", thissire_id);
-//		        crsr3 = dbh.exec( cmd);
-//		        cursor3   = ( Cursor ) crsr3; 
-//	    		startManagingCursor(cursor3);
-//	    		cursor3.moveToFirst();
-//	    		TV = (TextView) findViewById( R.id.sireName );
-//	    		thissire_name = dbh.getStr(0);
-//	    		TV.setText (thissire_name);	
-//	    		Log.i("lookForSheep", " Sire is " + thissire_name);
-//	    		
-//		        cmd = String.format( "select sheep_table.sheep_name where sheep_table.sheep_id = '%s'", thisdam_id);
-//		        crsr3 = dbh.exec( cmd);
-//		        cursor3   = ( Cursor ) crsr3; 
-//	    		startManagingCursor(cursor3);
-//	    		cursor3.moveToFirst();
-//	    		TV = (TextView) findViewById( R.id.damName );
-//	    		thisdam_name = dbh.getStr(0);
-//	    		TV.setText (thisdam_name);	 
-//	    		Log.i("lookForSheep", " Dam is " + thisdam_name);
-	    		
-        	}else{
+				}else{
 	        	return;
 	        }
 	        Log.i("lookForSheep", " out of the if statement");
@@ -421,8 +402,7 @@ public class LookUpSheep extends ListActivity
     		else {
     			clearBtn( null );
             	TV = (TextView) findViewById( R.id.sheepnameText );
-                TV.setText( "Sheep Database does not exist." ); 
-                
+                TV.setText( "Sheep Database does not exist." );                
         	}
 	}
 //  user clicked 'Scan' button    
@@ -436,7 +416,7 @@ public class LookUpSheep extends ListActivity
 			Message msg = Message.obtain(null, eidService.MSG_SEND_ME_TAGS);
 			msg.replyTo = mMessenger;
 			mService.send(msg);
-		   	//	make the scan eid button  0x0000FF00, 0xff00ff00
+		   	//	make the scan eid button  green 0x0000FF00, 0xff00ff00
 	    	Button btn = (Button) findViewById( R.id.scan_eid_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xff00ff00));
 			
@@ -463,8 +443,6 @@ public class LookUpSheep extends ListActivity
 		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
 	           public void onClick(DialogInterface dialog, int idx) {
 	               // User clicked OK button 
-	        	  
-	    		   clearBtn( null );
 	               }
 	       });		
 		AlertDialog dialog = builder.create();
@@ -594,58 +572,5 @@ public class LookUpSheep extends ListActivity
 			alertDialog.show();
     	}   	
     }
-//    private String formatRecord( Cursor crsr )
-//	{
-//    	String        line;
-//    	Log.i("formatRecord", " Got to the format record section");
-//	StringBuilder sb       = new StringBuilder();
-//	Log.i("formatRecord", " After the String Builder definition");
-//	int           nrCols   = colNames.length;
-////	Log.i("formatRecord", " number of columns is " + String.valueOf (nrCols));
-////	line     = String.format( "Record %d of %d:\n", recNo, nRecs );
-//	Log.i("formatRecord", " number of records is " + String.valueOf (nRecs));
-////	sb.append( line );
-//	
-//	Log.i("formatRecord", " number of columns is " + String.valueOf (nrCols));
-//	
-//	for( int ii = 0; ii < nRecs; ii++ )
-//	{	
-//		for( int i = 0; i < nrCols; i++ )
-//			{
-//			switch( cursor.getType(i) )
-//				{
-//				case Cursor.FIELD_TYPE_FLOAT:
-//					line = String.format( "  %s: %f\n", colNames[i], cursor.getFloat(i) );
-////					line = String.format( "%f\n", cursor.getFloat(i) );
-//					break;
-//				
-//				case Cursor.FIELD_TYPE_INTEGER:
-//					line = String.format( "  %s: %d\n", colNames[i], cursor.getInt(i) );
-////					line = String.format( "%d\n", cursor.getInt(i) );
-//					break;
-//				
-//				case Cursor.FIELD_TYPE_NULL:
-//					line = String.format( "  %s: null\n", colNames[i] );
-////					line = String.format( "null\n", colNames[i] );
-//					break;
-//				
-//				case Cursor.FIELD_TYPE_STRING:
-//					line = String.format( "  %s: %s\n", colNames[i], cursor.getString(i) );
-////					line = String.format( "%s\n", cursor.getString(i) );
-//					break;
-//					
-//				default:
-//					line = String.format( "  %s: ?? %s ??", colNames[i], cursor.getString(i) );
-////					line = String.format( "%s ", cursor.getString(i) );
-//					break;
-//				}			
-//			Log.i ("format record ", "Before building first line");
-//			sb.append( line );
-//			}
-//		Log.i ("format record ", "Before cursor move to next");
-//		cursor.moveToNext();
-//	}
-//	return sb.toString();
-//	}   
-    
+
 	}

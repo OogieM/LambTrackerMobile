@@ -84,10 +84,8 @@
     <string name="help_create_evaluate">Create a list of traits to evaluate on this run with the sheep. 
         You may select 10 scored items and 5 real data items. </string> 
    	<string name="help_ground_truth_tags">Select a sheep using the EID reader or by entering in a federal or farm tag number. 
-   	    All the tags for that sheep will be displayed in the scrolling view below. If any are incorrect, 
-   	    then update the data. When you are satisfied that the tag data re correct select the update database button. 
-   	    This will update all records in the database. It will NOT add new tags or set the tag date on or off. The 
-   	    assumption is that you are just verifying existing tags ONLY. Use this with caution!</string>   
+   	    All the tags for that sheep will be displayed in the scrolling view below. If you need to correct tags you will need to do 
+   	    that separately in the desktop application. </string>   
     <string name="help_lambing_sheep">Select a sheep using the EID reader or by entering in another identification. 
    	    All the tags for that sheep will be displayed in the scrolling view below. The ewe\'s last lambing results will be shown.
    	    If there are any lambs from that sheep for this year their identification will also be listed. You can choose to add lambs 

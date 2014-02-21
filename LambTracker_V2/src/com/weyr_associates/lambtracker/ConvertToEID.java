@@ -196,7 +196,7 @@ public class ConvertToEID extends Activity {
 	// use EID reader to look up a sheep
 	public void gotEID( )
     {
-		Object crsr;		
+//		Object crsr;		
 	   	//	make the scan eid button red
     	btn = (Button) findViewById( R.id.scan_eid_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
