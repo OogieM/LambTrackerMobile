@@ -270,7 +270,7 @@ public class ConvertToEID extends Activity {
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		tag_types.add(cursor.getString(1));
     	}
-    	cursor.close();    	
+//    	cursor.close();    	
     	
     	// Creating adapter for spinner
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
@@ -291,7 +291,7 @@ public class ConvertToEID extends Activity {
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		tag_colors.add(cursor.getString(2));
     	}
-    	cursor.close();
+//    	cursor.close();
     	// Creating adapter for spinner
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_colors);
     	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -317,6 +317,8 @@ public class ConvertToEID extends Activity {
 	    {
 		doUnbindService();
 		stopService(new Intent(ConvertToEID.this, eidService.class));
+		stopManagingCursor (cursor);
+		cursor.close();
        	dbh.closeDB();
     	clearBtn( null );   	
     	finish();
@@ -461,7 +463,7 @@ public class ConvertToEID extends Activity {
 		        	return;
 		    		}
 	        	thissheep_id = dbh.getInt(0);
-	        	cursor.close();
+//	        	cursor.close();
 	        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));
 	        	Log.i("LookForSheep", " Before finding all tags");
 	        	
@@ -545,7 +547,7 @@ public class ConvertToEID extends Activity {
 				        break;
 		    		} // end of case switch
 		    	} // end of for loop
-		    	cursor.close();
+//		    	cursor.close();
 //		    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
 				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
 			       	// make the alert button red
@@ -717,7 +719,7 @@ public class ConvertToEID extends Activity {
 	        startManagingCursor(cursor);
 	        dbh.moveToFirstRecord();
 	        eid_colorid = dbh.getInt(0);
-	        cursor.close();
+//	        cursor.close();
 	    	eid_tag_location_label = eid_tag_location_spinner.getSelectedItem().toString();
 	    	Log.i("update everything ", "EID location is " + eid_tag_location_label);
 	    	cmd = String.format("select id_location_table.id_locationid from id_location_table " +
@@ -727,7 +729,7 @@ public class ConvertToEID extends Activity {
 	        startManagingCursor(cursor);
 	        dbh.moveToFirstRecord();
 	        eid_locationid = dbh.getInt(0);
-	        cursor.close();
+//	        cursor.close();
 	    }
 	 
 	    //	Need to add tests to see what data we really have and only update if there is some
@@ -753,7 +755,7 @@ public class ConvertToEID extends Activity {
 	    	        dbh.moveToFirstRecord();
 	    	        fed_colorid = dbh.getInt(0);
 	    	        Log.i("update everything ", "fed color integer " + String.valueOf(fed_colorid));
-	    	        cursor.close();
+//	    	        cursor.close();
 	    	        
 	    		    TV = (TextView) findViewById( R.id.fed_locationText );
 	    		    fed_locationText = TV.getText().toString();
@@ -765,7 +767,7 @@ public class ConvertToEID extends Activity {
 	    	        startManagingCursor(cursor);
 	    	        dbh.moveToFirstRecord();
 	    	        fed_locationid = dbh.getInt(0);
-	    	        cursor.close();
+//	    	        cursor.close();
 	    	        // Set the flock ID to be the Desert Weyr Flock
 	    	        // Will have to change to handle the general case. 
 	    	        // In our case we assume all  federal tags being applied are with our 
@@ -815,7 +817,7 @@ public class ConvertToEID extends Activity {
 	    	        dbh.moveToFirstRecord();
 	    	        farm_locationid = dbh.getInt(0);
 	    	        Log.i("updatefarm ", "farm color integer " + String.valueOf(farm_locationid));
-	    	        cursor.close();
+//	    	        cursor.close();
 	    		    TV = (TextView) findViewById( R.id.farm_colorText );
 	    		    farm_colorText = TV.getText().toString();
 	    		    Log.i("updatefarm ", "farm color " + farm_colorText);
@@ -827,13 +829,13 @@ public class ConvertToEID extends Activity {
 	    	        dbh.moveToFirstRecord();
 	    	        farm_colorid = dbh.getInt(0);
 	    	        Log.i("updatefarm ", "farm location integer " + String.valueOf(farm_locationid));
-	    	        cursor.close();
+//	    	        cursor.close();
 	    			//have a farm tag but no farmtagid so add a new record;
 	    			Log.i("updatefarm ", "tag record id is 0 but have farm tag data need to add a new record to id_info_table here");
 	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
 	    					"values ( %s, 4, %s, %s, %s, '%s', %s )", thissheep_id, farm_colorid, farm_colorid, farm_locationid, today, farmText);
 	    			dbh.exec( cmd );	
-	    			cursor.close();
+//	    			cursor.close();
 	    		}
 	    		else{
 	    			// no farm tag to enter so return
@@ -898,7 +900,7 @@ public class ConvertToEID extends Activity {
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		tag_colors.add(cursor.getString(2));
     	}
-    	cursor.close();
+//    	cursor.close();
     	// Creating adapter for spinner
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_colors);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -943,7 +945,7 @@ public class ConvertToEID extends Activity {
     			       });		
     				AlertDialog dialog = builder.create();
     				dialog.show();
-    				cursor.close();	
+//    				cursor.close();	
     	}
     
     public void updateTag( View v ){
@@ -989,7 +991,7 @@ public class ConvertToEID extends Activity {
     		startManagingCursor(cursor);
     		dbh.moveToFirstRecord();
     		new_tag_type = dbh.getInt(0);
-    		cursor.close();
+//    		cursor.close();
     		
        		cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
        				"where tag_color_name='%s'", tag_color_label);
@@ -998,7 +1000,7 @@ public class ConvertToEID extends Activity {
     		startManagingCursor(cursor);
     		dbh.moveToFirstRecord();
     		new_tag_color = dbh.getInt(0);
-    		cursor.close();
+//    		cursor.close();
 
     		cmd = String.format("select id_location_table.id_locationid, id_location_table.id_location_abbrev from id_location_table " +
 			"where id_location_name='%s'", tag_location_label);
@@ -1010,7 +1012,7 @@ public class ConvertToEID extends Activity {
 //    		Log.i("New Location ID ", String.valueOf(new_tag_location));
      		tag_location_label = dbh.getStr(1);
 //    		Log.i("New Location ", tag_location_label);
-    		cursor.close();
+//    		cursor.close();
     		
     	   	// 	Fill the new tag data with where it is in the screen display
         	//	Integers to hold the info new_tag_type, new_tag_color, new_tag_location

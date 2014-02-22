@@ -251,7 +251,7 @@ public class LookUpSheep extends ListActivity
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		tag_types.add(cursor.getString(1));
     	}
-    	cursor.close();    	
+//    	cursor.close();    	
     	
     	// Creating adapter for spinner
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
@@ -277,7 +277,7 @@ public class LookUpSheep extends ListActivity
         }
 	public void lookForSheep (View v){
 
-		Object crsr, crsr3;
+		Object crsr, crsr2, crsr3;
 		Boolean exists;
 		TextView TV;
         exists = true;
@@ -344,17 +344,17 @@ public class LookUpSheep extends ListActivity
 		        if (thissire_id != 0){
 			        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thissire_id);
 			        Log.i("LookForSheep", " cmd is " + cmd);		        
-			        crsr3 = dbh.exec( cmd);
+			        crsr2 = dbh.exec( cmd);
 			        Log.i("LookForSheep", " after second db lookup");
-			        cursor3   = ( Cursor ) crsr3; 
-		    		startManagingCursor(cursor3);
-		    		cursor3.moveToFirst();
+			        cursor2   = ( Cursor ) crsr2; 
+		    		startManagingCursor(cursor2);
+		    		cursor2.moveToFirst();
 		    		TV = (TextView) findViewById( R.id.sireName );
 		    		thissire_name = dbh.getStr(0);
 		    		TV.setText (thissire_name);	 
 		    		Log.i("lookForSheep", " Sire is " + thissire_name);
 			        Log.i("LookForSheep", " Sire is " + String.valueOf(thissire_id));
-			        cursor3.close();
+//			        cursor3.close();
 		        }
 		        if(thisdam_id != 0){
 			        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thisdam_id);
@@ -367,7 +367,7 @@ public class LookUpSheep extends ListActivity
 		    		TV.setText (thisdam_name);	
 		    		Log.i("lookForSheep", " Dam is " + thisdam_name);
 			        Log.i("LookForSheep", " Dam is " + String.valueOf(thisdam_id));
-			        cursor3.close();
+//			        cursor3.close();
 		        }    		
 		    	Log.i("lookForSheep", " before formatting results");
 				
@@ -456,6 +456,11 @@ public class LookUpSheep extends ListActivity
 		stopService(new Intent(LookUpSheep.this, eidService.class));   	
     	// Added this to close the database if we go back to the main activity  	
     	stopManagingCursor (cursor);
+    	stopManagingCursor (cursor2);
+    	stopManagingCursor (cursor3);
+    	cursor3.close();
+    	cursor.close();
+    	cursor2.close();
     	dbh.closeDB();
     	clearBtn( null );
     	//Go back to main
