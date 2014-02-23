@@ -27,7 +27,6 @@
             android:layout_column="0"
             android:layout_row="1"
             android:enabled="true"
-            android:inputType="text"
             android:textSize="18sp"
             android:typeface="monospace" >
 			</EditText>
@@ -55,7 +54,7 @@
        </GridLayout>  
        
  <RelativeLayout
-    android:id="@+id/RelativeLayout02"
+    android:id="@+id/TopButtonRow"
     android:orientation="horizontal" 
   	android:layout_width="fill_parent"
   	android:layout_height="wrap_content">    
@@ -65,8 +64,7 @@
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:textSize="18sp" />
-     
+        android:textSize="18sp" />     
      <Button
             android:id="@+id/look_up_sheep_btn"
             android:layout_width="100dp"
@@ -74,8 +72,7 @@
             android:layout_toRightOf="@+id/tag_type_spinner"
             android:onClick="lookForSheep"
             android:text="@string/look_up_sheep_btn"
-            android:textSize="14sp" />
-    
+            android:textSize="14sp" />  
      <Button
             android:id="@+id/alert_btn"
             android:layout_width="100dp"
@@ -83,19 +80,46 @@
             android:layout_toRightOf="@+id/look_up_sheep_btn"
             android:onClick="showAlert"
             android:text="@string/alert_btn"
-            android:textSize="14sp" /> 
-            
+            android:textSize="14sp" />           
      <Button
             android:id="@+id/scan_eid_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/alert_btn"
             android:onClick="scanEid"
             android:text="@string/scan_eid_btn"
+            android:textSize="14sp" />    
+  </RelativeLayout>
+  <GridLayout
+        android:id="@+id/secondRowButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="4"
+        android:rowCount="2" >
+        
+     <Button
+            android:id="@+id/prev_rec_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
+            android:onClick="previousRecord"
+            android:text="@string/prev_rec_btn"
             android:textSize="14sp" />
      
-  </RelativeLayout>
-  		
+      <Button
+            android:id="@+id/next_rec_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_column="1"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
+            android:onClick="nextRecord"
+            android:text="@string/next_rec_btn"
+            android:textSize="14sp" />
+ 
+    </GridLayout> 		
 		<GridLayout
 	        android:id="@+id/grid2"
 	        android:layout_width="match_parent"
@@ -142,21 +166,71 @@
     	    
        <ListView 
 			android:id="@+id/android:list" 
-	  		android:layout_height="350dp"
+	  		android:layout_height="150dp"
 	  		android:layout_width="fill_parent">
 		</ListView>
-
+  <GridLayout 
+        	android:id="@+id/grid3"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+        	android:columnCount="3"
+       		android:rowCount="3">
+        
+           <TextView
+            android:layout_width="205dp"
+            android:layout_height="wrap_content"     
+            android:layout_gravity="left"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:inputType="none"
+            android:text="@string/sheep_sire_lbl" />
+           
+           <TextView
+            android:id="@+id/sireName"
+            android:layout_width="205dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_column="0"
+            android:layout_row="1"
+            android:enabled="true"
+            android:textSize="18sp"
+            android:typeface="monospace" >
+			</TextView>
+            
+  			<TextView
+        	android:layout_width="150dp"
+       	 	android:layout_height="wrap_content"
+        	android:layout_column="1"
+            android:layout_gravity="left"
+            android:layout_row="0"
+            android:inputType="none"
+        	android:text="@string/sheep_dam_lbl" />
+        
+        <TextView
+        	android:id="@+id/damName"
+        	android:layout_width="150dp"
+       	 	android:layout_height="wrap_content"
+           	android:layout_column="1"
+            android:layout_gravity="left"
+            android:layout_row="1"
+            android:ems="10"
+        	android:gravity="left"
+        	android:textSize="18sp"
+        	android:typeface="monospace" />       
+       </GridLayout>  
+      
 <RelativeLayout
-    android:id="@+id/RelativeLayout03"
+    android:id="@+id/BottomButtonBar"
     android:orientation="horizontal" 
   	android:layout_width="fill_parent"
   	android:layout_height="wrap_content">
-        
+    	
        	<Button
             android:id="@+id/back_to_main_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
            	android:layout_alignParentLeft="true"
+           	android:layout_alignParentBottom="true"
             android:onClick="backBtn"
             android:text="@string/back_btn"
             android:textSize="14sp" />
@@ -166,17 +240,30 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_toRightOf="@+id/back_to_main_btn"
+            android:layout_alignParentBottom="true"
             android:onClick="clearBtn"
             android:text="@string/clear_btn"
             android:textSize="14sp" />
+       	
+       	<Button
+            android:id="@+id/take_note"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_toRightOf="@+id/clear_form_btn"
+           	android:layout_alignParentBottom="true"
+            android:onClick="takeNote"
+            android:text="@string/take_note_btn"
+            android:textSize="14sp" />
+       	
        	<Button
            android:id="@+id/help_btn"
            android:layout_width="100dp"
            android:layout_height="50dp"
-           android:layout_alignParentRight="true"
+           android:layout_toRightOf="@+id/take_note"
+           android:layout_alignParentBottom="true"
            android:onClick="helpBtn"
            android:text="@string/help_btn"
            android:textSize="14sp" />
-       	</RelativeLayout>
+</RelativeLayout>
 
 </LinearLayout>

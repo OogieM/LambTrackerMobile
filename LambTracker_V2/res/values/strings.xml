@@ -50,6 +50,8 @@
     <string name="save_evaluation_scores_btn">Save Scores</string>
     <string name="create_evaluation_task_btn">Create Evaluation</string>
     <string name="look_up_sheep_btn">Look Up Sheep</string>
+    <string name="add_lamb_btn">Add a Lamb</string>
+   
    
     <string name="load_sheeplist">Load Sheep Database</string>
     <string name="do_sheeptask">Do Sheep Tasks</string>
@@ -69,6 +71,8 @@
     <string name="title_activity_evaluate_sheep">Evaluate Sheep</string>
     <string name="title_activity_test_interface_designs">Test Interface Designs</string>
     <string name="title_activity_create_sheep_evaluation">Create Evaluation Task</string>
+    <string name="title_activity_lambing_sheep">Lambing Sheep</string>
+     <string name="title_activity_add_lamb">Add a Lamb</string>
     
     <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
@@ -78,13 +82,17 @@
         Farm or Scanning an EID tag. Then select the scores for each trait. When finished select Save Scores
         to write the data to the database with an evaluation date of today. </string>
     <string name="help_create_evaluate">Create a list of traits to evaluate on this run with the sheep. 
-        You may select 10 scored items and 5 real data items.</string> 
+        You may select 10 scored items and 5 real data items. </string> 
    	<string name="help_ground_truth_tags">Select a sheep using the EID reader or by entering in a federal or farm tag number. 
-   	    All the tags for that sheep will be displayed in the scrolling view below. If any are incorrect, 
-   	    then update the data. When you are satisfied that the tag data re correct select the update database button. 
-   	    This will update all records in the database. It will NOT add new tags or set the tag date on or off. The 
-   	    assumption is that you are just verifying existing tags ONLY. Use this with caution!</string>   
-    
+   	    All the tags for that sheep will be displayed in the scrolling view below. If you need to correct tags you will need to do 
+   	    that separately in the desktop application. </string>   
+    <string name="help_lambing_sheep">Select a sheep using the EID reader or by entering in another identification. 
+   	    All the tags for that sheep will be displayed in the scrolling view below. The ewe\'s last lambing results will be shown.
+   	    If there are any lambs from that sheep for this year their identification will also be listed. You can choose to add lambs 
+   	    here to collect data on the birth. </string>   	    
+    <string name="help_add_lamb">Add the information on this lamb. Be sure to put the first lamb born in first and the second lamb 
+         born in second.  </string> 
+   	    
     
     <string name="convert_fill_fields">Please Fill in all four fields.</string>
     
@@ -96,6 +104,8 @@
         <item>Evaluate Sheep</item>
         <item>Evaluate Sheep2</item>
         <item>Look Up a Sheep</item>
+        <item>Lambing</item>
+        <item>Print Labels</item>
         <item>Edit Database</item>
         <item>Test Interface Designs</item>
      </string-array>
@@ -112,6 +122,7 @@
     <string name="sheep_lambease_lbl">Lambease Score</string>
     <string name="sheep_sire_lbl">Sire</string>
     <string name="sheep_dam_lbl">Dam</string>
+     <string name="sheep_stillborn">Stillborn</string>
     
     <string name="federal_id_lbl">Federal ID</string>
     <string name="farm_id_lbl">Farm ID</string>

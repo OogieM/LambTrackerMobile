@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
     
-       <GridLayout 
+      <GridLayout 
         	android:id="@+id/grid1"
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -12,7 +12,7 @@
        		android:rowCount="3">
         
            <TextView
-            android:layout_width="150dp"
+            android:layout_width="205dp"
             android:layout_height="wrap_content"     
             android:layout_gravity="left"
             android:layout_column="0"
@@ -28,14 +28,12 @@
             android:layout_column="0"
             android:layout_row="1"
             android:enabled="true"
-            android:inputType="number"
             android:textSize="18sp"
             android:typeface="monospace" >
-            <requestFocus />
-            </EditText>
+			</EditText>
             
   			<TextView
-        	android:layout_width="200dp"
+        	android:layout_width="150dp"
        	 	android:layout_height="wrap_content"
         	android:layout_column="1"
             android:layout_gravity="left"
@@ -45,7 +43,7 @@
         
         <TextView
         	android:id="@+id/sheepnameText"
-        	android:layout_width="200dp"
+        	android:layout_width="150dp"
        	 	android:layout_height="wrap_content"
            	android:layout_column="1"
             android:layout_gravity="left"
@@ -53,61 +51,87 @@
             android:ems="10"
         	android:gravity="left"
         	android:textSize="18sp"
-        	android:typeface="monospace" />    
-    
+        	android:typeface="monospace" />       
        </GridLayout>  
+       
+ <RelativeLayout
+    android:id="@+id/TopButtonRow"
+    android:orientation="horizontal" 
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content">    
      
-    <GridLayout
-        android:id="@+id/grid2"
-        android:layout_width="match_parent"
+     <Spinner
+        android:id="@+id/tag_type_spinner"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:columnCount="6" >
-
-        <Button
-            android:id="@+id/search_fed_btn"
+        android:layout_alignParentLeft="true"
+        android:textSize="18sp" />     
+     <Button
+            android:id="@+id/look_up_sheep_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/tag_type_spinner"
+            android:onClick="lookForSheep"
+            android:text="@string/look_up_sheep_btn"
+            android:textSize="14sp" />  
+     <Button
+            android:id="@+id/alert_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/look_up_sheep_btn"
+            android:onClick="showAlert"
+            android:text="@string/alert_btn"
+            android:textSize="14sp" />           
+     <Button
+            android:id="@+id/scan_eid_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:onClick="scanEid"
+            android:text="@string/scan_eid_btn"
+            android:textSize="14sp" />    
+  </RelativeLayout>
+      <GridLayout
+        android:id="@+id/secondRowButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="4"
+        android:rowCount="2" >
+        
+     <Button
+            android:id="@+id/prev_rec_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_column="0"
             android:layout_gravity="left|top"
             android:layout_row="0"
-            android:onClick="searchFedTag"
-            android:text="@string/search_fed_btn" 
-            android:textSize="14sp"/>
- 
-        <Button
-            android:id="@+id/search_farm_btn"
+            android:onClick="previousRecord"
+            android:text="@string/prev_rec_btn"
+            android:textSize="14sp" />
+     
+      <Button
+            android:id="@+id/next_rec_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_column="1"
             android:layout_gravity="left|top"
             android:layout_row="0"
-            android:onClick="searchFarmTag"
-            android:text="@string/search_farm_btn" 
-            android:textSize="14sp"/>
-       
-        
-        <Button
-            android:id="@+id/scan_eid_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_column="2"
-            android:layout_gravity="left|top"
-            android:layout_row="0"
-            android:onClick="scanEid"
-            android:text="@string/scan_eid_btn"
+            android:onClick="nextRecord"
+            android:text="@string/next_rec_btn"
             android:textSize="14sp" />
-        
-        <Button
+               
+       <Button
             android:id="@+id/save_evaluation_scores_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_column="3"
             android:layout_gravity="left|top"
-            android:layout_row="0"        	
+            android:layout_row="0"
             android:onClick="saveScores"
             android:text="@string/save_evaluation_scores_btn"
-            android:textSize="14sp" />       
-  	</GridLayout> 
+            android:textSize="14sp" /> 
+  
+    </GridLayout>   
     
     <GridLayout
         android:id="@+id/grid3"
@@ -235,46 +259,51 @@
   
 	</RelativeLayout>
 	
-    <RelativeLayout
-    	android:id="@+id/RelativeLayout02"
-    	android:orientation="horizontal" 
-  		android:layout_width="fill_parent"
-  		android:layout_height="wrap_content">
-        
+<RelativeLayout
+    android:id="@+id/BottomButtonBar"
+    android:orientation="horizontal" 
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content">
+    	
        	<Button
             android:id="@+id/back_to_main_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
            	android:layout_alignParentLeft="true"
+           	android:layout_alignParentBottom="true"
             android:onClick="backBtn"
             android:text="@string/back_btn"
             android:textSize="14sp" />
        	
        	<Button
-            android:id="@+id/alert_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-           	android:layout_toRightOf="@+id/back_to_main_btn"
-            android:onClick="showAlert"
-            android:text="@string/alert_btn"
-            android:textSize="14sp" />
-       	<Button
             android:id="@+id/clear_form_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_toRightOf="@+id/alert_btn"
+            android:layout_toRightOf="@+id/back_to_main_btn"
+            android:layout_alignParentBottom="true"
             android:onClick="clearBtn"
             android:text="@string/clear_btn"
             android:textSize="14sp" />
-       		
+       	
+       	<Button
+            android:id="@+id/take_note"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_toRightOf="@+id/clear_form_btn"
+           	android:layout_alignParentBottom="true"
+            android:onClick="takeNote"
+            android:text="@string/take_note_btn"
+            android:textSize="14sp" />
+       	
        	<Button
            android:id="@+id/help_btn"
            android:layout_width="100dp"
            android:layout_height="50dp"
-           android:layout_alignParentRight="true"
+           android:layout_toRightOf="@+id/take_note"
+           android:layout_alignParentBottom="true"
            android:onClick="helpBtn"
            android:text="@string/help_btn"
            android:textSize="14sp" />
-  </RelativeLayout>        
+</RelativeLayout>
   
 </LinearLayout>

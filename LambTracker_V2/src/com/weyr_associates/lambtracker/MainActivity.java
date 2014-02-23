@@ -1,6 +1,7 @@
 package com.weyr_associates.lambtracker;
 
 import java.text.DecimalFormat;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,6 +17,7 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -206,11 +208,19 @@ public class MainActivity extends Activity {
 					i = new Intent(MainActivity.this, LookUpSheep.class);
 					MainActivity.this.startActivity(i);
 					break;
-				case 7:
+			    case 7:
+					i = new Intent(MainActivity.this, LambingSheep.class);
+					MainActivity.this.startActivity(i);
+			        break;
+			    case 8:
+					i = new Intent(MainActivity.this, PrintLabels.class);
+					MainActivity.this.startActivity(i);
+			        break;
+				case 9:
 					i = new Intent(MainActivity.this, EditDB.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 8:		
+				case 10:		
 					i = new Intent(MainActivity.this, TestInterfaceDesigns.class);
 					MainActivity.this.startActivity(i);
 			        break;
@@ -329,9 +339,12 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		//startActivity(new Intent(this, EditPreferences.class));
+
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, 0, 0, "Settings").setIcon(R.drawable.settings).setAlphabeticShortcut('s');
+
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.activity_main, menu);
+	    
 		return true;
 	}
 	
@@ -344,11 +357,12 @@ public class MainActivity extends Activity {
 	}
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch(item.getItemId()) {
-		case 0: //Settings
+
+//		switch(item.getItemId()) {
+//		case 0: //Settings
 			startActivity(new Intent(this, EditPreferences.class));
-			return true;
-		}
+//			return true;
+//		}
 		return super.onMenuItemSelected(featureId, item);
 	}
 	
