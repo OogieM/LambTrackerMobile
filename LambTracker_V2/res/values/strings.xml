@@ -151,7 +151,8 @@
 	
 	<string name="take_note_lbl">Enter Note:</string>
 
-    <string name="sheep_task_lbl">Lambing History</string>   
+    <string name="lambing_history_lbl">Lambing History</string> 
+    <string name="current_lambs_lbl">Current Lambs</string>
     
          
     <string name="delete_sheep">Delete Sheep?</string>

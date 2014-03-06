@@ -867,7 +867,6 @@ public class ConvertToEID extends Activity {
 	    clearBtn( v );
 	    }
     public void addNewTag( View v ){
- //   	String temp;
     	Object crsr;
     	
        	btn = (Button) findViewById( R.id.update_display_btn );

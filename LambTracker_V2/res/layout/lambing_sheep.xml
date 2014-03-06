@@ -175,9 +175,16 @@
 		    android:layout_height="2dp"
 		    android:background="@android:color/black">
 		</View>
+		<TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+	       	android:layout_gravity="left"
+            android:inputType="none"
+            android:text="@string/lambing_history_lbl" 
+            android:textSize="14sp"/>
 	    <ListView 
 			android:id="@+id/list2" 
-	  		android:layout_height="100dp"
+	  		android:layout_height="90dp"
 	  		android:layout_width="fill_parent">
 		</ListView>
 		<View
@@ -186,6 +193,28 @@
 		    android:layout_height="2dp"
 		    android:background="@android:color/black">
 		</View>
+		
+	<RelativeLayout
+    	android:orientation="horizontal" 
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content">
+	   	<TextView
+        	android:id="@+id/lamb01nameText"
+        	android:layout_width="100dp"
+       	 	android:layout_height="wrap_content"
+            android:ems="10"
+        	android:gravity="left"
+        	android:textSize="14sp"
+        	android:typeface="monospace" /> 
+        <TextView
+        	android:id="@+id/lamb01sexText"
+        	android:layout_width="50dp"
+       	 	android:layout_height="wrap_content"
+           	android:layout_toRightOf="@+id/lamb01nameText"
+        	android:gravity="right"
+        	android:textSize="14sp"
+        	android:typeface="monospace" /> 
+        	</RelativeLayout>
 	    <ListView 
 			android:id="@+id/list3" 
 	  		android:layout_height="wrap_content"
@@ -197,6 +226,27 @@
 		    android:layout_height="2dp"
 		    android:background="@android:color/black">
 		</View>
+		<RelativeLayout
+    	android:orientation="horizontal" 
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content">
+        <TextView
+        	android:id="@+id/lamb02nameText"
+        	android:layout_width="100dp"
+       	 	android:layout_height="wrap_content"
+             android:ems="10"
+        	android:gravity="left"
+        	android:textSize="14sp"
+        	android:typeface="monospace" />
+        <TextView
+        	android:id="@+id/lamb02sexText"
+        	android:layout_width="50dp"
+       	 	android:layout_height="wrap_content"
+           	android:layout_toRightOf="@+id/lamb02nameText"
+        	android:gravity="right"
+        	android:textSize="14sp"
+        	android:typeface="monospace" /> 
+        </RelativeLayout>
 	    <ListView 
 			android:id="@+id/list4" 
 	  		android:layout_height="wrap_content"
@@ -208,6 +258,26 @@
 		    android:layout_height="2dp"
 		    android:background="@android:color/black">
 		</View>
+		<RelativeLayout
+    	android:orientation="horizontal" 
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content">
+        <TextView
+        	android:id="@+id/lamb03nameText"
+        	android:layout_width="100dp"
+       	 	android:layout_height="wrap_content"
+            android:gravity="left"
+        	android:textSize="14sp"
+        	android:typeface="monospace" />
+        <TextView
+        	android:id="@+id/lamb03sexText"
+        	android:layout_width="50dp"
+       	 	android:layout_height="wrap_content"
+           	android:layout_toRightOf="@+id/lamb03nameText"
+        	android:gravity="right"
+        	android:textSize="14sp"
+        	android:typeface="monospace" /> 
+        </RelativeLayout>
 	    <ListView 
 			android:id="@+id/list5" 
 	  		android:layout_height="wrap_content"

@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -42,11 +43,28 @@ public class AddLamb extends Activity {
 	public Button btn;
 	public String alert_text;
 	public Cursor 	cursor;
-	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner, lamb_ease_spinner;
+	public Spinner tag_type_spinner, tag_type_spinner2, tag_location_spinner, tag_color_spinner, lamb_ease_spinner;
 	public List<String> tag_types, tag_locations, tag_colors, lambing_ease;
 	ArrayAdapter<String> dataAdapter;
 	public int 		thissheep_id;
+	public int	rear_type, birth_type, sex, lambease, codon171, codon136, codon154;
+	public String dam_name;
+	public int dam_id, dam_codon171, dam_codon154, dam_codon136;
+	public int sire_id, sire_codon171, sire_codon154, sire_codon136;
+	public CheckBox 	stillbornbox;
+	public boolean stillborn;
+	public Float birth_weight;
 	public RadioGroup radioGroup;
+	public String mytoday;
+	public String mytime;
+	
+	int             fedtagid, farmtagid, eidtagid ; // These are record IDs not sheep IDs
+	public int new_tag_type, new_tag_color, new_tag_location;
+	
+	public String tag_type_label, tag_color_label, tag_location_label, new_tag_number, eid_tag_color_label ;
+	public String eid_tag_location_label, eidText;
+	public Spinner eid_tag_color_spinner, eid_tag_location_spinner;
+	
 	
 	/////////////////////////////////////////////////////
 	Messenger mService = null;
@@ -218,6 +236,7 @@ public class AddLamb extends Activity {
     	ArrayList radiobtnlist;
     	String[] radioBtnText;
        	Boolean			exists;
+       	TextView TV;
 
    	 //////////////////////////////////// 
 		CheckIfServiceIsRunning();
@@ -238,13 +257,17 @@ public class AddLamb extends Activity {
    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
    		tag_types.add(cursor.getString(1));
    	}
-   	cursor.close();    	
+//   	cursor.close();    	
    	
    	// Creating adapter for spinner
    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_type_spinner.setAdapter (dataAdapter);
 		tag_type_spinner.setSelection(2);	
+		
+    	//	make the scan eid button red
+    	btn = (Button) findViewById( R.id.scan_eid_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 
       	// make the alert button normal and disabled
    	btn = (Button) findViewById( R.id.alert_btn );
@@ -261,13 +284,21 @@ public class AddLamb extends Activity {
 	btn = (Button) findViewById( R.id.take_note );
 	btn.setEnabled(false);
 	
+	//	Disable the Look Up Sheep Button
+	btn = (Button) findViewById( R.id.look_up_sheep_btn );
+	btn.setEnabled(false);
+	
+//	Disable the bottom update tag button until we choose to add or update
+   	btn = (Button) findViewById( R.id.update_display_btn );
+	btn.setEnabled(false); 
+	
    	//	Fill the lamb sex radio group
    		radiobtnlist = new ArrayList();  
    		radiobtnlist.add ("Ram");
    		radiobtnlist.add ("Ewe");
    		radiobtnlist.add ("Unknown");
 	    radioBtnText = (String[]) radiobtnlist.toArray(new String [radiobtnlist.size()]);
-		cursor.close();  
+//		cursor.close();  
 		// Build the radio buttons here
 		radioGroup = ((RadioGroup) findViewById(R.id.radioGroupSex));
 		addRadioButtons(3, radioBtnText);
@@ -307,7 +338,7 @@ public class AddLamb extends Activity {
         	lambing_ease.add (cursor.getString(0));
 	    	Log.i("addlamb", " Lambing ease text is " + cursor.getString(0));
     	}        
-     	cursor.close();  
+//     	cursor.close();  
     	// Creating adapter for spinner
      	Log.i("addlamb", " before create lambing ease adapter" );    	
      	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, lambing_ease);
@@ -318,27 +349,141 @@ public class AddLamb extends Activity {
      	Log.i("addlamb", " after set adapter" );
 		lamb_ease_spinner.setSelection(0);
 		Log.i("addlamb", " after set selection" );
+		Bundle extras = getIntent().getExtras();
+		// TODO get extras here
+		if (extras!= null){
+			dam_id = extras.getInt("dam_id");
+			dam_name = extras.getString("dam_name");
+			TV = (TextView) findViewById( R.id.damName );
+            TV.setText(dam_name); 
+            dam_codon171 = extras.getInt("codon171");
+            dam_codon154 = extras.getInt("codon154");
+            dam_codon136 = extras.getInt("codon136");
+		}
+		//	Now need to figure out who the sire is based on date and breeding records.
+		//	First go get the breeding records for this ewe.
+	
+		
+		
     }
     public void updateDatabase( View v ){
-
+    	RadioGroup rg;
+    	TextView 		TV;
+		// Disable Update Database button and make it red to prevent getting 2 records at one time
+    	btn = (Button) findViewById( R.id.update_database_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+    	btn.setEnabled(false);   	
+    	//	Get the data for this lamb
     	
-    	
+   		//	Get the radio group selected for the birth type
+		Log.i("before radio group", " getting ready to get the birth type ");
+		rg=(RadioGroup)findViewById(R.id.radioBirthType);
+ 		birth_type = rg.getCheckedRadioButtonId();
+		Log.i("birth_type ", String.valueOf(birth_type));
+ 		
+   		//	Get the radio group selected for the rear type
+		Log.i("before radio group", " getting ready to get the rear type ");
+		rg=(RadioGroup)findViewById(R.id.radioRearType);
+ 		rear_type = rg.getCheckedRadioButtonId();
+		Log.i("rear_type ", String.valueOf(rear_type));
+		
+  		//	Get the radio group selected for the sex
+		Log.i("before radio group", " getting ready to get the sex ");
+		rg=(RadioGroup)findViewById(R.id.radioGroupSex);
+ 		sex = rg.getCheckedRadioButtonId();
+		Log.i("sex ", String.valueOf(sex));
+		
+		//	Get the value of the checkbox for stillborn
+		Log.i("before checkbox", " getting ready to get stillborn or not ");
+		stillbornbox = (CheckBox) findViewById(R.id.checkBoxStillborn);
+		if (stillbornbox.isChecked()){
+			stillborn = true;
+			Log.i("stillborn ", String.valueOf(stillborn));
+		}
+		//	Get the Birth Weight
+		Log.i("before weight", " getting ready to get birth weight ");
+		TV = (TextView) findViewById(R.id.birth_weight);
+		birth_weight = Float.valueOf(TV.getText().toString());
+		Log.i("birth_weight ", String.valueOf(birth_weight));
+		
+		//	Get the lambease score
+		Log.i("before lambease", " getting ready to get lambease ");
+		TV = (TextView) findViewById(R.id.lamb_ease_spinner);
+		lambease = lamb_ease_spinner.getSelectedItemPosition();
+		Log.i("lambease ", String.valueOf(lambease));
+		
+		//	Calculate codon171 based on sire and dam if possible
+		
+		//	If the Codon171 cannot be determined set an alert for this lamb that it needs scrapie blood
+		
+		
+		//	Get the date and time to add to the record
+		mytoday = TodayIs();
+		mytime = TimeIs();
+		
+		
     	
     }
     public void addNewTag( View v ){
+    	Object crsr;
     	
-   
-	//	Get set up to try to use the CursorAdapter to display all the tag data
-	//	Select only the columns I need for the tag display section
-//    String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
-//	Log.i("LookForSheep", "after setting string array fromColumns");
-//	//	Set the views for each column for each line. A tag takes up 1 line on the screen
-//    int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-//    Log.i("LookForSheep", "after setting string array toViews");
-//    myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
-//    Log.i("LookForSheep", "after setting myadapter");
-//    setListAdapter(myadapter);
-//    Log.i("LookForSheep", "after setting list adapter");
+       	btn = (Button) findViewById( R.id.update_display_btn );
+    	btn.setEnabled(true); 
+    	new_tag_number = null;
+       	// Fill the Tag Type Spinner
+     	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
+    	tag_types = new ArrayList<String>();      	
+    	
+    	// Select All fields from id types to build the spinner
+        cmd = "select * from id_type_table";
+        crsr = dbh.exec( cmd );  
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+    	tag_types.add("Select a Type");
+         // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		tag_types.add(cursor.getString(1));
+    	}
+    	
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		tag_type_spinner2.setAdapter (dataAdapter);
+		tag_type_spinner2.setSelection(1);	
+    	
+    	// Fill the Tag Color Spinner
+    	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
+     	tag_colors = new ArrayList<String>();       	
+        // Select All fields from tag colors to build the spinner
+        cmd = "select * from tag_colors_table";
+        crsr = dbh.exec( cmd );  
+        cursor   = ( Cursor ) crsr;
+        startManagingCursor(cursor);
+    	dbh.moveToFirstRecord();
+    	tag_colors.add("Select a Color");
+         // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		tag_colors.add(cursor.getString(2));
+    	}
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_colors);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		tag_color_spinner.setAdapter (dataAdapter);
+		tag_color_spinner.setSelection(5);
+				
+    	// Fill the Tag Location Spinner
+		// Only allow ear locations for tags for this task
+		tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
+		tag_locations = new ArrayList<String>();        
+		tag_locations.add("Select a Location");
+		tag_locations.add("Right Ear");		
+		tag_locations.add("Left Ear");
+		
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_locations);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		tag_location_spinner.setAdapter (dataAdapter);
+		tag_location_spinner.setSelection(2);
     
     }
 
@@ -395,6 +540,7 @@ public class AddLamb extends Activity {
 		stopService(new Intent(AddLamb.this, eidService.class));   	
     	// Added this to close the database if we go back to the main activity  	
     	stopManagingCursor (cursor);
+    	cursor.close();
     	dbh.closeDB();
     	clearBtn( null );
     	//Go back to lambing data
@@ -499,5 +645,139 @@ public class AddLamb extends Activity {
  			return Integer.toString(i);
  		}
  	}
+	   private String TimeIs() {
+			Calendar calendar = Calendar.getInstance();
+	        //12 hour format
+//			int hour = cal.get(Calendar.HOUR);
+	        //24 hour format
+			int hourofday = calendar.get(Calendar.HOUR_OF_DAY);
+			int minute = calendar.get(Calendar.MINUTE);
+			int second = calendar.get(Calendar.SECOND);
+			  
+			return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
+		}
+//   user clicked 'Scan' button    
+  public void scanEid( View v){
+  	// Here is where I need to get a tag scanned and put the data into the variable LastEID
+		if (mService != null) {
+		try {
+			//Start eidService sending tags
+			Message msg = Message.obtain(null, eidService.MSG_SEND_ME_TAGS);
+			msg.replyTo = mMessenger;
+			mService.send(msg);
+		   	//	make the scan eid button green
+	    	Button btn = (Button) findViewById( R.id.scan_eid_btn );
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xff00ff00));
+		} catch (RemoteException e) {
+			// In this case the service has crashed before we could even do anything with it
+		}
+		}    	    	
+  }
+  // TODO
+  public void updateTag( View v ){
+  	Object 			crsr;
+  	String 			cmd;
+  	TextView 		TV;
+  	// Get the data from the add tag section of the screen
+  	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
+  	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
+  	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
+  	
+  	tag_type_label = tag_type_spinner2.getSelectedItem().toString();
+//  	Log.i("updateTag", "Tag type is " + tag_type_label);
+  	tag_color_label = tag_color_spinner.getSelectedItem().toString();
+//  	Log.i("updateTag", "Tag color is " + tag_color_label);
+  	tag_location_label = tag_location_spinner.getSelectedItem().toString();
+//  	Log.i("updateTag", "Tag location is " + tag_location_label);
+  	
+  	TV  = (TextView) findViewById( R.id.new_tag_number);
+  	new_tag_number = TV.getText().toString();
+//  	Log.i("before if", " new tag number " + new_tag_number);    	
+   	if (tag_type_label == "Select a Type" || tag_location_label == "Select a Location" || tag_color_label == "Select a Color"
+  			|| TV.getText().toString().isEmpty()) {
+  		new_tag_type = 0;
+  		// Missing data so  display an alert 	
+  		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+  		builder.setMessage( R.string.convert_fill_fields )
+  	           .setTitle( R.string.convert_fill_fields );
+  		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+  	           public void onClick(DialogInterface dialog, int idx) {
+  	               // User clicked OK button 
+   	    		   return;
+  	               }
+  	       });		
+  		AlertDialog dialog = builder.create();
+  		dialog.show();		   		
+  	}else
+  	{
+  		cmd = String.format("select id_type_table.id_typeid from id_type_table " +
+			"where idtype_name='%s'", tag_type_label);
+  		crsr = dbh.exec( cmd );
+  		cursor   = ( Cursor ) crsr;
+  		startManagingCursor(cursor);
+  		dbh.moveToFirstRecord();
+  		new_tag_type = dbh.getInt(0);
+//  		cursor.close();
+  		
+     		cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
+     				"where tag_color_name='%s'", tag_color_label);
+     	    crsr = dbh.exec( cmd );
+  		cursor   = ( Cursor ) crsr;
+  		startManagingCursor(cursor);
+  		dbh.moveToFirstRecord();
+  		new_tag_color = dbh.getInt(0);
+//  		cursor.close();
 
+  		cmd = String.format("select id_location_table.id_locationid, id_location_table.id_location_abbrev from id_location_table " +
+			"where id_location_name='%s'", tag_location_label);
+  		crsr = dbh.exec( cmd );
+  		cursor   = ( Cursor ) crsr;
+  		startManagingCursor(cursor);
+  		dbh.moveToFirstRecord();
+  		new_tag_location = dbh.getInt(0);
+//  		Log.i("New Location ID ", String.valueOf(new_tag_location));
+   		tag_location_label = dbh.getStr(1);
+//  		Log.i("New Location ", tag_location_label);
+//  		cursor.close();
+  		
+  	   	// 	Fill the new tag data with where it is in the screen display
+      	//	Integers to hold the info new_tag_type, new_tag_color, new_tag_location
+  		
+      	if (new_tag_type == 1){
+      		//	Federal Tag so update list and set needs database update
+      		// 	by setting id of 0 meaning either no tag or needs update
+      		Log.i("in if", "Got a new federal tag type");
+      		// Need to figure out how to update the cursor adapter for the tag data here
+//      	    TV  = (TextView) findViewById( R.id.fedText );
+//      	    TV.setText(new_tag_number);
+//      	    TV = (TextView) findViewById( R.id.fed_colorText );
+//      	    TV.setText(tag_color_label);
+//      	    TV = (TextView) findViewById( R.id.fed_locationText );
+//      	    TV.setText(tag_location_label);
+      	    fedtagid = 0;
+       	}
+      	if (new_tag_type == 4){
+      		//	Farm Tag so update farm section and set needs database update
+      		//	by setting id of 0 meaning either no tag or needs update       		
+      		Log.i("in if", "Got a new farm tag type");
+      		// Need to figure out how to update the cursor adapter for the tag data here
+//      	    TV  = (TextView) findViewById( R.id.farmText );
+//      	    TV.setText(new_tag_number);
+//      	    TV = (TextView) findViewById( R.id.farm_colorText );
+//      	    TV.setText(tag_color_label);
+//      	    TV = (TextView) findViewById( R.id.farm_locationText );
+//      	    TV.setText(tag_location_label);
+      	    farmtagid = 0;
+      	}
+      	//	Clear out the add tag section    	
+      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
+      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
+      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
+      	TV  = (TextView) findViewById( R.id.new_tag_number);
+      	tag_type_spinner2.setSelection(1);
+      	tag_color_spinner.setSelection(5);
+      	tag_location_spinner.setSelection(2);
+      	TV.setText( "" );
+      	}
+   	}
 }

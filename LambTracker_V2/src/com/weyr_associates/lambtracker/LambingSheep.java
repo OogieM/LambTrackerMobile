@@ -42,6 +42,7 @@ public class LambingSheep extends ListActivity
 		int             id;
 		String 			logmessages;
 		public int 		thissheep_id;
+		public int		codon171, codon154, codon136;
 		int             fedtagid, farmtagid, eidtagid;
 		
 		public String 	tag_type_label, tag_color_label, tag_location_label, eid_tag_color_label ;
@@ -60,7 +61,7 @@ public class LambingSheep extends ListActivity
 		int[] tagViews;
 
 		ArrayAdapter<String> dataAdapter;
-		String     	cmd;
+		String     	cmd, dam_name;
 		Integer 	i;	
 		public Button btn;
 		
@@ -288,7 +289,7 @@ public class LambingSheep extends ListActivity
 			Object crsr, crsr2, crsr3, crsr4, crsr5;
 			Boolean exists;
 			TextView TV;
-			
+			String 	lambingdate ;
 	        exists = true;
 	     // Hide the keyboard when you click the button
 	    	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
@@ -297,6 +298,11 @@ public class LambingSheep extends ListActivity
 	    	lamb01_id = 0;
 	    	lamb02_id = 0;
 	    	lamb03_id = 0;
+	    	
+	    	//	empty the codon records
+	    	codon171 = 0;
+	    	codon154 = 0;
+	    	codon136 = 0;
 	    	
 	        TV = (TextView) findViewById( R.id.inputText );	        
 	    	String	tag_num = TV.getText().toString();
@@ -329,7 +335,8 @@ public class LambingSheep extends ListActivity
 		        	
 		    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 		    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-		    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01 " +
+		    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01, " +
+		    				"sheep_table.codon171, sheep_table.codon154, sheep_table.codon136 " +
 		    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
 		    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 		    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
@@ -346,8 +353,14 @@ public class LambingSheep extends ListActivity
 					cursor.moveToFirst();				
 					TV = (TextView) findViewById( R.id.sheepnameText );
 			        TV.setText (dbh.getStr(0));
+			        dam_name = dbh.getStr(0);
 					// Now we need to get the alert text for this sheep
 			        alert_text = dbh.getStr(8);
+			        //	Get the Codon 171, Codon 154 and Codon 136 values for ths sheep
+			        codon171 = dbh.getInt(9);
+			        codon154 = dbh.getInt(10);
+			        codon136 = dbh.getInt(11);
+			        
 			    	Log.i("lookForSheep", " before formatting results");
 					
 					//	Get set up to try to use the CursorAdapter to display all the tag data
@@ -376,6 +389,8 @@ public class LambingSheep extends ListActivity
 					nrCols   = colNames.length;					
 					cursor2.moveToFirst();	
 					if (nRecs > 0) {
+						lambingdate = dbh.getStr(1);
+						
 						lamb01_id = dbh.getInt(3);
 						Log.i("lookForSheep", " first lamb is id " + String.valueOf(lamb01_id));
 						lamb02_id = dbh.getInt(4);
@@ -418,9 +433,11 @@ public class LambingSheep extends ListActivity
 							// lambs name is dbh.getStr (0)
 							Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
 							Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
-							// lambs sex is dbh.getStr (2)
-							
-							
+							TV = (TextView) findViewById( R.id.lamb01nameText );
+				        	TV.setText(dbh.getStr(0));
+				        	TV = (TextView) findViewById( R.id.lamb01sexText );
+				        	TV.setText(dbh.getStr(2));
+				        	
 							//	Get set up to try to use the CursorAdapter to display all the tag data
 							//	Select only the columns I need for the tag display section
 					        String[] fromColumns3 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
@@ -454,9 +471,10 @@ public class LambingSheep extends ListActivity
 							// lambs name is dbh.getStr (0)
 							Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
 							Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
-							// lambs sex is dbh.getStr (2)
-							
-							
+							TV = (TextView) findViewById( R.id.lamb02nameText );
+				        	TV.setText(dbh.getStr(0));
+				        	TV = (TextView) findViewById( R.id.lamb02sexText );
+				        	TV.setText(dbh.getStr(2));
 							//	Get set up to try to use the CursorAdapter to display all the tag data
 							//	Select only the columns I need for the tag display section
 					        String[] fromColumns4 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
@@ -490,9 +508,10 @@ public class LambingSheep extends ListActivity
 							// lambs name is dbh.getStr (0)
 							Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
 							Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
-							// lambs sex is dbh.getStr (2)
-							
-							
+							TV = (TextView) findViewById( R.id.lamb03nameText );
+				        	TV.setText(dbh.getStr(0));
+				        	TV = (TextView) findViewById( R.id.lamb03sexText );
+				        	TV.setText(dbh.getStr(2));
 							//	Get set up to try to use the CursorAdapter to display all the tag data
 							//	Select only the columns I need for the tag display section
 					        String[] fromColumns5 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
@@ -519,13 +538,20 @@ public class LambingSheep extends ListActivity
 	                
 	        	}
 		}
-		
+		// TODO
 		public void addLamb (View v){
 			Intent i = null;
 			Log.i("addLamb", " at the beginning");
-			// Decide whether to go to a separate screen to fill in data or not
 			
 			i = new Intent(LambingSheep.this, AddLamb.class);
+			i.putExtra("dam_name", dam_name);
+			i.putExtra("dam_id", thissheep_id);
+			//	Put the codon values for this ewe 
+			//	Used to calculate the codon for the lambs if possible
+			i.putExtra("codon171", codon171);
+			i.putExtra("codon154", codon154);
+			i.putExtra("codon136", codon136);
+			
 			LambingSheep.this.startActivity(i);
 			
 		}

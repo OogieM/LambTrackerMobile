@@ -499,13 +499,6 @@ public class MainActivity extends Activity {
 		startActivity(listSheep);
 	    }
 
-	// set up a sheep task
-	public void doSheepTasks( View v )
-	    {
-		Intent workSheep = new Intent( this, DoSheepTask.class );
-		workSheep.putExtra("com.weyr_associates.lambtracker.LASTEID", LastEID);
-		startActivity(workSheep);
-		}
 
 	// use EID reader to look up a sheep
 	public void lookUpSheep( )
