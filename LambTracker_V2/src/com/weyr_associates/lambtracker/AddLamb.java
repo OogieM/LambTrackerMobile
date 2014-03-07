@@ -237,6 +237,7 @@ public class AddLamb extends Activity {
     	String[] radioBtnText;
        	Boolean			exists;
        	TextView TV;
+       	String temp_ram_in, temp_ram_out;
 
    	 //////////////////////////////////// 
 		CheckIfServiceIsRunning();
@@ -362,9 +363,44 @@ public class AddLamb extends Activity {
 		}
 		//	Now need to figure out who the sire is based on date and breeding records.
 		//	First go get the breeding records for this ewe.
-	
+		cmd = String.format("select sheep_breeding_table.ewe_id, " +
+				" sheep_breeding_table.breeding_id, " +
+				" breeding_record_table.ram_id, " +
+				" breeding_record_table.date_ram_in, " +
+    			" breeding_record_table.date_ram_out,  " +
+    			" breeding_record_table.service_type " +
+    			" from breeding_record_table " +
+    			" left outer join sheep_breeding_table on " +
+    			" sheep_breeding_table.breeding_id = breeding_record_table.id_breedingid " +
+    			" where sheep_breeding_table.ewe_id = '%s' ", dam_id);
+		//	TODO
+		//		Get the date and time to add to the record
+			mytoday = TodayIs();
+			mytime = TimeIs();
 		
-		
+    	Log.i("add a lamb ", " cmd is " + cmd);	    	
+    	crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+        	Log.i("addlamb", " in for loop checking breeding dates ");
+        	// Check the dates and see if this is the right record
+        	// Get the date ram in and date ram out
+        	temp_ram_in = dbh.getStr(3);
+        	temp_ram_out = dbh.getStr(4);
+        	// mytoday is the current date
+        	// need to figure out if the date is within early date 142 probable start date 147 
+        	//	probable end date 150 end date 155
+        	
+        	
+        	//  If it is within the dates then this is the record need  to save the data
+        	//	and break out of the for loop
+        	
+	    	
+    	}        
+		//	Handle the sire data here
+        
+        
     }
     public void updateDatabase( View v ){
     	RadioGroup rg;
@@ -417,9 +453,7 @@ public class AddLamb extends Activity {
 		//	If the Codon171 cannot be determined set an alert for this lamb that it needs scrapie blood
 		
 		
-		//	Get the date and time to add to the record
-		mytoday = TodayIs();
-		mytime = TimeIs();
+		
 		
 		
     	
