@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import com.weyr_associates.lambtracker.LookUpSheep.IncomingHandler;
+import com.weyr_associates.lambtracker.Utilities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -48,9 +49,12 @@ public class AddLamb extends Activity {
 	ArrayAdapter<String> dataAdapter;
 	public int 		thissheep_id;
 	public int	rear_type, birth_type, sex, lambease, codon171, codon136, codon154;
-	public String dam_name;
+	public String dam_name, sire_name, lamb_name;
+	public String lamb_alert_text, death_date, remove_date;
 	public int dam_id, dam_codon171, dam_codon154, dam_codon136;
 	public int sire_id, sire_codon171, sire_codon154, sire_codon136;
+	public int lamb_id, lamb_codon171, lamb_codon154, lamb_codon136;
+	public int flock_prefix, id_sheepbreedid, id_locationid,id_ownerid, birth_weight_units, lamb_birth_record;
 	public CheckBox 	stillbornbox;
 	public boolean stillborn;
 	public Float birth_weight;
@@ -237,7 +241,10 @@ public class AddLamb extends Activity {
     	String[] radioBtnText;
        	Boolean			exists;
        	TextView TV;
-       	String temp_ram_in, temp_ram_out;
+       	Float temp_ram_in, temp_ram_out;
+       	double	gestation_length;
+       	Double temp_julian_today;
+       	int [] jintdate = new int[] {0,0,0};
 
    	 //////////////////////////////////// 
 		CheckIfServiceIsRunning();
@@ -357,27 +364,48 @@ public class AddLamb extends Activity {
 			dam_name = extras.getString("dam_name");
 			TV = (TextView) findViewById( R.id.damName );
             TV.setText(dam_name); 
+            Log.i("add a lamb ", " dam is " + dam_name);
             dam_codon171 = extras.getInt("codon171");
             dam_codon154 = extras.getInt("codon154");
             dam_codon136 = extras.getInt("codon136");
 		}
 		//	Now need to figure out who the sire is based on date and breeding records.
 		//	First go get the breeding records for this ewe.
+		// First put an empty string in as sire name
+		sire_name = "Sire not found";
 		cmd = String.format("select sheep_breeding_table.ewe_id, " +
 				" sheep_breeding_table.breeding_id, " +
 				" breeding_record_table.ram_id, " +
-				" breeding_record_table.date_ram_in, " +
-    			" breeding_record_table.date_ram_out,  " +
+				" sheep_table.sheep_name, " +
+				" julianday(breeding_record_table.date_ram_in), " +
+    			" julianday(breeding_record_table.date_ram_out),  " +
     			" breeding_record_table.service_type " +
     			" from breeding_record_table " +
     			" left outer join sheep_breeding_table on " +
     			" sheep_breeding_table.breeding_id = breeding_record_table.id_breedingid " +
-    			" where sheep_breeding_table.ewe_id = '%s' ", dam_id);
+    			" inner join sheep_table on sheep_id = ram_id " +
+    			" where sheep_breeding_table.ewe_id = '%s' ", dam_id);		  
 		//	TODO
-		//		Get the date and time to add to the record
-			mytoday = TodayIs();
-			mytime = TimeIs();
+		//		Get the date and time to add to the record these are strings not numbers
+			mytoday = TodayIs(); 
+			Log.i("add a lamb ", " today is " + mytoday);
 		
+			mytime = TimeIs();
+			Log.i("add a lamb ", " time is " + mytime);
+			Calendar calendar = Calendar.getInstance();
+			Log.i("add a lamb ", " after getting a calendar");
+//			jintdate [0] = calendar.get(Calendar.YEAR);
+//			jintdate [1] = calendar.get(Calendar.MONTH) +1;
+//			jintdate [2] = calendar.get(Calendar.DAY_OF_MONTH);
+			//	Hard Coded a day within the breeding time of AI for testing purposes
+			
+			jintdate [0] = 2014;
+			jintdate [1] = 04;
+			jintdate [2] = 27;
+			
+			Log.i("add a lamb ", " before getting julian of today");
+			temp_julian_today = Utilities.toJulian(jintdate);
+			Log.i("addlamb", " julian today is " + String.valueOf(temp_julian_today));
     	Log.i("add a lamb ", " cmd is " + cmd);	    	
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
@@ -386,19 +414,39 @@ public class AddLamb extends Activity {
         	Log.i("addlamb", " in for loop checking breeding dates ");
         	// Check the dates and see if this is the right record
         	// Get the date ram in and date ram out
-        	temp_ram_in = dbh.getStr(3);
-        	temp_ram_out = dbh.getStr(4);
-        	// mytoday is the current date
+        	temp_ram_in = dbh.getReal(4);
+        	Log.i("addlamb", " julian ram in " + String.valueOf(temp_ram_in));
+        	temp_ram_out = dbh.getReal(5);
+        	Log.i("addlamb", " julian ram out " + String.valueOf(temp_ram_out));
         	// need to figure out if the date is within early date 142 probable start date 147 
-        	//	probable end date 150 end date 155
+        	//	probable end date 150 and end date 155
+        	// First calculate how many days gestation this is from date ram in
+        	gestation_length = temp_julian_today - temp_ram_in;
+        	Log.i("addlamb", " julian gestation is " + String.valueOf(gestation_length));
+        	// Now need to convert this to a number of days
         	
-        	
-        	//  If it is within the dates then this is the record need  to save the data
-        	//	and break out of the for loop
-        	
-	    	
+        	Log.i("addlamb", " calculated gestation length is " + String.valueOf(gestation_length));
+        	if  (gestation_length > 142 && gestation_length < 155) {
+        		//	This is the correct record so save the data and bump out
+        		sire_name = dbh.getStr(3);
+        		sire_id = dbh.getInt(2);
+        	}        	
+        	// The sire we have is 
+        	Log.i("addlamb", " in for loop sire is " + sire_name);	    	
     	}        
 		//	Handle the sire data here
+        TV = (TextView) findViewById( R.id.sireName );
+        TV.setText(sire_name); 
+        //	Go get the sire Codon171,154 and 136 values
+        cmd = String.format("select sheep_table.codon171, sheep_table.codon154, " +
+        		" sheep_table.codon136 from sheep_table where sheep_id = %s%", sire_id);
+        crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+        sire_codon171 = dbh.getInt(0);
+        sire_codon154 = dbh.getInt(1);
+        sire_codon136 = dbh.getInt(2);        
+        
         
         
     }
@@ -449,14 +497,170 @@ public class AddLamb extends Activity {
 		Log.i("lambease ", String.valueOf(lambease));
 		
 		//	Calculate codon171 based on sire and dam if possible
+		if (dam_codon171 == 1) {
+			// Dam is QQ so test the sire with a case statement
+			switch (sire_codon171){
+			case 1:
+				//	we have dam of QQ and Sire of QQ so lamb is QQ
+				lamb_codon171 = 1;
+				break;
+			case 2:
+			case 3:
+			case 4:
+				// 	Dam is QQ but sire is Q? or QR or R? so lamb is Q?
+				lamb_codon171 = 2;
+				// 	next need to set alert text to get scrapie blood for this lamb.
+				lamb_alert_text = lamb_alert_text + "Scrapie Blood";		
+				break;
+			case 5:
+				//	Dam is QQ but sire is RR so lamb is QR
+				lamb_codon171 = 3;
+				break;
+			case 6:
+				//	Dam is QQ but sire is ?? so lamb is Q?
+				lamb_codon171 = 2;
+				// 	next need to set alert text to get scrapie blood for this lamb.
+				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+			default:
+				//	We do not test for H or K alleles so the rest of the options are all set to do nothing
+				break;
+			}
+		}
+		if (dam_codon171 == 5) {
+			// Dam is RR so test the sire with a case statement
+			switch (sire_codon171){
+			case 1:
+				//	we have dam of RR and Sire of QQ so lamb is QR
+				lamb_codon171 = 3;
+				break;
+			case 2:
+			case 3:
+			case 4:
+				// 	Dam is RR but sire is Q? or QR or R? so lamb is R?
+				lamb_codon171 = 4;
+				// 	next need to set alert text to get scrapie blood for this lamb.
+				lamb_alert_text = lamb_alert_text + "Scrapie Blood";		
+				break;
+			case 5:
+				//	Dam is RR and sire is RR so lamb is RR
+				lamb_codon171 = 5;
+				break;
+			case 6:
+				//	Dam is RR but sire is ?? so lamb is R?
+				lamb_codon171 = 4;
+				// 	next need to set alert text to get scrapie blood for this lamb.
+				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+			default:
+				//	We do not test for H or K alleles so the rest of the options are all set to do nothing
+				break;
+			}
+		}
+		if (dam_codon171 == 2 || dam_codon171 == 4) {
+			// Dam is Q? or R? 
+			switch (sire_codon171){
+			case 1:
+				//	we have dam of Q? or R? and Sire of QQ so lamb is Q?
+				lamb_codon171 = 2;
+				//	next need to set alert text to get scrapie blood for this lamb.
+				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+				break;
+			case 2:
+			case 3:
+			case 4:	
+				// 	Dam is Q? or R? but sire is Q? or QR or R? so lamb is ??
+				lamb_codon171 = 6;
+				// 	next need to set alert text to get scrapie blood for this lamb.
+				lamb_alert_text = lamb_alert_text + "Scrapie Blood";		
+				break;
+			case 5:
+				//	Dam is Q? or R? and sire is RR so lamb is R?
+				lamb_codon171 = 4;
+				// 	next need to set alert text to get scrapie blood for this lamb.
+				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+				break;
+			case 6:
+				//	Dam is RR but sire is ?? so lamb is R?
+				lamb_codon171 = 4;
+				// 	next need to set alert text to get scrapie blood for this lamb.
+				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+			default:
+				//	We do not test for H or K alleles so the rest of the options are all set to do nothing
+				break;
+			}		
+		}
+		if (dam_codon171 == 3) {
+			// Dam is QR 
+			switch (sire_codon171){
+			case 1:
+				//	we have dam of QR and Sire of QQ so lamb is Q?
+				lamb_codon171 = 2;
+				//	next need to set alert text to get scrapie blood for this lamb.
+				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+				break;
+			case 2: //sire is Q?
+			case 3: // sire is QR
+			case 4:	// sire is R?
+				// 	Dam is QR but sire is Q? or QR or R? so lamb is ??
+				lamb_codon171 = 6;
+				// 	next need to set alert text to get scrapie blood for this lamb.
+				lamb_alert_text = lamb_alert_text + "Scrapie Blood";		
+				break;
+			case 5:
+				//	Dam is QR and sire is RR so lamb is R?
+				lamb_codon171 = 4;
+				// 	next need to set alert text to get scrapie blood for this lamb.
+				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+				break;
+			case 6:
+				//	Dam is QR but sire is ?? so lamb is ??
+				lamb_codon171 = 6;
+				// 	next need to set alert text to get scrapie blood for this lamb.
+				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+			default:
+				//	We do not test for H or K alleles so the rest of the options are all set to do nothing
+				break;
+			}
 		
-		//	If the Codon171 cannot be determined set an alert for this lamb that it needs scrapie blood
+		}
+		// TODO Add all the testing for codon154 and codon 136 here but left off for testing
+		//	For now set these to ??
+		lamb_codon154 = 1;
+		lamb_codon136 = 6;
+		//	Fill all the misc variables for the sheep record
+		//	Set breed based on sire and dam breed
+		//	Need to fix for the general case of crossbred lambs but for now set to crossbred if dam is Sooner
+		//	otherwise the default set to be Black Welsh
+		if (dam_id == 58) {
+			id_sheepbreedid = 2;
+		}else {
+			id_sheepbreedid = 1;
+		}		
+		//	Set the location to be East Orchard Pasture but will need to modify to be real
+		id_locationid = 1;
+		//	Set the birth_weight_units to be decimal pounds 
+		//	Should be modified to be the value from settings but I haven't implemented settings yet
+		birth_weight_units = 1;
+		
+		//	Go get all the tag data for this lamb
 		
 		
+		//	Set the name of this lamb to be the federal tag
 		
 		
-		
-    	
+		//	Ready to build the insert statement for this lamb.
+		cmd = String.format("insert into sheep_table (sheep_name, flock_prefix, sex, " +
+				"birth_date, birth_type, birth_weight, rear_type, death_date, remove_date, " +
+				"lambease, sire_id, dam_id, alert01, acquire_date, sheep_birth_record, " +
+				"codon171, codon154, codon136, id_sheepbreedid, id_locationid, " +
+				"id_ownerid, birth_weight_units) values " +
+				"(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ",
+				lamb_name,flock_prefix,sex,mytoday,birth_type, birth_weight,rear_type,death_date,
+				remove_date,lambease,sire_id,dam_id,lamb_alert_text,mytoday,lamb_birth_record,
+				lamb_codon171,lamb_codon154,lamb_codon136, id_sheepbreedid, id_locationid,
+				id_ownerid,birth_weight_units);
+		Log.i("add a lamb ", "cmd is " + cmd);
+		dbh.exec( cmd );
+		// 
     }
     public void addNewTag( View v ){
     	Object crsr;
@@ -672,6 +876,7 @@ public class AddLamb extends Activity {
  		int year = calendar.get(Calendar.YEAR);
  		return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
  	}
+    
      private String Make2Digits(int i) {
  		if (i < 10) {
  			return "0" + i;

@@ -7,7 +7,7 @@ package com.weyr_associates.lambtracker;
  * @author ww 
  * @version 2013-02-15
  */
-public class Utilities
+public class Utilities 
 {
     public static int    JGREG        = 15 + 31*(10+12*1582);   // 15 October 1582
     public static double SECS_PER_DAY = 86400.0;
@@ -21,7 +21,7 @@ public class Utilities
 
     }
 
-   public double toJulian( int[] ymd )
+   public static double toJulian( int[] ymd )
     {
     int year       = ymd[0]; // yyyy
     int month      = ymd[1]; // jan=1, feb=2,...
