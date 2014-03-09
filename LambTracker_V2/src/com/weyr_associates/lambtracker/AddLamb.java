@@ -1,5 +1,6 @@
 package com.weyr_associates.lambtracker;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -15,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteException;
 import android.graphics.LightingColorFilter;
 import android.os.Bundle;
@@ -62,7 +64,7 @@ public class AddLamb extends Activity {
 	public String mytoday;
 	public String mytime;
 	
-	int             fedtagid, farmtagid, eidtagid ; // These are record IDs not sheep IDs
+	int		fedtagid, farmtagid, eidtagid ; // These are record IDs not sheep IDs
 	public int new_tag_type, new_tag_color, new_tag_location;
 	
 	public String tag_type_label, tag_color_label, tag_location_label, new_tag_number, eid_tag_color_label ;
@@ -215,7 +217,7 @@ public class AddLamb extends Activity {
 	public void gotEID( )
 	{		
 //		View v = null;
-		Object crsr;
+//		Object crsr;
 		//	make the scan eid button red
 		btn = (Button) findViewById( R.id.scan_eid_btn );
 		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -253,67 +255,64 @@ public class AddLamb extends Activity {
 		
     	// Fill the Tag Type Spinner
     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
-   	tag_types = new ArrayList<String>();      	
+    	tag_types = new ArrayList<String>();      	
    	
-   	// Select All fields from id types to build the spinner
-       cmd = "select * from id_type_table";
-       crsr = dbh.exec( cmd );  
-       cursor   = ( Cursor ) crsr;
-   	dbh.moveToFirstRecord();
-   	tag_types.add("Select a Type");
-        // looping through all rows and adding to list
-   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-   		tag_types.add(cursor.getString(1));
-   	}
-//   	cursor.close();    	
-   	
-   	// Creating adapter for spinner
-   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
+	   	// Select All fields from id types to build the spinner
+	   	cmd = "select * from id_type_table";
+	   	crsr = dbh.exec( cmd );  
+		cursor   = ( Cursor ) crsr;
+	   	dbh.moveToFirstRecord();
+	   	tag_types.add("Select a Type");
+	    // looping through all rows and adding to list
+	   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+	   		tag_types.add(cursor.getString(1));
+	   	}
+	   	// Creating adapter for spinner
+	   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_type_spinner.setAdapter (dataAdapter);
 		tag_type_spinner.setSelection(2);	
+			
+	    //	make the scan eid button red
+	    btn = (Button) findViewById( R.id.scan_eid_btn );
+	    btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+	
+	    // make the alert button normal and disabled
+	   	btn = (Button) findViewById( R.id.alert_btn );
+	   	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+	   	btn.setEnabled(false);  
+	   	
+		//	Disable the Next Record and Prev. Record button until we have multiple records
+	   	btn = (Button) findViewById( R.id.next_rec_btn );
+	   	btn.setEnabled(false); 
+	   	btn = (Button) findViewById( R.id.prev_rec_btn );
+	   	btn.setEnabled(false);
+	
+	 	//	Disable the Take Note button
+		btn = (Button) findViewById( R.id.take_note );
+		btn.setEnabled(false);
 		
-    	//	make the scan eid button red
-    	btn = (Button) findViewById( R.id.scan_eid_btn );
-    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-
-      	// make the alert button normal and disabled
-   	btn = (Button) findViewById( R.id.alert_btn );
-   	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
-   	btn.setEnabled(false);  
-   	
-      	//	Disable the Next Record and Prev. Record button until we have multiple records
-   	btn = (Button) findViewById( R.id.next_rec_btn );
-   	btn.setEnabled(false); 
-   	btn = (Button) findViewById( R.id.prev_rec_btn );
-   	btn.setEnabled(false);
-
- 	//	Disable the Take Note button
-	btn = (Button) findViewById( R.id.take_note );
-	btn.setEnabled(false);
+		//	Disable the Look Up Sheep Button
+		btn = (Button) findViewById( R.id.look_up_sheep_btn );
+		btn.setEnabled(false);
+		
+		//	Disable the bottom update tag button until we choose to add or update
+	   	btn = (Button) findViewById( R.id.update_display_btn );
+		btn.setEnabled(false); 
 	
-	//	Disable the Look Up Sheep Button
-	btn = (Button) findViewById( R.id.look_up_sheep_btn );
-	btn.setEnabled(false);
-	
-//	Disable the bottom update tag button until we choose to add or update
-   	btn = (Button) findViewById( R.id.update_display_btn );
-	btn.setEnabled(false); 
-	
-   	//	Fill the lamb sex radio group
+		//	Fill the lamb sex radio group
    		radiobtnlist = new ArrayList();  
    		radiobtnlist.add ("Ram");
    		radiobtnlist.add ("Ewe");
    		radiobtnlist.add ("Unknown");
 	    radioBtnText = (String[]) radiobtnlist.toArray(new String [radiobtnlist.size()]);
-//		cursor.close();  
+
 		// Build the radio buttons here
 		radioGroup = ((RadioGroup) findViewById(R.id.radioGroupSex));
 		addRadioButtons(3, radioBtnText);
 		radiobtnlist.clear ();
 		
-	//	Fill the birth and rear type radio group
-//   		radiobtnlist = new ArrayList();  
+		//	Fill the birth and rear type radio group
    		radiobtnlist.add ("Single");
    		radiobtnlist.add ("Twin");
    		radiobtnlist.add ("Triplet");
@@ -322,9 +321,7 @@ public class AddLamb extends Activity {
 		// Build the radio buttons here
 		radioGroup = ((RadioGroup) findViewById(R.id.radioBirthType));
 		addRadioButtons(3, radioBtnText);
-		//	Fill the rear type radio group   		
-//	    radioBtnText = (String[]) radiobtnlist.toArray(new String [radiobtnlist.size()]);
-//		cursor.close();  
+		//	Fill the rear type radio group   		 
 		// Build the radio buttons here
 		radioGroup = ((RadioGroup) findViewById(R.id.radioRearType));
 		addRadioButtons(3, radioBtnText);
@@ -336,7 +333,7 @@ public class AddLamb extends Activity {
     			" from custom_evaluation_traits_table " +
     			" where custom_evaluation_traits_table.id_traitid = '%s' "+
     			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ", 24);
-//    	Log.i("evaluate2", " cmd is " + cmd);	    	
+    	//    	Log.i("evaluate2", " cmd is " + cmd);	    	
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
@@ -346,8 +343,8 @@ public class AddLamb extends Activity {
         	lambing_ease.add (cursor.getString(0));
 	    	Log.i("addlamb", " Lambing ease text is " + cursor.getString(0));
     	}        
-//     	cursor.close();  
-    	// Creating adapter for spinner
+
+    	// Creating adapter for lambease spinner
      	Log.i("addlamb", " before create lambing ease adapter" );    	
      	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, lambing_ease);
      	Log.i("addlamb", " after create lambing ease adapter" );
@@ -357,8 +354,13 @@ public class AddLamb extends Activity {
      	Log.i("addlamb", " after set adapter" );
 		lamb_ease_spinner.setSelection(0);
 		Log.i("addlamb", " after set selection" );
+		
+		//	Fill death and remove dates with null initially. Will change if this is a stillborn lamb
+		death_date = null;
+		remove_date = null;
+		
 		Bundle extras = getIntent().getExtras();
-		// TODO get extras here
+		// TODO get extras here from the lambing screen. Mostly ewe's data for scrapie genetics
 		if (extras!= null){
 			dam_id = extras.getInt("dam_id");
 			dam_name = extras.getString("dam_name");
@@ -370,9 +372,9 @@ public class AddLamb extends Activity {
             dam_codon136 = extras.getInt("codon136");
 		}
 		//	Now need to figure out who the sire is based on date and breeding records.
-		//	First go get the breeding records for this ewe.
-		// First put an empty string in as sire name
+		//  First put an empty string in as sire name
 		sire_name = "Sire not found";
+		//	Then go get the breeding records for this ewe.
 		cmd = String.format("select sheep_breeding_table.ewe_id, " +
 				" sheep_breeding_table.breeding_id, " +
 				" breeding_record_table.ram_id, " +
@@ -386,17 +388,13 @@ public class AddLamb extends Activity {
     			" inner join sheep_table on sheep_id = ram_id " +
     			" where sheep_breeding_table.ewe_id = '%s' ", dam_id);		  
 		//	TODO
-		//		Get the date and time to add to the record these are strings not numbers
-			mytoday = TodayIs(); 
-			Log.i("add a lamb ", " today is " + mytoday);
-		
-			mytime = TimeIs();
-			Log.i("add a lamb ", " time is " + mytime);
+			
 			Calendar calendar = Calendar.getInstance();
 			Log.i("add a lamb ", " after getting a calendar");
 //			jintdate [0] = calendar.get(Calendar.YEAR);
 //			jintdate [1] = calendar.get(Calendar.MONTH) +1;
 //			jintdate [2] = calendar.get(Calendar.DAY_OF_MONTH);
+			// TODO
 			//	Hard Coded a day within the breeding time of AI for testing purposes
 			
 			jintdate [0] = 2014;
@@ -406,83 +404,98 @@ public class AddLamb extends Activity {
 			Log.i("add a lamb ", " before getting julian of today");
 			temp_julian_today = Utilities.toJulian(jintdate);
 			Log.i("addlamb", " julian today is " + String.valueOf(temp_julian_today));
-    	Log.i("add a lamb ", " cmd is " + cmd);	    	
-    	crsr = dbh.exec( cmd );
-        cursor   = ( Cursor ) crsr;
-        dbh.moveToFirstRecord();
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-        	Log.i("addlamb", " in for loop checking breeding dates ");
-        	// Check the dates and see if this is the right record
-        	// Get the date ram in and date ram out
-        	temp_ram_in = dbh.getReal(4);
-        	Log.i("addlamb", " julian ram in " + String.valueOf(temp_ram_in));
-        	temp_ram_out = dbh.getReal(5);
-        	Log.i("addlamb", " julian ram out " + String.valueOf(temp_ram_out));
-        	// need to figure out if the date is within early date 142 probable start date 147 
-        	//	probable end date 150 and end date 155
-        	// First calculate how many days gestation this is from date ram in
-        	gestation_length = temp_julian_today - temp_ram_in;
-        	Log.i("addlamb", " julian gestation is " + String.valueOf(gestation_length));
-        	// Now need to convert this to a number of days
-        	
-        	Log.i("addlamb", " calculated gestation length is " + String.valueOf(gestation_length));
-        	if  (gestation_length > 142 && gestation_length < 155) {
-        		//	This is the correct record so save the data and bump out
-        		sire_name = dbh.getStr(3);
-        		sire_id = dbh.getInt(2);
-        	}        	
+	    	Log.i("add a lamb ", " cmd is " + cmd);	    	
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+	        	Log.i("addlamb", " in for loop checking breeding dates ");
+	        	// Check the dates and see if this is the right record
+	        	// Get the date ram in and date ram out
+	        	temp_ram_in = dbh.getReal(4);
+	        	Log.i("addlamb", " julian ram in " + String.valueOf(temp_ram_in));
+	        	temp_ram_out = dbh.getReal(5);
+	        	Log.i("addlamb", " julian ram out " + String.valueOf(temp_ram_out));
+	        	// need to figure out if the date is within early date 142 probable start date 147 
+	        	//	probable end date 150 and end date 155
+	        	// First calculate how many days gestation this is from date ram in
+	        	gestation_length = temp_julian_today - temp_ram_in;
+	        	Log.i("addlamb", " julian gestation is " + String.valueOf(gestation_length));
+	        	// Now need to convert this to a number of days
+	        	
+	        	Log.i("addlamb", " calculated gestation length is " + String.valueOf(gestation_length));
+	        	if  (gestation_length > 142 && gestation_length < 155) {
+	        		//	This is the correct record so save the data and bump out
+	        		sire_name = dbh.getStr(3);
+	        		sire_id = dbh.getInt(2);
+	        	}        	
         	// The sire we have is 
-        	Log.i("addlamb", " in for loop sire is " + sire_name);	    	
+        	Log.i("addlamb", " in for loop sire is " + sire_name);	
+        	Log.i("addlamb", " in for loop sire_id is " + String.valueOf(sire_id));	
     	}        
 		//	Handle the sire data here
         TV = (TextView) findViewById( R.id.sireName );
         TV.setText(sire_name); 
+        Log.i("addlamb", " after set display of sire name " + sire_name);
         //	Go get the sire Codon171,154 and 136 values
         cmd = String.format("select sheep_table.codon171, sheep_table.codon154, " +
-        		" sheep_table.codon136 from sheep_table where sheep_id = %s%", sire_id);
+        		" sheep_table.codon136 from sheep_table where sheep_id = '%s' ", sire_id);
+        Log.i("addlamb", " getting codon data cmd is " + cmd);	
         crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
         sire_codon171 = dbh.getInt(0);
+        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon171));
         sire_codon154 = dbh.getInt(1);
-        sire_codon136 = dbh.getInt(2);        
-        
-        
+        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon154));
+        sire_codon136 = dbh.getInt(2);  
+        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon136));        
         
     }
     public void updateDatabase( View v ){
-    	RadioGroup rg;
-    	TextView 		TV;
+    	RadioGroup 	rg;
+    	TextView 	TV;
+    	Object crsr;
 		// Disable Update Database button and make it red to prevent getting 2 records at one time
     	btn = (Button) findViewById( R.id.update_database_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-    	btn.setEnabled(false);   	
-    	//	Get the data for this lamb
+    	btn.setEnabled(false);
     	
+		//	Get the date and time to add to the lamb record these are strings not numbers
+		mytoday = TodayIs(); 
+		Log.i("add a lamb ", " today is " + mytoday);	
+		mytime = TimeIs();
+		Log.i("add a lamb ", " time is " + mytime);
+    	
+    	//	Get the data for this lamb   	
    		//	Get the radio group selected for the birth type
 		Log.i("before radio group", " getting ready to get the birth type ");
 		rg=(RadioGroup)findViewById(R.id.radioBirthType);
- 		birth_type = rg.getCheckedRadioButtonId();
+ 		birth_type = rg.getCheckedRadioButtonId()+1;
 		Log.i("birth_type ", String.valueOf(birth_type));
  		
    		//	Get the radio group selected for the rear type
 		Log.i("before radio group", " getting ready to get the rear type ");
 		rg=(RadioGroup)findViewById(R.id.radioRearType);
- 		rear_type = rg.getCheckedRadioButtonId();
+ 		rear_type = rg.getCheckedRadioButtonId()+1;
 		Log.i("rear_type ", String.valueOf(rear_type));
 		
   		//	Get the radio group selected for the sex
 		Log.i("before radio group", " getting ready to get the sex ");
 		rg=(RadioGroup)findViewById(R.id.radioGroupSex);
- 		sex = rg.getCheckedRadioButtonId();
+ 		sex = rg.getCheckedRadioButtonId()+1;
 		Log.i("sex ", String.valueOf(sex));
 		
 		//	Get the value of the checkbox for stillborn
 		Log.i("before checkbox", " getting ready to get stillborn or not ");
 		stillbornbox = (CheckBox) findViewById(R.id.checkBoxStillborn);
 		if (stillbornbox.isChecked()){
+			//	Set the values for death dates for stillborn lambs.
 			stillborn = true;
 			Log.i("stillborn ", String.valueOf(stillborn));
+			death_date = mytoday;
+			remove_date = mytoday;
+			//	need to add an S to the birth record but not sure how to do that yet
 		}
 		//	Get the Birth Weight
 		Log.i("before weight", " getting ready to get birth weight ");
@@ -492,32 +505,37 @@ public class AddLamb extends Activity {
 		
 		//	Get the lambease score
 		Log.i("before lambease", " getting ready to get lambease ");
-		TV = (TextView) findViewById(R.id.lamb_ease_spinner);
+		lamb_ease_spinner = (Spinner) findViewById(R.id.lamb_ease_spinner);
 		lambease = lamb_ease_spinner.getSelectedItemPosition();
 		Log.i("lambease ", String.valueOf(lambease));
 		
-		//	Calculate codon171 based on sire and dam if possible
+		//	Calculate codon171 value based on sire and dam if possible
 		if (dam_codon171 == 1) {
 			// Dam is QQ so test the sire with a case statement
+			Log.i("codon171 ", "Starting case statement for Dam is QQ");
 			switch (sire_codon171){
 			case 1:
-				//	we have dam of QQ and Sire of QQ so lamb is QQ
+				//	we have dam is QQ and Sire is QQ so lamb is QQ
+				Log.i("codon171 ", "Case 1: dam is QQ and Sire is QQ so lamb is QQ");
 				lamb_codon171 = 1;
 				break;
 			case 2:
 			case 3:
 			case 4:
 				// 	Dam is QQ but sire is Q? or QR or R? so lamb is Q?
+				Log.i("codon171 ", "Case 2,3,4: Dam is QQ but sire is Q? or QR or R? so lamb is Q?");
 				lamb_codon171 = 2;
 				// 	next need to set alert text to get scrapie blood for this lamb.
 				lamb_alert_text = lamb_alert_text + "Scrapie Blood";		
 				break;
 			case 5:
 				//	Dam is QQ but sire is RR so lamb is QR
+				Log.i("codon171 ", "Case 5: Dam is QQ but sire is RR so lamb is QR");
 				lamb_codon171 = 3;
 				break;
 			case 6:
 				//	Dam is QQ but sire is ?? so lamb is Q?
+				Log.i("codon171 ", "Case 6: Dam is QQ but sire is ?? so lamb is Q?");
 				lamb_codon171 = 2;
 				// 	next need to set alert text to get scrapie blood for this lamb.
 				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
@@ -528,25 +546,30 @@ public class AddLamb extends Activity {
 		}
 		if (dam_codon171 == 5) {
 			// Dam is RR so test the sire with a case statement
+			Log.i("codon171 ", "In case statement with Dam is RR");
 			switch (sire_codon171){
 			case 1:
-				//	we have dam of RR and Sire of QQ so lamb is QR
+				//	we have Dam is RR and Sire is QQ so lamb is QR
+				Log.i("codon171 ", "Case 1: Dam is RR and Sire is QQ so lamb is QR");
 				lamb_codon171 = 3;
 				break;
 			case 2:
 			case 3:
 			case 4:
 				// 	Dam is RR but sire is Q? or QR or R? so lamb is R?
+				Log.i("codon171 ", "Case 2,3,4: Dam is RR but sire is Q? or QR or R? so lamb is R?");
 				lamb_codon171 = 4;
 				// 	next need to set alert text to get scrapie blood for this lamb.
 				lamb_alert_text = lamb_alert_text + "Scrapie Blood";		
 				break;
 			case 5:
 				//	Dam is RR and sire is RR so lamb is RR
+				Log.i("codon171 ", "Case 5: Dam is RR and sire is RR so lamb is RR");
 				lamb_codon171 = 5;
 				break;
 			case 6:
 				//	Dam is RR but sire is ?? so lamb is R?
+				Log.i("codon171 ", "Case 6: Dam is RR but sire is ?? so lamb is R?");
 				lamb_codon171 = 4;
 				// 	next need to set alert text to get scrapie blood for this lamb.
 				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
@@ -557,9 +580,11 @@ public class AddLamb extends Activity {
 		}
 		if (dam_codon171 == 2 || dam_codon171 == 4) {
 			// Dam is Q? or R? 
+			Log.i("codon171 ", "Dam is Q? or R? so test sire with case statement");
 			switch (sire_codon171){
 			case 1:
-				//	we have dam of Q? or R? and Sire of QQ so lamb is Q?
+				//	we have Dam is Q? or R? and Sire is QQ so lamb is Q?
+				Log.i("codon171 ", "Case 1: Dam is Q? or R? and Sire is QQ so lamb is Q?");
 				lamb_codon171 = 2;
 				//	next need to set alert text to get scrapie blood for this lamb.
 				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
@@ -568,18 +593,21 @@ public class AddLamb extends Activity {
 			case 3:
 			case 4:	
 				// 	Dam is Q? or R? but sire is Q? or QR or R? so lamb is ??
+				Log.i("codon171 ", "Case 2,3,4: Dam is Q? or R? but sire is Q? or QR or R? so lamb is ??");
 				lamb_codon171 = 6;
 				// 	next need to set alert text to get scrapie blood for this lamb.
 				lamb_alert_text = lamb_alert_text + "Scrapie Blood";		
 				break;
 			case 5:
 				//	Dam is Q? or R? and sire is RR so lamb is R?
+				Log.i("codon171 ", "Case 5: Dam is Q? or R? and sire is RR so lamb is R?");
 				lamb_codon171 = 4;
 				// 	next need to set alert text to get scrapie blood for this lamb.
 				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
 				break;
 			case 6:
 				//	Dam is RR but sire is ?? so lamb is R?
+				Log.i("codon171 ", "Case 6: Dam is RR but sire is ?? so lamb is R?");
 				lamb_codon171 = 4;
 				// 	next need to set alert text to get scrapie blood for this lamb.
 				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
@@ -590,9 +618,11 @@ public class AddLamb extends Activity {
 		}
 		if (dam_codon171 == 3) {
 			// Dam is QR 
+			Log.i("codon171 ", "Dam is QR so test sire with case statement");
 			switch (sire_codon171){
 			case 1:
-				//	we have dam of QR and Sire of QQ so lamb is Q?
+				//	we have Dam is QR and Sire is QQ so lamb is Q?
+				Log.i("codon171 ", "Case 1: Dam is QR and Sire is QQ so lamb is Q?");
 				lamb_codon171 = 2;
 				//	next need to set alert text to get scrapie blood for this lamb.
 				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
@@ -601,26 +631,28 @@ public class AddLamb extends Activity {
 			case 3: // sire is QR
 			case 4:	// sire is R?
 				// 	Dam is QR but sire is Q? or QR or R? so lamb is ??
+				Log.i("codon171 ", "Case 2,3,4: Dam is QR but sire is Q? or QR or R? so lamb is ??");
 				lamb_codon171 = 6;
 				// 	next need to set alert text to get scrapie blood for this lamb.
 				lamb_alert_text = lamb_alert_text + "Scrapie Blood";		
 				break;
 			case 5:
 				//	Dam is QR and sire is RR so lamb is R?
+				Log.i("codon171 ", "Case 5: Dam is QR and sire is RR so lamb is R?");
 				lamb_codon171 = 4;
 				// 	next need to set alert text to get scrapie blood for this lamb.
 				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
 				break;
 			case 6:
 				//	Dam is QR but sire is ?? so lamb is ??
+				Log.i("codon171 ", "Case 6: Dam is QR but sire is ?? so lamb is ??");
 				lamb_codon171 = 6;
 				// 	next need to set alert text to get scrapie blood for this lamb.
 				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
 			default:
 				//	We do not test for H or K alleles so the rest of the options are all set to do nothing
 				break;
-			}
-		
+			}		
 		}
 		// TODO Add all the testing for codon154 and codon 136 here but left off for testing
 		//	For now set these to ??
@@ -629,38 +661,71 @@ public class AddLamb extends Activity {
 		//	Fill all the misc variables for the sheep record
 		//	Set breed based on sire and dam breed
 		//	Need to fix for the general case of crossbred lambs but for now set to crossbred if dam is Sooner
+		//	Sooner is sheep_id 58
 		//	otherwise the default set to be Black Welsh
 		if (dam_id == 58) {
 			id_sheepbreedid = 2;
 		}else {
+			//	need to test here if sire and dam are the same breed id and if so set lamb to that
 			id_sheepbreedid = 1;
 		}		
-		//	Set the location to be East Orchard Pasture but will need to modify to be real
+		//	Set the location to be East Orchard Pasture but will need to modify to be real one based on location of dam
 		id_locationid = 1;
 		//	Set the birth_weight_units to be decimal pounds 
 		//	Should be modified to be the value from settings but I haven't implemented settings yet
 		birth_weight_units = 1;
+		//	Set the owner_id to be Desert Weyr
+		id_ownerid = 1;		
+		
+		
 		
 		//	Go get all the tag data for this lamb
 		
 		
-		//	Set the name of this lamb to be the federal tag
+		//	Set the name of this lamb to be the federal tag if it is a standard federal tag
+		//	Otherwise set the lamb name to be the farm tag
+		//	Names cannot be the EID tag number, that is too long. 
+		//	Still need to handle the case of the EID being the official federal tag
+		
+		
 		
 		
 		//	Ready to build the insert statement for this lamb.
 		cmd = String.format("insert into sheep_table (sheep_name, flock_prefix, sex, " +
-				"birth_date, birth_type, birth_weight, rear_type, death_date, remove_date, " +
-				"lambease, sire_id, dam_id, alert01, acquire_date, sheep_birth_record, " +
-				"codon171, codon154, codon136, id_sheepbreedid, id_locationid, " +
-				"id_ownerid, birth_weight_units) values " +
-				"(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ",
-				lamb_name,flock_prefix,sex,mytoday,birth_type, birth_weight,rear_type,death_date,
-				remove_date,lambease,sire_id,dam_id,lamb_alert_text,mytoday,lamb_birth_record,
-				lamb_codon171,lamb_codon154,lamb_codon136, id_sheepbreedid, id_locationid,
-				id_ownerid,birth_weight_units);
+			"birth_date, birth_time, birth_type, birth_weight, rear_type, death_date, remove_date, " +
+			"lambease, sire_id, dam_id, alert01, acquire_date, sheep_birth_record, " +
+			"codon171, codon154, codon136, id_sheepbreedid, id_locationid, " +
+			"id_ownerid, birth_weight_units) values " +
+			"('%s', %s, %s,'%s','%s',%s,%s,%s,'%s','%s',%s,%s,%s,'%s','%s',%s,%s,%s,%s,%s,%s,%s,%s) ",
+			lamb_name, flock_prefix, sex, mytoday, mytime, birth_type, birth_weight, 
+			rear_type, death_date, remove_date, lambease, sire_id, dam_id, 
+			lamb_alert_text, mytoday, lamb_birth_record,
+			lamb_codon171, lamb_codon154, lamb_codon136, id_sheepbreedid, id_locationid,
+			id_ownerid,birth_weight_units);
+		
 		Log.i("add a lamb ", "cmd is " + cmd);
-		dbh.exec( cmd );
-		// 
+		//	 I should be able to get the sheep_id of the last insert returned by the command but
+		//	for some reason the database handler only is returning a cursor object
+		//	so for now I've commented out this line and am doing a select to get the last insert
+
+		dbh.exec(cmd);
+		Log.i("add a lamb ", "after insert ");
+		//  now we have a sheep record for the lamb. 
+		//	We need to get the sheep_id of this lamb for use in the birth record
+		cmd = String.format("select last_insert_rowid()");
+		crsr = dbh.exec( cmd );  
+		cursor   = ( Cursor ) crsr;
+		startManagingCursor(cursor);
+  		dbh.moveToFirstRecord();
+  		lamb_id = dbh.getInt(0);		
+		Log.i("add a lamb ", "the lamb_id is " + String.valueOf(lamb_id));
+		
+		// Update the birth record?
+		
+		
+		
+		
+		
     }
     public void addNewTag( View v ){
     	Object crsr;
@@ -707,7 +772,8 @@ public class AddLamb extends Activity {
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_colors);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_color_spinner.setAdapter (dataAdapter);
-		tag_color_spinner.setSelection(5);
+		//	Set the tag color to be the default should be from settings but not implemented yet.
+		tag_color_spinner.setSelection(5); // set to orange
 				
     	// Fill the Tag Location Spinner
 		// Only allow ear locations for tags for this task
@@ -721,7 +787,8 @@ public class AddLamb extends Activity {
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_locations);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_location_spinner.setAdapter (dataAdapter);
-		tag_location_spinner.setSelection(2);
+		//	Set the tag location to be the left ear by default should be from settings
+		tag_location_spinner.setSelection(2); // left ear for non EID tags
     
     }
 
@@ -923,15 +990,15 @@ public class AddLamb extends Activity {
   	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
   	
   	tag_type_label = tag_type_spinner2.getSelectedItem().toString();
-//  	Log.i("updateTag", "Tag type is " + tag_type_label);
+  	Log.i("updateTag", "Tag type is " + tag_type_label);
   	tag_color_label = tag_color_spinner.getSelectedItem().toString();
-//  	Log.i("updateTag", "Tag color is " + tag_color_label);
+  	Log.i("updateTag", "Tag color is " + tag_color_label);
   	tag_location_label = tag_location_spinner.getSelectedItem().toString();
-//  	Log.i("updateTag", "Tag location is " + tag_location_label);
+  	Log.i("updateTag", "Tag location is " + tag_location_label);
   	
   	TV  = (TextView) findViewById( R.id.new_tag_number);
   	new_tag_number = TV.getText().toString();
-//  	Log.i("before if", " new tag number " + new_tag_number);    	
+  	Log.i("before if", " new tag number " + new_tag_number);    	
    	if (tag_type_label == "Select a Type" || tag_location_label == "Select a Location" || tag_color_label == "Select a Color"
   			|| TV.getText().toString().isEmpty()) {
   		new_tag_type = 0;
@@ -956,16 +1023,14 @@ public class AddLamb extends Activity {
   		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_type = dbh.getInt(0);
-//  		cursor.close();
   		
-     		cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
+     	cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
      				"where tag_color_name='%s'", tag_color_label);
-     	    crsr = dbh.exec( cmd );
+     	crsr = dbh.exec( cmd );
   		cursor   = ( Cursor ) crsr;
   		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_color = dbh.getInt(0);
-//  		cursor.close();
 
   		cmd = String.format("select id_location_table.id_locationid, id_location_table.id_location_abbrev from id_location_table " +
 			"where id_location_name='%s'", tag_location_label);
@@ -974,10 +1039,9 @@ public class AddLamb extends Activity {
   		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_location = dbh.getInt(0);
-//  		Log.i("New Location ID ", String.valueOf(new_tag_location));
+  		Log.i("New Location ID ", String.valueOf(new_tag_location));
    		tag_location_label = dbh.getStr(1);
-//  		Log.i("New Location ", tag_location_label);
-//  		cursor.close();
+  		Log.i("New Location ", tag_location_label);
   		
   	   	// 	Fill the new tag data with where it is in the screen display
       	//	Integers to hold the info new_tag_type, new_tag_color, new_tag_location
