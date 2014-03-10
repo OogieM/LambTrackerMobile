@@ -95,6 +95,7 @@
    	    
     
     <string name="convert_fill_fields">Please Fill in all four fields.</string>
+     <string name="enter_tag_data">Enter Tag Data</string>
     
     <string-array name="sheep_task_array">
         <item>Choose a Flock Task</item>
