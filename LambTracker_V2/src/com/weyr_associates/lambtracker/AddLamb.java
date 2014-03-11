@@ -1,5 +1,6 @@
 package com.weyr_associates.lambtracker;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,6 +68,8 @@ public class AddLamb extends Activity {
 	public RadioGroup radioGroup;
 	public String mytoday;
 	public String mytime;
+	public Integer lambing_historyid, lamb01_id, lamb02_id, lamb03_id, lambs_born, lambs_weaned;
+	public String lambing_notes, lambing_date, lambing_time, sex_abbrev;
 	
 	int		fedtagid, farmtagid, eidtagid ; // These are record IDs not sheep IDs
 	public int new_tag_type, new_tag_color, new_tag_location;
@@ -230,8 +233,7 @@ public class AddLamb extends Activity {
 		TextView TV = (TextView) findViewById (R.id.inputText);
 		TV.setText( LastEID );
 		Log.i("in gotEID ", "with LastEID of " + LastEID);
-		
-		
+				
 	  	// Put the EID Tag data into the add tag section of the screen
 	  	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
 	  	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
@@ -383,6 +385,9 @@ public class AddLamb extends Activity {
 		death_date = null;
 		remove_date = null;
 		
+		//Fill birth_weight with null until we get a weight
+		birth_weight = null;
+		
 		Bundle extras = getIntent().getExtras();
 		// TODO get extras here from the lambing screen. Mostly ewe's data for scrapie genetics
 		if (extras!= null){
@@ -508,8 +513,17 @@ public class AddLamb extends Activity {
 		Log.i("before radio group", " getting ready to get the sex ");
 		rg=(RadioGroup)findViewById(R.id.radioGroupSex);
  		sex = rg.getCheckedRadioButtonId()+1;
+ 		Log.i("sex ", String.valueOf(sex));
+ 		cmd = String.format("select sheep_sex_table.sex_abbrev from sheep_sex_table " +
+ 		"where sheep_sex_table.sex_sheepid = %s", sex);
+ 		crsr = dbh.exec( cmd );  
+		cursor   = ( Cursor ) crsr;
+		startManagingCursor(cursor);
+  		dbh.moveToFirstRecord();
+  		sex_abbrev = dbh.getStr(0);
+ 		
 		Log.i("sex ", String.valueOf(sex));
-		
+		Log.i("sex ", sex_abbrev);
 		//	Get the value of the checkbox for stillborn
 		Log.i("before checkbox", " getting ready to get stillborn or not ");
 		stillbornbox = (CheckBox) findViewById(R.id.checkBoxStillborn);
@@ -744,9 +758,70 @@ public class AddLamb extends Activity {
   		lamb_id = dbh.getInt(0);		
 		Log.i("add a lamb ", "the lamb_id is " + String.valueOf(lamb_id));
 		
-		// Update the birth record?
+		//	Create a lambing history record by first seeing if there is one already for this year
+		//	If so then update the existing one
+		//	If not then insert a new one
 		
+		String year = YearIs();
+		year = year + "%";
 		
+		Log.i("before try block ", " lambing year is " + year);
+		
+		try { //	We have a record so need to add this lamb at the end and update the lambing_notes
+			cmd = String.format("select * from lambing_history_table where lambing_history_table.dam_id = %s and " +
+					" lambing_history_table.lambing_date like '%s' ", dam_id, year);
+			Log.i("in try block ", " cmd is " + cmd);
+			crsr = dbh.exec( cmd );
+			Log.i("in try block ", "after try the first DB select ");
+			cursor   = ( Cursor ) crsr;
+			Log.i("in try block ", "after cursor ");
+			startManagingCursor(cursor);
+	  		dbh.moveToFirstRecord();
+	  		Log.i("in try block ", "after move to first ");
+	  		lambing_historyid = dbh.getInt(0);
+	  		Log.i("in try block ", "after get first variable ");
+	  		lambing_date = dbh.getStr(1);
+	  		lambing_time = dbh.getStr(10);
+	  		lambing_notes = dbh.getStr(4);
+	  		lambs_born = dbh.getInt(5);
+	  		lambs_weaned = dbh.getInt(6);
+	  		lamb01_id = dbh.getInt(7);
+	  		lamb02_id = dbh.getInt(8);
+	  		lamb03_id = dbh.getInt(9);
+	  		//	First add this lamb as the next in the lambing notes field
+	  		lambing_notes = lambing_notes + sex_abbrev; 
+	  		Log.i("add a lamb ", "the lambing_notes are " + lambing_notes);	  		
+	  		// Then update the record by adding this lambs ID in the next slot
+	  		//	presumes we have one lamb in there already so the new on is either lamb02 or lamb03
+	  		if (lamb02_id != null){
+	  			//	have 2 lambs already
+	  			cmd = String.format("update lambing_history_table set lambing_history_table.lambing_notes = lambing_notes, " +
+	  				" lambing_history_table.lamb03_id = lamb_id");
+	  			Log.i("in try block ", " cmd is " + cmd);
+	  			Log.i("in try block ", " have 2 lambs so add a third to record");
+	  			dbh.exec( cmd );
+	  			}
+	  		else{
+	  			//	only have 1 lamb so far
+	  			cmd = String.format("update lambing_history_table set lambing_history_table.lambing_notes = lambing_notes, " +
+	  		  		" lambing_history_table.lamb02_id = lamb_id");
+	  			Log.i("in try block ", " cmd is " + cmd);
+	  			Log.i("in try block ", " have only 1 lamb so add a second to record");
+	  			dbh.exec( cmd );
+	  		}	  		
+		} catch (Exception e) {
+			//	No record found so insert one
+			lambing_date = mytoday;
+			lambing_time = mytime;
+  			Log.i("in catch block ", " after setting date and time");
+			cmd = String.format("insert into lambing_history_table (lambing_date, dam_id, sire_id, " +
+			"lambing_notes, lambs_born, lambs_weaned, lamb01_id, lambing_time) " +
+			"values ('%s', %s, %s,'%s', %s, %s, %s, '%s') ", 
+			mytoday, dam_id, sire_id, lambing_notes, birth_type, rear_type, lamb_id, mytime);
+			Log.i("in catch block ", " cmd is " + cmd);
+			dbh.exec( cmd );
+			Log.i("in catch block ", "after cmd");
+		}
 		
 		
 		
@@ -999,7 +1074,11 @@ public class AddLamb extends Activity {
  		int year = calendar.get(Calendar.YEAR);
  		return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
  	}
-    
+    private String YearIs() {
+ 		Calendar calendar = Calendar.getInstance();
+  		int year = calendar.get(Calendar.YEAR);
+ 		return Integer.toString(year) ;
+ 	}
      private String Make2Digits(int i) {
  		if (i < 10) {
  			return "0" + i;
