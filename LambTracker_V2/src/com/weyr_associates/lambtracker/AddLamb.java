@@ -385,8 +385,13 @@ public class AddLamb extends Activity {
 		death_date = null;
 		remove_date = null;
 		
-		//Fill birth_weight with null until we get a weight
+		//	Fill birth_weight with null until we get a weight
 		birth_weight = null;
+		
+		//	Fill the lamb id's with nothing until we search for them
+		lamb01_id = null;
+		lamb02_id = null;
+		lamb03_id = null;
 		
 		Bundle extras = getIntent().getExtras();
 		// TODO get extras here from the lambing screen. Mostly ewe's data for scrapie genetics
@@ -522,8 +527,7 @@ public class AddLamb extends Activity {
   		dbh.moveToFirstRecord();
   		sex_abbrev = dbh.getStr(0);
  		
-		Log.i("sex ", String.valueOf(sex));
-		Log.i("sex ", sex_abbrev);
+		Log.i("sex abbrev ", sex_abbrev);
 		//	Get the value of the checkbox for stillborn
 		Log.i("before checkbox", " getting ready to get stillborn or not ");
 		stillbornbox = (CheckBox) findViewById(R.id.checkBoxStillborn);
@@ -564,7 +568,12 @@ public class AddLamb extends Activity {
 				Log.i("codon171 ", "Case 2,3,4: Dam is QQ but sire is Q? or QR or R? so lamb is Q?");
 				lamb_codon171 = 2;
 				// 	next need to set alert text to get scrapie blood for this lamb.
-				lamb_alert_text = lamb_alert_text + "Scrapie Blood";		
+				if (lamb_alert_text != null){
+					lamb_alert_text = lamb_alert_text + "Scrapie Blood";	
+				}else{
+					//	Alert has null so just reset it to be the new one
+					lamb_alert_text = "Scrapie Blood";
+				}
 				break;
 			case 5:
 				//	Dam is QQ but sire is RR so lamb is QR
@@ -576,7 +585,12 @@ public class AddLamb extends Activity {
 				Log.i("codon171 ", "Case 6: Dam is QQ but sire is ?? so lamb is Q?");
 				lamb_codon171 = 2;
 				// 	next need to set alert text to get scrapie blood for this lamb.
-				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+				if (lamb_alert_text != null){
+					lamb_alert_text = lamb_alert_text + "Scrapie Blood";	
+				}else{
+					//	Alert has null so just reset it to be the new one
+					lamb_alert_text = "Scrapie Blood";
+				}
 			default:
 				//	We do not test for H or K alleles so the rest of the options are all set to do nothing
 				break;
@@ -598,7 +612,12 @@ public class AddLamb extends Activity {
 				Log.i("codon171 ", "Case 2,3,4: Dam is RR but sire is Q? or QR or R? so lamb is R?");
 				lamb_codon171 = 4;
 				// 	next need to set alert text to get scrapie blood for this lamb.
-				lamb_alert_text = lamb_alert_text + "Scrapie Blood";		
+				if (lamb_alert_text != null){
+					lamb_alert_text = lamb_alert_text + "Scrapie Blood";	
+				}else{
+					//	Alert has null so just reset it to be the new one
+					lamb_alert_text = "Scrapie Blood";
+				}		
 				break;
 			case 5:
 				//	Dam is RR and sire is RR so lamb is RR
@@ -610,7 +629,12 @@ public class AddLamb extends Activity {
 				Log.i("codon171 ", "Case 6: Dam is RR but sire is ?? so lamb is R?");
 				lamb_codon171 = 4;
 				// 	next need to set alert text to get scrapie blood for this lamb.
-				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+				if (lamb_alert_text != null){
+					lamb_alert_text = lamb_alert_text + "Scrapie Blood";	
+				}else{
+					//	Alert has null so just reset it to be the new one
+					lamb_alert_text = "Scrapie Blood";
+				}
 			default:
 				//	We do not test for H or K alleles so the rest of the options are all set to do nothing
 				break;
@@ -625,7 +649,12 @@ public class AddLamb extends Activity {
 				Log.i("codon171 ", "Case 1: Dam is Q? or R? and Sire is QQ so lamb is Q?");
 				lamb_codon171 = 2;
 				//	next need to set alert text to get scrapie blood for this lamb.
-				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+				if (lamb_alert_text != null){
+					lamb_alert_text = lamb_alert_text + "Scrapie Blood";	
+				}else{
+					//	Alert has null so just reset it to be the new one
+					lamb_alert_text = "Scrapie Blood";
+				}
 				break;
 			case 2:
 			case 3:
@@ -634,21 +663,36 @@ public class AddLamb extends Activity {
 				Log.i("codon171 ", "Case 2,3,4: Dam is Q? or R? but sire is Q? or QR or R? so lamb is ??");
 				lamb_codon171 = 6;
 				// 	next need to set alert text to get scrapie blood for this lamb.
-				lamb_alert_text = lamb_alert_text + "Scrapie Blood";		
+				if (lamb_alert_text != null){
+					lamb_alert_text = lamb_alert_text + "Scrapie Blood";	
+				}else{
+					//	Alert has null so just reset it to be the new one
+					lamb_alert_text = "Scrapie Blood";
+				}	
 				break;
 			case 5:
 				//	Dam is Q? or R? and sire is RR so lamb is R?
 				Log.i("codon171 ", "Case 5: Dam is Q? or R? and sire is RR so lamb is R?");
 				lamb_codon171 = 4;
 				// 	next need to set alert text to get scrapie blood for this lamb.
-				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+				if (lamb_alert_text != null){
+					lamb_alert_text = lamb_alert_text + "Scrapie Blood";	
+				}else{
+					//	Alert has null so just reset it to be the new one
+					lamb_alert_text = "Scrapie Blood";
+				}
 				break;
 			case 6:
 				//	Dam is RR but sire is ?? so lamb is R?
 				Log.i("codon171 ", "Case 6: Dam is RR but sire is ?? so lamb is R?");
 				lamb_codon171 = 4;
 				// 	next need to set alert text to get scrapie blood for this lamb.
-				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+				if (lamb_alert_text != null){
+					lamb_alert_text = lamb_alert_text + "Scrapie Blood";	
+				}else{
+					//	Alert has null so just reset it to be the new one
+					lamb_alert_text = "Scrapie Blood";
+				}
 			default:
 				//	We do not test for H or K alleles so the rest of the options are all set to do nothing
 				break;
@@ -663,7 +707,12 @@ public class AddLamb extends Activity {
 				Log.i("codon171 ", "Case 1: Dam is QR and Sire is QQ so lamb is Q?");
 				lamb_codon171 = 2;
 				//	next need to set alert text to get scrapie blood for this lamb.
-				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+				if (lamb_alert_text != null){
+					lamb_alert_text = lamb_alert_text + "Scrapie Blood";	
+				}else{
+					//	Alert has null so just reset it to be the new one
+					lamb_alert_text = "Scrapie Blood";
+				}
 				break;
 			case 2: //sire is Q?
 			case 3: // sire is QR
@@ -672,28 +721,43 @@ public class AddLamb extends Activity {
 				Log.i("codon171 ", "Case 2,3,4: Dam is QR but sire is Q? or QR or R? so lamb is ??");
 				lamb_codon171 = 6;
 				// 	next need to set alert text to get scrapie blood for this lamb.
-				lamb_alert_text = lamb_alert_text + "Scrapie Blood";		
+				if (lamb_alert_text != null){
+					lamb_alert_text = lamb_alert_text + "Scrapie Blood";	
+				}else{
+					//	Alert has null so just reset it to be the new one
+					lamb_alert_text = "Scrapie Blood";
+				}		
 				break;
 			case 5:
 				//	Dam is QR and sire is RR so lamb is R?
 				Log.i("codon171 ", "Case 5: Dam is QR and sire is RR so lamb is R?");
 				lamb_codon171 = 4;
 				// 	next need to set alert text to get scrapie blood for this lamb.
-				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+				if (lamb_alert_text != null){
+					lamb_alert_text = lamb_alert_text + "Scrapie Blood";	
+				}else{
+					//	Alert has null so just reset it to be the new one
+					lamb_alert_text = "Scrapie Blood";
+				}
 				break;
 			case 6:
 				//	Dam is QR but sire is ?? so lamb is ??
 				Log.i("codon171 ", "Case 6: Dam is QR but sire is ?? so lamb is ??");
 				lamb_codon171 = 6;
 				// 	next need to set alert text to get scrapie blood for this lamb.
-				lamb_alert_text = lamb_alert_text + "Scrapie Blood";
+				if (lamb_alert_text != null){
+					lamb_alert_text = lamb_alert_text + "Scrapie Blood";	
+				}else{
+					//	Alert has null so just reset it to be the new one
+					lamb_alert_text = "Scrapie Blood";
+				}
 			default:
 				//	We do not test for H or K alleles so the rest of the options are all set to do nothing
 				break;
 			}		
 		}
 		// TODO Add all the testing for codon154 and codon 136 here but left off for testing
-		//	For now set these to ??
+		//	For now set these to ?? because we don't know what this lamb is
 		lamb_codon154 = 1;
 		lamb_codon136 = 6;
 		//	Fill all the misc variables for the sheep record
@@ -705,18 +769,20 @@ public class AddLamb extends Activity {
 			id_sheepbreedid = 2;
 		}else {
 			//	need to test here if sire and dam are the same breed id and if so set lamb to that
+			//	For now set to be Black Welsh if not a child of Sooner
 			id_sheepbreedid = 1;
 		}		
 		//	Set the location to be East Orchard Pasture but will need to modify to be real one based on location of dam
 		id_locationid = 1;
+		//	The following things should be modified to be the value from settings 
+		//	but I haven't implemented settings yet so hard coding them
+		// TODO
 		//	Set the birth_weight_units to be decimal pounds 
-		//	Should be modified to be the value from settings but I haven't implemented settings yet
 		birth_weight_units = 1;
 		//	Set the owner_id to be Desert Weyr
-		id_ownerid = 1;		
-		
-		
-		
+		id_ownerid = 1;	
+		//	Set the flock_prefix to be Desert Weyr 
+		flock_prefix = 1;
 		//	Go get all the tag data for this lamb
 		
 		
@@ -786,17 +852,20 @@ public class AddLamb extends Activity {
 	  		lambs_born = dbh.getInt(5);
 	  		lambs_weaned = dbh.getInt(6);
 	  		lamb01_id = dbh.getInt(7);
+	  		Log.i("in try block ", "after get lamb01_id " + String.valueOf(lamb01_id));
 	  		lamb02_id = dbh.getInt(8);
+	  		Log.i("in try block ", "after get lamb02_id " + String.valueOf(lamb02_id));
 	  		lamb03_id = dbh.getInt(9);
+	  		Log.i("in try block ", "after get lamb03_id " + String.valueOf(lamb03_id));
 	  		//	First add this lamb as the next in the lambing notes field
 	  		lambing_notes = lambing_notes + sex_abbrev; 
 	  		Log.i("add a lamb ", "the lambing_notes are " + lambing_notes);	  		
-	  		// Then update the record by adding this lambs ID in the next slot
+	  		// Then update the record by adding this lambs' ID in the next slot
 	  		//	presumes we have one lamb in there already so the new on is either lamb02 or lamb03
 	  		if (lamb02_id != null){
 	  			//	have 2 lambs already
 	  			cmd = String.format("update lambing_history_table set lambing_history_table.lambing_notes = lambing_notes, " +
-	  				" lambing_history_table.lamb03_id = lamb_id");
+	  				" lambing_history_table.lamb03_id = lamb_id where lambing_history_table.lambing_historyid = lambing_historyid");
 	  			Log.i("in try block ", " cmd is " + cmd);
 	  			Log.i("in try block ", " have 2 lambs so add a third to record");
 	  			dbh.exec( cmd );
@@ -804,7 +873,7 @@ public class AddLamb extends Activity {
 	  		else{
 	  			//	only have 1 lamb so far
 	  			cmd = String.format("update lambing_history_table set lambing_history_table.lambing_notes = lambing_notes, " +
-	  		  		" lambing_history_table.lamb02_id = lamb_id");
+	  		  		"lambing_history_table.lamb02_id = lamb_id where lambing_history_table.lambing_historyid = lambing_historyid");
 	  			Log.i("in try block ", " cmd is " + cmd);
 	  			Log.i("in try block ", " have only 1 lamb so add a second to record");
 	  			dbh.exec( cmd );
@@ -813,14 +882,33 @@ public class AddLamb extends Activity {
 			//	No record found so insert one
 			lambing_date = mytoday;
 			lambing_time = mytime;
-  			Log.i("in catch block ", " after setting date and time");
+			Log.i("in catch block ", " after setting date and time");
+			if (lambing_notes != null){
+				lambing_notes = lambing_notes + sex_abbrev;	
+			}else{
+				//	notes has null so just reset it to be the new one
+				lambing_notes = sex_abbrev;
+			}
+  			Log.i("in catch block ", " after setting lambing_notes " + lambing_notes);
 			cmd = String.format("insert into lambing_history_table (lambing_date, dam_id, sire_id, " +
 			"lambing_notes, lambs_born, lambs_weaned, lamb01_id, lambing_time) " +
 			"values ('%s', %s, %s,'%s', %s, %s, %s, '%s') ", 
 			mytoday, dam_id, sire_id, lambing_notes, birth_type, rear_type, lamb_id, mytime);
 			Log.i("in catch block ", " cmd is " + cmd);
 			dbh.exec( cmd );
-			Log.i("in catch block ", "after cmd");
+			Log.i("in catch block ", "after cmd to create a new record");
+			cmd = String.format("select last_insert_rowid()");
+			crsr = dbh.exec( cmd );  
+			cursor   = ( Cursor ) crsr;
+			startManagingCursor(cursor);
+	  		dbh.moveToFirstRecord();
+	  		lambing_historyid = dbh.getInt(0);		
+			Log.i("add a lamb ", "the lambing_historyid is " + String.valueOf(lambing_historyid));
+			//	Now need to go back and add this birth record reference to the lamb record
+			cmd = String.format("update sheep_table set sheep_table.sheep_birth_record = lambing_historyid, " +
+	  		  		" where sheep_table.sheep_id = lamb_id");
+	  			Log.i("in try block ", " cmd is " + cmd);
+			
 		}
 		
 		
