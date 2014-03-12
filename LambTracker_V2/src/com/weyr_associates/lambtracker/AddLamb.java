@@ -382,19 +382,19 @@ public class AddLamb extends Activity {
 		Log.i("addlamb", " after set selection" );
 		
 		//	Fill death and remove dates with null initially. Will change if this is a stillborn lamb
-		death_date = null;
-		remove_date = null;
+//		death_date = null;
+//		remove_date = null;
 		
-		//	Fill birth_weight with null until we get a weight
-		birth_weight = null;
+		//	Fill birth_weight with 0 until we get a weight
+		birth_weight = 0.0f;
 		
 		//	Fill the lamb id's with nothing until we search for them
-		lamb01_id = null;
-		lamb02_id = null;
-		lamb03_id = null;
-		//	Fill the lambs born and lambs weaned fields with a single lamb until we get another one
-		lambs_born = 1;
-		lambs_weaned = 1;
+		lamb01_id = 0;
+		lamb02_id = 0;
+		lamb03_id = 0;
+		//	Fill the lambs born and lambs weaned fields no lamb until we get start
+		lambs_born = 0;
+		lambs_weaned = 0;
 		//	The lambing_history record is empty until we create one
 		lambing_historyid = 0;
 		
@@ -866,8 +866,9 @@ public class AddLamb extends Activity {
 	  		Log.i("add a lamb ", "the lambing_notes are " + lambing_notes);	  		
 	  		// Then update the record by adding this lambs' ID in the next slot
 	  		//	presumes we have one lamb in there already so the new on is either lamb02 or lamb03
-	  		if (lamb02_id != null || lamb02_id != 0 ){
+	  		if (lamb02_id != 0 ){
 	  			//	have 2 lambs already
+	  			Log.i("in if stmt ", "lamb02_id " + String.valueOf(lamb02_id));
 	  			Log.i("in try block ", " have 2 lambs so add a third to record");
 //	  			Update the lambs born and lambs weaned fields
 	  			lambs_born = lambs_born +1;
@@ -880,13 +881,25 @@ public class AddLamb extends Activity {
 	  			Log.i("in try block ", " cmd is " + cmd);
 	  			dbh.exec( cmd );
 	  			Log.i("in try block ", " after update with third lamb");
-				//	Now need to go back and add this birth record reference to the lamb record
-				cmd = String.format("update sheep_table set sheep_birth_record = %s " +
-		  		  		" where sheep_id = %s ", lambing_historyid, lamb_id);
+				//	Now need to go back and add this birth record reference to the lamb records
+	  			cmd = String.format("update sheep_table set sheep_birth_record = %s," +
+						"birth_type = %s, rear_type = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lambs_weaned, lamb_id);
+		  		dbh.exec( cmd ); 
+		  		Log.i("in try block ", " after update sheep record  for last lamb to add birth record");
+		  		cmd = String.format("update sheep_table set sheep_birth_record = %s," +
+						"birth_type = %s, rear_type = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lambs_weaned, lamb02_id);
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
-		  		Log.i("in try block ", " after update sheep record to add birth record");
-	  			}
+		  		Log.i("in try block ", " after update sheep record for second lamb to add birth record");
+		  		cmd = String.format("update sheep_table set sheep_birth_record = %s," +
+						"birth_type = %s, rear_type = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lambs_weaned, lamb01_id);
+		  		Log.i("in try block ", " cmd is " + cmd);
+		  		dbh.exec( cmd ); 
+		  		Log.i("in try block ", " after update sheep record for first lamb to add birth record");		  	
+	  		}
 	  		else{
 	  			//	only have 1 lamb so far
 	  			Log.i("in try block ", " have only 1 lamb so add a second to record");
@@ -907,7 +920,14 @@ public class AddLamb extends Activity {
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record to add birth record");
-	  		}	  		
+		  		cmd = String.format("update sheep_table set sheep_birth_record = %s," +
+						"birth_type = %s, rear_type = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lambs_weaned, lamb01_id);
+		  		Log.i("in try block ", " cmd is " + cmd);
+		  		dbh.exec( cmd ); 
+		  		Log.i("in try block ", " after update sheep record for first lamb to add birth record");
+	  			}
+	  		Log.i("after if ", " after end of if statement for more lambs ");
 		} catch (Exception e) {
 			//	No record found so insert one
 			lambing_date = mytoday;
@@ -945,9 +965,6 @@ public class AddLamb extends Activity {
 	  		dbh.exec( cmd ); 	
 			
 		}
-		
-		
-		
     }
     public void addNewTag( View v ){
     	Object crsr;
