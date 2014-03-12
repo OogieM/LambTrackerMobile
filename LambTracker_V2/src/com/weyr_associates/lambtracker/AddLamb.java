@@ -862,21 +862,29 @@ public class AddLamb extends Activity {
 	  		Log.i("add a lamb ", "the lambing_notes are " + lambing_notes);	  		
 	  		// Then update the record by adding this lambs' ID in the next slot
 	  		//	presumes we have one lamb in there already so the new on is either lamb02 or lamb03
-	  		if (lamb02_id != null){
+	  		if (lamb02_id != null | lamb02_id != 0 ){
 	  			//	have 2 lambs already
-	  			cmd = String.format("update lambing_history_table set lambing_history_table.lambing_notes = lambing_notes, " +
-	  				" lambing_history_table.lamb03_id = lamb_id where lambing_history_table.lambing_historyid = lambing_historyid");
-	  			Log.i("in try block ", " cmd is " + cmd);
 	  			Log.i("in try block ", " have 2 lambs so add a third to record");
+	  			cmd = String.format("update lambing_history_table set " +
+	  				"lambing_history_table.lambing_notes = '%s', " +
+	  				" lambing_history_table.lamb03_id = %s " +
+	  				"where lambing_history_table.lambing_historyid = %s",
+	  				lambing_notes, lamb_id, lambing_historyid);
+	  			Log.i("in try block ", " cmd is " + cmd);
 	  			dbh.exec( cmd );
+	  			Log.i("in try block ", " after update with third lamb");
 	  			}
 	  		else{
 	  			//	only have 1 lamb so far
-	  			cmd = String.format("update lambing_history_table set lambing_history_table.lambing_notes = lambing_notes, " +
-	  		  		"lambing_history_table.lamb02_id = lamb_id where lambing_history_table.lambing_historyid = lambing_historyid");
-	  			Log.i("in try block ", " cmd is " + cmd);
 	  			Log.i("in try block ", " have only 1 lamb so add a second to record");
+	  			cmd = String.format("update lambing_history_table set " +
+		  				"lambing_history_table.lambing_notes = '%s', " +
+		  				" lambing_history_table.lamb02_id = %s " +
+		  				"where lambing_history_table.lambing_historyid = %s",
+		  				lambing_notes, lamb_id, lambing_historyid);
+	  			Log.i("in try block ", " cmd is " + cmd);
 	  			dbh.exec( cmd );
+	  			Log.i("in try block ", " after update of second lamb");
 	  		}	  		
 		} catch (Exception e) {
 			//	No record found so insert one
