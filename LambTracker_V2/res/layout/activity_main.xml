@@ -77,8 +77,10 @@
 
 <ScrollView android:id="@+id/svLog" 
     android:layout_width="fill_parent" 
-    android:layout_height="400dp" 
-    android:textColor="#FF0000" /> 
+    android:layout_below="@+id/btnService"
+    android:layout_height="100dp" 
+    android:textColor="#FF0000" > 
+</ScrollView>
 
 <TextView android:id="@+id/textLog" 
     android:layout_width="wrap_content" 

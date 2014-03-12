@@ -392,6 +392,7 @@ public class AddLamb extends Activity {
 		lamb01_id = null;
 		lamb02_id = null;
 		lamb03_id = null;
+		lambing_historyid = 0;
 		
 		Bundle extras = getIntent().getExtras();
 		// TODO get extras here from the lambing screen. Mostly ewe's data for scrapie genetics
@@ -862,29 +863,41 @@ public class AddLamb extends Activity {
 	  		Log.i("add a lamb ", "the lambing_notes are " + lambing_notes);	  		
 	  		// Then update the record by adding this lambs' ID in the next slot
 	  		//	presumes we have one lamb in there already so the new on is either lamb02 or lamb03
-	  		if (lamb02_id != null | lamb02_id != 0 ){
+	  		if (lamb02_id != null || lamb02_id != 0 ){
 	  			//	have 2 lambs already
 	  			Log.i("in try block ", " have 2 lambs so add a third to record");
 	  			cmd = String.format("update lambing_history_table set " +
-	  				"lambing_history_table.lambing_notes = '%s', " +
-	  				" lambing_history_table.lamb03_id = %s " +
-	  				"where lambing_history_table.lambing_historyid = %s",
+	  				"lambing_notes = '%s', " +
+	  				" lamb03_id = %s " +
+	  				"where lambing_historyid = %s",
 	  				lambing_notes, lamb_id, lambing_historyid);
 	  			Log.i("in try block ", " cmd is " + cmd);
 	  			dbh.exec( cmd );
 	  			Log.i("in try block ", " after update with third lamb");
+				//	Now need to go back and add this birth record reference to the lamb record
+				cmd = String.format("update sheep_table set sheep_birth_record = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lamb_id);
+		  		Log.i("in try block ", " cmd is " + cmd);
+		  		dbh.exec( cmd ); 
+		  		Log.i("in try block ", " after update sheep record to add birth record");
 	  			}
 	  		else{
 	  			//	only have 1 lamb so far
 	  			Log.i("in try block ", " have only 1 lamb so add a second to record");
 	  			cmd = String.format("update lambing_history_table set " +
-		  				"lambing_history_table.lambing_notes = '%s', " +
-		  				" lambing_history_table.lamb02_id = %s " +
-		  				"where lambing_history_table.lambing_historyid = %s",
+		  				"lambing_notes = '%s', " +
+		  				" lamb02_id = %s " +
+		  				"where lambing_historyid = %s",
 		  				lambing_notes, lamb_id, lambing_historyid);
 	  			Log.i("in try block ", " cmd is " + cmd);
 	  			dbh.exec( cmd );
 	  			Log.i("in try block ", " after update of second lamb");
+				//	Now need to go back and add this birth record reference to the lamb record
+	  			cmd = String.format("update sheep_table set sheep_birth_record = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lamb_id);
+		  		Log.i("in try block ", " cmd is " + cmd);
+		  		dbh.exec( cmd ); 
+		  		Log.i("in try block ", " after update sheep record to add birth record");
 	  		}	  		
 		} catch (Exception e) {
 			//	No record found so insert one
@@ -913,9 +926,10 @@ public class AddLamb extends Activity {
 	  		lambing_historyid = dbh.getInt(0);		
 			Log.i("add a lamb ", "the lambing_historyid is " + String.valueOf(lambing_historyid));
 			//	Now need to go back and add this birth record reference to the lamb record
-			cmd = String.format("update sheep_table set sheep_table.sheep_birth_record = lambing_historyid, " +
-	  		  		" where sheep_table.sheep_id = lamb_id");
-	  			Log.i("in try block ", " cmd is " + cmd);
+			cmd = String.format("update sheep_table set sheep_birth_record = %s " +
+	  		  		" where sheep_id = %s ", lambing_historyid, lamb_id);
+	  		Log.i("in try block ", " cmd is " + cmd);
+	  		dbh.exec( cmd ); 	
 			
 		}
 		
