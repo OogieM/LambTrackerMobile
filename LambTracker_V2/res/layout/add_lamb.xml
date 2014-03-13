@@ -239,30 +239,36 @@
         android:layout_row="1"
         android:orientation="horizontal">
   	</RadioGroup>
-  	
+  	</GridLayout>
+  	<GridLayout 
+        	android:id="@+id/grid4"
+	        android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+        	android:columnCount="2"
+       		android:rowCount="2">
      <TextView
          android:id="@+id/sheep_sex_lbl"
-         android:layout_width="125dp"
+         android:layout_width="50dp"
          android:layout_height="wrap_content"
          android:layout_column="0"
-         android:layout_gravity="right"
-         android:layout_row="2"
+         android:layout_gravity="right|center"
+         android:layout_row="0"
          android:text="@string/sheep_sex_lbl"
          android:textSize="18sp"
          android:typeface="monospace" />
         
        	<RadioGroup
         android:id="@+id/radioGroupSex"
-        android:layout_width="250dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:layout_gravity="left|center"
-        android:layout_row="2"
+        android:layout_row="0"
         android:orientation="horizontal">
   	</RadioGroup> 
   	</GridLayout>
   	<GridLayout 
-        	android:id="@+id/grid4"
+        	android:id="@+id/grid5"
 	        android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
         	android:columnCount="4"
@@ -316,7 +322,7 @@
 	</RelativeLayout>
      		
 		<GridLayout
-	        android:id="@+id/grid5"
+	        android:id="@+id/grid6"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:columnCount="5">   	    

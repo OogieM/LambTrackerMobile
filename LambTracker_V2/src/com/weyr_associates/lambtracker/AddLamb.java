@@ -65,10 +65,11 @@ public class AddLamb extends Activity {
 	public CheckBox 	stillbornbox;
 	public boolean stillborn;
 	public Float birth_weight;
+	public double	real_gestation_length;
 	public RadioGroup radioGroup;
 	public String mytoday;
 	public String mytime;
-	public Integer lambing_historyid, lamb01_id, lamb02_id, lamb03_id, lambs_born, lambs_weaned;
+	public Integer lambing_historyid, lamb01_id, lamb02_id, lamb03_id, lambs_born;
 	public String lambing_notes, lambing_date, lambing_time, sex_abbrev;
 	
 	int		fedtagid, farmtagid, eidtagid ; // These are record IDs not sheep IDs
@@ -240,14 +241,14 @@ public class AddLamb extends Activity {
 	  	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
 	  	TV = (TextView) findViewById( R.id.new_tag_number );
 	  	TV.setText( LastEID );
-	  	//	Set tag type, color and ocation to defaults for EID tags
+	  	//	Set tag type, color and location to defaults for EID tags
 	  	//	Electronic, Yellow, Right Ear
 	  	tag_type_spinner2.setSelection(2);
-	  	Log.i("updateTag", "Tag type is " + tag_type_label);
+//	  	Log.i("updateTag", "Tag type is " + tag_type_label);
 	  	tag_color_spinner.setSelection(1);
-	  	Log.i("updateTag", "Tag color is " + tag_color_label);
+//	  	Log.i("updateTag", "Tag color is " + tag_color_label);
 	  	tag_location_spinner.setSelection(1);
-	  	Log.i("updateTag", "Tag location is " + tag_location_label);
+//	  	Log.i("updateTag", "Tag location is " + tag_location_label);
 	  	// Put the last EID into the new tag number
 	  	new_tag_number = LastEID;
 	  	
@@ -326,16 +327,21 @@ public class AddLamb extends Activity {
 	   	btn = (Button) findViewById( R.id.update_display_btn );
 		btn.setEnabled(false); 
 	
-		//	Fill the lamb sex radio group
-   		radiobtnlist = new ArrayList();  
-   		radiobtnlist.add ("Ram");
-   		radiobtnlist.add ("Ewe");
-   		radiobtnlist.add ("Unknown");
+		// Select All fields from sheep sex to fill the lamb sex radio group
+		radiobtnlist = new ArrayList();
+	   	cmd = "select * from sheep_sex_table";
+	   	crsr = dbh.exec( cmd );  
+		cursor   = ( Cursor ) crsr;
+	   	dbh.moveToFirstRecord();
+	    // looping through all rows and adding to list
+	   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+	   		radiobtnlist.add(cursor.getString(1));
+	   	}
 	    radioBtnText = (String[]) radiobtnlist.toArray(new String [radiobtnlist.size()]);
 
 		// Build the radio buttons here
 		radioGroup = ((RadioGroup) findViewById(R.id.radioGroupSex));
-		addRadioButtons(3, radioBtnText);
+		addRadioButtons(4, radioBtnText);
 		radiobtnlist.clear ();
 		
 		//	Fill the birth and rear type radio group
@@ -344,11 +350,11 @@ public class AddLamb extends Activity {
    		radiobtnlist.add ("Triplet");
 	    radioBtnText = (String[]) radiobtnlist.toArray(new String [radiobtnlist.size()]);
 		 
-		// Build the radio buttons here
+		// 	Build the radio buttons here
 		radioGroup = ((RadioGroup) findViewById(R.id.radioBirthType));
 		addRadioButtons(3, radioBtnText);
 		//	Fill the rear type radio group   		 
-		// Build the radio buttons here
+		// 	Build the radio buttons here
 		radioGroup = ((RadioGroup) findViewById(R.id.radioRearType));
 		addRadioButtons(3, radioBtnText);
 		radiobtnlist.clear ();
@@ -392,9 +398,9 @@ public class AddLamb extends Activity {
 		lamb01_id = 0;
 		lamb02_id = 0;
 		lamb03_id = 0;
-		//	Fill the lambs born and lambs weaned fields no lamb until we get start
+		//	Fill the lambs born and rear type fields to have no lamb until we start
 		lambs_born = 0;
-		lambs_weaned = 0;
+		rear_type = 0;
 		//	The lambing_history record is empty until we create one
 		lambing_historyid = 0;
 		
@@ -467,6 +473,9 @@ public class AddLamb extends Activity {
 	        		//	This is the correct record so save the data and bump out
 	        		sire_name = dbh.getStr(3);
 	        		sire_id = dbh.getInt(2);
+	        		//	make the gestation an integer
+	        		real_gestation_length = (int)gestation_length;
+	        		Log.i("addlamb", " gestation length is " + String.valueOf(real_gestation_length));
 	        	}        	
         	// The sire we have is 
         	Log.i("addlamb", " in for loop sire is " + sire_name);	
@@ -484,11 +493,11 @@ public class AddLamb extends Activity {
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
         sire_codon171 = dbh.getInt(0);
-        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon171));
+//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon171));
         sire_codon154 = dbh.getInt(1);
-        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon154));
+//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon154));
         sire_codon136 = dbh.getInt(2);  
-        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon136));        
+//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon136));        
         
     }
     public void updateDatabase( View v ){
@@ -530,9 +539,9 @@ public class AddLamb extends Activity {
 		cursor   = ( Cursor ) crsr;
 		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
-  		sex_abbrev = dbh.getStr(0);
- 		
+  		sex_abbrev = dbh.getStr(0);		
 		Log.i("sex abbrev ", sex_abbrev);
+		
 		//	Get the value of the checkbox for stillborn
 		Log.i("before checkbox", " getting ready to get stillborn or not ");
 		stillbornbox = (CheckBox) findViewById(R.id.checkBoxStillborn);
@@ -542,18 +551,44 @@ public class AddLamb extends Activity {
 			Log.i("stillborn ", String.valueOf(stillborn));
 			death_date = mytoday;
 			remove_date = mytoday;
-			//	need to add an S to the birth record but not sure how to do that yet
+			rear_type = rear_type-1;
 		}
+		
 		//	Get the Birth Weight
 		Log.i("before weight", " getting ready to get birth weight ");
 		TV = (TextView) findViewById(R.id.birth_weight);
-		birth_weight = Float.valueOf(TV.getText().toString());
+		try {
+			birth_weight = Float.valueOf(TV.getText().toString());
+		} catch (Exception e) {
+			//	set birth_weight to 0
+			birth_weight = 0.0f;
+		}	
 		Log.i("birth_weight ", String.valueOf(birth_weight));
 		
 		//	Get the lambease score
 		Log.i("before lambease", " getting ready to get lambease ");
 		lamb_ease_spinner = (Spinner) findViewById(R.id.lamb_ease_spinner);
 		lambease = lamb_ease_spinner.getSelectedItemPosition();
+		if (lambease == 0){
+			//	Need to require a value for lambease here
+			// Missing data so  display an alert 	
+    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+    		builder.setMessage( R.string.add_lamb_fill_fields )
+    	           .setTitle( R.string.add_lamb_fill_fields );
+    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int idx) {
+    	               // User clicked OK button 
+    	       		// Enable Update Database button and make it red to prevent getting 2 records at one time
+    	           	btn = (Button) findViewById( R.id.update_database_btn );
+    	           	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+    	           	btn.setEnabled(true);
+
+     	    		   return;
+    	               }
+    	       });		
+    		AlertDialog dialog = builder.create();
+    		dialog.show();	
+		}
 		Log.i("lambease ", String.valueOf(lambease));
 		
 		//	Calculate codon171 value based on sire and dam if possible
@@ -854,7 +889,6 @@ public class AddLamb extends Activity {
 	  		lambing_time = dbh.getStr(10);
 	  		lambing_notes = dbh.getStr(4);
 	  		lambs_born = dbh.getInt(5);
-	  		lambs_weaned = dbh.getInt(6);
 	  		lamb01_id = dbh.getInt(7);
 	  		Log.i("in try block ", "after get lamb01_id " + String.valueOf(lamb01_id));
 	  		lamb02_id = dbh.getInt(8);
@@ -862,7 +896,11 @@ public class AddLamb extends Activity {
 	  		lamb03_id = dbh.getInt(9);
 	  		Log.i("in try block ", "after get lamb03_id " + String.valueOf(lamb03_id));
 	  		//	First add this lamb as the next in the lambing notes field
-	  		lambing_notes = lambing_notes + sex_abbrev; 
+	  		if (stillborn){
+	  			lambing_notes = lambing_notes + "S"; 
+	  		}else{
+	  			lambing_notes = lambing_notes + sex_abbrev;
+	  		}
 	  		Log.i("add a lamb ", "the lambing_notes are " + lambing_notes);	  		
 	  		// Then update the record by adding this lambs' ID in the next slot
 	  		//	presumes we have one lamb in there already so the new on is either lamb02 or lamb03
@@ -870,32 +908,32 @@ public class AddLamb extends Activity {
 	  			//	have 2 lambs already
 	  			Log.i("in if stmt ", "lamb02_id " + String.valueOf(lamb02_id));
 	  			Log.i("in try block ", " have 2 lambs so add a third to record");
-//	  			Update the lambs born and lambs weaned fields
+//	  			Update the lambs born and rear_type
 	  			lambs_born = lambs_born +1;
-	  			lambs_weaned = lambs_weaned +1;
+	  			rear_type = rear_type +1;
 	  			cmd = String.format("update lambing_history_table set " +
 		  				"lambing_notes = '%s', lambs_born = %s, " +
-		  				"lambs_weaned = %s, lamb03_id = %s " +
+		  				" lamb03_id = %s " +
 		  				"where lambing_historyid = %s",
-		  				lambing_notes, lambs_born, lambs_weaned, lamb_id, lambing_historyid);
+		  				lambing_notes, lambs_born,  lamb_id, lambing_historyid);
 	  			Log.i("in try block ", " cmd is " + cmd);
 	  			dbh.exec( cmd );
 	  			Log.i("in try block ", " after update with third lamb");
-				//	Now need to go back and add this birth record reference to the lamb records
+				//	Now need to go back and update this birth record reference to the lamb records
 	  			cmd = String.format("update sheep_table set sheep_birth_record = %s," +
 						"birth_type = %s, rear_type = %s " +
-		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lambs_weaned, lamb_id);
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb_id);
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record  for last lamb to add birth record");
 		  		cmd = String.format("update sheep_table set sheep_birth_record = %s," +
 						"birth_type = %s, rear_type = %s " +
-		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lambs_weaned, lamb02_id);
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb02_id);
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record for second lamb to add birth record");
 		  		cmd = String.format("update sheep_table set sheep_birth_record = %s," +
 						"birth_type = %s, rear_type = %s " +
-		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lambs_weaned, lamb01_id);
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb01_id);
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record for first lamb to add birth record");		  	
@@ -905,48 +943,48 @@ public class AddLamb extends Activity {
 	  			Log.i("in try block ", " have only 1 lamb so add a second to record");
 	  			//	Update the lambs born and lambs weaned fields
 	  			lambs_born = lambs_born +1;
-	  			lambs_weaned = lambs_weaned +1;	  			
+	  			rear_type = rear_type +1;	  			
 	  			cmd = String.format("update lambing_history_table set " +
 		  				"lambing_notes = '%s', lambs_born = %s, " +
-		  				"lambs_weaned = %s, lamb02_id = %s " +
+		  				" lamb02_id = %s " +
 		  				"where lambing_historyid = %s",
-		  				lambing_notes, lambs_born, lambs_weaned, lamb_id, lambing_historyid);
+		  				lambing_notes, lambs_born, lamb_id, lambing_historyid);
 	  			Log.i("in try block ", " cmd is " + cmd);
 	  			dbh.exec( cmd );
 	  			Log.i("in try block ", " after update of second lamb");
 				//	Now need to go back and add this birth record reference to the lamb record
-	  			cmd = String.format("update sheep_table set sheep_birth_record = %s " +
-		  		  		" where sheep_id = %s ", lambing_historyid, lamb_id);
+	  			cmd = String.format("update sheep_table set sheep_birth_record = %s," +
+						"birth_type = %s, rear_type = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb_id);
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record to add birth record");
 		  		cmd = String.format("update sheep_table set sheep_birth_record = %s," +
 						"birth_type = %s, rear_type = %s " +
-		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lambs_weaned, lamb01_id);
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb01_id);
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
-		  		Log.i("in try block ", " after update sheep record for first lamb to add birth record");
+		  		Log.i("in try block ", " after update sheep record for first lamb to correct rear type and birth type");
 	  			}
 	  		Log.i("after if ", " after end of if statement for more lambs ");
 		} catch (Exception e) {
 			//	No record found so insert one
 			lambing_date = mytoday;
 			lambing_time = mytime;
-//			Update the lambs born and lambs weaned fields
+//			Update the lambs born and rear type fields
   			lambs_born = lambs_born +1;
-  			lambs_weaned = lambs_weaned +1;
-			Log.i("in catch block ", " after setting date and time");
-			if (lambing_notes != null){
-				lambing_notes = lambing_notes + sex_abbrev;	
-			}else{
-				//	notes has null so just reset it to be the new one
-				lambing_notes = sex_abbrev;
-			}
+  			rear_type = rear_type + 1;
+//			Log.i("in catch block ", " after setting date and time");
+  			if (stillborn){
+	  			lambing_notes = "S"; 
+	  		}else{
+	  			lambing_notes = sex_abbrev;
+	  		}
   			Log.i("in catch block ", " after setting lambing_notes " + lambing_notes);
 			cmd = String.format("insert into lambing_history_table (lambing_date, dam_id, sire_id, " +
-			"lambing_notes, lambs_born, lambs_weaned, lamb01_id, lambing_time) " +
-			"values ('%s', %s, %s,'%s', %s, %s, %s, '%s') ", 
-			mytoday, dam_id, sire_id, lambing_notes, lambs_born, lambs_weaned, lamb_id, mytime);
+			"lambing_notes, lambs_born, lamb01_id, lambing_time) " +
+			"values ('%s', %s, %s,'%s', %s, %s, '%s') ", 
+			mytoday, dam_id, sire_id, lambing_notes, lambs_born, lamb_id, mytime);
 			Log.i("in catch block ", " cmd is " + cmd);
 			dbh.exec( cmd );
 			Log.i("in catch block ", "after cmd to create a new record");
@@ -960,10 +998,9 @@ public class AddLamb extends Activity {
 			//	Now need to go back and add this birth record reference to the lamb record
 			cmd = String.format("update sheep_table set sheep_birth_record = %s," +
 					"birth_type = %s, rear_type = %s " +
-	  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lambs_weaned, lamb_id);
+	  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb_id);
 	  		Log.i("in try block ", " cmd is " + cmd);
-	  		dbh.exec( cmd ); 	
-			
+	  		dbh.exec( cmd ); 				
 		}
     }
     public void addNewTag( View v ){

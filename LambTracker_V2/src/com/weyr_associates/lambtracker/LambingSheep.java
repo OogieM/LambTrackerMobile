@@ -538,6 +538,12 @@ public class LambingSheep extends ListActivity
 	        	}
 		}
 		// TODO
+//		@Override
+//		public void onResume (){
+//			super.onResume();
+//			View v = null;
+//			lookForSheep (v);
+//		}
 		public void addLamb (View v){
 			Intent i = null;
 			Log.i("addLamb", " at the beginning");
