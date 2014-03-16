@@ -281,9 +281,8 @@ public class LambingSheep extends ListActivity
 	    	btn = (Button) findViewById( R.id.prev_rec_btn );
 	    	btn.setEnabled(false);
 	        }
+		
 		public void lookForSheep (View v){
-
-//			int     nrCols;
 			int 	lamb01_id, lamb02_id, lamb03_id;
 			Object crsr, crsr2, crsr3, crsr4, crsr5;
 			Boolean exists;
@@ -311,7 +310,7 @@ public class LambingSheep extends ListActivity
 	    	ListView lambtags02 = (ListView) findViewById(R.id.list4);
 	    	ListView lambtags03 = (ListView) findViewById(R.id.list5);
 	    	
-	    	Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
+//	    	Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
 	        exists = tableExists("sheep_table");
 	        if (exists){
 	        	if( tag_num != null && tag_num.length() > 0 ){
@@ -328,10 +327,24 @@ public class LambingSheep extends ListActivity
 			        	return;
 			    		}
 		        	thissheep_id = dbh.getInt(0);
-		        
 		        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));
-		        	Log.i("LookForSheep", " Before finding all tags");
-		        	
+		        	//	Go get the sex of this sheep
+		        	cmd = String.format( "select sheep_table.sex from sheep_table where sheep_id = %s",thissheep_id);
+		        	crsr = dbh.exec( cmd ); 	    		
+		    		cursor   = ( Cursor ) crsr; 
+		    		startManagingCursor(cursor);
+					cursor.moveToFirst();				
+					i =  (dbh.getInt(0));
+					Log.i("LookForSheep", "This sheep is sex " + String.valueOf(i));
+					if (i != 2) {
+						// This is not a ewe so set the name to not a ewe, clear out and return
+						clearBtn( v );
+			    		TV = (TextView) findViewById( R.id.sheepnameText );
+			        	TV.setText( "This is not a ewe." );
+			        	return;
+					}
+					
+		        	Log.i("LookForSheep", " Before finding all tags");		        	
 		    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 		    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
 		    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01, " +
@@ -355,7 +368,7 @@ public class LambingSheep extends ListActivity
 			        dam_name = dbh.getStr(0);
 					// Now we need to get the alert text for this sheep
 			        alert_text = dbh.getStr(8);
-			        //	Get the Codon 171, Codon 154 and Codon 136 values for ths sheep
+			        //	Get the Codon 171, Codon 154 and Codon 136 values for this sheep
 			        codon171 = dbh.getInt(9);
 			        codon154 = dbh.getInt(10);
 			        codon136 = dbh.getInt(11);
@@ -796,7 +809,6 @@ public class LambingSheep extends ListActivity
 	    				AlertDialog dialog = builder.create();
 	    				dialog.show();    		
 	    	}
-
 	   
 	    // user clicked 'clear' button
 	    public void clearBtn( View v )
@@ -805,6 +817,18 @@ public class LambingSheep extends ListActivity
 			TV = (TextView) findViewById( R.id.inputText );
 			TV.setText( "" );		
 			TV = (TextView) findViewById( R.id.sheepnameText );
+			TV.setText( "" );
+			TV = (TextView) findViewById( R.id.lamb01nameText );
+			TV.setText( "" );
+			TV = (TextView) findViewById( R.id.lamb01sexText );
+			TV.setText( "" );
+			TV = (TextView) findViewById( R.id.lamb02nameText );
+			TV.setText( "" );
+			TV = (TextView) findViewById( R.id.lamb02sexText );
+			TV.setText( "" );
+			TV = (TextView) findViewById( R.id.lamb03nameText );
+			TV.setText( "" );
+			TV = (TextView) findViewById( R.id.lamb03sexText );
 			TV.setText( "" );
 			//	Need to clear out the rest of the tags here but only if we've actually looked for tags.
 			try {

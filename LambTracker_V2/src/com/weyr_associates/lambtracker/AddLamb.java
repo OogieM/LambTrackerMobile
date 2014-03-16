@@ -508,6 +508,8 @@ public class AddLamb extends Activity {
   		TextView temp_tag_num, temp_tag_color, temp_tag_loc, temp_tag_type;
   		String tag_num;
   		int tag_color, tag_loc, tag_type, tag_flock;
+  		String year = YearIs();
+  		TableLayout tl;
     	Object crsr;
 		// Disable Update Database button and make it red to prevent getting 2 records at one time
     	btn = (Button) findViewById( R.id.update_database_btn );
@@ -865,70 +867,69 @@ public class AddLamb extends Activity {
 		//	for now just get the first one
 		//	Go get all the tag data for this lamb
 		Log.i("before ", "getting the first tag info");
-		TableLayout tl;
-  		
   		tl = (TableLayout) findViewById(R.id.tag_table);
-  		Log.i("in table ", "after get the table view");  		
-  		TableRow tr = (TableRow) tl.getChildAt(0);
-  		Log.i("in table ", "after get the table row");
-  		temp_tag_num = (TextView) tr.getChildAt (0);
-  		temp_tag_color = (TextView) tr.getChildAt(1);
-  		temp_tag_loc = (TextView) tr.getChildAt(2);
-  		temp_tag_type = (TextView) tr.getChildAt(3);
-  		Log.i("in table ", "after get the children of that row values");
-  		
-  		tag_num = temp_tag_num.getText().toString();
-  		tag_color_label = temp_tag_color.getText().toString();
-  		Log.i("before ", "getting tag color looking for " + tag_color_label);
-  		cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
-     				"where tag_color_name='%s'", tag_color_label);
-     	crsr = dbh.exec( cmd );
-  		cursor   = ( Cursor ) crsr;
-  		startManagingCursor(cursor);
-  		dbh.moveToFirstRecord();
-  		tag_color = dbh.getInt(0);
-  		Log.i("after ", "getting tag color");
-  		
-  		tag_location_label = temp_tag_loc.getText().toString();
-  		Log.i("before ", "getting tag location looking for " + tag_location_label);
-  		cmd = String.format("select id_location_table.id_locationid, id_location_table.id_location_abbrev from id_location_table " +
-			"where id_location_abbrev='%s'", tag_location_label);
-  		crsr = dbh.exec( cmd );
-  		cursor   = ( Cursor ) crsr;
-  		startManagingCursor(cursor);
-  		dbh.moveToFirstRecord();
-  		tag_loc = dbh.getInt(0);
-  		
-  		tag_type_label = temp_tag_type.getText().toString(); 		
-  		cmd = String.format("select id_type_table.id_typeid from id_type_table " +
-			"where idtype_name='%s'", tag_type_label);
-  		crsr = dbh.exec( cmd );
-  		cursor   = ( Cursor ) crsr;
-  		startManagingCursor(cursor);
-  		dbh.moveToFirstRecord();
-  		tag_type = dbh.getInt(0);
-  		Log.i("after ", "getting tag type");
-  		//	If the tag is a federal tag then make the flock ID 1 for Desert Weyr 
-  		//	Should be whatever the default is in settings
-  		//	Also set the lamb name to be this year plus fed tag until we change it
-  		// once the EID is the federal tag the lamb name has to be the farm tag 
-		//	Names cannot be the EID tag number, that is too long. 
-		//	Still need to handle the case of the EID being the official federal tag
-  		String year = YearIs();
-  		if (tag_type==1){
-  			tag_flock = 1;
-  			lamb_name = year + "-" + tag_num;
+  		Log.i("in table ", "after get the table view");
+  		int i;
+  		for (i = 0; i < tl.getChildCount(); i++){
+  			Log.i("in for loop ", "after start" + String.valueOf(tl.getChildCount()));
+	  		TableRow tr = (TableRow) tl.getChildAt(i);
+	  		Log.i("in table ", "after get the table row");
+	  		temp_tag_num = (TextView) tr.getChildAt (0);
+	  		temp_tag_color = (TextView) tr.getChildAt(1);
+	  		temp_tag_loc = (TextView) tr.getChildAt(2);
+	  		temp_tag_type = (TextView) tr.getChildAt(3);
+	  		Log.i("in table ", "after get the children of that row values");
+	  		
+	  		tag_num = temp_tag_num.getText().toString();
+	  		tag_color_label = temp_tag_color.getText().toString();
+	  		Log.i("before ", "getting tag color looking for " + tag_color_label);
+	  		cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
+	     				"where tag_color_name='%s'", tag_color_label);
+	     	crsr = dbh.exec( cmd );
+	  		cursor   = ( Cursor ) crsr;
+	  		startManagingCursor(cursor);
+	  		dbh.moveToFirstRecord();
+	  		tag_color = dbh.getInt(0);
+	  		Log.i("after ", "getting tag color");
+	  		
+	  		tag_location_label = temp_tag_loc.getText().toString();
+	  		Log.i("before ", "getting tag location looking for " + tag_location_label);
+	  		cmd = String.format("select id_location_table.id_locationid, id_location_table.id_location_abbrev from id_location_table " +
+				"where id_location_abbrev='%s'", tag_location_label);
+	  		crsr = dbh.exec( cmd );
+	  		cursor   = ( Cursor ) crsr;
+	  		startManagingCursor(cursor);
+	  		dbh.moveToFirstRecord();
+	  		tag_loc = dbh.getInt(0);
+	  		
+	  		tag_type_label = temp_tag_type.getText().toString(); 		
+	  		cmd = String.format("select id_type_table.id_typeid from id_type_table " +
+				"where idtype_name='%s'", tag_type_label);
+	  		crsr = dbh.exec( cmd );
+	  		cursor   = ( Cursor ) crsr;
+	  		startManagingCursor(cursor);
+	  		dbh.moveToFirstRecord();
+	  		tag_type = dbh.getInt(0);
+	  		Log.i("after ", "getting tag type");
+	  		//	If the tag is a federal tag then make the flock ID 1 for Desert Weyr 
+	  		//	Should be whatever the default is in settings
+	  		//	Also set the lamb name to be this year plus fed tag until we change it
+	  		// once the EID is the federal tag the lamb name has to be the farm tag 
+			//	Names cannot be the EID tag number, that is too long. 
+			//	Still need to handle the case of the EID being the official federal tag
+	  		if (tag_type==1){
+	  			tag_flock = 1;
+	  			lamb_name = year + "-" + tag_num;
+	  		}	  		
+	     	// Now go put in a tag record for this tag for this lamb
+	  		cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+	  				" tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) values " +
+	  				" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", lamb_id, tag_type, tag_color, tag_color, 
+	  				tag_loc, mytoday, tag_num, tag_flock);
+	  		Log.i("add tag to ", "db cmd is " + cmd);
+			dbh.exec(cmd);
+			Log.i("add tag ", "after insert into id_info_table");
   		}
-  		
-     	// Now go put in a tag record for this tag for this lamb
-  		cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
-  				" tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) values " +
-  				" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", lamb_id, tag_type, tag_color, tag_color, 
-  				tag_loc, mytoday, tag_num, tag_flock);
-  		Log.i("add tag to ", "db cmd is " + cmd);
-		dbh.exec(cmd);
-		Log.i("add tag ", "after insert into id_info_table");
-		
 		//	End of what has to loop through all IDs for the lamb being added 
 		
 		//	Now update the sheep record with the new sheep name
@@ -942,7 +943,7 @@ public class AddLamb extends Activity {
 		//	If so then update the existing one
 		//	If not then insert a new one
 		
-		// Make the year string able to be used in a quesry to get this year's lambing records. 
+		// Make the year string able to be used in a query to get this year's lambing records. 
 		year = year + "%";		
 		Log.i("before try block ", " lambing year is " + year);
 		
@@ -1076,6 +1077,8 @@ public class AddLamb extends Activity {
 	  		Log.i("in try block ", " cmd is " + cmd);
 	  		dbh.exec( cmd ); 				
 		}
+		//	done with this lamb so force back to the ewe screen
+		backBtn(v);
     }
     public void addNewTag( View v ){
     	Object crsr;
@@ -1203,7 +1206,7 @@ public class AddLamb extends Activity {
     	cursor.close();
     	dbh.closeDB();
     	clearBtn( null );
-    	//Go back to lambing data
+    	//Go back to ewe lambing data
       	finish();
 	    }
  
@@ -1235,10 +1238,10 @@ public class AddLamb extends Activity {
 		TV.setText( "" );		
 		TV = (TextView) findViewById( R.id.sheepnameText );
 		TV.setText( "" );
-		TV = (TextView) findViewById( R.id.sireName );
-		TV.setText( "" );
-		TV = (TextView) findViewById( R.id.damName );
-		TV.setText( "" );
+//		TV = (TextView) findViewById( R.id.sireName );
+//		TV.setText( "" );
+//		TV = (TextView) findViewById( R.id.damName );
+//		TV.setText( "" );
 		//	Clear the radio group checks
 		Log.i("in clear button", " ready to clear the radio groups "); 
 		rg=(RadioGroup)findViewById(R.id.radioBirthType);
