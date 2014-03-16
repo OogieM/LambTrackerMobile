@@ -403,9 +403,11 @@ public class AddLamb extends Activity {
 		rear_type = 0;
 		//	The lambing_history record is empty until we create one
 		lambing_historyid = 0;
+		//	Fill lambing_notes with empty string until we read them form the history
+		lambing_notes = "";
 		
 		Bundle extras = getIntent().getExtras();
-		// TODO get extras here from the lambing screen. Mostly ewe's data for scrapie genetics
+		// get extras here from the lambing screen. Mostly ewe's data for scrapie genetics
 		if (extras!= null){
 			dam_id = extras.getInt("dam_id");
 			dam_name = extras.getString("dam_name");
@@ -503,6 +505,9 @@ public class AddLamb extends Activity {
     public void updateDatabase( View v ){
     	RadioGroup 	rg;
     	TextView 	TV;
+  		TextView temp_tag_num, temp_tag_color, temp_tag_loc, temp_tag_type;
+  		String tag_num;
+  		int tag_color, tag_loc, tag_type, tag_flock;
     	Object crsr;
 		// Disable Update Database button and make it red to prevent getting 2 records at one time
     	btn = (Button) findViewById( R.id.update_database_btn );
@@ -823,16 +828,6 @@ public class AddLamb extends Activity {
 		id_ownerid = 1;	
 		//	Set the flock_prefix to be Desert Weyr 
 		flock_prefix = 1;
-		//	Go get all the tag data for this lamb
-		
-		
-		//	Set the name of this lamb to be the federal tag if it is a standard federal tag
-		//	Otherwise set the lamb name to be the farm tag
-		//	Names cannot be the EID tag number, that is too long. 
-		//	Still need to handle the case of the EID being the official federal tag
-		
-		
-		
 		
 		//	Ready to build the insert statement for this lamb.
 		cmd = String.format("insert into sheep_table (sheep_name, flock_prefix, sex, " +
@@ -848,10 +843,6 @@ public class AddLamb extends Activity {
 			id_ownerid,birth_weight_units);
 		
 		Log.i("add a lamb ", "cmd is " + cmd);
-		//	 I should be able to get the sheep_id of the last insert returned by the command but
-		//	for some reason the database handler only is returning a cursor object
-		//	so for now I've commented out this line and am doing a select to get the last insert
-
 		dbh.exec(cmd);
 		Log.i("add a lamb ", "after insert ");
 		//  now we have a sheep record for the lamb. 
@@ -864,11 +855,94 @@ public class AddLamb extends Activity {
   		lamb_id = dbh.getInt(0);		
 		Log.i("add a lamb ", "the lamb_id is " + String.valueOf(lamb_id));
 		
+		//	Set the lamb name to be empty initially
+		lamb_name = "";
+		// Set the flock ID to be nothing initially
+		tag_flock = 0;
+		
+		// TODO
+		//	This will be what has to loop through all IDs for the lamb being added 
+		//	for now just get the first one
+		//	Go get all the tag data for this lamb
+		Log.i("before ", "getting the first tag info");
+		TableLayout tl;
+  		
+  		tl = (TableLayout) findViewById(R.id.tag_table);
+  		Log.i("in table ", "after get the table view");  		
+  		TableRow tr = (TableRow) tl.getChildAt(0);
+  		Log.i("in table ", "after get the table row");
+  		temp_tag_num = (TextView) tr.getChildAt (0);
+  		temp_tag_color = (TextView) tr.getChildAt(1);
+  		temp_tag_loc = (TextView) tr.getChildAt(2);
+  		temp_tag_type = (TextView) tr.getChildAt(3);
+  		Log.i("in table ", "after get the children of that row values");
+  		
+  		tag_num = temp_tag_num.getText().toString();
+  		tag_color_label = temp_tag_color.getText().toString();
+  		Log.i("before ", "getting tag color looking for " + tag_color_label);
+  		cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
+     				"where tag_color_name='%s'", tag_color_label);
+     	crsr = dbh.exec( cmd );
+  		cursor   = ( Cursor ) crsr;
+  		startManagingCursor(cursor);
+  		dbh.moveToFirstRecord();
+  		tag_color = dbh.getInt(0);
+  		Log.i("after ", "getting tag color");
+  		
+  		tag_location_label = temp_tag_loc.getText().toString();
+  		Log.i("before ", "getting tag location looking for " + tag_location_label);
+  		cmd = String.format("select id_location_table.id_locationid, id_location_table.id_location_abbrev from id_location_table " +
+			"where id_location_abbrev='%s'", tag_location_label);
+  		crsr = dbh.exec( cmd );
+  		cursor   = ( Cursor ) crsr;
+  		startManagingCursor(cursor);
+  		dbh.moveToFirstRecord();
+  		tag_loc = dbh.getInt(0);
+  		
+  		tag_type_label = temp_tag_type.getText().toString(); 		
+  		cmd = String.format("select id_type_table.id_typeid from id_type_table " +
+			"where idtype_name='%s'", tag_type_label);
+  		crsr = dbh.exec( cmd );
+  		cursor   = ( Cursor ) crsr;
+  		startManagingCursor(cursor);
+  		dbh.moveToFirstRecord();
+  		tag_type = dbh.getInt(0);
+  		Log.i("after ", "getting tag type");
+  		//	If the tag is a federal tag then make the flock ID 1 for Desert Weyr 
+  		//	Should be whatever the default is in settings
+  		//	Also set the lamb name to be this year plus fed tag until we change it
+  		// once the EID is the federal tag the lamb name has to be the farm tag 
+		//	Names cannot be the EID tag number, that is too long. 
+		//	Still need to handle the case of the EID being the official federal tag
+  		String year = YearIs();
+  		if (tag_type==1){
+  			tag_flock = 1;
+  			lamb_name = year + "-" + tag_num;
+  		}
+  		
+     	// Now go put in a tag record for this tag for this lamb
+  		cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+  				" tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) values " +
+  				" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", lamb_id, tag_type, tag_color, tag_color, 
+  				tag_loc, mytoday, tag_num, tag_flock);
+  		Log.i("add tag to ", "db cmd is " + cmd);
+		dbh.exec(cmd);
+		Log.i("add tag ", "after insert into id_info_table");
+		
+		//	End of what has to loop through all IDs for the lamb being added 
+		
+		//	Now update the sheep record with the new sheep name
+		cmd = String.format("update sheep_table set sheep_name = '%s' " +
+  		  		" where sheep_id = %s ", lamb_name, lamb_id);
+		Log.i("add sheep_name ", "to db cmd is " + cmd);
+		dbh.exec(cmd);
+		Log.i("add name ", "after insert into sheep_table");
+  		
 		//	Create a lambing history record by first seeing if there is one already for this year
 		//	If so then update the existing one
 		//	If not then insert a new one
 		
-		String year = YearIs();
+		// Make the year string able to be used in a quesry to get this year's lambing records. 
 		year = year + "%";		
 		Log.i("before try block ", " lambing year is " + year);
 		
@@ -910,7 +984,7 @@ public class AddLamb extends Activity {
 	  			Log.i("in try block ", " have 2 lambs so add a third to record");
 //	  			Update the lambs born and rear_type
 	  			lambs_born = lambs_born +1;
-	  			rear_type = rear_type +1;
+//	  			rear_type = rear_type +1;
 	  			cmd = String.format("update lambing_history_table set " +
 		  				"lambing_notes = '%s', lambs_born = %s, " +
 		  				" lamb03_id = %s " +
@@ -943,7 +1017,7 @@ public class AddLamb extends Activity {
 	  			Log.i("in try block ", " have only 1 lamb so add a second to record");
 	  			//	Update the lambs born and lambs weaned fields
 	  			lambs_born = lambs_born +1;
-	  			rear_type = rear_type +1;	  			
+//	  			rear_type = rear_type +1;	  			
 	  			cmd = String.format("update lambing_history_table set " +
 		  				"lambing_notes = '%s', lambs_born = %s, " +
 		  				" lamb02_id = %s " +
@@ -982,9 +1056,9 @@ public class AddLamb extends Activity {
 	  		}
   			Log.i("in catch block ", " after setting lambing_notes " + lambing_notes);
 			cmd = String.format("insert into lambing_history_table (lambing_date, dam_id, sire_id, " +
-			"lambing_notes, lambs_born, lamb01_id, lambing_time) " +
-			"values ('%s', %s, %s,'%s', %s, %s, '%s') ", 
-			mytoday, dam_id, sire_id, lambing_notes, lambs_born, lamb_id, mytime);
+			"lambing_notes, lambs_born, lamb01_id, lambing_time, gestation_length) " +
+			"values ('%s', %s, %s,'%s', %s, %s, '%s', %s) ", 
+			mytoday, dam_id, sire_id, lambing_notes, lambs_born, lamb_id, mytime, real_gestation_length);
 			Log.i("in catch block ", " cmd is " + cmd);
 			dbh.exec( cmd );
 			Log.i("in catch block ", "after cmd to create a new record");
@@ -1051,7 +1125,6 @@ public class AddLamb extends Activity {
 		tag_color_spinner.setSelection(5); // set to orange
 				
     	// Fill the Tag Location Spinner
-		// Only allow ear locations for tags for this task
 		tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
 		tag_locations = new ArrayList<String>();        
 		tag_locations.add("Select a Location");		
@@ -1295,7 +1368,7 @@ public class AddLamb extends Activity {
   public void updateTag( View v ){
   	Object 			crsr;
   	String 			cmd;
-  	TextView 		TV, TV2, TV3;
+  	TextView 		TV;
   	// Get the data from the add tag section of the screen
   	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
   	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
@@ -1361,12 +1434,6 @@ public class AddLamb extends Activity {
    		tag_location_label = dbh.getStr(1);
   		Log.i("New Location ", tag_location_label);
   		
-      	//	Integers hold the info new_tag_type, new_tag_color, new_tag_location
-//  		ArrayList newtag = new ArrayList();
-//  		newtag.add(new_tag_number);
-//  		newtag.add(new_tag_color);
-//  		newtag.add(new_tag_location);
-//  		newtag.add(new_tag_type);
   		Log.i("Before tag ", "Before creating the tag table layout");
   		TableLayout tl;
   		TableRow tr;
@@ -1382,8 +1449,7 @@ public class AddLamb extends Activity {
    		TV = new TextView(this);
   		TV.setText (tag_color_label);
   		TV.setWidth(75);
-  		tr.addView(TV);
-   		
+  		tr.addView(TV); 		
  
    		TV = new TextView(this);
    		TV.setText (tag_location_label);
