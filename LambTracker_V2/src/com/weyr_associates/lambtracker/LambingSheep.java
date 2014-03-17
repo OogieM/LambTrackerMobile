@@ -211,7 +211,6 @@ public class LambingSheep extends ListActivity
 		public void gotEID( )
 		{		
 //			View v = null;
-			Object crsr;
 			//	make the scan eid button red
 			btn = (Button) findViewById( R.id.scan_eid_btn );
 			btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -404,17 +403,17 @@ public class LambingSheep extends ListActivity
 						lambingdate = dbh.getStr(1);
 						
 						lamb01_id = dbh.getInt(3);
-						Log.i("lookForSheep", " first lamb is id " + String.valueOf(lamb01_id));
+//						Log.i("lookForSheep", " first lamb is id " + String.valueOf(lamb01_id));
 						lamb02_id = dbh.getInt(4);
-						Log.i("lookForSheep", " second lamb is id " + String.valueOf(lamb02_id));
+//						Log.i("lookForSheep", " second lamb is id " + String.valueOf(lamb02_id));
 						lamb03_id = dbh.getInt(5);
-						Log.i("lookForSheep", " third lamb is id " + String.valueOf(lamb03_id));
+//						Log.i("lookForSheep", " third lamb is id " + String.valueOf(lamb03_id));
 						String[] fromColumns2 = new String[ ]{ "lambing_date", "lambing_notes"};
-						Log.i("lookForSheep", " after set string array second time");
+//						Log.i("lookForSheep", " after set string array second time");
 						int[] toViews2 = new int[] { R.id.lambing_date, R.id.lambing_notes};
-						Log.i("lookForSheep", " after set integer array second time");
+//						Log.i("lookForSheep", " after set integer array second time");
 						myadapter2 = new SimpleCursorAdapter(this, R.layout.list_entry2, cursor2 ,fromColumns2, toViews2, 0);
-						Log.i("lookForSheep", " after set myadapter2");
+//						Log.i("lookForSheep", " after set myadapter2");
 						historylist.setAdapter(myadapter2);
 						};
 	//TODO		
@@ -432,16 +431,16 @@ public class LambingSheep extends ListActivity
 			    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb01_id);
 //						Log.i("lookForSheep", " command is" + cmd);
 			    		crsr3 = dbh.exec( cmd ); 
-			    		Log.i("lookForSheep", " after run 3rd sqlite command");
+//			    		Log.i("lookForSheep", " after run 3rd sqlite command");
 			    		cursor3   = ( Cursor ) crsr3; 
 			    		startManagingCursor(cursor3);
 						nRecs    = cursor3.getCount();
-						Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
+//						Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
 //						colNames = cursor3.getColumnNames();
 //						nrCols   = colNames.length;
 						cursor3.moveToFirst();				
 						if (nRecs > 0) {
-							// put the lamb name up and perhaps the lamb's sex
+							// put the lamb name up and the lamb's sex
 							// lambs name is dbh.getStr (0)
 							Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
 							Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
@@ -556,22 +555,37 @@ public class LambingSheep extends ListActivity
 			super.onResume();
 			int 	lamb01_id, lamb02_id, lamb03_id;
 			Object crsr, crsr2, crsr3, crsr4, crsr5;
-			Boolean exists;
 			TextView TV;
 			String 	lambingdate ;
+			String 	dbfile = getString(R.string.real_database_file) ;
+	        Log.i("LookUpSheep", " after get database file");
+	    	dbh = new DatabaseHandler( this, dbfile );
+			Log.i("in resume", " of lambing sheep");
 	    	//	empty the lamb records
 	    	lamb01_id = 0;
 	    	lamb02_id = 0;
 	    	lamb03_id = 0;
-	    		    	
-	        TV = (TextView) findViewById( R.id.inputText );	        
-	    	String	tag_num = TV.getText().toString();
-
 	    	ListView historylist = (ListView) findViewById(R.id.list2);
 	    	ListView lambtags01 = (ListView) findViewById(R.id.list3);
 	    	ListView lambtags02 = (ListView) findViewById(R.id.list4);
 	    	ListView lambtags03 = (ListView) findViewById(R.id.list5);
-
+	    	Log.i("in resume", " after get listviews of all lists");
+//		try {
+//			myadapter3.changeCursor(null);
+//		} catch (Exception e) {
+//			// In this case there is no adapter so do nothing
+//		}
+//		try {
+//			myadapter4.changeCursor(null);
+//		} catch (Exception e) {
+//			// In this case there is no adapter so do nothing
+//		}
+//		try {
+//			myadapter5.changeCursor(null);
+//		} catch (Exception e) {
+//			// In this case there is no adapter so do nothing
+//		}
+		Log.i("inResume", " before get lamb history for this ewe");	
 //		Add display the lambing history for this ewe here					
 		cmd = String.format( "select lambing_history_table.lambing_historyid as _id, lambing_history_table.lambing_date, " +
 				"lambing_history_table.lambing_notes, lambing_history_table.lamb01_id, lambing_history_table.lamb02_id, lambing_history_table.lamb03_id " +
@@ -579,23 +593,22 @@ public class LambingSheep extends ListActivity
 				" where lambing_history_table.dam_id = '%s'  " +
 				"order by lambing_history_table.lambing_date desc", thissheep_id );					
 		crsr2 = dbh.exec( cmd ); 	
-		Log.i("lookForSheep", " after run 2nd sqlite command");
+		Log.i("inResume", " after get lamb history for this ewe");
 		cursor2   = ( Cursor ) crsr2; 
 		startManagingCursor(cursor2);
 		nRecs    = cursor2.getCount();
-		Log.i("lookForSheep", " nRecs is " + String.valueOf(nRecs));
+		Log.i("inResume", " nRecs is " + String.valueOf(nRecs));
 //		colNames = cursor2.getColumnNames();
 //		nrCols   = colNames.length;					
 		cursor2.moveToFirst();	
 		if (nRecs > 0) {
-			lambingdate = dbh.getStr(1);
-			
+			lambingdate = dbh.getStr(1);			
 			lamb01_id = dbh.getInt(3);
-			Log.i("lookForSheep", " first lamb is id " + String.valueOf(lamb01_id));
+//			Log.i("lookForSheep", " first lamb is id " + String.valueOf(lamb01_id));
 			lamb02_id = dbh.getInt(4);
-			Log.i("lookForSheep", " second lamb is id " + String.valueOf(lamb02_id));
+//			Log.i("lookForSheep", " second lamb is id " + String.valueOf(lamb02_id));
 			lamb03_id = dbh.getInt(5);
-			Log.i("lookForSheep", " third lamb is id " + String.valueOf(lamb03_id));
+//			Log.i("lookForSheep", " third lamb is id " + String.valueOf(lamb03_id));
 			String[] fromColumns2 = new String[ ]{ "lambing_date", "lambing_notes"};
 			Log.i("lookForSheep", " after set string array second time");
 			int[] toViews2 = new int[] { R.id.lambing_date, R.id.lambing_notes};
@@ -619,7 +632,7 @@ public class LambingSheep extends ListActivity
     				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb01_id);
 //			Log.i("lookForSheep", " command is" + cmd);
     		crsr3 = dbh.exec( cmd ); 
-    		Log.i("lookForSheep", " after run 3rd sqlite command");
+    		Log.i("lookForSheep", " after run get this year first lamb sqlite command");
     		cursor3   = ( Cursor ) crsr3; 
     		startManagingCursor(cursor3);
 			nRecs    = cursor3.getCount();
@@ -657,7 +670,7 @@ public class LambingSheep extends ListActivity
     				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb02_id);
 //			Log.i("lookForSheep", " command is" + cmd);
     		crsr4 = dbh.exec( cmd ); 
-    		Log.i("lookForSheep", " after run 4th sqlite command");
+    		Log.i("lookForSheep", " after run get this year second lamb sqlite command");
     		cursor4   = ( Cursor ) crsr4; 
     		startManagingCursor(cursor4);
 			nRecs    = cursor4.getCount();
@@ -694,7 +707,7 @@ public class LambingSheep extends ListActivity
     				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb03_id);
 //			Log.i("lookForSheep", " command is" + cmd);
     		crsr5 = dbh.exec( cmd ); 
-    		Log.i("lookForSheep", " after run 4th sqlite command");
+    		Log.i("lookForSheep", " after run get this year third lamb sqlite command");
     		cursor5   = ( Cursor ) crsr5; 
     		startManagingCursor(cursor5);
 			nRecs    = cursor5.getCount();
@@ -833,14 +846,30 @@ public class LambingSheep extends ListActivity
 			//	Need to clear out the rest of the tags here but only if we've actually looked for tags.
 			try {
 				myadapter.changeCursor(null);
-				myadapter2.changeCursor(null);
-				myadapter3.changeCursor(null);
-				myadapter4.changeCursor(null);
-				myadapter5.changeCursor(null);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				// In this case there is no adapter so do nothing
-			}		
+			}	
+			try {
+				myadapter2.changeCursor(null);
+			} catch (Exception e) {
+				// In this case there is no adapter so do nothing
+			}
+			try {
+				myadapter3.changeCursor(null);
+			} catch (Exception e) {
+				// In this case there is no adapter so do nothing
+			}
+			try {
+				myadapter4.changeCursor(null);
+			} catch (Exception e) {
+				// In this case there is no adapter so do nothing
+			}
+			try {
+				myadapter5.changeCursor(null);
+			} catch (Exception e) {
+				// In this case there is no adapter so do nothing
+			}
+			
 	    }   
 	    
 }

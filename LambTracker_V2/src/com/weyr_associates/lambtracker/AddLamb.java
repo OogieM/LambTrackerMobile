@@ -576,6 +576,7 @@ public class AddLamb extends Activity {
     		AlertDialog dialog = builder.create();
     		dialog.show();	
 		}
+		else{
 		Log.i("lambease ", String.valueOf(lambease));
 		
 		//	Calculate codon171 value based on sire and dam if possible
@@ -1026,7 +1027,7 @@ public class AddLamb extends Activity {
 				//	done with this lamb so force back to the ewe screen
 				backBtn(v);
 				}
-	  		Log.i("after if ", " after end of if statement for more lambs ");
+//	  		Log.i("after if ", " after end of if statement for more lambs ");
 		} catch (Exception e) {
 			//	No record found so insert one
 			lambing_date = mytoday;
@@ -1063,6 +1064,7 @@ public class AddLamb extends Activity {
 	  		dbh.exec( cmd ); 
 			//	done with this lamb so force back to the ewe screen
 			backBtn(v);
+		}
 		}
 		// Enable Update Database button and make it normal 
     	btn = (Button) findViewById( R.id.update_database_btn );
@@ -1188,13 +1190,16 @@ public class AddLamb extends Activity {
     public void backBtn( View v )
 	    {
     	doUnbindService();
-		stopService(new Intent(AddLamb.this, eidService.class));   	
-    	// Added this to close the database if we go back to the main activity  	
+		stopService(new Intent(AddLamb.this, eidService.class)); 
+		Log.i("in add lamb", " in back btn after stop EID service");
+		clearBtn( null );
+		// Added this to close the database if we go back to the main activity  	
     	stopManagingCursor (cursor);
     	cursor.close();
-    	dbh.closeDB();
-    	clearBtn( null );
+//    	Log.i("in add lamb", " in back btn after close cursor");
+    	dbh.closeDB();   	
     	//Go back to ewe lambing data
+    	Log.i("in add lamb", " before finish this activity");
       	finish();
 	    }
  
@@ -1230,11 +1235,12 @@ public class AddLamb extends Activity {
 //		TV = (TextView) findViewById( R.id.damName );
 //		TV.setText( "" );
 		//	Clear the radio group checks
-		Log.i("in clear button", " ready to clear the radio groups "); 
+		Log.i("in add lamb", "in clear button ready to clear the radio groups "); 
 		rg=(RadioGroup)findViewById(R.id.radioRearType);
 		rg.clearCheck();
 		rg=(RadioGroup)findViewById(R.id.radioGroupSex);
 		rg.clearCheck();
+		Log.i("in add lamb", " in clear btn resetting the stillborn checkbox");
 		//	Clear the stillborn box
 		cb=(CheckBox)findViewById(R.id.checkBoxStillborn);
 		cb.setChecked(false);
@@ -1252,6 +1258,7 @@ public class AddLamb extends Activity {
       	TV.setText( "" );	
       	tl = (TableLayout) findViewById(R.id.tag_table);
       	tl.removeAllViews();
+      	Log.i("in add lamb", " in clear btn after removing the table views");
     }  
     public void takeNote( View v )
     {
