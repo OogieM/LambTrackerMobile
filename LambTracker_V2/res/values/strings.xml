@@ -50,16 +50,14 @@
     <string name="save_evaluation_scores_btn">Save Scores</string>
     <string name="create_evaluation_task_btn">Create Evaluation</string>
     <string name="look_up_sheep_btn">Look Up Sheep</string>
-    <string name="add_lamb_btn">Add a Lamb</string>
-   
+    <string name="add_lamb_btn">Add a Lamb</string> 
    
     <string name="load_sheeplist">Load Sheep Database</string>
     <string name="do_sheeptask">Do Sheep Tasks</string>
     <string name="look_up_sheep">Look up a Sheep by EID</string>
    	<string name="copy_real_db_action">copyRealDB</string>
    	<string name="select_file_db_action">selectFileDB</string> 
-    <string name="show_real_db_action">showRealDB</string>
-      
+    <string name="show_real_db_action">showRealDB</string>     
     
     <string name="title_activity_do_sheep_task">Demo Lambing Data</string>
     <string name="title_activity_load_sheep_list">Manage Sheep Database</string>
@@ -91,12 +89,12 @@
    	    If there are any lambs from that sheep for this year their identification will also be listed. You can choose to add lambs 
    	    here to collect data on the birth. </string>   	    
     <string name="help_add_lamb">Add the information on this lamb. Be sure to put the first lamb born in first and the second lamb 
-         born in second.  </string> 
-   	    
+         born in second.  </string>    	    
     
     <string name="convert_fill_fields">Please Fill in all four fields.</string>
     <string name="add_lamb_fill_fields">Please Fill in a Lambease value.</string>
-     <string name="enter_tag_data">Enter Tag Data</string>
+    <string name="enter_tag_data">Enter Tag Data</string>
+    <string name="wrong_id_location">Invalid ID Location</string>
     
     <string-array name="sheep_task_array">
         <item>Choose a Flock Task</item>

@@ -166,7 +166,7 @@
             android:layout_column="1"
             android:layout_row="0"
             android:enabled="true"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:typeface="monospace" >
 			</TextView>
             
@@ -187,7 +187,7 @@
             android:layout_gravity="left"
             android:layout_row="0"
             android:enabled="true"
-        	android:textSize="14sp"
+        	android:textSize="18sp"
         	android:typeface="monospace" /> 
 </GridLayout>
 
@@ -197,27 +197,6 @@
 			android:layout_height="wrap_content"
         	android:columnCount="3"
        		android:rowCount="5">
-        	
-        <TextView
-        android:id="@+id/sheep_birth_type_lbl"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content"
-        android:layout_column="0"
-        android:layout_gravity="right|center"
-        android:layout_row="0"
-        android:textSize="18sp"
-        android:typeface="monospace" 
-        android:text="@string/sheep_birth_type_lbl"/>
-	   
-     <RadioGroup
-        android:id="@+id/radioBirthType"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:layout_gravity="left|center"
-        android:layout_row="0"
-        android:orientation="horizontal">
-  	</RadioGroup> 
   	
       	<TextView
         android:id="@+id/sheep_rear_type_lbl"
@@ -225,7 +204,7 @@
         android:layout_height="wrap_content"
        	android:layout_column="0"
         android:layout_gravity="right|center"
-        android:layout_row="1"
+        android:layout_row="0"
         android:textSize="18sp"
         android:typeface="monospace" 
         android:text="@string/sheep_rear_type_lbl"/>
@@ -236,7 +215,7 @@
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:layout_gravity="left|center"
-        android:layout_row="1"
+        android:layout_row="0"
         android:orientation="horizontal">
   	</RadioGroup>
   	</GridLayout>

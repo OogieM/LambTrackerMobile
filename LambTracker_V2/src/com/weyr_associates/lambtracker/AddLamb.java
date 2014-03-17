@@ -61,7 +61,8 @@ public class AddLamb extends Activity {
 	public int dam_id, dam_codon171, dam_codon154, dam_codon136;
 	public int sire_id, sire_codon171, sire_codon154, sire_codon136;
 	public int lamb_id, lamb_codon171, lamb_codon154, lamb_codon136;
-	public int flock_prefix, id_sheepbreedid, id_locationid,id_ownerid, birth_weight_units, lamb_birth_record;
+	public int flock_prefix, id_sheepbreedid, id_locationid, id_ownerid;
+	public int	service_type, birth_weight_units, lamb_birth_record;
 	public CheckBox 	stillbornbox;
 	public boolean stillborn;
 	public Float birth_weight;
@@ -250,8 +251,7 @@ public class AddLamb extends Activity {
 	  	tag_location_spinner.setSelection(1);
 //	  	Log.i("updateTag", "Tag location is " + tag_location_label);
 	  	// Put the last EID into the new tag number
-	  	new_tag_number = LastEID;
-	  	
+	  	new_tag_number = LastEID;	  	
 	}	
 	/////////////////////////////////////////////////////
 	
@@ -338,22 +338,16 @@ public class AddLamb extends Activity {
 	   		radiobtnlist.add(cursor.getString(1));
 	   	}
 	    radioBtnText = (String[]) radiobtnlist.toArray(new String [radiobtnlist.size()]);
-
 		// Build the radio buttons here
 		radioGroup = ((RadioGroup) findViewById(R.id.radioGroupSex));
 		addRadioButtons(4, radioBtnText);
 		radiobtnlist.clear ();
 		
-		//	Fill the birth and rear type radio group
+		//	Fill the rear type radio group
    		radiobtnlist.add ("Single");
    		radiobtnlist.add ("Twin");
    		radiobtnlist.add ("Triplet");
 	    radioBtnText = (String[]) radiobtnlist.toArray(new String [radiobtnlist.size()]);
-		 
-		// 	Build the radio buttons here
-		radioGroup = ((RadioGroup) findViewById(R.id.radioBirthType));
-		addRadioButtons(3, radioBtnText);
-		//	Fill the rear type radio group   		 
 		// 	Build the radio buttons here
 		radioGroup = ((RadioGroup) findViewById(R.id.radioRearType));
 		addRadioButtons(3, radioBtnText);
@@ -377,23 +371,14 @@ public class AddLamb extends Activity {
     	}        
 
     	// Creating adapter for lambease spinner
-//     	Log.i("addlamb", " before create lambing ease adapter" );    	
      	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, lambing_ease);
-//     	Log.i("addlamb", " after create lambing ease adapter" );
      	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//     	Log.i("addlamb", " after set resource" );
      	lamb_ease_spinner.setAdapter (dataAdapter);
-//     	Log.i("addlamb", " after set adapter" );
 		lamb_ease_spinner.setSelection(0);
 		Log.i("addlamb", " after set selection" );
 		
-		//	Fill death and remove dates with null initially. Will change if this is a stillborn lamb
-//		death_date = null;
-//		remove_date = null;
-		
 		//	Fill birth_weight with 0 until we get a weight
-		birth_weight = 0.0f;
-		
+		birth_weight = 0.0f;		
 		//	Fill the lamb id's with nothing until we search for them
 		lamb01_id = 0;
 		lamb02_id = 0;
@@ -403,11 +388,11 @@ public class AddLamb extends Activity {
 		rear_type = 0;
 		//	The lambing_history record is empty until we create one
 		lambing_historyid = 0;
-		//	Fill lambing_notes with empty string until we read them form the history
+		//	Fill lambing_notes with empty string until we read them from the history
 		lambing_notes = "";
 		
 		Bundle extras = getIntent().getExtras();
-		// get extras here from the lambing screen. Mostly ewe's data for scrapie genetics
+		// get extras here from the lambing screen. Mostly ewe's data for scrapie genetics	
 		if (extras!= null){
 			dam_id = extras.getInt("dam_id");
 			dam_name = extras.getString("dam_name");
@@ -448,9 +433,9 @@ public class AddLamb extends Activity {
 			jintdate [1] = 04;
 			jintdate [2] = 27;
 			
-			Log.i("add a lamb ", " before getting julian of today");
+//			Log.i("add a lamb ", " before getting julian of today");
 			temp_julian_today = Utilities.toJulian(jintdate);
-			Log.i("addlamb", " julian today is " + String.valueOf(temp_julian_today));
+//			Log.i("addlamb", " julian today is " + String.valueOf(temp_julian_today));
 	    	Log.i("add a lamb ", " cmd is " + cmd);	    	
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
@@ -475,6 +460,7 @@ public class AddLamb extends Activity {
 	        		//	This is the correct record so save the data and bump out
 	        		sire_name = dbh.getStr(3);
 	        		sire_id = dbh.getInt(2);
+	        		service_type = dbh.getInt(6);
 	        		//	make the gestation an integer
 	        		real_gestation_length = (int)gestation_length;
 	        		Log.i("addlamb", " gestation length is " + String.valueOf(real_gestation_length));
@@ -511,6 +497,7 @@ public class AddLamb extends Activity {
   		String year = YearIs();
   		TableLayout tl;
     	Object crsr;
+    	
 		// Disable Update Database button and make it red to prevent getting 2 records at one time
     	btn = (Button) findViewById( R.id.update_database_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -518,17 +505,11 @@ public class AddLamb extends Activity {
     	
 		//	Get the date and time to add to the lamb record these are strings not numbers
 		mytoday = TodayIs(); 
-		Log.i("add a lamb ", " today is " + mytoday);	
+//		Log.i("add a lamb ", " today is " + mytoday);	
 		mytime = TimeIs();
-		Log.i("add a lamb ", " time is " + mytime);
+//		Log.i("add a lamb ", " time is " + mytime);
     	
-    	//	Get the data for this lamb   	
-   		//	Get the radio group selected for the birth type
-		Log.i("before radio group", " getting ready to get the birth type ");
-		rg=(RadioGroup)findViewById(R.id.radioBirthType);
- 		birth_type = rg.getCheckedRadioButtonId()+1;
-		Log.i("birth_type ", String.valueOf(birth_type));
- 		
+    	//	Get the data for this lamb   	 		
    		//	Get the radio group selected for the rear type
 		Log.i("before radio group", " getting ready to get the rear type ");
 		rg=(RadioGroup)findViewById(R.id.radioRearType);
@@ -558,7 +539,7 @@ public class AddLamb extends Activity {
 			Log.i("stillborn ", String.valueOf(stillborn));
 			death_date = mytoday;
 			remove_date = mytoday;
-			rear_type = rear_type-1;
+//			rear_type = rear_type-1;
 		}
 		
 		//	Get the Birth Weight
@@ -578,18 +559,17 @@ public class AddLamb extends Activity {
 		lambease = lamb_ease_spinner.getSelectedItemPosition();
 		if (lambease == 0){
 			//	Need to require a value for lambease here
-			// Missing data so  display an alert 	
+			//  Missing data so  display an alert 	
     		AlertDialog.Builder builder = new AlertDialog.Builder( this );
     		builder.setMessage( R.string.add_lamb_fill_fields )
     	           .setTitle( R.string.add_lamb_fill_fields );
     		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int idx) {
-    	               // User clicked OK button 
-    	       		// Enable Update Database button and make it red to prevent getting 2 records at one time
-    	           	btn = (Button) findViewById( R.id.update_database_btn );
-    	           	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-    	           	btn.setEnabled(true);
-
+    	               	// User clicked OK button 
+    	         		// make update database button normal and enabled so we can try again
+    	           		btn = (Button) findViewById( R.id.update_database_btn );
+    	           		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+    	            	btn.setEnabled(true);
      	    		   return;
     	               }
     	       });		
@@ -1011,7 +991,9 @@ public class AddLamb extends Activity {
 		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb01_id);
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
-		  		Log.i("in try block ", " after update sheep record for first lamb to add birth record");		  	
+		  		Log.i("in try block ", " after update sheep record for first lamb to add birth record");
+				//	done with this lamb so force back to the ewe screen
+				backBtn(v);
 	  		}
 	  		else{
 	  			//	only have 1 lamb so far
@@ -1040,7 +1022,10 @@ public class AddLamb extends Activity {
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record for first lamb to correct rear type and birth type");
-	  			}
+	  			
+				//	done with this lamb so force back to the ewe screen
+				backBtn(v);
+				}
 	  		Log.i("after if ", " after end of if statement for more lambs ");
 		} catch (Exception e) {
 			//	No record found so insert one
@@ -1048,7 +1033,7 @@ public class AddLamb extends Activity {
 			lambing_time = mytime;
 //			Update the lambs born and rear type fields
   			lambs_born = lambs_born +1;
-  			rear_type = rear_type + 1;
+//  			rear_type = rear_type + 1;
 //			Log.i("in catch block ", " after setting date and time");
   			if (stillborn){
 	  			lambing_notes = "S"; 
@@ -1075,14 +1060,18 @@ public class AddLamb extends Activity {
 					"birth_type = %s, rear_type = %s " +
 	  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb_id);
 	  		Log.i("in try block ", " cmd is " + cmd);
-	  		dbh.exec( cmd ); 				
+	  		dbh.exec( cmd ); 
+			//	done with this lamb so force back to the ewe screen
+			backBtn(v);
 		}
-		//	done with this lamb so force back to the ewe screen
-		backBtn(v);
+		// Enable Update Database button and make it normal 
+    	btn = (Button) findViewById( R.id.update_database_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+    	btn.setEnabled(true);
+    	
     }
     public void addNewTag( View v ){
-    	Object crsr;
-    	
+    	Object crsr;   	
        	btn = (Button) findViewById( R.id.update_display_btn );
     	btn.setEnabled(true); 
     	new_tag_number = null;
@@ -1146,8 +1135,7 @@ public class AddLamb extends Activity {
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_location_spinner.setAdapter (dataAdapter);
 		//	Set the tag location to be the left ear by default should be from settings
-		tag_location_spinner.setSelection(2); // left ear for non EID tags
-    
+		tag_location_spinner.setSelection(2); // left ear for non EID tags   
     }
 
 	public boolean tableExists (String table){
@@ -1224,7 +1212,6 @@ public class AddLamb extends Activity {
     				AlertDialog dialog = builder.create();
     				dialog.show();    		
     	}
-
    
     // user clicked 'clear' button
     public void clearBtn( View v )
@@ -1244,8 +1231,6 @@ public class AddLamb extends Activity {
 //		TV.setText( "" );
 		//	Clear the radio group checks
 		Log.i("in clear button", " ready to clear the radio groups "); 
-		rg=(RadioGroup)findViewById(R.id.radioBirthType);
-		rg.clearCheck();
 		rg=(RadioGroup)findViewById(R.id.radioRearType);
 		rg.clearCheck();
 		rg=(RadioGroup)findViewById(R.id.radioGroupSex);
@@ -1372,6 +1357,9 @@ public class AddLamb extends Activity {
   	Object 			crsr;
   	String 			cmd;
   	TextView 		TV;
+  	Boolean 	tagok;
+  	//	Initially set tag to not ok until we verify tag entry is good
+  	tagok = false;
   	// Get the data from the add tag section of the screen
   	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
   	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
@@ -1404,8 +1392,7 @@ public class AddLamb extends Activity {
   		dialog.show();		   		
   	}else
   	{
-  		Log.i("before ", "getting tag type");
-
+  		Log.i("before ", "getting tag type looking for " + tag_type_label);
   		cmd = String.format("select id_type_table.id_typeid from id_type_table " +
 			"where idtype_name='%s'", tag_type_label);
   		crsr = dbh.exec( cmd );
@@ -1413,8 +1400,7 @@ public class AddLamb extends Activity {
   		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_type = dbh.getInt(0);
-  		Log.i("after ", "getting tag type");
-  		
+  		Log.i("after ", "getting tag type" + String.valueOf(new_tag_type));  		
      	
   		Log.i("before ", "getting tag color looking for " + tag_color_label);
   		cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
@@ -1424,7 +1410,8 @@ public class AddLamb extends Activity {
   		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_color = dbh.getInt(0);
-  		Log.i("after ", "getting tag color");
+  		Log.i("after ", "getting tag color" + String.valueOf(new_tag_color));
+  		
   		Log.i("before ", "getting tag location looking for " + tag_location_label);
   		cmd = String.format("select id_location_table.id_locationid, id_location_table.id_location_abbrev from id_location_table " +
 			"where id_location_abbrev='%s'", tag_location_label);
@@ -1437,45 +1424,117 @@ public class AddLamb extends Activity {
    		tag_location_label = dbh.getStr(1);
   		Log.i("New Location ", tag_location_label);
   		
-  		Log.i("Before tag ", "Before creating the tag table layout");
-  		TableLayout tl;
-  		TableRow tr;
-  		tl = (TableLayout) findViewById(R.id.tag_table);
-  		tr = new TableRow (this);
+  		//	Need to test if the type is an ear tag and the location is not an ear then must request change
+  		switch (new_tag_type){		
+		case 1:
+		case 2:
+		case 4:		
+		case 6:
+		case 7:
+			// Tag Type is Federal, Electronic, Farm, Split or Notch so require an ear location
+			switch (new_tag_location){
+			case 1:
+			case 2:
+				// Ear locations so ok
+				tagok = true;
+				break;
+			case 3:
+			case 4:
+			case 5:
+				// flank or side not allowed for tags, split or notches
+				tagok = false;
+		  		break;
+			}
+			break;
+		case 3:
+			// paint brand only location allowed is side
+			switch (new_tag_location){
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				// Ear and flank locations not allowed
+				tagok = false;
+		  		break;
+			case 5:
+				// side so ok
+				tagok = true;
+		  		break;
+			}
+			break;
+		case 5:
+			// tattoo so all except side
+			switch (new_tag_location){
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				// Ear and flank locations ok
+				tagok = true;
+		  		break;
+			case 5:
+				// side not allowed
+				tagok = false;
+		  		break;
+			}
+			break;
+  		}
+  		if (tagok) {
+  			// all tag data is ok so can put in the table
+  	  		Log.i("Before tag ", "Before creating the tag table layout");
+  	  		TableLayout tl;
+  	  		TableRow tr;
+  	  		tl = (TableLayout) findViewById(R.id.tag_table);
+  	  		tr = new TableRow (this);
 
-  		TV = new TextView(this);
-   		TV.setText (new_tag_number);
-   		TV.setWidth(200);
-   		tr.addView(TV);
+  	  		TV = new TextView(this);
+  	   		TV.setText (new_tag_number);
+  	   		TV.setWidth(200);
+  	   		tr.addView(TV);
 
-   		Log.i("Before ", "setting next text view TV2");  		
-   		TV = new TextView(this);
-  		TV.setText (tag_color_label);
-  		TV.setWidth(75);
-  		tr.addView(TV); 		
- 
-   		TV = new TextView(this);
-   		TV.setText (tag_location_label);
-   		TV.setWidth(50);
-  		tr.addView(TV);
+  	   		Log.i("Before ", "setting next text view TV2");  		
+  	   		TV = new TextView(this);
+  	  		TV.setText (tag_color_label);
+  	  		TV.setWidth(75);
+  	  		tr.addView(TV); 		
+  	 
+  	   		TV = new TextView(this);
+  	   		TV.setText (tag_location_label);
+  	   		TV.setWidth(50);
+  	  		tr.addView(TV);
 
-  		TV = new TextView(this);
-  		TV.setText (tag_type_label); 
-  		TV.setWidth(90);
-  		tr.addView(TV);
- 
-  		tl.addView(tr);
-  		Log.i("after tag ", "after creating the tag table layout");
-  		
-      	//	Clear out the add tag section    	
-      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
-      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
-      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
-      	TV  = (TextView) findViewById( R.id.new_tag_number);
-      	tag_type_spinner2.setSelection(1);
-      	tag_color_spinner.setSelection(5);
-      	tag_location_spinner.setSelection(2);
-      	TV.setText( "" );
+  	  		TV = new TextView(this);
+  	  		TV.setText (tag_type_label); 
+  	  		TV.setWidth(90);
+  	  		tr.addView(TV);
+  	 
+  	  		tl.addView(tr);
+  	  		Log.i("after tag ", "after creating the tag table layout");
+  	      	//	Clear out the add tag section by making the values the defaults for a federal tag  	
+  	      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
+  	      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
+  	      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
+  	      	TV  = (TextView) findViewById( R.id.new_tag_number);
+  	      	tag_type_spinner2.setSelection(1);
+  	      	tag_color_spinner.setSelection(5);
+  	      	tag_location_spinner.setSelection(2);
+  	      	TV.setText( "" );
+  		}else{
+  			//	bad tag location to ask for a new one
+	  		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+	  		builder.setMessage( R.string.wrong_id_location )
+	  	           .setTitle( R.string.enter_tag_data );
+	  		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+	  	           public void onClick(DialogInterface dialog, int idx) {
+	  	               // User clicked OK button 
+	   	    		   return;
+	  	               }
+	  	       });		
+	  		AlertDialog dialog = builder.create();
+	  		dialog.show();
+  			
+  		}
+  	
       	}
    	}
 }
