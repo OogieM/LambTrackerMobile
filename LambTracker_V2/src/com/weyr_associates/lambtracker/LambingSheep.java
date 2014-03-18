@@ -36,7 +36,6 @@ import android.database.sqlite.SQLiteException;
 
 public class LambingSheep extends ListActivity
 {
-
 		private DatabaseHandler dbh;
 		int             id;
 		String 			logmessages;
@@ -319,7 +318,7 @@ public class LambingSheep extends ListActivity
 		        	dbh.exec( cmd );
 		        	dbh.moveToFirstRecord();
 		        	if( dbh.getSize() == 0 )
-			    		{ // no sheep with that  tag in the database so clear out and return
+			    		{ // no sheep with that tag in the database so clear out and return
 			    		clearBtn( v );
 			    		TV = (TextView) findViewById( R.id.sheepnameText );
 			        	TV.setText( "Cannot find this sheep." );
@@ -546,7 +545,6 @@ public class LambingSheep extends ListActivity
 	    			clearBtn( null );
 	            	TV = (TextView) findViewById( R.id.sheepnameText );
 	                TV.setText( "Sheep Database does not exist." ); 
-	                
 	        	}
 		}
 		// TODO
@@ -557,34 +555,31 @@ public class LambingSheep extends ListActivity
 			Object crsr, crsr2, crsr3, crsr4, crsr5;
 			TextView TV;
 			String 	lambingdate ;
-			String 	dbfile = getString(R.string.real_database_file) ;
-	        Log.i("LookUpSheep", " after get database file");
-	    	dbh = new DatabaseHandler( this, dbfile );
 			Log.i("in resume", " of lambing sheep");
+			TV = (TextView) findViewById( R.id.lamb01nameText );
+			TV.setText( "" );
+			TV = (TextView) findViewById( R.id.lamb01sexText );
+			TV.setText( "" );
+			TV = (TextView) findViewById( R.id.lamb02nameText );
+			TV.setText( "" );
+			TV = (TextView) findViewById( R.id.lamb02sexText );
+			TV.setText( "" );
+			TV = (TextView) findViewById( R.id.lamb03nameText );
+			TV.setText( "" );
+			TV = (TextView) findViewById( R.id.lamb03sexText );
+			TV.setText( "" );
 	    	//	empty the lamb records
 	    	lamb01_id = 0;
 	    	lamb02_id = 0;
 	    	lamb03_id = 0;
+	    	Log.i("in resume", " before get listviews of all lists");
 	    	ListView historylist = (ListView) findViewById(R.id.list2);
 	    	ListView lambtags01 = (ListView) findViewById(R.id.list3);
 	    	ListView lambtags02 = (ListView) findViewById(R.id.list4);
 	    	ListView lambtags03 = (ListView) findViewById(R.id.list5);
 	    	Log.i("in resume", " after get listviews of all lists");
-//		try {
-//			myadapter3.changeCursor(null);
-//		} catch (Exception e) {
-//			// In this case there is no adapter so do nothing
-//		}
-//		try {
-//			myadapter4.changeCursor(null);
-//		} catch (Exception e) {
-//			// In this case there is no adapter so do nothing
-//		}
-//		try {
-//			myadapter5.changeCursor(null);
-//		} catch (Exception e) {
-//			// In this case there is no adapter so do nothing
-//		}
+	    //	Need to clear out the old lamb ID date but can't figure out how to do that at all
+	    	
 		Log.i("inResume", " before get lamb history for this ewe");	
 //		Add display the lambing history for this ewe here					
 		cmd = String.format( "select lambing_history_table.lambing_historyid as _id, lambing_history_table.lambing_date, " +
@@ -617,9 +612,7 @@ public class LambingSheep extends ListActivity
 			Log.i("lookForSheep", " after set myadapter2");
 			historylist.setAdapter(myadapter2);
 			};
-//TODO		
 		// Add display current year lambs here if there are any
-			
 			// First lamb
 			cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
     				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
@@ -641,8 +634,7 @@ public class LambingSheep extends ListActivity
 //			nrCols   = colNames.length;
 			cursor3.moveToFirst();				
 			if (nRecs > 0) {
-				// put the lamb name up and perhaps the lamb's sex
-				// lambs name is dbh.getStr (0)
+				// put the lamb name up and the lamb's sex
 				Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
 				Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
 				TV = (TextView) findViewById( R.id.lamb01nameText );
@@ -679,8 +671,7 @@ public class LambingSheep extends ListActivity
 //			nrCols   = colNames.length;
 			cursor4.moveToFirst();				
 			if (nRecs > 0) {
-				// put the lamb name up and perhaps the lamb's sex
-				// lambs name is dbh.getStr (0)
+				// put the lamb name up and the lamb's sex
 				Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
 				Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
 				TV = (TextView) findViewById( R.id.lamb02nameText );
@@ -712,12 +703,9 @@ public class LambingSheep extends ListActivity
     		startManagingCursor(cursor5);
 			nRecs    = cursor5.getCount();
 			Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
-//			colNames = cursor3.getColumnNames();
-//			nrCols   = colNames.length;
 			cursor5.moveToFirst();				
 			if (nRecs > 0) {
-				// put the lamb name up and perhaps the lamb's sex
-				// lambs name is dbh.getStr (0)
+				// put the lamb name up and the lamb's sex
 				Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
 				Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
 				TV = (TextView) findViewById( R.id.lamb03nameText );
@@ -786,8 +774,7 @@ public class LambingSheep extends ListActivity
 		           .setTitle( R.string.help_warning );
 			builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int idx) {
-		               // User clicked OK button 
-		        	  
+		               // User clicked OK button 		        	  
 		    		   clearBtn( null );
 		               }
 		       });		
