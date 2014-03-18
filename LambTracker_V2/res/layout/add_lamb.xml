@@ -150,7 +150,7 @@
        		android:rowCount="3">
         
            <TextView
-            android:layout_width="100dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"     
             android:layout_gravity="left"
             android:layout_column="0"
@@ -171,7 +171,7 @@
 			</TextView>
             
   			<TextView
-        	android:layout_width="100dp"
+        	android:layout_width="50dp"
        	 	android:layout_height="wrap_content"
         	android:layout_column="2"
             android:layout_gravity="left"
@@ -181,7 +181,7 @@
         
         <TextView
         	android:id="@+id/damName"
-        	android:layout_width="100dp"
+        	android:layout_width="150dp"
        	 	android:layout_height="wrap_content"
            	android:layout_column="3"
             android:layout_gravity="left"

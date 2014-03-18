@@ -46,7 +46,7 @@ public class LambingSheep extends ListActivity
 		public String 	tag_type_label, tag_color_label, tag_location_label, eid_tag_color_label ;
 		public String 	eid_tag_location_label, eidText, alert_text;
 		public Cursor 	cursor, cursor2, cursor3, cursor4, cursor5;
-
+		public Object 	crsr, crsr2, crsr3, crsr4, crsr5;
 		public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
 		public List<String> tag_types, tag_locations, tag_colors;
 		
@@ -233,7 +233,7 @@ public class LambingSheep extends ListActivity
 	        String 	dbfile = getString(R.string.real_database_file) ;
 	        Log.i("LookUpSheep", " after get database file");
 	    	dbh = new DatabaseHandler( this, dbfile );
-	    	Object crsr;
+//	    	Object crsr;
 	    	int     nrCols;
 //			Added the variable definitions here    	
 	      	String          cmd;
@@ -282,7 +282,7 @@ public class LambingSheep extends ListActivity
 		
 		public void lookForSheep (View v){
 			int 	lamb01_id, lamb02_id, lamb03_id;
-			Object crsr, crsr2, crsr3, crsr4, crsr5;
+//			Object crsr, crsr2, crsr3, crsr4, crsr5;
 			Boolean exists;
 			TextView TV;
 			String 	lambingdate ;
@@ -395,8 +395,6 @@ public class LambingSheep extends ListActivity
 		    		startManagingCursor(cursor2);
 					nRecs    = cursor2.getCount();
 					Log.i("lookForSheep", " nRecs is " + String.valueOf(nRecs));
-//					colNames = cursor2.getColumnNames();
-//					nrCols   = colNames.length;					
 					cursor2.moveToFirst();	
 					if (nRecs > 0) {
 						lambingdate = dbh.getStr(1);
@@ -550,9 +548,11 @@ public class LambingSheep extends ListActivity
 		// TODO
 		@Override
 		public void onResume (){
+			Log.i("Start resume", " of lambing sheep");
 			super.onResume();
+			Log.i("after ", "super onResume of lambing sheep");
 			int 	lamb01_id, lamb02_id, lamb03_id;
-			Object crsr, crsr2, crsr3, crsr4, crsr5;
+//			Object crsr, crsr2, crsr3, crsr4, crsr5;
 			TextView TV;
 			String 	lambingdate ;
 			Log.i("in resume", " of lambing sheep");
@@ -569,6 +569,27 @@ public class LambingSheep extends ListActivity
 			TV = (TextView) findViewById( R.id.lamb03sexText );
 			TV.setText( "" );
 	    	//	empty the lamb records
+			try {
+				Log.i("lambing resume", " before set myadapter3 first lamb tags to null");
+				myadapter3.changeCursor(null);
+			} catch (Exception e) {
+				// In this case there is no adapter so do nothing
+				Log.i("lambing resume", " exception setting myadapter3 first lamb tags to null");
+			}
+			try {
+				Log.i("lambing resume", " before set myadapter4 second lamb tags to null");
+				myadapter4.changeCursor(null);
+			} catch (Exception e) {
+				// In this case there is no adapter so do nothing
+				Log.i("lambing resume", " exception setting myadapter4 second lamb tags to null");
+			}
+			try {
+				Log.i("lambing resume", " before set myadapter5 third lamb tags to null");
+				myadapter5.changeCursor(null);
+			} catch (Exception e) {
+				// In this case there is no adapter so do nothing
+				Log.i("lambing resume", " exception setting myadapter5 third lamb tags to null");
+			}
 	    	lamb01_id = 0;
 	    	lamb02_id = 0;
 	    	lamb03_id = 0;
@@ -832,33 +853,41 @@ public class LambingSheep extends ListActivity
 			TV.setText( "" );
 			//	Need to clear out the rest of the tags here but only if we've actually looked for tags.
 			try {
+				Log.i("lambing clrbtn", " before set ewe tags to null");
 				myadapter.changeCursor(null);
 			} catch (Exception e) {
 				// In this case there is no adapter so do nothing
+				Log.i("lambing clrbtn", " exception setting ewe tags to null");
 			}	
 			try {
+				Log.i("lambing clrbtn", " before set lambing history to null");
 				myadapter2.changeCursor(null);
 			} catch (Exception e) {
 				// In this case there is no adapter so do nothing
+				Log.i("lambing clrbtn", " exception setting lambing history to null");
 			}
 			try {
+				Log.i("lambing clrbtn", " before set myadapter3 first lamb tags to null");
 				myadapter3.changeCursor(null);
 			} catch (Exception e) {
 				// In this case there is no adapter so do nothing
+				Log.i("lambing clrbtn", " exception setting myadapter3 first lamb tags to null");
 			}
 			try {
+				Log.i("lambing clrbtn", " before set myadapter4 second lamb tags to null");
 				myadapter4.changeCursor(null);
 			} catch (Exception e) {
 				// In this case there is no adapter so do nothing
+				Log.i("lambing clrbtn", " exception setting myadapter4 second lamb tags to null");
 			}
 			try {
+				Log.i("lambing clrbtn", " before set myadapter5 third lamb tags to null");
 				myadapter5.changeCursor(null);
 			} catch (Exception e) {
 				// In this case there is no adapter so do nothing
-			}
-			
-	    }   
-	    
+				Log.i("lambing clrbtn", " exception setting myadapter5 third lamb tags to null");
+			}			
+	    }   	    
 }
 
 	

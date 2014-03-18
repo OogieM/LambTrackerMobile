@@ -1193,7 +1193,7 @@ public class AddLamb extends Activity {
 		stopService(new Intent(AddLamb.this, eidService.class)); 
 		Log.i("in add lamb", " in back btn after stop EID service");
 		clearBtn( null );
-		// Added this to close the database if we go back to the main activity  	
+		// Added this to close the database if we go back to the lambing activity  	
     	stopManagingCursor (cursor);
     	cursor.close();
 //    	Log.i("in add lamb", " in back btn after close cursor");
