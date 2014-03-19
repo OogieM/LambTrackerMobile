@@ -1,6 +1,7 @@
 package com.weyr_associates.lambtracker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import android.app.ListActivity;
 import android.widget.ArrayAdapter;
@@ -21,9 +22,11 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -896,7 +899,86 @@ public class LambingSheep extends ListActivity
 				// In this case there is no adapter so do nothing
 				Log.i("lambing clrbtn", " exception setting myadapter5 third lamb tags to null");
 			}			
-	    }   	    
+	    }  
+	    public void takeNote( View v )
+	    {
+	    	final Context context = this;
+	    	//Implement take a note stuff here
+	    	if (thissheep_id == 0) {
+	    		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
+	    	}
+	    	else {
+	    		Log.i ("takeNote", " got a sheep, need to get a note to add");
+	    		
+	    		LayoutInflater li = LayoutInflater.from(context);
+				View promptsView = li.inflate(R.layout.note_prompt, null);
+
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+						context);
+
+				// set prompts.xml to alertdialog builder
+				alertDialogBuilder.setView(promptsView);
+
+				final EditText userInput = (EditText) promptsView
+						.findViewById(R.id.note_text);
+
+				// set dialog message
+				alertDialogBuilder
+					.setCancelable(false)
+					.setPositiveButton("Save Note",
+					  new DialogInterface.OnClickListener() {
+					    public void onClick(DialogInterface dialog,int id) {
+						// get user input and set it to result
+						// edit text
+						String note_text = String.valueOf(userInput.getText());
+						cmd = String.format("insert into note_table (sheep_id, note_text, note_date) " +
+		    					"values ( %s, '%s', '%s' )", thissheep_id, note_text, TodayIs());
+		    			Log.i("update notes ", "before cmd " + cmd);
+		    			dbh.exec( cmd );	
+		    			Log.i("update notes ", "after cmd exec");
+					    }
+					  })
+					.setNegativeButton("Cancel",
+					  new DialogInterface.OnClickListener() {
+					    public void onClick(DialogInterface dialog,int id) {
+						dialog.cancel();
+					    }
+					  });
+
+				// create alert dialog
+				AlertDialog alertDialog = alertDialogBuilder.create();
+
+				// show it
+				alertDialog.show();
+	    	}   	
+	    }
+		   private String TodayIs() {
+				Calendar calendar = Calendar.getInstance();
+				int day = calendar.get(Calendar.DAY_OF_MONTH);
+				int month = calendar.get(Calendar.MONTH);
+				int year = calendar.get(Calendar.YEAR);
+				  
+				return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
+			}
+		    private String Make2Digits(int i) {
+				if (i < 10) {
+					return "0" + i;
+				} else {
+					return Integer.toString(i);
+				}
+			}	
+			   private String TimeIs() {
+					Calendar calendar = Calendar.getInstance();
+			        //12 hour format
+//					int hour = cal.get(Calendar.HOUR);
+			        //24 hour format
+					int hourofday = calendar.get(Calendar.HOUR_OF_DAY);
+					int minute = calendar.get(Calendar.MINUTE);
+					int second = calendar.get(Calendar.SECOND);
+					  
+					return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
+				}
+
 }
 
 	
