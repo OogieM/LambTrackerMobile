@@ -706,6 +706,9 @@ public class LambingSheep extends ListActivity
 		        int[] toViews4 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
 				myadapter4 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns4, toViews4, 0);
 				lambtags02.setAdapter(myadapter4);	
+			}else {
+				//	Clear out the id data for lamb02 in the ewe lambing display
+				lambtags02.setAdapter(null);
 			}
 			// third lamb
 			cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
@@ -740,6 +743,9 @@ public class LambingSheep extends ListActivity
 		        int[] toViews5 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
 				myadapter5 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns5, toViews5, 0);
 				lambtags03.setAdapter(myadapter5);	
+			}else {
+				//	Clear out the id data for lamb03 in the ewe lambing display
+				lambtags03.setAdapter(null);
 			}
 		}
 		public void addLamb (View v){
