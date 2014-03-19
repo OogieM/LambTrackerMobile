@@ -569,27 +569,27 @@ public class LambingSheep extends ListActivity
 			TV = (TextView) findViewById( R.id.lamb03sexText );
 			TV.setText( "" );
 	    	//	empty the lamb records
-			try {
-				Log.i("lambing resume", " before set myadapter3 first lamb tags to null");
-				myadapter3.changeCursor(null);
-			} catch (Exception e) {
-				// In this case there is no adapter so do nothing
-				Log.i("lambing resume", " exception setting myadapter3 first lamb tags to null");
-			}
-			try {
-				Log.i("lambing resume", " before set myadapter4 second lamb tags to null");
-				myadapter4.changeCursor(null);
-			} catch (Exception e) {
-				// In this case there is no adapter so do nothing
-				Log.i("lambing resume", " exception setting myadapter4 second lamb tags to null");
-			}
-			try {
-				Log.i("lambing resume", " before set myadapter5 third lamb tags to null");
-				myadapter5.changeCursor(null);
-			} catch (Exception e) {
-				// In this case there is no adapter so do nothing
-				Log.i("lambing resume", " exception setting myadapter5 third lamb tags to null");
-			}
+//			try {
+//				Log.i("lambing resume", " before set myadapter3 first lamb tags to null");
+//				myadapter3.changeCursor(null);
+//			} catch (Exception e) {
+//				// In this case there is no adapter so do nothing
+//				Log.i("lambing resume", " exception setting myadapter3 first lamb tags to null");
+//			}
+//			try {
+//				Log.i("lambing resume", " before set myadapter4 second lamb tags to null");
+//				myadapter4.changeCursor(null);
+//			} catch (Exception e) {
+//				// In this case there is no adapter so do nothing
+//				Log.i("lambing resume", " exception setting myadapter4 second lamb tags to null");
+//			}
+//			try {
+//				Log.i("lambing resume", " before set myadapter5 third lamb tags to null");
+//				myadapter5.changeCursor(null);
+//			} catch (Exception e) {
+//				// In this case there is no adapter so do nothing
+//				Log.i("lambing resume", " exception setting myadapter5 third lamb tags to null");
+//			}
 	    	lamb01_id = 0;
 	    	lamb02_id = 0;
 	    	lamb03_id = 0;
@@ -599,7 +599,6 @@ public class LambingSheep extends ListActivity
 	    	ListView lambtags02 = (ListView) findViewById(R.id.list4);
 	    	ListView lambtags03 = (ListView) findViewById(R.id.list5);
 	    	Log.i("in resume", " after get listviews of all lists");
-	    //	Need to clear out the old lamb ID date but can't figure out how to do that at all
 	    	
 		Log.i("inResume", " before get lamb history for this ewe");	
 //		Add display the lambing history for this ewe here					
@@ -630,6 +629,7 @@ public class LambingSheep extends ListActivity
 			int[] toViews2 = new int[] { R.id.lambing_date, R.id.lambing_notes};
 			Log.i("lookForSheep", " after set integer array second time");
 			myadapter2 = new SimpleCursorAdapter(this, R.layout.list_entry2, cursor2 ,fromColumns2, toViews2, 0);
+//			myadapter2 = new SimpleCursorAdapter(this, R.layout.list_entry2, cursor2 ,fromColumns2, toViews2, 0);
 			Log.i("lookForSheep", " after set myadapter2");
 			historylist.setAdapter(myadapter2);
 			};
