@@ -222,7 +222,8 @@ public class ConvertToEID extends Activity {
 		CheckIfServiceIsRunning();
 		Log.i("Convert", "back from isRunning");  	
 ////////////////////////////////////    	
-    	   	
+    	 
+		thissheep_id = 0;
     	//	make the remove tag buttons red
 		Log.i("onCreate", " before setting remove tag buttons red");
     	btn = (Button) findViewById( R.id.remove_fedtag_btn );
@@ -272,7 +273,6 @@ public class ConvertToEID extends Activity {
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		tag_types.add(cursor.getString(1));
     	}
-//    	cursor.close();    	
     	
     	// Creating adapter for spinner
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);

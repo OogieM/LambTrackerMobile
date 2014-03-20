@@ -246,7 +246,7 @@ public class LambingSheep extends ListActivity
 			CheckIfServiceIsRunning();
 			Log.i("Convert", "back from isRunning");  	
 			////////////////////////////////////    	
-			
+			thissheep_id = 0;
 	     	// Fill the Tag Type Spinner
 	     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
 	    	tag_types = new ArrayList<String>();      	

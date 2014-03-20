@@ -239,6 +239,8 @@ public class LookUpSheep extends ListActivity
 		Log.i("Convert", "back from isRunning");  	
 		////////////////////////////////////    	
 		
+		thissheep_id = 0;
+		
      	// Fill the Tag Type Spinner
      	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
     	tag_types = new ArrayList<String>();      	
@@ -253,7 +255,6 @@ public class LookUpSheep extends ListActivity
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		tag_types.add(cursor.getString(1));
     	}
-//    	cursor.close();    	
     	
     	// Creating adapter for spinner
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
@@ -456,13 +457,15 @@ public class LookUpSheep extends ListActivity
 	    {
     	doUnbindService();
 		stopService(new Intent(LookUpSheep.this, eidService.class));   	
-    	// Added this to close the database if we go back to the main activity  	
-    	stopManagingCursor (cursor);
-    	stopManagingCursor (cursor2);
-    	stopManagingCursor (cursor3);
-    	cursor3.close();
-    	cursor.close();
-    	cursor2.close();
+    	// Added this to close the database if we go back to the main activity  
+		stopManagingCursor (cursor);
+		cursor.close();
+		if (thissheep_id != 0){
+	    	stopManagingCursor (cursor2);
+	    	stopManagingCursor (cursor3);
+	    	cursor3.close();
+	    	cursor2.close();
+		}
     	dbh.closeDB();
     	clearBtn( null );
     	//Go back to main

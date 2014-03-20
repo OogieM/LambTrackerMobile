@@ -51,6 +51,7 @@
     <string name="create_evaluation_task_btn">Create Evaluation</string>
     <string name="look_up_sheep_btn">Look Up Sheep</string>
     <string name="add_lamb_btn">Add a Lamb</string> 
+    <string name="print_label_btn">Print Label</string>
    
     <string name="load_sheeplist">Load Sheep Database</string>
     <string name="do_sheeptask">Do Sheep Tasks</string>
@@ -70,8 +71,9 @@
     <string name="title_activity_test_interface_designs">Test Interface Designs</string>
     <string name="title_activity_create_sheep_evaluation">Create Evaluation Task</string>
     <string name="title_activity_lambing_sheep">Lambing Sheep</string>
-     <string name="title_activity_add_lamb">Add a Lamb</string>
-    
+    <string name="title_activity_add_lamb">Add a Lamb</string>
+    <string name="title_activity_print_labels">Print Labels</string>
+
     <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
     <string name="help_convert">Select a sheep based on either Federal or Farm tag. The system assumes there are no duplicate
@@ -90,6 +92,7 @@
    	    here to collect data on the birth. </string>   	    
     <string name="help_add_lamb">Add the information on this lamb. Be sure to put the first lamb born in first and the second lamb 
          born in second.  </string>    	    
+    <string name="help_print">This prints a single label with the EID as a bar code and the name of the sheep on it.  </string>
     
     <string name="convert_fill_fields">Please Fill in all four fields.</string>
     <string name="add_lamb_fill_fields">Please Fill in a Lambease value.</string>
