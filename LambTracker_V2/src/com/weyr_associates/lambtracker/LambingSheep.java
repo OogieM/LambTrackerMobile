@@ -212,7 +212,6 @@ public class LambingSheep extends ListActivity
 
 		public void gotEID( )
 		{		
-//			View v = null;
 			//	make the scan eid button red
 			btn = (Button) findViewById( R.id.scan_eid_btn );
 			btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -236,12 +235,10 @@ public class LambingSheep extends ListActivity
 	        String 	dbfile = getString(R.string.real_database_file) ;
 	        Log.i("LookUpSheep", " after get database file");
 	    	dbh = new DatabaseHandler( this, dbfile );
-//	    	Object crsr;
-	    	int     nrCols;
 //			Added the variable definitions here    	
 	      	String          cmd;
-	      	String 			results, results2;
-	    	Boolean			exists;
+//	      	String 			results, results2;
+//	    	Boolean			exists;
 
 	    	 //////////////////////////////////// 
 			CheckIfServiceIsRunning();
@@ -285,7 +282,6 @@ public class LambingSheep extends ListActivity
 		
 		public void lookForSheep (View v){
 			int 	lamb01_id, lamb02_id, lamb03_id;
-//			Object crsr, crsr2, crsr3, crsr4, crsr5;
 			Boolean exists;
 			TextView TV;
 			String 	lambingdate ;
@@ -456,6 +452,9 @@ public class LambingSheep extends ListActivity
 					        int[] toViews3 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
 							myadapter3 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor3 ,fromColumns3, toViews3, 0);
 							lambtags01.setAdapter(myadapter3);	
+						}else {
+							//	Clear out the id data for lamb01 in the ewe lambing display 	
+							lambtags01.setAdapter(null);
 						}
 						// second lamb
 						cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
@@ -493,6 +492,9 @@ public class LambingSheep extends ListActivity
 					        int[] toViews4 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
 							myadapter4 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns4, toViews4, 0);
 							lambtags02.setAdapter(myadapter4);	
+						}else {
+							//	Clear out the id data for lamb02 in the ewe lambing display 	
+							lambtags02.setAdapter(null);
 						}
 						// third lamb
 						cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
@@ -530,6 +532,9 @@ public class LambingSheep extends ListActivity
 					        int[] toViews5 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
 							myadapter5 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns5, toViews5, 0);
 							lambtags03.setAdapter(myadapter5);	
+						}else {
+							//	Clear out the id data for lamb03 in the ewe lambing display 	
+							lambtags03.setAdapter(null);
 						}
 					//	Now to test of the sheep has an alert and if so then display the alert
 					if (alert_text != null && !alert_text.isEmpty()){
@@ -571,28 +576,6 @@ public class LambingSheep extends ListActivity
 			TV.setText( "" );
 			TV = (TextView) findViewById( R.id.lamb03sexText );
 			TV.setText( "" );
-	    	//	empty the lamb records
-//			try {
-//				Log.i("lambing resume", " before set myadapter3 first lamb tags to null");
-//				myadapter3.changeCursor(null);
-//			} catch (Exception e) {
-//				// In this case there is no adapter so do nothing
-//				Log.i("lambing resume", " exception setting myadapter3 first lamb tags to null");
-//			}
-//			try {
-//				Log.i("lambing resume", " before set myadapter4 second lamb tags to null");
-//				myadapter4.changeCursor(null);
-//			} catch (Exception e) {
-//				// In this case there is no adapter so do nothing
-//				Log.i("lambing resume", " exception setting myadapter4 second lamb tags to null");
-//			}
-//			try {
-//				Log.i("lambing resume", " before set myadapter5 third lamb tags to null");
-//				myadapter5.changeCursor(null);
-//			} catch (Exception e) {
-//				// In this case there is no adapter so do nothing
-//				Log.i("lambing resume", " exception setting myadapter5 third lamb tags to null");
-//			}
 	    	lamb01_id = 0;
 	    	lamb02_id = 0;
 	    	lamb03_id = 0;
@@ -616,8 +599,6 @@ public class LambingSheep extends ListActivity
 		startManagingCursor(cursor2);
 		nRecs    = cursor2.getCount();
 		Log.i("inResume", " nRecs is " + String.valueOf(nRecs));
-//		colNames = cursor2.getColumnNames();
-//		nrCols   = colNames.length;					
 		cursor2.moveToFirst();	
 		if (nRecs > 0) {
 			lambingdate = dbh.getStr(1);			
@@ -674,7 +655,7 @@ public class LambingSheep extends ListActivity
 				myadapter3 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor3 ,fromColumns3, toViews3, 0);
 				lambtags01.setAdapter(myadapter3);	
 			}else {
-				//	Clear out the id data for lamb02 in the ewe lambing display 	
+				//	Clear out the id data for lamb01 in the ewe lambing display 	
 				lambtags01.setAdapter(null);
 			}
 			// second lamb
@@ -913,8 +894,7 @@ public class LambingSheep extends ListActivity
 	    		LayoutInflater li = LayoutInflater.from(context);
 				View promptsView = li.inflate(R.layout.note_prompt, null);
 
-				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-						context);
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
 				// set prompts.xml to alertdialog builder
 				alertDialogBuilder.setView(promptsView);
@@ -931,8 +911,10 @@ public class LambingSheep extends ListActivity
 						// get user input and set it to result
 						// edit text
 						String note_text = String.valueOf(userInput.getText());
-						cmd = String.format("insert into note_table (sheep_id, note_text, note_date) " +
-		    					"values ( %s, '%s', '%s' )", thissheep_id, note_text, TodayIs());
+						//	Figure out how to handle id_predefinednotesid from a spinner here as an option
+						
+						cmd = String.format("insert into note_table (sheep_id, note_text, note_date, note_time) " +
+		    					"values ( %s, '%s', '%s', '%s' )", thissheep_id, note_text, TodayIs(), TimeIs());
 		    			Log.i("update notes ", "before cmd " + cmd);
 		    			dbh.exec( cmd );	
 		    			Log.i("update notes ", "after cmd exec");
