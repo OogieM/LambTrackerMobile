@@ -291,7 +291,7 @@ public class ConvertToEID extends Activity {
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		tag_colors.add(cursor.getString(2));
     	}
-//    	cursor.close();
+
     	// Creating adapter for spinner
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_colors);
     	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -867,7 +867,6 @@ public class ConvertToEID extends Activity {
 	    clearBtn( v );
 	    }
     public void addNewTag( View v ){
- //   	String temp;
     	Object crsr;
     	
        	btn = (Button) findViewById( R.id.update_display_btn );

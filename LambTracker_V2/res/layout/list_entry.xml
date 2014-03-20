@@ -8,21 +8,21 @@
         android:id="@+id/tag_number"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:textSize="14sp" />
   	<TextView
         android:id="@+id/tag_color_name"
         android:layout_width="85dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:textSize="14sp" />
   	<TextView
         android:id="@+id/id_location_abbrev"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:textSize="14sp" />
   	<TextView
         android:id="@+id/idtype_name"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:textSize="14sp" />
        
 </LinearLayout>

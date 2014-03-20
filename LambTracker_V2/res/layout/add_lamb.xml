@@ -146,11 +146,11 @@
         	android:id="@+id/grid2"
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-        	android:columnCount="3"
+        	android:columnCount="4"
        		android:rowCount="3">
         
            <TextView
-            android:layout_width="205dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"     
             android:layout_gravity="left"
             android:layout_column="0"
@@ -160,20 +160,20 @@
            
            <TextView
             android:id="@+id/sireName"
-            android:layout_width="205dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:layout_column="0"
-            android:layout_row="1"
+            android:layout_column="1"
+            android:layout_row="0"
             android:enabled="true"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:typeface="monospace" >
 			</TextView>
             
   			<TextView
-        	android:layout_width="150dp"
+        	android:layout_width="50dp"
        	 	android:layout_height="wrap_content"
-        	android:layout_column="1"
+        	android:layout_column="2"
             android:layout_gravity="left"
             android:layout_row="0"
             android:inputType="none"
@@ -183,12 +183,11 @@
         	android:id="@+id/damName"
         	android:layout_width="150dp"
        	 	android:layout_height="wrap_content"
-           	android:layout_column="1"
+           	android:layout_column="3"
             android:layout_gravity="left"
-            android:layout_row="1"
-            android:ems="10"
-        	android:gravity="left"
-        	android:textSize="14sp"
+            android:layout_row="0"
+            android:enabled="true"
+        	android:textSize="18sp"
         	android:typeface="monospace" /> 
 </GridLayout>
 
@@ -198,27 +197,6 @@
 			android:layout_height="wrap_content"
         	android:columnCount="3"
        		android:rowCount="5">
-        	
-        <TextView
-        android:id="@+id/sheep_birth_type_lbl"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content"
-        android:layout_column="0"
-        android:layout_gravity="right|center"
-        android:layout_row="0"
-        android:textSize="18sp"
-        android:typeface="monospace" 
-        android:text="@string/sheep_birth_type_lbl"/>
-	   
-     <RadioGroup
-        android:id="@+id/radioBirthType"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:layout_gravity="left|center"
-        android:layout_row="0"
-        android:orientation="horizontal">
-  	</RadioGroup> 
   	
       	<TextView
         android:id="@+id/sheep_rear_type_lbl"
@@ -226,7 +204,7 @@
         android:layout_height="wrap_content"
        	android:layout_column="0"
         android:layout_gravity="right|center"
-        android:layout_row="1"
+        android:layout_row="0"
         android:textSize="18sp"
         android:typeface="monospace" 
         android:text="@string/sheep_rear_type_lbl"/>
@@ -237,33 +215,39 @@
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:layout_gravity="left|center"
-        android:layout_row="1"
+        android:layout_row="0"
         android:orientation="horizontal">
   	</RadioGroup>
-  	
+  	</GridLayout>
+  	<GridLayout 
+        	android:id="@+id/grid4"
+	        android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+        	android:columnCount="2"
+       		android:rowCount="2">
      <TextView
          android:id="@+id/sheep_sex_lbl"
-         android:layout_width="125dp"
+         android:layout_width="50dp"
          android:layout_height="wrap_content"
          android:layout_column="0"
-         android:layout_gravity="right"
-         android:layout_row="2"
+         android:layout_gravity="right|center"
+         android:layout_row="0"
          android:text="@string/sheep_sex_lbl"
          android:textSize="18sp"
          android:typeface="monospace" />
         
        	<RadioGroup
         android:id="@+id/radioGroupSex"
-        android:layout_width="250dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:layout_gravity="left|center"
-        android:layout_row="2"
+        android:layout_row="0"
         android:orientation="horizontal">
   	</RadioGroup> 
   	</GridLayout>
   	<GridLayout 
-        	android:id="@+id/grid4"
+        	android:id="@+id/grid5"
 	        android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
         	android:columnCount="4"
@@ -317,7 +301,7 @@
 	</RelativeLayout>
      		
 		<GridLayout
-	        android:id="@+id/grid5"
+	        android:id="@+id/grid6"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:columnCount="5">   	    
@@ -360,12 +344,76 @@
         
      	</GridLayout>
     	    
-       <ListView 
-			android:id="@+id/android:list" 
-	  		android:layout_height="100dp"
+       <TableLayout 
+			android:id="@+id/tag_table"
+	  		android:layout_height="70dp"
 	  		android:layout_width="fill_parent">
-		</ListView>
-			
+		</TableLayout>
+<GridLayout
+        android:id="@+id/grid7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="4"
+        android:rowCount="2" >
+      
+  <Spinner
+        android:id="@+id/tag_type_spinner2"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_gravity="left"
+        android:layout_row="0"
+        android:textSize="18sp" />
+  <Spinner
+  	  android:id="@+id/tag_color_spinner"
+  	  android:layout_width="125dp"
+  	  android:layout_height="wrap_content"
+  	  android:layout_column="1"
+      android:layout_gravity="left"
+      android:layout_row="0"
+  	  android:textSize="18sp"/>
+  <Spinner
+  	  android:id="@+id/tag_location_spinner"
+  	  android:layout_width="90dp"
+  	  android:layout_height="wrap_content"
+  	  android:layout_column="2"
+      android:layout_gravity="left"
+      android:layout_row="0"
+  	  android:textSize="18sp"/>
+ 
+  </GridLayout>
+  <RelativeLayout
+    android:id="@+id/RelativeLayout03"
+    android:orientation="horizontal" 
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content">
+   <EditText
+            android:id="@+id/new_tag_number"
+            android:layout_width="205dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:enabled="true"
+            android:inputType="number"
+            android:textSize="14sp"
+            android:typeface="monospace" >
+           </EditText>
+	<TextView 
+	    	 android:id="@+id/new_tag_label"
+	    	 android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/new_tag_number"
+            android:inputType="none"
+            android:text="@string/new_tag_lbl"/>
+	<Button
+            android:id="@+id/update_display_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/new_tag_label"
+            android:onClick="updateTag"
+            android:text="@string/update_display_btn"
+            android:textSize="14sp" />
+</RelativeLayout>
+       			
 <RelativeLayout
     android:id="@+id/BottomButtonBar"
     android:orientation="horizontal" 

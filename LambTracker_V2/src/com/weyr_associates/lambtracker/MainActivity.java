@@ -75,9 +75,9 @@ public class MainActivity extends Activity {
 				LastEID = (b2.getString("info1"));
 //				We have a good whole EID number so send it to the LookUpSheep component	
 
-				if (!mIspaused)  {
-					lookUpSheep ();
-				}
+//				if (!mIspaused)  {
+//					lookUpSheep ();
+//				}
 				
 				break;			
 			case eidService.MSG_UPDATE_LOG_APPEND:
@@ -499,13 +499,6 @@ public class MainActivity extends Activity {
 		startActivity(listSheep);
 	    }
 
-	// set up a sheep task
-	public void doSheepTasks( View v )
-	    {
-		Intent workSheep = new Intent( this, DoSheepTask.class );
-		workSheep.putExtra("com.weyr_associates.lambtracker.LASTEID", LastEID);
-		startActivity(workSheep);
-		}
 
 	// use EID reader to look up a sheep
 	public void lookUpSheep( )
