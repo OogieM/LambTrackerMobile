@@ -36,6 +36,7 @@ public class ConvertToEID extends Activity {
 	private DatabaseHandler dbh;
 	int             fedtagid, farmtagid, eidtagid; // These are record IDs not sheep IDs
 	public Cursor 	cursor;
+	public Object 	crsr;
 	public int 		thissheep_id, new_tag_type, new_tag_color, new_tag_location;
 	
 	public Button btn;
@@ -43,7 +44,8 @@ public class ConvertToEID extends Activity {
 	public String eid_tag_location_label, eidText, alert_text;
 	public Spinner tag_type_spinner, tag_type_spinner2, tag_location_spinner, tag_color_spinner, eid_tag_color_spinner, eid_tag_location_spinner;
 	public List<String> tag_types, tag_locations, tag_colors;
-	
+	public Spinner predefined_note_spinner;
+	public List<String> predefined_notes;
 	ArrayAdapter<String> dataAdapter;
 	String     	cmd;
 	Integer 	i;
@@ -325,24 +327,54 @@ public class ConvertToEID extends Activity {
 	    }
     // user clicked the 'Take Note' button
     public void takeNote( View v )
-    {
+    {	    	
     	final Context context = this;
+		//	First fill the predefined note spinner with possibilities
+    	predefined_notes = new ArrayList<String>();
+		predefined_notes.add("Select a Predefined Note");
+//		Log.i ("takeNote", " after adding Select a Predefined Note");
+    	// Select All fields from predefined_notes_table to build the spinner
+        cmd = "select * from predefined_notes_table";
+//        Log.i ("takeNote", " cmd is " + cmd);
+        crsr = dbh.exec( cmd );  
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+         // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		predefined_notes.add(cursor.getString(1));
+//    		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
+    	}
+    	cursor.close();    
+    	Log.i ("takeNote", " after set the predefined note spinner ");
+    	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
     	//Implement take a note stuff here
     	if (thissheep_id == 0) {
     		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
     	}
     	else {
-    		Log.i ("takeNote", " got a sheep, need to get a note to add");
+//    		Log.i ("takeNote", " got a sheep, need to get a note to add");
+    		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+//    		Log.i ("takeNote", " after getting new alertdialogbuilder");
     		
     		LayoutInflater li = LayoutInflater.from(context);
 			View promptsView = li.inflate(R.layout.note_prompt, null);
+//			Log.i ("takeNote", " after inflating layout");	
 
-			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-					context);
-
-			// set prompts.xml to alertdialog builder
+			// set view note_prompt to alertdialog builder
 			alertDialogBuilder.setView(promptsView);
-
+			Log.i ("takeNote", " after setting view");
+		   	// Creating adapter for spinner
+	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, predefined_notes);
+//	    	Log.i ("takeNote", " after create new array adapter for the spinner ");
+	    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//	    	Log.i ("takeNote", " after set dropdown resource for the spinner ");
+	    	predefined_note_spinner = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner);
+//	    	Log.i ("takeNote", " after set promptsView for the spinner ");
+	    	predefined_note_spinner.setAdapter (dataAdapter);
+//			Log.i ("takeNote", " after set the adapter for the spinner ");
+			predefined_note_spinner.setSelection(0);
+//			Log.i ("takeNote", " after set spinner to location 0");
+			
 			final EditText userInput = (EditText) promptsView
 					.findViewById(R.id.note_text);
 
@@ -355,8 +387,11 @@ public class ConvertToEID extends Activity {
 					// get user input and set it to result
 					// edit text
 					String note_text = String.valueOf(userInput.getText());
-					cmd = String.format("insert into note_table (sheep_id, note_text, note_date) " +
-	    					"values ( %s, '%s', '%s' )", thissheep_id, note_text, TodayIs());
+					//	Get id_predefinednotesid from a spinner here 
+					int predefined_note = predefined_note_spinner.getSelectedItemPosition();
+					// Update the notes table with the data
+					cmd = String.format("insert into note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid) " +
+	    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note);
 	    			Log.i("update notes ", "before cmd " + cmd);
 	    			dbh.exec( cmd );	
 	    			Log.i("update notes ", "after cmd exec");
@@ -1059,5 +1094,16 @@ public class ConvertToEID extends Activity {
 			return false;
 	        		}
 	        	}
+	   private String TimeIs() {
+			Calendar calendar = Calendar.getInstance();
+	        //12 hour format
+//			int hour = cal.get(Calendar.HOUR);
+	        //24 hour format
+			int hourofday = calendar.get(Calendar.HOUR_OF_DAY);
+			int minute = calendar.get(Calendar.MINUTE);
+			int second = calendar.get(Calendar.SECOND);
+			  
+			return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
+		}
 
 }
