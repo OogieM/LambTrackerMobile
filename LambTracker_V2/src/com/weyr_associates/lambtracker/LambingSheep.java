@@ -239,8 +239,6 @@ public class LambingSheep extends ListActivity
 	    	dbh = new DatabaseHandler( this, dbfile );
 //			Added the variable definitions here    	
 	      	String          cmd;
-//	      	String 			results, results2;
-//	    	Boolean			exists;
 
 	    	 //////////////////////////////////// 
 			CheckIfServiceIsRunning();
@@ -966,32 +964,32 @@ public class LambingSheep extends ListActivity
 				alertDialog.show();
 	    	}   	
 	    }
-		   private String TodayIs() {
-				Calendar calendar = Calendar.getInstance();
-				int day = calendar.get(Calendar.DAY_OF_MONTH);
-				int month = calendar.get(Calendar.MONTH);
-				int year = calendar.get(Calendar.YEAR);
-				  
-				return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
-			}
-		    private String Make2Digits(int i) {
-				if (i < 10) {
-					return "0" + i;
-				} else {
-					return Integer.toString(i);
-				}
-			}	
-			   private String TimeIs() {
-					Calendar calendar = Calendar.getInstance();
-			        //12 hour format
+   private String TodayIs() {
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		int month = calendar.get(Calendar.MONTH);
+		int year = calendar.get(Calendar.YEAR);
+		  
+		return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
+	}
+    private String Make2Digits(int i) {
+		if (i < 10) {
+			return "0" + i;
+		} else {
+			return Integer.toString(i);
+		}
+	}	
+	   private String TimeIs() {
+			Calendar calendar = Calendar.getInstance();
+	        //12 hour format
 //					int hour = cal.get(Calendar.HOUR);
-			        //24 hour format
-					int hourofday = calendar.get(Calendar.HOUR_OF_DAY);
-					int minute = calendar.get(Calendar.MINUTE);
-					int second = calendar.get(Calendar.SECOND);
-					  
-					return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
-				}
+	        //24 hour format
+			int hourofday = calendar.get(Calendar.HOUR_OF_DAY);
+			int minute = calendar.get(Calendar.MINUTE);
+			int second = calendar.get(Calendar.SECOND);
+			  
+			return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
+		}
 
 }
 
