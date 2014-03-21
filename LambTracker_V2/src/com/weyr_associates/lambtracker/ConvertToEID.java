@@ -725,20 +725,20 @@ public class ConvertToEID extends Activity {
     	// Get the values from the UI screen
     	TextView TV = (TextView) findViewById( R.id.sheepnameText );
     	sheepnameText = TV.getText().toString();
-    	Log.i("update everything ", "sheep name " + sheepnameText);   	
-    	Log.i("update everything ", "sheep_id is " + String.valueOf(thissheep_id));   	
-    	Log.i("update everything ", "fed info record " + fedtagid);  
+//    	Log.i("update everything ", "sheep name " + sheepnameText);   	
+//    	Log.i("update everything ", "sheep_id is " + String.valueOf(thissheep_id));   	
+//    	Log.i("update everything ", "fed info record " + fedtagid);  
     	TV  = (TextView) findViewById( R.id.fedText );
 	    fedText = TV.getText().toString();
-	    Log.i("update everything ", "fed tag " + fedText);	    
-	    Log.i("update everything ", "farm info record " + farmtagid);
+//	    Log.i("update everything ", "fed tag " + fedText);	    
+//	    Log.i("update everything ", "farm info record " + farmtagid);
 	    TV  = (TextView) findViewById( R.id.farmText );
 	    farmText = TV.getText().toString();
-	    Log.i("update everything ", "farm tag " + farmText);	    	    
-	    Log.i("update everything ", "eid info record " + eidtagid);
+//	    Log.i("update everything ", "farm tag " + farmText);	    	    
+//	    Log.i("update everything ", "eid info record " + eidtagid);
 	    TV  = (TextView) findViewById( R.id.eidText );
 	    eidText = TV.getText().toString();	
-	    Log.i("update everything ", "EID Tag " + eidText);
+//	    Log.i("update everything ", "EID Tag " + eidText);
 	    
 	    if (eidText != null && !eidText.isEmpty()){
 	    	// Get the data from the EID tag section of the screen

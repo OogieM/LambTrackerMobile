@@ -30,10 +30,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 public class SheepManagement extends ListActivity {
@@ -58,8 +61,9 @@ public class SheepManagement extends ListActivity {
 	public List<String> wormers, vaccines;
 	public String[] this_sheeps_tags ;
 	public int drug_gone; // 0 = false 1 = true
-	public int	drug_type;
-	
+	public int	drug_type, which_wormer, which_vaccine;
+	public String mytoday, mytime;
+	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine;
 	private int             nRecs;
 	private int			    recNo;
 	private String[]        colNames;
@@ -250,6 +254,8 @@ public class SheepManagement extends ListActivity {
     	dbh = new DatabaseHandler( this, dbfile );
 //		Added the variable definitions here    	
       	String          cmd;
+      	mytoday = TodayIs(); 
+		mytime = TimeIs();
    	 //////////////////////////////////// 
 		CheckIfServiceIsRunning();
 		Log.i("SheepMgmt", "back from isRunning");  	
@@ -269,7 +275,7 @@ public class SheepManagement extends ListActivity {
 	   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	   		tag_types.add(cursor.getString(1));
 	   	}
-	   	cursor.close();    	
+//	   	cursor.close();    	
 	   	
 	   	// Creating adapter for spinner
 	   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
@@ -296,7 +302,7 @@ public class SheepManagement extends ListActivity {
 		   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 		   		wormers.add(cursor.getString(1) + " lot " + cursor.getString(2));
 		   	}
-		   	cursor.close();    	
+//		   	cursor.close();    	
 		   	Log.i("SheepMgmt", " after filling wormer spinner"); 
 		   	// Creating adapter for spinner
 		   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, wormers);
@@ -319,7 +325,7 @@ public class SheepManagement extends ListActivity {
 		   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 		   		vaccines.add(cursor.getString(1) + " lot " + cursor.getString(2));
 		   	}
-		   	cursor.close();    	
+//		   	cursor.close();    	
 		   	
 		   	// Creating adapter for spinner
 		   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, vaccines);
@@ -408,14 +414,14 @@ public class SheepManagement extends ListActivity {
 		    	
 		        //	Get the sire and dam id numbers
 		        thissire_id = dbh.getInt(9);
-		        Log.i("LookForSheep", " Sire is " + String.valueOf(thissire_id));
+//		        Log.i("LookForSheep", " Sire is " + String.valueOf(thissire_id));
 		        thisdam_id = dbh.getInt(10);
-		        Log.i("LookForSheep", " Dam is " + String.valueOf(thisdam_id));
+//		        Log.i("LookForSheep", " Dam is " + String.valueOf(thisdam_id));
 		        
 		        //	Go get the sire name
 		        if (thissire_id != 0){
 			        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thissire_id);
-			        Log.i("LookForSheep", " cmd is " + cmd);		        
+//			        Log.i("LookForSheep", " cmd is " + cmd);		        
 			        crsr2 = dbh.exec( cmd);
 			        Log.i("LookForSheep", " after second db lookup");
 			        cursor2   = ( Cursor ) crsr2; 
@@ -472,6 +478,46 @@ public class SheepManagement extends ListActivity {
                 TV.setText( "Sheep Database does not exist." ); 
         	}
 	}	
+	
+	 public void updateDatabase( View v ){
+	    	
+			// Disable Update Database button and make it red to prevent getting 2 records at one time
+	    	btn = (Button) findViewById( R.id.update_database_btn );
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+	    	btn.setEnabled(false);
+			//	Get the value of the checkbox for trim toes
+			Log.i("before checkbox", " getting ready to get trim toes or not ");
+			boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
+			if (boxtrimtoes.isChecked()){
+				//	go update the database with a toe trimming date and time
+				Log.i("toes trimmed ", String.valueOf(boxtrimtoes));				
+			}			
+// TODO
+			//	Need to figure out the id_drugid for what we are giving this sheep
+			boxwormer = (CheckBox) findViewById(R.id.checkBoxGiveWormer);
+			if (boxwormer.isChecked()){
+				//	Go get which wormer was selected in the spinner
+				wormer_spinner = (Spinner) findViewById(R.id.wormer_spinner);
+				which_wormer = wormer_spinner.getSelectedItemPosition();
+				//	go update the database with a drug record for this wormer and this sheep
+				
+				Log.i("wormer ", String.valueOf(boxwormer));				
+			}	
+		
+			boxvaccine = (CheckBox) findViewById(R.id.checkBoxGiveVaccine);
+			if (boxvaccine.isChecked()){
+				//	Go get which vaccine was selected in the spinner
+				vaccine_spinner = (Spinner) findViewById(R.id.vaccine_spinner);
+		    	which_vaccine = vaccine_spinner.getSelectedItemPosition();
+				//	go update the database with a drug record for this vaccine and this sheep
+		    	
+				Log.i("vaccine ", String.valueOf(boxvaccine));				
+			}	
+			
+	    	
+	    	
+			
+	 }
 	public void printLabel( View v ){ 
 
 		// Ken add the printing code here
@@ -511,6 +557,7 @@ public class SheepManagement extends ListActivity {
 		stopService(new Intent(SheepManagement.this, eidService.class));   	
     	// Added this to close the database if we go back to the main activity  	
     	stopManagingCursor (cursor);
+    	cursor.close();
     	dbh.closeDB();
     	clearBtn( null );
     	//Go back to main
