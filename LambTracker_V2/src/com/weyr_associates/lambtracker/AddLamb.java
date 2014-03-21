@@ -82,7 +82,7 @@ public class AddLamb extends Activity {
 	public Spinner eid_tag_color_spinner, eid_tag_location_spinner;
 	public Spinner predefined_note_spinner;
 	public List<String> predefined_notes;
-
+	private int             nRecs;
 	
 	/////////////////////////////////////////////////////
 	Messenger mService = null;
@@ -424,25 +424,28 @@ public class AddLamb extends Activity {
     			" where sheep_breeding_table.ewe_id = '%s' ", dam_id);		  
 		//	TODO
 			
-			Calendar calendar = Calendar.getInstance();
-			Log.i("add a lamb ", " after getting a calendar");
+		Calendar calendar = Calendar.getInstance();
+		Log.i("add a lamb ", " after getting a calendar");
 //			jintdate [0] = calendar.get(Calendar.YEAR);
 //			jintdate [1] = calendar.get(Calendar.MONTH) +1;
 //			jintdate [2] = calendar.get(Calendar.DAY_OF_MONTH);
-			// TODO
-			//	Hard Coded a day within the breeding time of AI for testing purposes
-			
-			jintdate [0] = 2014;
-			jintdate [1] = 04;
-			jintdate [2] = 27;
-			
+		// TODO
+		//	Hard Coded a day within the breeding time of AI for testing purposes
+		
+		jintdate [0] = 2014;
+		jintdate [1] = 04;
+		jintdate [2] = 27;
+		
 //			Log.i("add a lamb ", " before getting julian of today");
-			temp_julian_today = Utilities.toJulian(jintdate);
+		temp_julian_today = Utilities.toJulian(jintdate);
 //			Log.i("addlamb", " julian today is " + String.valueOf(temp_julian_today));
-	    	Log.i("add a lamb ", " cmd is " + cmd);	    	
-	    	crsr = dbh.exec( cmd );
-	        cursor   = ( Cursor ) crsr;
-	        dbh.moveToFirstRecord();
+    	Log.i("add a lamb ", " cmd is " + cmd);	    	
+    	crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        startManagingCursor(cursor);
+        nRecs    = cursor.getCount();
+        dbh.moveToFirstRecord();
+        if (nRecs > 0) {
 	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	        	Log.i("addlamb", " in for loop checking breeding dates ");
 	        	// Check the dates and see if this is the right record
@@ -471,7 +474,7 @@ public class AddLamb extends Activity {
         	// The sire we have is 
         	Log.i("addlamb", " in for loop sire is " + sire_name);	
         	Log.i("addlamb", " in for loop sire_id is " + String.valueOf(sire_id));	
-    	}        
+	        }        
 		//	Handle the sire data here
         TV = (TextView) findViewById( R.id.sireName );
         TV.setText(sire_name); 
@@ -489,7 +492,7 @@ public class AddLamb extends Activity {
 //        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon154));
         sire_codon136 = dbh.getInt(2);  
 //        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon136));        
-        
+        }
     }
     public void updateDatabase( View v ){
     	RadioGroup 	rg;
