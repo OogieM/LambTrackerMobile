@@ -263,17 +263,14 @@
 		        android:layout_gravity="left|center"
 		        android:layout_row="1"
 		        android:text="@string/sheep_givewormer"/>
-		  <TextView
-	        	android:id="@+id/wormer"
-	        	android:layout_width="150dp"
-	       	 	android:layout_height="wrap_content"
-	           	android:layout_column="1"
-	            android:layout_gravity="left"
-	            android:layout_row="1"
-	            android:ems="10"
-	        	android:gravity="left"
-	        	android:textSize="18sp"
-	        	android:typeface="monospace" />        	
+		  <Spinner
+		        android:id="@+id/wormer_spinner"
+		        android:layout_width="270dp"
+		        android:layout_height="wrap_content"
+		        android:layout_column="1"
+		        android:layout_gravity="left|center"
+		        android:layout_row="1"
+		        android:textSize="18sp" />     	
  
 		  <CheckBox
 		        android:id="@+id/checkBoxGiveVaccine"
@@ -283,18 +280,15 @@
 		        android:layout_gravity="left|center"
 		        android:layout_row="2"
 		        android:text="@string/sheep_givevaccine"/>
-		<TextView
-	        	android:id="@+id/vaccine"
-	        	android:layout_width="150dp"
-	       	 	android:layout_height="wrap_content"
-	           	android:layout_column="1"
-	            android:layout_gravity="left"
-	            android:layout_row="2"
-	            android:ems="10"
-	        	android:gravity="left"
-	        	android:textSize="18sp"
-	        	android:typeface="monospace" /> 
-  </GridLayout>  
+		<Spinner
+		        android:id="@+id/vaccine_spinner"
+		        android:layout_width="270dp"
+		        android:layout_height="wrap_content"
+		        android:layout_column="1"
+		        android:layout_gravity="left|center"
+		        android:layout_row="2"
+		        android:textSize="18sp" /> 
+  	</GridLayout>  
   
 <RelativeLayout
     android:id="@+id/BottomButtonBar"
