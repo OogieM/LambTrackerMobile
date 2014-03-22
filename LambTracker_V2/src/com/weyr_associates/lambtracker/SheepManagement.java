@@ -33,11 +33,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 public class SheepManagement extends ListActivity {
 	private DatabaseHandler dbh;
@@ -58,10 +60,13 @@ public class SheepManagement extends ListActivity {
 	public Spinner wormer_spinner, vaccine_spinner;
 	public List<String> predefined_notes;
 	public List<String> tag_types, tag_locations, tag_colors;
-	public List<String> wormers, wormer_id_drugid, vaccines, vaccine_id_drugid;
+	public List<String> wormers, vaccines;
+	public List<Integer> wormer_id_drugid, vaccine_id_drugid;
+	public int wormer_id, vaccine_id, drug_loc;
 	public String[] this_sheeps_tags ;
 	public int drug_gone; // 0 = false 1 = true
 	public int	drug_type, which_wormer, which_vaccine;
+	public RadioGroup radioGroup;
 	public String mytoday, mytime;
 	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine;
 	private int             nRecs;
@@ -256,6 +261,8 @@ public class SheepManagement extends ListActivity {
       	String          cmd;
       	mytoday = TodayIs(); 
 		mytime = TimeIs();
+		ArrayList radiobtnlist;
+    	String[] radioBtnText;
    	 //////////////////////////////////// 
 		CheckIfServiceIsRunning();
 		Log.i("SheepMgmt", "back from isRunning");  	
@@ -289,7 +296,7 @@ public class SheepManagement extends ListActivity {
 		// Fill the Wormer Spinner
 	    	wormer_spinner = (Spinner) findViewById(R.id.wormer_spinner);
 		   	wormers = new ArrayList<String>();  
-		   	wormer_id_drugid = new ArrayList<String>();
+		   	wormer_id_drugid = new ArrayList<Integer>();
 		   	drug_type = 1;
 		   	// Select All fields from id types to build the spinner
 		   	cmd = String.format( "select id_drugid, user_task_name, drug_lot from drug_table where " +
@@ -298,10 +305,10 @@ public class SheepManagement extends ListActivity {
 		   	cursor   = ( Cursor ) crsr;
 	   	  	dbh.moveToFirstRecord();
 	   	  	wormers.add("Select a Dewormer");
-	   	  	wormer_id_drugid.add("Drug Id");
+	   	  	wormer_id_drugid.add(0);
 		        // looping through all rows and adding to list
 		   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-		   		wormer_id_drugid.add(cursor.getString(0));
+		   		wormer_id_drugid.add(cursor.getInt(0));
 		   		wormers.add(cursor.getString(1) + " lot " + cursor.getString(2));
 		   	}
 //		   	cursor.close();    	
@@ -315,7 +322,7 @@ public class SheepManagement extends ListActivity {
 			// Fill the Vaccine Spinner
 	    	vaccine_spinner = (Spinner) findViewById(R.id.vaccine_spinner);
 		   	vaccines = new ArrayList<String>(); 
-		   	vaccine_id_drugid = new ArrayList<String>();
+		   	vaccine_id_drugid = new ArrayList<Integer>();
 		   	drug_type = 2;
 		   	// Select All fields from id types to build the spinner
 		   	cmd = String.format( "select drug_table.id_drugid, drug_table.user_task_name, drug_table.drug_lot " +
@@ -324,17 +331,37 @@ public class SheepManagement extends ListActivity {
 		   	cursor   = ( Cursor ) crsr;
 	   	  	dbh.moveToFirstRecord();
 	   	  	vaccines.add("Select a Vaccine");
-	   	  	vaccine_id_drugid.add("Drug Id");
+	   	  	vaccine_id_drugid.add(0);
 		        // looping through all rows and adding to list
 		   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-		   		vaccine_id_drugid.add(cursor.getString(0));
+		   		vaccine_id_drugid.add(cursor.getInt(0));
 		   		vaccines.add(cursor.getString(1) + " lot " + cursor.getString(2));
 		   	}
 		   	// Creating adapter for spinner
 		   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, vaccines);
 				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				vaccine_spinner.setAdapter (dataAdapter);
-				vaccine_spinner.setSelection(1);		
+				vaccine_spinner.setSelection(1);	
+			// 	Create the radio buttons for the shot locations here	
+				radiobtnlist = new ArrayList();
+//				radiobtnlist.add ("Select Vaccine Location");
+				radiobtnlist.add ("SQ RS");
+				radiobtnlist.add ("SQ LS");
+				radiobtnlist.add ("IM N");
+//			   	cmd = "select * from drug_location_table";
+//			   	crsr = dbh.exec( cmd );  
+//				cursor   = ( Cursor ) crsr;
+//				nRecs    = cursor.getCount();
+//			   	dbh.moveToFirstRecord();
+//			    // looping through all rows and adding to list
+//			   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+//			   		radiobtnlist.add(cursor.getString(2));
+//			   	}
+			    radioBtnText = (String[]) radiobtnlist.toArray(new String [radiobtnlist.size()]);
+				// Build the radio buttons here
+				radioGroup = ((RadioGroup) findViewById(R.id.radioShotLoc));
+				addRadioButtons(3, radioBtnText);
+				radiobtnlist.clear ();
 			
 //		TextView TV = (TextView) findViewById( R.id.inputText );	
 		
@@ -504,8 +531,16 @@ public class SheepManagement extends ListActivity {
 				which_wormer = wormer_spinner.getSelectedItemPosition();
 				Log.i("wormer spinner", " position is" + String.valueOf(which_wormer));
 				//	go update the database with a drug record for this wormer and this sheep
-//				int ii = wormer_id_drugid.getValue(which_wormer);						
-				Log.i("wormer ", String.valueOf(boxwormer));				
+				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
+				i = wormer_id_drugid.get(which_wormer);
+				Log.i("wormer id", " value is " + String.valueOf(i));
+				//	Drug location 5 is by mouth
+				cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
+		  				" drug_time_on, drug_location) values " +
+		  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, 5);
+		  		Log.i("add drug to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into sheep_drug_table");							
 			}	
 		
 			boxvaccine = (CheckBox) findViewById(R.id.checkBoxGiveVaccine);
@@ -514,12 +549,24 @@ public class SheepManagement extends ListActivity {
 				vaccine_spinner = (Spinner) findViewById(R.id.vaccine_spinner);
 		    	which_vaccine = vaccine_spinner.getSelectedItemPosition();
 				//	go update the database with a drug record for this vaccine and this sheep
-		    	
-				Log.i("vaccine ", String.valueOf(boxvaccine));				
+		    	Log.i("vaccine spinner", " position is" + String.valueOf(which_vaccine));
+				//	go update the database with a drug record for this wormer and this sheep
+				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
+				i = vaccine_id_drugid.get(which_vaccine);
+				Log.i("vaccine id", " value is " + String.valueOf(i));
+				// Go get drug location for the shot
+				//	Need to set up a radio button for the locations and read it
+//				Get the radio group selected for the location
+				Log.i("before radio group", " getting ready to get the shot location ");
+				radioGroup=(RadioGroup)findViewById(R.id.radioShotLoc);
+		 		drug_loc = radioGroup.getCheckedRadioButtonId()+1;				
+				cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
+		  				" drug_time_on, drug_location) values " +
+		  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, drug_loc);
+		  		Log.i("add drug to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into sheep_drug_table");						
 			}	
-			
-	    	
-	    	
 			
 	 }
 	public void printLabel( View v ){ 
@@ -750,4 +797,25 @@ public class SheepManagement extends ListActivity {
 				  
 				return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
 			}
+		   private void addRadioButtons(int numButtons, String[] radioBtnText) {
+			  	  int i;
+
+			  	  for(i = 0; i < numButtons; i++){
+			  	    //instantiate...
+			  	    RadioButton radioBtn = new RadioButton(this);
+
+			  	    //set the values that you would otherwise hardcode in the xml...
+			  	  	radioBtn.setLayoutParams 
+			  	      (new LayoutParams 
+			  	      (LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+			  	    //label the button...
+			  	  	radioBtn.setText(radioBtnText[i]);
+//			  	  	Log.i("addradiobuttons", radioBtnText[i]);
+			  	  	radioBtn.setId(i);
+
+			  	    //add it to the group.
+			  	    radioGroup.addView(radioBtn, i);
+			  	  }
+			  	}   
 }
