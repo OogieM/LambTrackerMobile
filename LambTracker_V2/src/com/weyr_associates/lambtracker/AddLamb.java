@@ -522,6 +522,7 @@ public class AddLamb extends Activity {
  		rear_type = rg.getCheckedRadioButtonId()+1;
 		Log.i("rear_type ", String.valueOf(rear_type));
 		
+		sex_abbrev = "U";
   		//	Get the radio group selected for the sex
 		Log.i("before radio group", " getting ready to get the sex ");
 		rg=(RadioGroup)findViewById(R.id.radioGroupSex);

@@ -58,7 +58,7 @@ public class SheepManagement extends ListActivity {
 	public Spinner wormer_spinner, vaccine_spinner;
 	public List<String> predefined_notes;
 	public List<String> tag_types, tag_locations, tag_colors;
-	public List<String> wormers, vaccines;
+	public List<String> wormers, wormer_id_drugid, vaccines, vaccine_id_drugid;
 	public String[] this_sheeps_tags ;
 	public int drug_gone; // 0 = false 1 = true
 	public int	drug_type, which_wormer, which_vaccine;
@@ -275,7 +275,6 @@ public class SheepManagement extends ListActivity {
 	   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	   		tag_types.add(cursor.getString(1));
 	   	}
-//	   	cursor.close();    	
 	   	
 	   	// Creating adapter for spinner
 	   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
@@ -289,7 +288,8 @@ public class SheepManagement extends ListActivity {
 // TODO			
 		// Fill the Wormer Spinner
 	    	wormer_spinner = (Spinner) findViewById(R.id.wormer_spinner);
-		   	wormers = new ArrayList<String>();      	
+		   	wormers = new ArrayList<String>();  
+		   	wormer_id_drugid = new ArrayList<String>();
 		   	drug_type = 1;
 		   	// Select All fields from id types to build the spinner
 		   	cmd = String.format( "select id_drugid, user_task_name, drug_lot from drug_table where " +
@@ -298,8 +298,10 @@ public class SheepManagement extends ListActivity {
 		   	cursor   = ( Cursor ) crsr;
 	   	  	dbh.moveToFirstRecord();
 	   	  	wormers.add("Select a Dewormer");
+	   	  	wormer_id_drugid.add("Drug Id");
 		        // looping through all rows and adding to list
 		   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+		   		wormer_id_drugid.add(cursor.getString(0));
 		   		wormers.add(cursor.getString(1) + " lot " + cursor.getString(2));
 		   	}
 //		   	cursor.close();    	
@@ -312,7 +314,8 @@ public class SheepManagement extends ListActivity {
 							
 			// Fill the Vaccine Spinner
 	    	vaccine_spinner = (Spinner) findViewById(R.id.vaccine_spinner);
-		   	vaccines = new ArrayList<String>();      	
+		   	vaccines = new ArrayList<String>(); 
+		   	vaccine_id_drugid = new ArrayList<String>();
 		   	drug_type = 2;
 		   	// Select All fields from id types to build the spinner
 		   	cmd = String.format( "select drug_table.id_drugid, drug_table.user_task_name, drug_table.drug_lot " +
@@ -321,19 +324,19 @@ public class SheepManagement extends ListActivity {
 		   	cursor   = ( Cursor ) crsr;
 	   	  	dbh.moveToFirstRecord();
 	   	  	vaccines.add("Select a Vaccine");
+	   	  	vaccine_id_drugid.add("Drug Id");
 		        // looping through all rows and adding to list
 		   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+		   		vaccine_id_drugid.add(cursor.getString(0));
 		   		vaccines.add(cursor.getString(1) + " lot " + cursor.getString(2));
 		   	}
-//		   	cursor.close();    	
-		   	
 		   	// Creating adapter for spinner
 		   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, vaccines);
 				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				vaccine_spinner.setAdapter (dataAdapter);
 				vaccine_spinner.setSelection(1);		
 			
-		TextView TV = (TextView) findViewById( R.id.inputText );	
+//		TextView TV = (TextView) findViewById( R.id.inputText );	
 		
 	      	// make the alert button normal and disabled
 	   	btn = (Button) findViewById( R.id.alert_btn );
@@ -499,8 +502,9 @@ public class SheepManagement extends ListActivity {
 				//	Go get which wormer was selected in the spinner
 				wormer_spinner = (Spinner) findViewById(R.id.wormer_spinner);
 				which_wormer = wormer_spinner.getSelectedItemPosition();
+				Log.i("wormer spinner", " position is" + String.valueOf(which_wormer));
 				//	go update the database with a drug record for this wormer and this sheep
-				
+//				int ii = wormer_id_drugid.getValue(which_wormer);						
 				Log.i("wormer ", String.valueOf(boxwormer));				
 			}	
 		
