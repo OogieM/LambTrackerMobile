@@ -99,6 +99,7 @@
         
     <string name="convert_fill_fields">Please Fill in all four fields.</string>
     <string name="add_lamb_fill_fields">Please Fill in a Lambease value.</string>
+    <string name="drug_loc_fill_fields">Please Fill in a Shot Location.</string>
     <string name="enter_tag_data">Enter Tag Data</string>
     <string name="wrong_id_location">Invalid ID Location</string>
     

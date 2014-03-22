@@ -69,6 +69,8 @@ public class SheepManagement extends ListActivity {
 	public RadioGroup radioGroup;
 	public String mytoday, mytime;
 	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine;
+	public String note_text;
+	public int predefined_note;
 	private int             nRecs;
 	private int			    recNo;
 	private String[]        colNames;
@@ -519,10 +521,19 @@ public class SheepManagement extends ListActivity {
 			Log.i("before checkbox", " getting ready to get trim toes or not ");
 			boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
 			if (boxtrimtoes.isChecked()){
-				//	go update the database with a toe trimming date and time
-				Log.i("toes trimmed ", String.valueOf(boxtrimtoes));				
+				//	go update the database with a toe trimming date and time add that as a note 
+				note_text = "";
+				predefined_note = 14; // hard coded the code for toes trimmed
+				// TODO
+				//	This will have to be changed for the general case
+				cmd = String.format("insert into note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid) " +
+    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note);
+    			Log.i("update notes ", "before cmd " + cmd);
+    			dbh.exec( cmd );	
+    			Log.i("update notes ", "after cmd exec");
+				Log.i("toes trimmed ", String.valueOf(boxtrimtoes));					
 			}			
-// TODO
+
 			//	Need to figure out the id_drugid for what we are giving this sheep
 			boxwormer = (CheckBox) findViewById(R.id.checkBoxGiveWormer);
 			if (boxwormer.isChecked()){
@@ -559,15 +570,33 @@ public class SheepManagement extends ListActivity {
 //				Get the radio group selected for the location
 				Log.i("before radio group", " getting ready to get the shot location ");
 				radioGroup=(RadioGroup)findViewById(R.id.radioShotLoc);
-		 		drug_loc = radioGroup.getCheckedRadioButtonId()+1;				
-				cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
-		  				" drug_time_on, drug_location) values " +
-		  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, drug_loc);
-		  		Log.i("add drug to ", "db cmd is " + cmd);
-				dbh.exec(cmd);
-				Log.i("add tag ", "after insert into sheep_drug_table");						
-			}	
-			
+		 		drug_loc = radioGroup.getCheckedRadioButtonId()+1;	
+		 		if (drug_loc == 0){
+		    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+		    		builder.setMessage( R.string.drug_loc_fill_fields )
+		    	           .setTitle( R.string.drug_loc_fill_fields );
+		    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+		    	           public void onClick(DialogInterface dialog, int idx) {
+		    	               	// User clicked OK button 
+		    	         		// make update database button normal and enabled so we can try again
+		    	           		btn = (Button) findViewById( R.id.update_database_btn );
+		    	           		btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));
+		    	            	btn.setEnabled(true);
+		     	    		   return;
+		    	               }
+		    	       });		
+		    		AlertDialog dialog = builder.create();
+		    		dialog.show();	
+		 		}else{
+					cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
+			  				" drug_time_on, drug_location) values " +
+			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, drug_loc);
+			  		Log.i("add drug to ", "db cmd is " + cmd);
+					dbh.exec(cmd);
+					Log.i("add tag ", "after insert into sheep_drug_table");	
+		 		}
+			}
+			clearBtn( null );
 	 }
 	public void printLabel( View v ){ 
 
@@ -662,6 +691,18 @@ public class SheepManagement extends ListActivity {
 			// In this case there is no adapter so do nothing
 		}
 		Log.i("clear btn", "after changing myadapter");
+		radioGroup=(RadioGroup)findViewById(R.id.radioShotLoc);
+		radioGroup.clearCheck();
+		boxvaccine = (CheckBox) findViewById(R.id.checkBoxGiveVaccine);
+		boxvaccine.setChecked(false);
+		boxwormer = (CheckBox) findViewById(R.id.checkBoxGiveWormer);
+		boxwormer.setChecked(false);
+		boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
+		boxtrimtoes.setChecked(false);
+		// Enable Update Database button and make it normal
+    	btn = (Button) findViewById( R.id.update_database_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));
+    	btn.setEnabled(true);
     }
 	
 	public void helpBtn( View v )
