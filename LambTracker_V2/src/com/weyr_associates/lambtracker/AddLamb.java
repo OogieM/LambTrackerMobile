@@ -522,19 +522,26 @@ public class AddLamb extends Activity {
  		rear_type = rg.getCheckedRadioButtonId()+1;
 		Log.i("rear_type ", String.valueOf(rear_type));
 		
-		sex_abbrev = "U";
   		//	Get the radio group selected for the sex
 		Log.i("before radio group", " getting ready to get the sex ");
 		rg=(RadioGroup)findViewById(R.id.radioGroupSex);
- 		sex = rg.getCheckedRadioButtonId()+1;
- 		Log.i("sex ", String.valueOf(sex));
- 		cmd = String.format("select sheep_sex_table.sex_abbrev from sheep_sex_table " +
- 		"where sheep_sex_table.sex_sheepid = %s", sex);
- 		crsr = dbh.exec( cmd );  
-		cursor   = ( Cursor ) crsr;
-		startManagingCursor(cursor);
-  		dbh.moveToFirstRecord();
-  		sex_abbrev = dbh.getStr(0);		
+		sex = rg.getCheckedRadioButtonId();
+		Log.i("sex radio button id ", String.valueOf(rg.getCheckedRadioButtonId()));		
+		if (sex == -1){
+			//	Set the sex to be unknown if not filled in
+			sex_abbrev = "U";
+			sex = 4;
+		}else{
+			sex = sex + 1;
+			Log.i("sex ", String.valueOf(sex));
+	 		cmd = String.format("select sheep_sex_table.sex_abbrev from sheep_sex_table " +
+	 		"where sheep_sex_table.sex_sheepid = %s", sex);
+	 		crsr = dbh.exec( cmd );  
+			cursor   = ( Cursor ) crsr;
+			startManagingCursor(cursor);
+	  		dbh.moveToFirstRecord();
+	  		sex_abbrev = dbh.getStr(0);	
+		}			
 		Log.i("sex abbrev ", sex_abbrev);
 		
 		//	Get the value of the checkbox for stillborn
