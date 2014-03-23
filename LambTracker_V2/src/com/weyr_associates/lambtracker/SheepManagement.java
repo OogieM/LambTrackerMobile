@@ -68,7 +68,7 @@ public class SheepManagement extends ListActivity {
 	public int	drug_type, which_wormer, which_vaccine;
 	public RadioGroup radioGroup;
 	public String mytoday, mytime;
-	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine;
+	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxshearing;
 	public String note_text;
 	public int predefined_note;
 	private int             nRecs;
@@ -596,6 +596,22 @@ public class SheepManagement extends ListActivity {
 					Log.i("add tag ", "after insert into sheep_drug_table");	
 		 		}
 			}
+
+//			Get the value of the checkbox for shearing
+			Log.i("before checkbox", " getting ready to get sheep shorn or not ");
+			boxshearing = (CheckBox) findViewById(R.id.checkBoxShear);
+			if (boxshearing.isChecked()){
+				//	go update the database with a shearing date and time add that as a note 
+				note_text = "Shorn";
+				// TODO
+				//	This will have to be changed for the general case
+				cmd = String.format("insert into note_table (sheep_id, note_text, note_date, note_time) " +
+    					"values ( %s, '%s', '%s', '%s' )", thissheep_id, note_text, TodayIs(), TimeIs());
+    			Log.i("update notes ", "before cmd " + cmd);
+    			dbh.exec( cmd );	
+    			Log.i("update notes ", "after cmd exec");
+				Log.i("shorn ", String.valueOf(boxshearing));					
+			}	
 			clearBtn( null );
 	 }
 	public void printLabel( View v ){ 
@@ -699,6 +715,8 @@ public class SheepManagement extends ListActivity {
 		boxwormer.setChecked(false);
 		boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
 		boxtrimtoes.setChecked(false);
+		boxshearing = (CheckBox) findViewById(R.id.checkBoxTrimToes);
+		boxshearing.setChecked(false);
 		// Enable Update Database button and make it normal
     	btn = (Button) findViewById( R.id.update_database_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));
