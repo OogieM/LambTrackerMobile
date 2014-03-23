@@ -172,7 +172,7 @@ public final class Intents {
      * Send this intent to encode a piece of data as a QR code and display it full screen, so
      * that another person can scan the barcode from your screen.
      */	  
-    public static final String ACTION = "weyr.ENCODE";
+    public static final String ACTION = "weyr.LT.ENCODE";
 
     /**
      * The data to encode. Use {@link android.content.Intent#putExtra(String, String)} or

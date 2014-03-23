@@ -51,6 +51,7 @@
     <string name="create_evaluation_task_btn">Create Evaluation</string>
     <string name="look_up_sheep_btn">Look Up Sheep</string>
     <string name="add_lamb_btn">Add a Lamb</string> 
+    <string name="print_label_btn">Print Label</string>
    
     <string name="load_sheeplist">Load Sheep Database</string>
     <string name="do_sheeptask">Do Sheep Tasks</string>
@@ -70,8 +71,10 @@
     <string name="title_activity_test_interface_designs">Test Interface Designs</string>
     <string name="title_activity_create_sheep_evaluation">Create Evaluation Task</string>
     <string name="title_activity_lambing_sheep">Lambing Sheep</string>
-     <string name="title_activity_add_lamb">Add a Lamb</string>
-    
+    <string name="title_activity_add_lamb">Add a Lamb</string>
+    <string name="title_activity_sheep_management">Sheep Management</string>
+    <string name="title_activity_print_labels">Print Labels</string>
+
     <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
     <string name="help_convert">Select a sheep based on either Federal or Farm tag. The system assumes there are no duplicate
@@ -90,9 +93,13 @@
    	    here to collect data on the birth. </string>   	    
     <string name="help_add_lamb">Add the information on this lamb. Be sure to put the first lamb born in first and the second lamb 
          born in second.  </string>    	    
-    
+    <string name="help_print">This prints a single label with the EID as a bar code and the name of the sheep on it.  </string>
+    <string name="help_management">Select the management tasks you have done for this sheep and then update the database. </string>
+        
+        
     <string name="convert_fill_fields">Please Fill in all four fields.</string>
     <string name="add_lamb_fill_fields">Please Fill in a Lambease value.</string>
+    <string name="drug_loc_fill_fields">Please Fill in a Shot Location.</string>
     <string name="enter_tag_data">Enter Tag Data</string>
     <string name="wrong_id_location">Invalid ID Location</string>
     
@@ -105,6 +112,7 @@
         <item>Evaluate Sheep2</item>
         <item>Look Up a Sheep</item>
         <item>Lambing</item>
+        <item>Sheep Management</item>
         <item>Print Labels</item>
         <item>Edit Database</item>
         <item>Test Interface Designs</item>
@@ -122,8 +130,12 @@
     <string name="sheep_lambease_lbl">Lambease Score</string>
     <string name="sheep_sire_lbl">Sire</string>
     <string name="sheep_dam_lbl">Dam</string>
-     <string name="sheep_stillborn">Stillborn</string>
-    
+    <string name="sheep_stillborn">Stillborn</string>
+    <string name="sheep_trimtoes">Trim Toes</string>
+    <string name="sheep_givewormer">Give Wormer</string>
+    <string name="sheep_givevaccine">Give Vaccine</string>
+    <string name="sheep_shear">Shear Sheep</string>
+     
     <string name="federal_id_lbl">Federal ID</string>
     <string name="farm_id_lbl">Farm ID</string>
     <string name="electronic_id_lbl">Electronic ID</string>

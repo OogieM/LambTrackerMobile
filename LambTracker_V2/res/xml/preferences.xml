@@ -28,4 +28,14 @@
 				android:summary="HTC devices need to use a different Bluetooth connection method."
 			/>
 		</PreferenceScreen>
-	</PreferenceScreen>
+		    <PreferenceScreen
+		    android:key="labelsettings"
+		    android:title="Label Settings">
+		    <EditTextPreference android:key="label" android:title="Text to add to printed label" android:summary="Text to add to printed label"/>
+		    <CheckBoxPreference
+			android:key="autop"
+			android:title="AutoPrint"
+			android:summary="Auto print the barcode label"
+		    />
+		    </PreferenceScreen>
+		</PreferenceScreen>
