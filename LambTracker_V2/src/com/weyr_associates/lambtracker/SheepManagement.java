@@ -858,5 +858,25 @@ public class SheepManagement extends ListActivity {
 			  	    //add it to the group.
 			  	    radioGroup.addView(radioBtn, i);
 			  	  }
-			  	}   
+			  	}  
+			//  user clicked 'Scan' button    
+			 public void scanEid( View v){
+			 	// Here is where I need to get a tag scanned and put the data into the variable LastEID
+				 clearBtn( v );
+				 tag_type_spinner.setSelection(2);
+				 if (mService != null) {
+					try {
+						//Start eidService sending tags
+						Message msg = Message.obtain(null, eidService.MSG_SEND_ME_TAGS);
+						msg.replyTo = mMessenger;
+						mService.send(msg);
+					   	//	make the scan eid button  0x0000FF00, 0xff00ff00
+				    	Button btn = (Button) findViewById( R.id.scan_eid_btn );
+				    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xff00ff00));
+						
+					} catch (RemoteException e) {
+						// In this case the service has crashed before we could even do anything with it
+					}
+					}    	    	
+			 } 
 }
