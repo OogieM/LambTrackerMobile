@@ -551,7 +551,13 @@ public class SheepManagement extends ListActivity {
 		  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, 5);
 		  		Log.i("add drug to ", "db cmd is " + cmd);
 				dbh.exec(cmd);
-				Log.i("add tag ", "after insert into sheep_drug_table");							
+				Log.i("add tag ", "after insert into sheep_drug_table");
+				// TODO
+				//	Need to update the alert to include the slaughter withdrawal for this drug
+//				cmd = String.format("Select meat_withdrawal_units, user_meat_withdrawal from drug_table where drug_id = %s", i);
+//				Log.i("drug withdrawal ", "db cmd is " + cmd);
+				
+				
 			}	
 		
 			boxvaccine = (CheckBox) findViewById(R.id.checkBoxGiveVaccine);
