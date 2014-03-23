@@ -40,6 +40,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
+import com.google.zxing.client.android.Intents;
 
 public class SheepManagement extends ListActivity {
 	private DatabaseHandler dbh;
@@ -623,12 +624,11 @@ public class SheepManagement extends ListActivity {
 	public void printLabel( View v ){ 
 
 		// Ken add the printing code here
+		try
+	    {
 		String[] lines = EID.split("\n"); // works for both
-		
 	    String contents = LastEID.substring(0, 3) + LastEID.substring(4, 16);
-	   	
-	    try
-	    {					    		
+						    		
 		Intent encodeIntent = new Intent("weyr.LT.ENCODE");
 		encodeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		encodeIntent.addCategory(Intent.CATEGORY_DEFAULT); 
@@ -728,7 +728,12 @@ public class SheepManagement extends ListActivity {
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));
     	btn.setEnabled(true);
     }
-	
+	@Override
+	public void onResume (){	
+		super.onResume();
+//		Log.i("PrintLabel", " OnResume");
+		scanEid( null );
+	}	
 	public void helpBtn( View v )
   {
  	// Display help here   	
