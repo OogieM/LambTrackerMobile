@@ -54,7 +54,7 @@ public class SheepManagement extends ListActivity {
 	public String 	eid_tag_location_label, eidText, alert_text;
 	public String 	thissire_name, thisdam_name;
 
-	public Cursor 	cursor, cursor2, cursor3, cursor4, cursor5;
+	public Cursor 	cursor, cursor2, cursor3, cursor4;
 	public Object 	crsr, crsr2, crsr3, crsr4, crsr5;
 	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
 	public Spinner predefined_note_spinner;
@@ -268,6 +268,7 @@ public class SheepManagement extends ListActivity {
     	String[] radioBtnText;
    	 //////////////////////////////////// 
 		CheckIfServiceIsRunning();
+		LoadPreferences (true);
 		Log.i("SheepMgmt", "back from isRunning");  	
 		////////////////////////////////////    	
 		thissheep_id = 0;
@@ -443,6 +444,7 @@ public class SheepManagement extends ListActivity {
 				cursor.moveToFirst();				
 				TV = (TextView) findViewById( R.id.sheepnameText );
 		        TV.setText (dbh.getStr(0));
+		        SheepName = dbh.getStr(0);
 		        alert_text = dbh.getStr(8);
 		    	
 		        //	Get the sire and dam id numbers
@@ -622,8 +624,6 @@ public class SheepManagement extends ListActivity {
 			clearBtn( null );
 	 }
 	public void printLabel( View v ){ 
-
-		// Ken add the printing code here
 		try
 	    {
 		String[] lines = EID.split("\n"); // works for both
@@ -661,7 +661,7 @@ public class SheepManagement extends ListActivity {
     	stopManagingCursor (cursor);
     	cursor.close();
     	dbh.closeDB();
-//    	clearBtn( null );
+    	clearBtn( null );
     	//Go back to main
       	finish();
 	    }
@@ -690,7 +690,6 @@ public class SheepManagement extends ListActivity {
 			       });		
 				AlertDialog dialog = builder.create();
 				dialog.show();
-//				cursor.close();
 	}
 	
 	public void clearBtn( View v )
@@ -844,7 +843,7 @@ public class SheepManagement extends ListActivity {
     		predefined_notes.add(cursor.getString(1));
 //			    		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
     	}
-    	cursor.close();    
+//    	cursor.close();    
     	Log.i ("takeNote", " after set the predefined note spinner ");
     	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
     	//Implement take a note stuff here

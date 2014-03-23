@@ -242,6 +242,7 @@ public class LambingSheep extends ListActivity
 
 	    	 //////////////////////////////////// 
 			CheckIfServiceIsRunning();
+//			LoadPreferences (true);
 			Log.i("Convert", "back from isRunning");  	
 			////////////////////////////////////    	
 			thissheep_id = 0;
@@ -278,6 +279,10 @@ public class LambingSheep extends ListActivity
 	    	btn.setEnabled(false); 
 	    	btn = (Button) findViewById( R.id.prev_rec_btn );
 	    	btn.setEnabled(false);
+	    	
+//	    	make the scan eid button red
+			btn = (Button) findViewById( R.id.scan_eid_btn );
+			btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 	        }
 		
 		public void lookForSheep (View v){
