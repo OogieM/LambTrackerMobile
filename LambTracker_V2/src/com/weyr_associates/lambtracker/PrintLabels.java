@@ -312,6 +312,7 @@ public class PrintLabels extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState)	
     {
+		Log.i("PrintLabel", " Oncreate1");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.print_labels);
         String 			dbname = getString(R.string.real_database_file); 
@@ -321,18 +322,25 @@ public class PrintLabels extends Activity {
         Object 			crsr;
         dbh = new DatabaseHandler( this, dbname );
        
-		CheckIfServiceIsRunning();
+//		CheckIfServiceIsRunning();
 		LoadPreferences(true);
+		Log.i("PrintLabel", " OnCreate2");
 		
     }
 	@Override
 	public void onResume (){	
 		super.onResume();
 		Log.i("PrintLabel", " OnResume");
+		CheckIfServiceIsRunning();
 		scanEid( null );
 	}
 	
-	
+	@Override
+	public void onPause (){	
+		super.onPause();
+		Log.i("PrintLabel", " OnPause");
+		doUnbindService();
+	}
 	public void printLabel( View v ){ 
 
 		// Ken add the printing code here

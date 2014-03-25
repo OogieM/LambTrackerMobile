@@ -899,6 +899,7 @@ public class LambingSheep extends ListActivity
 //	        Log.i ("takeNote", " cmd is " + cmd);
 	        crsr = dbh.exec( cmd );  
 	        cursor   = ( Cursor ) crsr;
+	        startManagingCursor(cursor);
 	    	dbh.moveToFirstRecord();
 	         // looping through all rows and adding to list
 	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){

@@ -267,7 +267,7 @@ public class SheepManagement extends ListActivity {
 		ArrayList radiobtnlist;
     	String[] radioBtnText;
    	 //////////////////////////////////// 
-		CheckIfServiceIsRunning();
+//		CheckIfServiceIsRunning();
 		LoadPreferences (true);
 		Log.i("SheepMgmt", "back from isRunning");  	
 		////////////////////////////////////    	
@@ -280,6 +280,7 @@ public class SheepManagement extends ListActivity {
 	       cmd = "select * from id_type_table";
 	       crsr = dbh.exec( cmd );  
 	       cursor   = ( Cursor ) crsr;
+	       startManagingCursor(cursor);
 	   	dbh.moveToFirstRecord();
 	   	tag_types.add("Select a Type");
 	        // looping through all rows and adding to list
@@ -307,6 +308,7 @@ public class SheepManagement extends ListActivity {
 		   			"drug_gone = %s and drug_type = %s", drug_gone , drug_type);
 		   	crsr = dbh.exec( cmd );  
 		   	cursor   = ( Cursor ) crsr;
+		   	startManagingCursor(cursor);
 	   	  	dbh.moveToFirstRecord();
 	   	  	wormers.add("Select a Dewormer");
 	   	  	wormer_id_drugid.add(0);
@@ -333,6 +335,7 @@ public class SheepManagement extends ListActivity {
 		   			"from drug_table where drug_gone = %s and drug_type = %s", drug_gone , drug_type);
 		   	crsr = dbh.exec( cmd );  
 		   	cursor   = ( Cursor ) crsr;
+		   	startManagingCursor(cursor);
 	   	  	dbh.moveToFirstRecord();
 	   	  	vaccines.add("Select a Vaccine");
 	   	  	vaccine_id_drugid.add(0);
@@ -596,6 +599,7 @@ public class SheepManagement extends ListActivity {
 		    	       });		
 		    		AlertDialog dialog = builder.create();
 		    		dialog.show();	
+		    		return;
 		 		}else{
 					cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
 			  				" drug_time_on, drug_location) values " +
@@ -628,7 +632,7 @@ public class SheepManagement extends ListActivity {
 	    {
 		String[] lines = EID.split("\n"); // works for both
 	    String contents = LastEID.substring(0, 3) + LastEID.substring(4, 16);
-						    		
+	    Log.i("PrintLabel btn ", " contents " + contents);		    		
 		Intent encodeIntent = new Intent("weyr.LT.ENCODE");
 		encodeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		encodeIntent.addCategory(Intent.CATEGORY_DEFAULT); 
@@ -638,18 +642,21 @@ public class SheepManagement extends ListActivity {
 		encodeIntent.putExtra("ENCODE_AUTOPRINT", "false");
 
 		if (AutoPrint) {
-		encodeIntent.putExtra("ENCODE_AUTOPRINT", "true");
+			encodeIntent.putExtra("ENCODE_AUTOPRINT", "true");
+			Log.i("PrintLabel btn ", " autoprint is true ");	
 	     };
 		
 		encodeIntent.putExtra("ENCODE_DATA1", LabelText);						
 		encodeIntent.putExtra("ENCODE_DATE", TodayIs() + "  " + TimeIs());
+		Log.i("PrintLabel btn ", " before put extra sheepName ");
 		encodeIntent.putExtra("ENCODE_SHEEPNAME", SheepName);
+		Log.i("PrintLabel btn ", " after put extra sheepName " + SheepName);
 	    startActivity(encodeIntent);
-		
+	    Log.i("PrintLabel btn ", " after start activity encode " );
 	    }
 	    catch(Exception r)
 	    {
-	        Log.v("EIDService", "RunTimeException: " + r);
+	        Log.v("PrintLabel ", " in sheep management RunTimeException: " + r);
 	    }			
 	}
 	   
@@ -660,6 +667,20 @@ public class SheepManagement extends ListActivity {
     	// Added this to close the database if we go back to the main activity  	
     	stopManagingCursor (cursor);
     	cursor.close();
+    	try {
+    		stopManagingCursor (cursor2);
+    		cursor2.close();
+    	}catch (Exception r)
+    	{
+    		Log.i("back btn", "cursor2 RunTimeException: " + r);
+    	}
+    	try {
+    		stopManagingCursor (cursor3);
+    		cursor3.close();
+    	}catch (Exception r)
+    	{
+    		Log.i("back btn", " cursor3 RunTimeException: " + r);
+    	}
     	dbh.closeDB();
     	clearBtn( null );
     	//Go back to main
@@ -678,6 +699,7 @@ public class SheepManagement extends ListActivity {
 				Log.i("evalGetAlert ", cmd);  
 				crsr = dbh.exec( cmd );
 		        cursor   = ( Cursor ) crsr;
+		        startManagingCursor(cursor);
 		        dbh.moveToFirstRecord();		       
 		        alert_text = (dbh.getStr(0));
 		        Log.i("evalShowAlert ", alert_text); 
@@ -720,19 +742,35 @@ public class SheepManagement extends ListActivity {
 		boxwormer.setChecked(false);
 		boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
 		boxtrimtoes.setChecked(false);
-		boxshearing = (CheckBox) findViewById(R.id.checkBoxTrimToes);
+		boxshearing = (CheckBox) findViewById(R.id.checkBoxShear);
 		boxshearing.setChecked(false);
 		// Enable Update Database button and make it normal
     	btn = (Button) findViewById( R.id.update_database_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));
     	btn.setEnabled(true);
+    	
+      	// make the alert button normal and disabled
+	   	btn = (Button) findViewById( R.id.alert_btn );
+	   	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+	   	btn.setEnabled(false);  
+   	
     }
 	@Override
 	public void onResume (){	
 		super.onResume();
-//		Log.i("PrintLabel", " OnResume");
+		CheckIfServiceIsRunning();
+		Log.i("SheepMgmt", " OnResume");
 		scanEid( null );
-	}	
+		
+	}
+	@Override
+	public void onPause (){	
+		super.onPause();
+		Log.i("SheepMgmt", " OnPause");
+		doUnbindService();
+	}
+	
+	
 	public void helpBtn( View v )
   {
  	// Display help here   	
@@ -823,7 +861,9 @@ public class SheepManagement extends ListActivity {
 					} catch (RemoteException e) {
 						// In this case the service has crashed before we could even do anything with it
 					}
-					}    	    	
+					} else{ 
+						Log.i("in ScanEID", " mService is null " );
+					}
 			 } 
     public void takeNote( View v )
     {	    	
@@ -837,6 +877,7 @@ public class SheepManagement extends ListActivity {
 //			        Log.i ("takeNote", " cmd is " + cmd);
         crsr = dbh.exec( cmd );  
         cursor   = ( Cursor ) crsr;
+        startManagingCursor(cursor);
     	dbh.moveToFirstRecord();
          // looping through all rows and adding to list
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
