@@ -68,8 +68,7 @@ public class SheepManagement extends ListActivity {
 	public int drug_gone; // 0 = false 1 = true
 	public int	drug_type, which_wormer, which_vaccine;
 	public RadioGroup radioGroup;
-	public String mytoday, mytime;
-	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxshearing;
+	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine;
 	public String note_text;
 	public int predefined_note;
 	private int             nRecs;
@@ -245,7 +244,7 @@ public class SheepManagement extends ListActivity {
 		// 	Display the EID number
 		TextView TV = (TextView) findViewById (R.id.inputText);
 		TV.setText( LastEID );
-		Log.i("in gotEID ", "with LastEID of " + LastEID);
+		Log.i("in gotEID ", "with LastEID of " + LastEID);		
 		
 	}	
 	
@@ -262,8 +261,6 @@ public class SheepManagement extends ListActivity {
     	dbh = new DatabaseHandler( this, dbfile );
 //		Added the variable definitions here    	
       	String          cmd;
-      	mytoday = TodayIs(); 
-		mytime = TimeIs();
 		ArrayList radiobtnlist;
     	String[] radioBtnText;
    	 //////////////////////////////////// 
@@ -348,7 +345,7 @@ public class SheepManagement extends ListActivity {
 		   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, vaccines);
 				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				vaccine_spinner.setAdapter (dataAdapter);
-				vaccine_spinner.setSelection(1);	
+				vaccine_spinner.setSelection(2);	
 			// 	Create the radio buttons for the shot locations here	
 				radiobtnlist = new ArrayList();
 //				radiobtnlist.add ("Select Vaccine Location");
@@ -523,49 +520,7 @@ public class SheepManagement extends ListActivity {
 	    	btn = (Button) findViewById( R.id.update_database_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 	    	btn.setEnabled(false);
-			//	Get the value of the checkbox for trim toes
-			Log.i("before checkbox", " getting ready to get trim toes or not ");
-			boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
-			if (boxtrimtoes.isChecked()){
-				//	go update the database with a toe trimming date and time add that as a note 
-				note_text = "";
-				predefined_note = 14; // hard coded the code for toes trimmed
-				// TODO
-				//	This will have to be changed for the general case
-				cmd = String.format("insert into note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid) " +
-    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note);
-    			Log.i("update notes ", "before cmd " + cmd);
-    			dbh.exec( cmd );	
-    			Log.i("update notes ", "after cmd exec");
-				Log.i("toes trimmed ", String.valueOf(boxtrimtoes));					
-			}			
-
-			//	Need to figure out the id_drugid for what we are giving this sheep
-			boxwormer = (CheckBox) findViewById(R.id.checkBoxGiveWormer);
-			if (boxwormer.isChecked()){
-				//	Go get which wormer was selected in the spinner
-				wormer_spinner = (Spinner) findViewById(R.id.wormer_spinner);
-				which_wormer = wormer_spinner.getSelectedItemPosition();
-				Log.i("wormer spinner", " position is" + String.valueOf(which_wormer));
-				//	go update the database with a drug record for this wormer and this sheep
-				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
-				i = wormer_id_drugid.get(which_wormer);
-				Log.i("wormer id", " value is " + String.valueOf(i));
-				//	Drug location 5 is by mouth
-				cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
-		  				" drug_time_on, drug_location) values " +
-		  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, 5);
-		  		Log.i("add drug to ", "db cmd is " + cmd);
-				dbh.exec(cmd);
-				Log.i("add tag ", "after insert into sheep_drug_table");
-				// TODO
-				//	Need to update the alert to include the slaughter withdrawal for this drug
-//				cmd = String.format("Select meat_withdrawal_units, user_meat_withdrawal from drug_table where drug_id = %s", i);
-//				Log.i("drug withdrawal ", "db cmd is " + cmd);
-				
-				
-			}	
-		
+	    	
 			boxvaccine = (CheckBox) findViewById(R.id.checkBoxGiveVaccine);
 			if (boxvaccine.isChecked()){
 				//	Go get which vaccine was selected in the spinner
@@ -603,28 +558,56 @@ public class SheepManagement extends ListActivity {
 		 		}else{
 					cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
 			  				" drug_time_on, drug_location) values " +
-			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, drug_loc);
+			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, TodayIs(), TimeIs(), drug_loc);
 			  		Log.i("add drug to ", "db cmd is " + cmd);
 					dbh.exec(cmd);
 					Log.i("add tag ", "after insert into sheep_drug_table");	
 		 		}
-			}
-
-//			Get the value of the checkbox for shearing
-			Log.i("before checkbox", " getting ready to get sheep shorn or not ");
-			boxshearing = (CheckBox) findViewById(R.id.checkBoxShear);
-			if (boxshearing.isChecked()){
-				//	go update the database with a shearing date and time add that as a note 
-				note_text = "Shorn";
+			}	    	
+	    	
+			//	Get the value of the checkbox for trim toes
+			Log.i("before checkbox", " getting ready to get trim toes or not ");
+			boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
+			if (boxtrimtoes.isChecked()){
+				//	go update the database with a toe trimming date and time add that as a note 
+				note_text = "";
+				predefined_note = 14; // hard coded the code for toes trimmed
 				// TODO
 				//	This will have to be changed for the general case
-				cmd = String.format("insert into note_table (sheep_id, note_text, note_date, note_time) " +
-    					"values ( %s, '%s', '%s', '%s' )", thissheep_id, note_text, TodayIs(), TimeIs());
+				cmd = String.format("insert into note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid) " +
+    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note);
     			Log.i("update notes ", "before cmd " + cmd);
     			dbh.exec( cmd );	
     			Log.i("update notes ", "after cmd exec");
-				Log.i("shorn ", String.valueOf(boxshearing));					
+				Log.i("toes trimmed ", String.valueOf(boxtrimtoes));					
+			}			
+
+			//	Need to figure out the id_drugid for what we are giving this sheep
+			boxwormer = (CheckBox) findViewById(R.id.checkBoxGiveWormer);
+			if (boxwormer.isChecked()){
+				//	Go get which wormer was selected in the spinner
+				wormer_spinner = (Spinner) findViewById(R.id.wormer_spinner);
+				which_wormer = wormer_spinner.getSelectedItemPosition();
+				Log.i("wormer spinner", " position is" + String.valueOf(which_wormer));
+				//	go update the database with a drug record for this wormer and this sheep
+				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
+				i = wormer_id_drugid.get(which_wormer);
+				Log.i("wormer id", " value is " + String.valueOf(i));
+				//	Drug location 5 is by mouth
+				cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
+		  				" drug_time_on, drug_location) values " +
+		  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, TodayIs(), TimeIs(), 5);
+		  		Log.i("add drug to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into sheep_drug_table");
+				// TODO
+				//	Need to update the alert to include the slaughter withdrawal for this drug
+//				cmd = String.format("Select meat_withdrawal_units, user_meat_withdrawal from drug_table where drug_id = %s", i);
+//				Log.i("drug withdrawal ", "db cmd is " + cmd);
+				
+				
 			}	
+		
 			clearBtn( null );
 	 }
 	public void printLabel( View v ){ 
@@ -742,8 +725,6 @@ public class SheepManagement extends ListActivity {
 		boxwormer.setChecked(false);
 		boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
 		boxtrimtoes.setChecked(false);
-		boxshearing = (CheckBox) findViewById(R.id.checkBoxShear);
-		boxshearing.setChecked(false);
 		// Enable Update Database button and make it normal
     	btn = (Button) findViewById( R.id.update_database_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));
@@ -760,17 +741,16 @@ public class SheepManagement extends ListActivity {
 		super.onResume();
 		CheckIfServiceIsRunning();
 		Log.i("SheepMgmt", " OnResume");
-		scanEid( null );
-		
+		scanEid( null );	
 	}
+
 	@Override
 	public void onPause (){	
 		super.onPause();
 		Log.i("SheepMgmt", " OnPause");
 		doUnbindService();
 	}
-	
-	
+
 	public void helpBtn( View v )
   {
  	// Display help here   	
@@ -785,7 +765,6 @@ public class SheepManagement extends ListActivity {
 	       });		
 		AlertDialog dialog = builder.create();
 		dialog.show();
-		
   }
  
 	public boolean tableExists (String table){
