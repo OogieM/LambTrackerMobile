@@ -390,7 +390,7 @@ public class ConvertToEID extends Activity {
 					//	Get id_predefinednotesid from a spinner here 
 					int predefined_note = predefined_note_spinner.getSelectedItemPosition();
 					// Update the notes table with the data
-					cmd = String.format("insert into note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid) " +
+					cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid) " +
 	    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note);
 	    			Log.i("update notes ", "before cmd " + cmd);
 	    			dbh.exec( cmd );	
