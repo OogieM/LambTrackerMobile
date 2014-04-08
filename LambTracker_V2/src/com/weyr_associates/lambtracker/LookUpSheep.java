@@ -42,7 +42,7 @@ public class LookUpSheep extends ListActivity
 	public String 	tag_type_label, tag_color_label, tag_location_label, eid_tag_color_label ;
 	public String 	eid_tag_location_label, eidText, alert_text;
 	public String 	thissire_name, thisdam_name;
-	public Cursor 	cursor, cursor2, cursor3;
+	public Cursor 	cursor, cursor2, cursor3, cursor4;
 	public Object	crsr;
 	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
 	public List<String> tag_types, tag_locations, tag_colors;
@@ -281,7 +281,7 @@ public class LookUpSheep extends ListActivity
         }
 	public void lookForSheep (View v){
 
-		Object crsr, crsr2, crsr3;
+		Object crsr, crsr2, crsr3, crsr4;
 		Boolean exists;
 		TextView TV;
         exists = true;
@@ -398,6 +398,25 @@ public class LookUpSheep extends ListActivity
 			    	//	testing whether I can put up an alert box here without issues
 			    	showAlert(v);
 				}
+				//	Now go get all the notes for this sheep and format them
+				// TODO
+				nRecs    = 0;
+				cmd = String.format( "select sheep_id, note_text, note_date, note_time, id_predefinednotesid01, " +
+						"id_predefinednotesid02, id_predefinednotesid03, id_predefinednotesid04," +
+						"id_predefinednotesid05 from sheep_note_table where sheep_id='%s' "+
+	        			"order by note_date, note_time asc", thissheep_id);  	        	
+	        	 Log.i("LookForSheep", " command is  " + cmd);
+	        	crsr4 = dbh.exec( cmd );
+	        	cursor4   = ( Cursor ) crsr4; 
+	    		startManagingCursor(cursor4);
+	    		nRecs    = cursor4.getCount();
+	        	dbh.moveToFirstRecord();
+	        	// decide how to handle finding the note records
+	        	if( dbh.getSize() != 0 )
+		    		{ // get the notes for this sheep 
+		    		Log.i("lookup", "Got some notes for this sheep");
+		    		}			
+				
 				}else{
 	        	return;
 	        }
@@ -456,16 +475,39 @@ public class LookUpSheep extends ListActivity
     // user clicked the 'back' button
     public void backBtn( View v )
 	    {
+//    	Log.i("Back Button", " In the lookupsheep back code at beginning");   
     	doUnbindService();
+//    	Log.i("Back Button", " In lookupsheep back after dounbindservice");   
 		stopService(new Intent(LookUpSheep.this, eidService.class));   	
+//    	Log.i("Back Button", " In lookupsheep back after stop service");   
     	// Added this to close the database if we go back to the main activity  
-		stopManagingCursor (cursor);
-		cursor.close();
-		if (thissheep_id != 0){
-	    	stopManagingCursor (cursor2);
-	    	stopManagingCursor (cursor3);
-	    	cursor3.close();
-	    	cursor2.close();
+    	//	Close cursors if there are any but fall out if we don't have any in use
+		try {
+//			Log.i("Back Button", " In try stmt cursor");   
+			stopManagingCursor (cursor);
+			cursor.close();
+		}
+		catch (Exception e) {
+//			Log.i("Back Button", " In catch stmt cursor");  
+			// In this case there is no adapter so do nothing
+		}
+		try {
+//			Log.i("Back Button", " In try stmt cursor2");   
+			stopManagingCursor (cursor2);
+			cursor2.close();
+		}
+		catch (Exception e) {
+//			Log.i("Back Button", " In catch stmt cursor2");  
+			// In this case there is no adapter so do nothing
+		}
+		try {
+//			Log.i("Back Button", " In try stmt cursor3");   
+			stopManagingCursor (cursor3);
+			cursor3.close();
+		}
+		catch (Exception e) {
+//			Log.i("Back Button", " In catch stmt cursor3");  
+			// In this case there is no adapter so do nothing
 		}
     	dbh.closeDB();
     	clearBtn( null );

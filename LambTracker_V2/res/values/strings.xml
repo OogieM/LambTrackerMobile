@@ -3,18 +3,14 @@
 
     <string name="app_name">LambTracker</string>
     <string name="app_name_long">Weyr Associates LambTracker</string>
-	<string name="app_name_settings">Weyr Associates LambTracker - Settings</string>
-	
-	<string name="real_database_file">lambtracker_db.sqlite</string>
-	<string name="database_path">/data/data/com.weyr_associates.lambtracker/databases/</string>
-	
-    <string name="service_started">EID Service Running</string> 
-    <string name="service_label">EID Service</string> 
+    <string name="app_name_settings">Weyr Associates LambTracker - Settings</string>
+    <string name="real_database_file">lambtracker_db.sqlite</string>
+    <string name="database_path">/data/data/com.weyr_associates.lambtracker/databases/</string>
+    <string name="service_started">EID Service Running</string>
+    <string name="service_label">EID Service</string>
     <string name="menu_settings">Settings</string>
-    
-    <string name="exec_sql_btn">Execute SQL</string>    
+    <string name="exec_sql_btn">Execute SQL</string>
     <string name="edit_db_btn">Edit DB</string>
-    
     <string name="copy_db_assets_btn">Copy DB in Assets</string>
     <string name="select_db_file_btn">Select DB File</string>
     <string name="show_db_btn">Show DB</string>
@@ -23,7 +19,7 @@
     <string name="prev_rec_btn">Prev. Record</string>
     <string name="clear_btn">Clear</string>
     <string name="enter_btn">Enter</string>
-    <string name="quit_btn">Quit</string>  
+    <string name="quit_btn">Quit</string>
     <string name="back_btn">Back</string>
     <string name="view_btn">View</string>
     <string name="help_btn">Help</string>
@@ -37,29 +33,27 @@
     <string name="cancel_btn">Cancel</string>
     <string name="alert_btn">Alert</string>
     <string name="take_note_btn">Take Note</string>
-    <string name="ok">OK</string> 
-    <string name="scan_eid_btn">Scan EID Tag</string>   
+    <string name="ok">OK</string>
+    <string name="scan_eid_btn">Scan EID Tag</string>
     <string name="scan_add_eid_btn">Scan to add EID Tag</string>
     <string name="remove_tag_btn">Remove Tag</string>
     <string name="remove_fedtag_btn">Remove Fed Tag</string>
     <string name="remove_farmtag_btn">Remove Farm Tag</string>
-	<string name="search_fed_btn">Search Federal Tag</string>
-	<string name="search_farm_btn">Search Farm Tag</string>
-	<string name="search_other_btn">Search Other ID</string>
+    <string name="search_fed_btn">Search Federal Tag</string>
+    <string name="search_farm_btn">Search Farm Tag</string>
+    <string name="search_other_btn">Search Other ID</string>
     <string name="add_new_tag_btn">Add Non EID Tag</string>
     <string name="save_evaluation_scores_btn">Save Scores</string>
     <string name="create_evaluation_task_btn">Create Evaluation</string>
     <string name="look_up_sheep_btn">Look Up Sheep</string>
-    <string name="add_lamb_btn">Add a Lamb</string> 
+    <string name="add_lamb_btn">Add a Lamb</string>
     <string name="print_label_btn">Print Label</string>
-   
     <string name="load_sheeplist">Load Sheep Database</string>
     <string name="do_sheeptask">Do Sheep Tasks</string>
     <string name="look_up_sheep">Look up a Sheep by EID</string>
-   	<string name="copy_real_db_action">copyRealDB</string>
-   	<string name="select_file_db_action">selectFileDB</string> 
-    <string name="show_real_db_action">showRealDB</string>     
-    
+    <string name="copy_real_db_action">copyRealDB</string>
+    <string name="select_file_db_action">selectFileDB</string>
+    <string name="show_real_db_action">showRealDB</string>
     <string name="title_activity_do_sheep_task">Demo Lambing Data</string>
     <string name="title_activity_load_sheep_list">Manage Sheep Database</string>
     <string name="title_activity_look_up_sheep">Look Up Sheep</string>
@@ -74,40 +68,39 @@
     <string name="title_activity_add_lamb">Add a Lamb</string>
     <string name="title_activity_sheep_management">Sheep Management</string>
     <string name="title_activity_print_labels">Print Labels</string>
-
+    <string name="title_activity_set_lambtracker_defaults">Set LambTracker Defaults</string>
+    
     <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
     <string name="help_convert">Select a sheep based on either Federal or Farm tag. The system assumes there are no duplicate
-         farm tags and no duplicate federal tags. There can be duplicates where one is a federal tag and one is a farm tag. </string>   
+         farm tags and no duplicate federal tags. There can be duplicates where one is a federal tag and one is a farm tag. </string>
     <string name="help_evaluate">Evaluate sheep based on the criteria you select. Use the select to locate a sheep by Federal, 
         Farm or Scanning an EID tag. Then select the scores for each trait. When finished select Save Scores
         to write the data to the database with an evaluation date of today. </string>
     <string name="help_create_evaluate">Create a list of traits to evaluate on this run with the sheep. 
-        You may select 10 scored items and 5 real data items. </string> 
-   	<string name="help_ground_truth_tags">Select a sheep using the EID reader or by entering in a federal or farm tag number. 
+        You may select 10 scored items and 5 real data items. </string>
+    <string name="help_ground_truth_tags">Select a sheep using the EID reader or by entering in a federal or farm tag number. 
    	    All the tags for that sheep will be displayed in the scrolling view below. If you need to correct tags you will need to do 
-   	    that separately in the desktop application. </string>   
+   	    that separately in the desktop application. </string>
     <string name="help_lambing_sheep">Select a sheep using the EID reader or by entering in another identification. 
    	    All the tags for that sheep will be displayed in the scrolling view below. The ewe\'s last lambing results will be shown.
    	    If there are any lambs from that sheep for this year their identification will also be listed. You can choose to add lambs 
-   	    here to collect data on the birth. </string>   	    
+   	    here to collect data on the birth. </string>
     <string name="help_add_lamb">Add the information on this lamb. Be sure to put the first lamb born in first and the second lamb 
-         born in second.  </string>    	    
+         born in second.  </string>
     <string name="help_print">This prints a single label with the EID as a bar code and the name of the sheep on it.  </string>
     <string name="help_management">Select the management tasks you have done for this sheep and then update the database. </string>
-        
-        
     <string name="convert_fill_fields">Please Fill in all four fields.</string>
     <string name="add_lamb_fill_fields">Please Fill in a Lambease value.</string>
     <string name="drug_loc_fill_fields">Please Fill in a Shot Location.</string>
     <string name="enter_tag_data">Enter Tag Data</string>
     <string name="wrong_id_location">Invalid ID Location</string>
-    
+
     <string-array name="sheep_task_array">
         <item>Choose a Flock Task</item>
         <item>Manage Sheep Database</item>
         <item>Convert to EID</item>
-        <item>Create a Sheep Evaluation Task</item>       
+        <item>Create a Sheep Evaluation Task</item>
         <item>Evaluate Sheep</item>
         <item>Evaluate Sheep2</item>
         <item>Look Up a Sheep</item>
@@ -115,12 +108,13 @@
         <item>Sheep Management</item>
         <item>Print Labels</item>
         <item>Edit Database</item>
+        <item>Set LambTracker Defaults</item>
         <item>Test Interface Designs</item>
-     </string-array>
-   
+    </string-array>
+
     <string name="sheep_name_lbl">Sheep Name</string>
     <string name="flock_prefix_lbl">Flock Prefix</string>
-    <string name="sheep_sex_lbl">Sex</string>  
+    <string name="sheep_sex_lbl">Sex</string>
     <string name="sheep_birth_date_lbl">Birth Date</string>
     <string name="sheep_birth_type_lbl">Birth Type</string>
     <string name="sheep_birth_weight_lbl">Birth Weight</string>
@@ -135,12 +129,10 @@
     <string name="sheep_givewormer">Give Wormer</string>
     <string name="sheep_givevaccine">Give Vaccine</string>
     <string name="sheep_shear">Shear Sheep</string>
-     
     <string name="federal_id_lbl">Federal ID</string>
     <string name="farm_id_lbl">Farm ID</string>
     <string name="electronic_id_lbl">Electronic ID</string>
     <string name="input_id_lbl">Input Search String</string>
-      
     <string name="tag_number_lbl">Tag Number</string>
     <string name="tag_record_lbl">ID #</string>
     <string name="tag_type_lbl">Tag Type</string>
@@ -154,23 +146,23 @@
     <string name="tag_date_on_lbl">Tag Date On</string>
     <string name="tag_date_off_lbl">Tag Date Off</string>
     <string name="new_tag_lbl">New Tag Number</string>
-    
     <string name="select_scored_traits.lbl">Select Traits Scored 1 to 5</string>
     <string name="select_value_traits.lbl">Select Traits with Real values</string>
-       
-	<string name="sql_command_lbl">SQL Command</string>
-	<string name="results_lbl">Results</string>
-	
-	<string name="take_note_lbl">Enter Note:</string>
-
-    <string name="lambing_history_lbl">Lambing History</string> 
+    <string name="sql_command_lbl">SQL Command</string>
+    <string name="results_lbl">Results</string>
+    <string name="take_note_lbl">Enter Note:</string>
+    <string name="lambing_history_lbl">Lambing History</string>
     <string name="current_lambs_lbl">Current Lambs</string>
+    <string name="sheep_breed_lbl">Sheep Breed</string>
+    <string name="owner_id_lbl">Owner</string>
+    <string name="update_eval_lbl">Update Alerts on Save Evaluation?</string>
+    <string name="include_removed_sheep">Include Removed Sheep in Look Up Sheep?</string>
     
-         
     <string name="delete_sheep">Delete Sheep?</string>
     <string name="delete_tag">Remove Tag from this Sheep?</string>
     <string name="delete_warning">Delete Warning</string>
-    
     <string name="action_settings">Settings</string>
-       
+    <string name="title_activity_set_defaults">SetDefaults</string>
+   
+
 </resources>
