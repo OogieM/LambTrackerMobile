@@ -1355,14 +1355,49 @@ public class AddLamb extends Activity {
 					int predefined_note05 = predefined_note_spinner05.getSelectedItemPosition();
 					// Update the notes table with the data
 					cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, " +
-							"id_predefinednotesid01, id_predefinednotesid02, id_predefinednotesid03, " +
-							"id_predefinednotesid04, id_predefinednotesid05) " +
-							"values ( %s, '%s', '%s', '%s', %s, %s, %s, %s, %s )",
-	    					thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note01, predefined_note02, predefined_note03,
-	    					predefined_note04, predefined_note05);
+							"id_predefinednotesid01) " +
+							"values ( %s, '%s', '%s', '%s', %s )",
+	    					thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note01);
 	    			Log.i("update notes ", "before cmd " + cmd);
 	    			dbh.exec( cmd );	
 	    			Log.i("update notes ", "after cmd exec");
+	    			Log.i("take note","first note written");
+	    			if (predefined_note02 > 0) {
+	    	 			Log.i("take note","second note written");
+	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+	 							"id_predefinednotesid01) " +
+	 							"values ( %s, '%s', '%s', %s)",
+	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note02 );
+	 	    			Log.i("update notes ", "before cmd " + cmd);
+	 	    			dbh.exec( cmd );	
+	    	 		}
+	    			if (predefined_note03 > 0) {
+	    	 			Log.i("take note","third note written");
+	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+	 							"id_predefinednotesid01) " +
+	 							"values ( %s, '%s', '%s', %s)",
+	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note03 );
+	 	    			Log.i("update notes ", "before cmd " + cmd);
+	 	    			dbh.exec( cmd );	
+	    	 		}
+	    			if (predefined_note04 > 0) {
+	    	 			Log.i("take note","fourth note written");
+	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+	 							"id_predefinednotesid01) " +
+	 							"values ( %s, '%s', '%s', %s)",
+	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note04 );
+	 	    			Log.i("update notes ", "before cmd " + cmd);
+	 	    			dbh.exec( cmd );	
+	    	 		}
+	    			if (predefined_note05 > 0) {
+	    	 			Log.i("take note","fifth note written");
+	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+	 							"id_predefinednotesid01) " +
+	 							"values ( %s, '%s', '%s', %s)",
+	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note05 );
+	 	    			Log.i("update notes ", "before cmd " + cmd);
+	 	    			dbh.exec( cmd );	
+	    	 		}
 				    }
 				  })
 				.setNegativeButton("Cancel",
