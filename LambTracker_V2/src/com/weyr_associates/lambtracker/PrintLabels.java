@@ -222,6 +222,11 @@ public class PrintLabels extends Activity {
 			clearBtn( null );
 			TV = (TextView) findViewById( R.id.sheepnameText );
 	    	TV.setText( "Cannot find this sheep." );
+			
+		if (AutoPrint) {
+			scanEid( null );
+			}
+		
 	    	return;
 		}
     	TV = (TextView) findViewById(R.id.sheepnameText);
@@ -238,13 +243,20 @@ public class PrintLabels extends Activity {
     	Log.i("Got EID ", "Alert Text is " + alert_text);
 //    	Now to test of the sheep has an alert and if so then set the alerts button to red
 //    	if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-		if (alert_text != null && !alert_text.isEmpty() ){
+
+
+	     	
+    	if (alert_text != null && !alert_text.isEmpty() ){
 			// make the alert button red and enable it and pop up the alert text
 			btn = (Button) findViewById( R.id.alert_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-	    	btn.setEnabled(true); 
+	    	btn.setEnabled(true);
+			if (!AutoPrint) {
 	    	showAlert(v);
-		}
+			}
+		 }
+    	
+    	
 //		Now we need to get the farm tag for that sheep and fill the display with data
     	
     	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
@@ -291,12 +303,16 @@ public class PrintLabels extends Activity {
         	ii = dbh.getInt(1);
     	}
 		// TODO
+		if (AutoPrint) {
+			printLabel(v);
+			}
     	
    }	
 
 	@Override
     public void onCreate(Bundle savedInstanceState)	
     {
+		Log.i("PrintLabel", " Oncreate1");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.print_labels);
         String 			dbname = getString(R.string.real_database_file); 
@@ -306,19 +322,33 @@ public class PrintLabels extends Activity {
         Object 			crsr;
         dbh = new DatabaseHandler( this, dbname );
        
-		CheckIfServiceIsRunning();
+//		CheckIfServiceIsRunning();
 		LoadPreferences(true);
+		Log.i("PrintLabel", " OnCreate2");
 		
     }
+	@Override
+	public void onResume (){	
+		super.onResume();
+		Log.i("PrintLabel", " OnResume");
+		CheckIfServiceIsRunning();
+		scanEid( null );
+	}
+	
+	@Override
+	public void onPause (){	
+		super.onPause();
+		Log.i("PrintLabel", " OnPause");
+		doUnbindService();
+	}
 	public void printLabel( View v ){ 
 
 		// Ken add the printing code here
-		String[] lines = EID.split("\n"); // works for both
-		
-	    String contents = LastEID.substring(0, 3) + LastEID.substring(4, 16);
-	   	
 	    try
-	    {					    		
+	    {
+		String[] lines = EID.split("\n"); // works for both		
+	    String contents = LastEID.substring(0, 3) + LastEID.substring(4, 16);
+	   					    		
 		Intent encodeIntent = new Intent("weyr.LT.ENCODE");
 		encodeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		encodeIntent.addCategory(Intent.CATEGORY_DEFAULT); 

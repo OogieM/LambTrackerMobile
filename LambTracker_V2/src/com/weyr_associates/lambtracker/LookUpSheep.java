@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,11 +43,12 @@ public class LookUpSheep extends ListActivity
 	public String 	tag_type_label, tag_color_label, tag_location_label, eid_tag_color_label ;
 	public String 	eid_tag_location_label, eidText, alert_text;
 	public String 	thissire_name, thisdam_name;
-	public Cursor 	cursor, cursor2, cursor3;
+	public Cursor 	cursor, cursor2, cursor3, cursor4;
 	public Object	crsr;
 	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
 	public List<String> tag_types, tag_locations, tag_colors;
-	public Spinner predefined_note_spinner;
+	public Spinner predefined_note_spinner01, predefined_note_spinner02, predefined_note_spinner03;
+	public Spinner predefined_note_spinner04, predefined_note_spinner05;
 	public List<String> predefined_notes;
 	public String[] this_sheeps_tags ;
 	
@@ -61,7 +63,7 @@ public class LookUpSheep extends ListActivity
 	Integer 	i;	
 	public Button btn;
 	
-	public SimpleCursorAdapter myadapter;
+	public SimpleCursorAdapter myadapter, myadapter2;
 
 	/////////////////////////////////////////////////////
 	Messenger mService = null;
@@ -280,9 +282,10 @@ public class LookUpSheep extends ListActivity
         }
 	public void lookForSheep (View v){
 
-		Object crsr, crsr2, crsr3;
+		Object crsr, crsr2, crsr3, crsr4;
 		Boolean exists;
 		TextView TV;
+		ListView notelist = (ListView) findViewById(R.id.list2);
         exists = true;
      // Hide the keyboard when you click the button
     	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
@@ -357,7 +360,6 @@ public class LookUpSheep extends ListActivity
 		    		TV.setText (thissire_name);	 
 		    		Log.i("lookForSheep", " Sire is " + thissire_name);
 			        Log.i("LookForSheep", " Sire is " + String.valueOf(thissire_id));
-//			        cursor3.close();
 		        }
 		        if(thisdam_id != 0){
 			        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thisdam_id);
@@ -370,7 +372,6 @@ public class LookUpSheep extends ListActivity
 		    		TV.setText (thisdam_name);	
 		    		Log.i("lookForSheep", " Dam is " + thisdam_name);
 			        Log.i("LookForSheep", " Dam is " + String.valueOf(thisdam_id));
-//			        cursor3.close();
 		        }    		
 		    	Log.i("lookForSheep", " before formatting results");
 				
@@ -397,6 +398,33 @@ public class LookUpSheep extends ListActivity
 			    	//	testing whether I can put up an alert box here without issues
 			    	showAlert(v);
 				}
+				//	Now go get all the notes for this sheep and format them
+				cmd = String.format( "select sheep_note_table.id_noteid as _id, sheep_note_table.note_date, sheep_note_table.note_time, " +
+						"sheep_note_table.note_text, predefined_notes_table.predefined_note_text " +
+						" from sheep_note_table inner join predefined_notes_table " +
+						"on predefined_notes_table.id_predefinednotesid = sheep_note_table.id_predefinednotesid01" +
+						" where sheep_id='%s' "+
+	        			"order by note_date desc ", thissheep_id);  	        	
+	        	 Log.i("LookForSheep", " command is  " + cmd);
+	        	crsr4 = dbh.exec( cmd );
+	        	cursor4   = ( Cursor ) crsr4; 
+	    		startManagingCursor(cursor4);
+	    		nRecs    = cursor4.getCount();
+	    		Log.i("lookForSheep", " nRecs is " + String.valueOf(nRecs));
+	    		cursor4.moveToFirst();	
+	    		if (nRecs > 0) {
+		        	// format the note records
+					//	Select only the columns I need for the note display section
+		        	String[] fromColumns2 = new String[ ]{ "note_date", "note_time", "note_text", "predefined_note_text"};
+					Log.i("LookForSheep", "after setting string array fromColumns for notes");
+					//	Set the views for each column for each line. A tag takes up 1 line on the screen
+					int[] toViews2 = new int[] { R.id.note_date, R.id.note_time, R.id.note_text, R.id.predefined_note_text};
+			        Log.i("LookForSheep", "after setting string array toViews for notes");
+			        myadapter2 = new SimpleCursorAdapter(this, R.layout.note_entry, cursor4 ,fromColumns2, toViews2, 0);
+			        Log.i("LookForSheep", "after setting myadapter to show notes");
+			        notelist.setAdapter(myadapter2);
+			        Log.i("LookForSheep", "after setting list adapter to show notes");			
+	    		}
 				}else{
 	        	return;
 	        }
@@ -441,7 +469,7 @@ public class LookUpSheep extends ListActivity
     {
    	// Display help here   	
 		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-		builder.setMessage( R.string.help_ground_truth_tags )
+		builder.setMessage( R.string.help_look_up_sheep)
 	           .setTitle( R.string.help_warning );
 		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
 	           public void onClick(DialogInterface dialog, int idx) {
@@ -455,16 +483,39 @@ public class LookUpSheep extends ListActivity
     // user clicked the 'back' button
     public void backBtn( View v )
 	    {
+//    	Log.i("Back Button", " In the lookupsheep back code at beginning");   
     	doUnbindService();
+//    	Log.i("Back Button", " In lookupsheep back after dounbindservice");   
 		stopService(new Intent(LookUpSheep.this, eidService.class));   	
+//    	Log.i("Back Button", " In lookupsheep back after stop service");   
     	// Added this to close the database if we go back to the main activity  
-		stopManagingCursor (cursor);
-		cursor.close();
-		if (thissheep_id != 0){
-	    	stopManagingCursor (cursor2);
-	    	stopManagingCursor (cursor3);
-	    	cursor3.close();
-	    	cursor2.close();
+    	//	Close cursors if there are any but fall out if we don't have any in use
+		try {
+//			Log.i("Back Button", " In try stmt cursor");   
+			stopManagingCursor (cursor);
+			cursor.close();
+		}
+		catch (Exception e) {
+//			Log.i("Back Button", " In catch stmt cursor");  
+			// In this case there is no adapter so do nothing
+		}
+		try {
+//			Log.i("Back Button", " In try stmt cursor2");   
+			stopManagingCursor (cursor2);
+			cursor2.close();
+		}
+		catch (Exception e) {
+//			Log.i("Back Button", " In catch stmt cursor2");  
+			// In this case there is no adapter so do nothing
+		}
+		try {
+//			Log.i("Back Button", " In try stmt cursor3");   
+			stopManagingCursor (cursor3);
+			cursor3.close();
+		}
+		catch (Exception e) {
+//			Log.i("Back Button", " In catch stmt cursor3");  
+			// In this case there is no adapter so do nothing
 		}
     	dbh.closeDB();
     	clearBtn( null );
@@ -530,89 +581,143 @@ public class LookUpSheep extends ListActivity
  			return Integer.toString(i);
  		}
  	}
-	    public void takeNote( View v )
-	    {	    	
-	    	final Context context = this;
+     public void takeNote( View v )
+     {	    	
+     	final Context context = this;
  		//	First fill the predefined note spinner with possibilities
-	    	predefined_notes = new ArrayList<String>();
+     	predefined_notes = new ArrayList<String>();
  		predefined_notes.add("Select a Predefined Note");
 // 		Log.i ("takeNote", " after adding Select a Predefined Note");
-	    	// Select All fields from predefined_notes_table to build the spinner
-	        cmd = "select * from predefined_notes_table";
-//	        Log.i ("takeNote", " cmd is " + cmd);
-	        crsr = dbh.exec( cmd );  
-	        cursor   = ( Cursor ) crsr;
-	    	dbh.moveToFirstRecord();
-	         // looping through all rows and adding to list
-	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-	    		predefined_notes.add(cursor.getString(1));
-//	    		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
-	    	}
-	    	cursor.close();    
-	    	Log.i ("takeNote", " after set the predefined note spinner ");
-	    	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
-	    	//Implement take a note stuff here
-	    	if (thissheep_id == 0) {
-	    		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
-	    	}
-	    	else {
-//	    		Log.i ("takeNote", " got a sheep, need to get a note to add");
-	    		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-//	    		Log.i ("takeNote", " after getting new alertdialogbuilder");
-	    		
-	    		LayoutInflater li = LayoutInflater.from(context);
-				View promptsView = li.inflate(R.layout.note_prompt, null);
-//				Log.i ("takeNote", " after inflating layout");	
+     	// Select All fields from predefined_notes_table to build the spinner
+         cmd = "select * from predefined_notes_table";
+//         Log.i ("takeNote", " cmd is " + cmd);
+         crsr = dbh.exec( cmd );  
+         cursor   = ( Cursor ) crsr;
+     	dbh.moveToFirstRecord();
+          // looping through all rows and adding to list
+     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+     		predefined_notes.add(cursor.getString(1));
+//     		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
+     	}
+     	cursor.close();    
+     	Log.i ("takeNote", " after set the predefined note spinner ");
+     	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
+     	//Implement take a note stuff here
+     	if (thissheep_id == 0) {
+     		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
+     	}
+     	else {
+//     		Log.i ("takeNote", " got a sheep, need to get a note to add");
+     		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+//     		Log.i ("takeNote", " after getting new alertdialogbuilder");
+     		
+     		LayoutInflater li = LayoutInflater.from(context);
+ 			View promptsView = li.inflate(R.layout.note_prompt, null);
+// 			Log.i ("takeNote", " after inflating layout");	
 
-				// set view note_prompt to alertdialog builder
-				alertDialogBuilder.setView(promptsView);
-				Log.i ("takeNote", " after setting view");
-			   	// Creating adapter for spinner
-		    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, predefined_notes);
-//		    	Log.i ("takeNote", " after create new array adapter for the spinner ");
-		    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//		    	Log.i ("takeNote", " after set dropdown resource for the spinner ");
-		    	predefined_note_spinner = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner);
-//		    	Log.i ("takeNote", " after set promptsView for the spinner ");
-		    	predefined_note_spinner.setAdapter (dataAdapter);
-//				Log.i ("takeNote", " after set the adapter for the spinner ");
-				predefined_note_spinner.setSelection(0);
-//				Log.i ("takeNote", " after set spinner to location 0");
-				
-				final EditText userInput = (EditText) promptsView
-						.findViewById(R.id.note_text);
+ 			// set view note_prompt to alertdialog builder
+ 			alertDialogBuilder.setView(promptsView);
+ 			Log.i ("takeNote", " after setting view");
+ 		   	// Creating adapter for predefined notes spinners
+ 	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, predefined_notes);
+ 	    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+ 	    	predefined_note_spinner01 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner01);
+ 	    	predefined_note_spinner01.setAdapter (dataAdapter);
+ 			predefined_note_spinner01.setSelection(0);
+ 			
+ 	    	predefined_note_spinner02 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner02);
+ 	    	predefined_note_spinner02.setAdapter (dataAdapter);
+ 			predefined_note_spinner02.setSelection(0);
 
-				// set dialog message
-				alertDialogBuilder
-					.setCancelable(false)
-					.setPositiveButton("Save Note",
-					  new DialogInterface.OnClickListener() {
-					    public void onClick(DialogInterface dialog,int id) {
-						// get user input and set it to result
-						// edit text
-						String note_text = String.valueOf(userInput.getText());
-						//	Get id_predefinednotesid from a spinner here 
-						int predefined_note = predefined_note_spinner.getSelectedItemPosition();
-						// Update the notes table with the data
-						cmd = String.format("insert into note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid) " +
-		    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note);
-		    			Log.i("update notes ", "before cmd " + cmd);
-		    			dbh.exec( cmd );	
-		    			Log.i("update notes ", "after cmd exec");
-					    }
-					  })
-					.setNegativeButton("Cancel",
-					  new DialogInterface.OnClickListener() {
-					    public void onClick(DialogInterface dialog,int id) {
-						dialog.cancel();
-					    }
-					  });
-				// create alert dialog
-				AlertDialog alertDialog = alertDialogBuilder.create();
-				// show it
-				alertDialog.show();
-	    	}   	
-	    }
+ 	    	predefined_note_spinner03 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner03);
+ 	    	predefined_note_spinner03.setAdapter (dataAdapter);
+ 			predefined_note_spinner03.setSelection(0);
+
+ 	    	predefined_note_spinner04 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner04);
+ 	    	predefined_note_spinner04.setAdapter (dataAdapter);
+ 			predefined_note_spinner04.setSelection(0);
+
+ 	    	predefined_note_spinner05 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner05);
+ 	    	predefined_note_spinner05.setAdapter (dataAdapter);
+ 			predefined_note_spinner05.setSelection(0);
+
+ 			final EditText userInput = (EditText) promptsView
+ 					.findViewById(R.id.note_text);
+
+ 			// set dialog message
+ 			alertDialogBuilder
+ 				.setCancelable(false)
+ 				.setPositiveButton("Save Note",
+ 				  new DialogInterface.OnClickListener() {
+ 				    public void onClick(DialogInterface dialog,int id) {
+ 					// get user input and set it to result
+ 					// edit text
+ 					String note_text = String.valueOf(userInput.getText());
+ 					//	Get id_predefinednotesid from a spinner here 
+ 					int predefined_note01 = predefined_note_spinner01.getSelectedItemPosition();
+ 					int predefined_note02 = predefined_note_spinner02.getSelectedItemPosition();
+ 					int predefined_note03 = predefined_note_spinner03.getSelectedItemPosition();
+ 					int predefined_note04 = predefined_note_spinner04.getSelectedItemPosition();
+ 					int predefined_note05 = predefined_note_spinner05.getSelectedItemPosition();
+ 					// Update the notes table with the data
+ 					cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, " +
+ 							"id_predefinednotesid01) " +
+ 							"values ( %s, '%s', '%s', '%s', %s )",
+ 	    					thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note01);
+ 	    			Log.i("update notes ", "before cmd " + cmd);
+ 	    			dbh.exec( cmd );	
+ 	    			Log.i("update notes ", "after cmd exec");
+ 	    			Log.i("take note","first note written");
+ 	    			if (predefined_note02 > 0) {
+ 	    	 			Log.i("take note","second note written");
+ 	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+ 	 							"id_predefinednotesid01) " +
+ 	 							"values ( %s, '%s', '%s', %s)",
+ 	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note02 );
+ 	 	    			Log.i("update notes ", "before cmd " + cmd);
+ 	 	    			dbh.exec( cmd );	
+ 	    	 		}
+ 	    			if (predefined_note03 > 0) {
+ 	    	 			Log.i("take note","third note written");
+ 	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+ 	 							"id_predefinednotesid01) " +
+ 	 							"values ( %s, '%s', '%s', %s)",
+ 	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note03 );
+ 	 	    			Log.i("update notes ", "before cmd " + cmd);
+ 	 	    			dbh.exec( cmd );	
+ 	    	 		}
+ 	    			if (predefined_note04 > 0) {
+ 	    	 			Log.i("take note","fourth note written");
+ 	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+ 	 							"id_predefinednotesid01) " +
+ 	 							"values ( %s, '%s', '%s', %s)",
+ 	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note04 );
+ 	 	    			Log.i("update notes ", "before cmd " + cmd);
+ 	 	    			dbh.exec( cmd );	
+ 	    	 		}
+ 	    			if (predefined_note05 > 0) {
+ 	    	 			Log.i("take note","fifth note written");
+ 	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+ 	 							"id_predefinednotesid01) " +
+ 	 							"values ( %s, '%s', '%s', %s)",
+ 	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note05 );
+ 	 	    			Log.i("update notes ", "before cmd " + cmd);
+ 	 	    			dbh.exec( cmd );	
+ 	    	 		}
+ 				    }
+ 				  })
+ 				.setNegativeButton("Cancel",
+ 				  new DialogInterface.OnClickListener() {
+ 				    public void onClick(DialogInterface dialog,int id) {
+ 					dialog.cancel();
+ 				    }
+ 				  });
+ 			// create alert dialog
+ 			AlertDialog alertDialog = alertDialogBuilder.create();
+ 			// show it
+ 			alertDialog.show();
+     	}   	
+     }
 	    private String TimeIs() {
 			Calendar calendar = Calendar.getInstance();
 	        //12 hour format

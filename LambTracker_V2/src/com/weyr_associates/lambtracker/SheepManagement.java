@@ -40,6 +40,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
+import com.google.zxing.client.android.Intents;
 
 public class SheepManagement extends ListActivity {
 	private DatabaseHandler dbh;
@@ -53,10 +54,11 @@ public class SheepManagement extends ListActivity {
 	public String 	eid_tag_location_label, eidText, alert_text;
 	public String 	thissire_name, thisdam_name;
 
-	public Cursor 	cursor, cursor2, cursor3, cursor4, cursor5;
+	public Cursor 	cursor, cursor2, cursor3, cursor4;
 	public Object 	crsr, crsr2, crsr3, crsr4, crsr5;
 	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
-	public Spinner predefined_note_spinner;
+	public Spinner predefined_note_spinner01, predefined_note_spinner02, predefined_note_spinner03;
+	public Spinner predefined_note_spinner04, predefined_note_spinner05;
 	public Spinner wormer_spinner, vaccine_spinner;
 	public List<String> predefined_notes;
 	public List<String> tag_types, tag_locations, tag_colors;
@@ -67,10 +69,9 @@ public class SheepManagement extends ListActivity {
 	public int drug_gone; // 0 = false 1 = true
 	public int	drug_type, which_wormer, which_vaccine;
 	public RadioGroup radioGroup;
-	public String mytoday, mytime;
-	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxshearing;
+	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine;
 	public String note_text;
-	public int predefined_note;
+	public int predefined_note01, predefined_note02, predefined_note03, predefined_note04, predefined_note05;
 	private int             nRecs;
 	private int			    recNo;
 	private String[]        colNames;
@@ -244,7 +245,7 @@ public class SheepManagement extends ListActivity {
 		// 	Display the EID number
 		TextView TV = (TextView) findViewById (R.id.inputText);
 		TV.setText( LastEID );
-		Log.i("in gotEID ", "with LastEID of " + LastEID);
+		Log.i("in gotEID ", "with LastEID of " + LastEID);		
 		
 	}	
 	
@@ -261,12 +262,11 @@ public class SheepManagement extends ListActivity {
     	dbh = new DatabaseHandler( this, dbfile );
 //		Added the variable definitions here    	
       	String          cmd;
-      	mytoday = TodayIs(); 
-		mytime = TimeIs();
 		ArrayList radiobtnlist;
     	String[] radioBtnText;
    	 //////////////////////////////////// 
-		CheckIfServiceIsRunning();
+//		CheckIfServiceIsRunning();
+		LoadPreferences (true);
 		Log.i("SheepMgmt", "back from isRunning");  	
 		////////////////////////////////////    	
 		thissheep_id = 0;
@@ -278,6 +278,7 @@ public class SheepManagement extends ListActivity {
 	       cmd = "select * from id_type_table";
 	       crsr = dbh.exec( cmd );  
 	       cursor   = ( Cursor ) crsr;
+	       startManagingCursor(cursor);
 	   	dbh.moveToFirstRecord();
 	   	tag_types.add("Select a Type");
 	        // looping through all rows and adding to list
@@ -305,6 +306,7 @@ public class SheepManagement extends ListActivity {
 		   			"drug_gone = %s and drug_type = %s", drug_gone , drug_type);
 		   	crsr = dbh.exec( cmd );  
 		   	cursor   = ( Cursor ) crsr;
+		   	startManagingCursor(cursor);
 	   	  	dbh.moveToFirstRecord();
 	   	  	wormers.add("Select a Dewormer");
 	   	  	wormer_id_drugid.add(0);
@@ -331,6 +333,7 @@ public class SheepManagement extends ListActivity {
 		   			"from drug_table where drug_gone = %s and drug_type = %s", drug_gone , drug_type);
 		   	crsr = dbh.exec( cmd );  
 		   	cursor   = ( Cursor ) crsr;
+		   	startManagingCursor(cursor);
 	   	  	dbh.moveToFirstRecord();
 	   	  	vaccines.add("Select a Vaccine");
 	   	  	vaccine_id_drugid.add(0);
@@ -343,7 +346,7 @@ public class SheepManagement extends ListActivity {
 		   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, vaccines);
 				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				vaccine_spinner.setAdapter (dataAdapter);
-				vaccine_spinner.setSelection(1);	
+				vaccine_spinner.setSelection(2);	
 			// 	Create the radio buttons for the shot locations here	
 				radiobtnlist = new ArrayList();
 //				radiobtnlist.add ("Select Vaccine Location");
@@ -442,6 +445,7 @@ public class SheepManagement extends ListActivity {
 				cursor.moveToFirst();				
 				TV = (TextView) findViewById( R.id.sheepnameText );
 		        TV.setText (dbh.getStr(0));
+		        SheepName = dbh.getStr(0);
 		        alert_text = dbh.getStr(8);
 		    	
 		        //	Get the sire and dam id numbers
@@ -517,49 +521,7 @@ public class SheepManagement extends ListActivity {
 	    	btn = (Button) findViewById( R.id.update_database_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 	    	btn.setEnabled(false);
-			//	Get the value of the checkbox for trim toes
-			Log.i("before checkbox", " getting ready to get trim toes or not ");
-			boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
-			if (boxtrimtoes.isChecked()){
-				//	go update the database with a toe trimming date and time add that as a note 
-				note_text = "";
-				predefined_note = 14; // hard coded the code for toes trimmed
-				// TODO
-				//	This will have to be changed for the general case
-				cmd = String.format("insert into note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid) " +
-    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note);
-    			Log.i("update notes ", "before cmd " + cmd);
-    			dbh.exec( cmd );	
-    			Log.i("update notes ", "after cmd exec");
-				Log.i("toes trimmed ", String.valueOf(boxtrimtoes));					
-			}			
-
-			//	Need to figure out the id_drugid for what we are giving this sheep
-			boxwormer = (CheckBox) findViewById(R.id.checkBoxGiveWormer);
-			if (boxwormer.isChecked()){
-				//	Go get which wormer was selected in the spinner
-				wormer_spinner = (Spinner) findViewById(R.id.wormer_spinner);
-				which_wormer = wormer_spinner.getSelectedItemPosition();
-				Log.i("wormer spinner", " position is" + String.valueOf(which_wormer));
-				//	go update the database with a drug record for this wormer and this sheep
-				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
-				i = wormer_id_drugid.get(which_wormer);
-				Log.i("wormer id", " value is " + String.valueOf(i));
-				//	Drug location 5 is by mouth
-				cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
-		  				" drug_time_on, drug_location) values " +
-		  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, 5);
-		  		Log.i("add drug to ", "db cmd is " + cmd);
-				dbh.exec(cmd);
-				Log.i("add tag ", "after insert into sheep_drug_table");
-				// TODO
-				//	Need to update the alert to include the slaughter withdrawal for this drug
-//				cmd = String.format("Select meat_withdrawal_units, user_meat_withdrawal from drug_table where drug_id = %s", i);
-//				Log.i("drug withdrawal ", "db cmd is " + cmd);
-				
-				
-			}	
-		
+	    	
 			boxvaccine = (CheckBox) findViewById(R.id.checkBoxGiveVaccine);
 			if (boxvaccine.isChecked()){
 				//	Go get which vaccine was selected in the spinner
@@ -593,42 +555,68 @@ public class SheepManagement extends ListActivity {
 		    	       });		
 		    		AlertDialog dialog = builder.create();
 		    		dialog.show();	
+		    		return;
 		 		}else{
 					cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
 			  				" drug_time_on, drug_location) values " +
-			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, drug_loc);
+			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, TodayIs(), TimeIs(), drug_loc);
 			  		Log.i("add drug to ", "db cmd is " + cmd);
 					dbh.exec(cmd);
 					Log.i("add tag ", "after insert into sheep_drug_table");	
 		 		}
-			}
-
-//			Get the value of the checkbox for shearing
-			Log.i("before checkbox", " getting ready to get sheep shorn or not ");
-			boxshearing = (CheckBox) findViewById(R.id.checkBoxShear);
-			if (boxshearing.isChecked()){
-				//	go update the database with a shearing date and time add that as a note 
-				note_text = "Shorn";
+			}	    	
+	    	
+			//	Get the value of the checkbox for trim toes
+			Log.i("before checkbox", " getting ready to get trim toes or not ");
+			boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
+			if (boxtrimtoes.isChecked()){
+				//	go update the database with a toe trimming date and time add that as a note 
+				note_text = "";
+				predefined_note01 = 14; // hard coded the code for toes trimmed
 				// TODO
 				//	This will have to be changed for the general case
-				cmd = String.format("insert into note_table (sheep_id, note_text, note_date, note_time) " +
-    					"values ( %s, '%s', '%s', '%s' )", thissheep_id, note_text, TodayIs(), TimeIs());
+				cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid01) " +
+    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note01);
     			Log.i("update notes ", "before cmd " + cmd);
     			dbh.exec( cmd );	
     			Log.i("update notes ", "after cmd exec");
-				Log.i("shorn ", String.valueOf(boxshearing));					
+				Log.i("toes trimmed ", String.valueOf(boxtrimtoes));					
+			}			
+
+			//	Need to figure out the id_drugid for what we are giving this sheep
+			boxwormer = (CheckBox) findViewById(R.id.checkBoxGiveWormer);
+			if (boxwormer.isChecked()){
+				//	Go get which wormer was selected in the spinner
+				wormer_spinner = (Spinner) findViewById(R.id.wormer_spinner);
+				which_wormer = wormer_spinner.getSelectedItemPosition();
+				Log.i("wormer spinner", " position is" + String.valueOf(which_wormer));
+				//	go update the database with a drug record for this wormer and this sheep
+				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
+				i = wormer_id_drugid.get(which_wormer);
+				Log.i("wormer id", " value is " + String.valueOf(i));
+				//	Drug location 5 is by mouth
+				cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
+		  				" drug_time_on, drug_location) values " +
+		  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, TodayIs(), TimeIs(), 5);
+		  		Log.i("add drug to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into sheep_drug_table");
+				// TODO
+				//	Need to update the alert to include the slaughter withdrawal for this drug
+//				cmd = String.format("Select meat_withdrawal_units, user_meat_withdrawal from drug_table where drug_id = %s", i);
+//				Log.i("drug withdrawal ", "db cmd is " + cmd);
+				
+				
 			}	
+		
 			clearBtn( null );
 	 }
 	public void printLabel( View v ){ 
-
-		// Ken add the printing code here
+		try
+	    {
 		String[] lines = EID.split("\n"); // works for both
-		
 	    String contents = LastEID.substring(0, 3) + LastEID.substring(4, 16);
-	   	
-	    try
-	    {					    		
+	    Log.i("PrintLabel btn ", " contents " + contents);		    		
 		Intent encodeIntent = new Intent("weyr.LT.ENCODE");
 		encodeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		encodeIntent.addCategory(Intent.CATEGORY_DEFAULT); 
@@ -638,18 +626,21 @@ public class SheepManagement extends ListActivity {
 		encodeIntent.putExtra("ENCODE_AUTOPRINT", "false");
 
 		if (AutoPrint) {
-		encodeIntent.putExtra("ENCODE_AUTOPRINT", "true");
+			encodeIntent.putExtra("ENCODE_AUTOPRINT", "true");
+			Log.i("PrintLabel btn ", " autoprint is true ");	
 	     };
 		
 		encodeIntent.putExtra("ENCODE_DATA1", LabelText);						
 		encodeIntent.putExtra("ENCODE_DATE", TodayIs() + "  " + TimeIs());
+		Log.i("PrintLabel btn ", " before put extra sheepName ");
 		encodeIntent.putExtra("ENCODE_SHEEPNAME", SheepName);
+		Log.i("PrintLabel btn ", " after put extra sheepName " + SheepName);
 	    startActivity(encodeIntent);
-		
+	    Log.i("PrintLabel btn ", " after start activity encode " );
 	    }
 	    catch(Exception r)
 	    {
-	        Log.v("EIDService", "RunTimeException: " + r);
+	        Log.v("PrintLabel ", " in sheep management RunTimeException: " + r);
 	    }			
 	}
 	   
@@ -660,8 +651,22 @@ public class SheepManagement extends ListActivity {
     	// Added this to close the database if we go back to the main activity  	
     	stopManagingCursor (cursor);
     	cursor.close();
+    	try {
+    		stopManagingCursor (cursor2);
+    		cursor2.close();
+    	}catch (Exception r)
+    	{
+    		Log.i("back btn", "cursor2 RunTimeException: " + r);
+    	}
+    	try {
+    		stopManagingCursor (cursor3);
+    		cursor3.close();
+    	}catch (Exception r)
+    	{
+    		Log.i("back btn", " cursor3 RunTimeException: " + r);
+    	}
     	dbh.closeDB();
-//    	clearBtn( null );
+    	clearBtn( null );
     	//Go back to main
       	finish();
 	    }
@@ -678,6 +683,7 @@ public class SheepManagement extends ListActivity {
 				Log.i("evalGetAlert ", cmd);  
 				crsr = dbh.exec( cmd );
 		        cursor   = ( Cursor ) crsr;
+		        startManagingCursor(cursor);
 		        dbh.moveToFirstRecord();		       
 		        alert_text = (dbh.getStr(0));
 		        Log.i("evalShowAlert ", alert_text); 
@@ -690,7 +696,6 @@ public class SheepManagement extends ListActivity {
 			       });		
 				AlertDialog dialog = builder.create();
 				dialog.show();
-//				cursor.close();
 	}
 	
 	public void clearBtn( View v )
@@ -721,14 +726,32 @@ public class SheepManagement extends ListActivity {
 		boxwormer.setChecked(false);
 		boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
 		boxtrimtoes.setChecked(false);
-		boxshearing = (CheckBox) findViewById(R.id.checkBoxTrimToes);
-		boxshearing.setChecked(false);
 		// Enable Update Database button and make it normal
     	btn = (Button) findViewById( R.id.update_database_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));
     	btn.setEnabled(true);
+    	
+      	// make the alert button normal and disabled
+	   	btn = (Button) findViewById( R.id.alert_btn );
+	   	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+	   	btn.setEnabled(false);  
+   	
     }
-	
+	@Override
+	public void onResume (){	
+		super.onResume();
+		CheckIfServiceIsRunning();
+		Log.i("SheepMgmt", " OnResume");
+		scanEid( null );	
+	}
+
+	@Override
+	public void onPause (){	
+		super.onPause();
+		Log.i("SheepMgmt", " OnPause");
+		doUnbindService();
+	}
+
 	public void helpBtn( View v )
   {
  	// Display help here   	
@@ -743,7 +766,6 @@ public class SheepManagement extends ListActivity {
 	       });		
 		AlertDialog dialog = builder.create();
 		dialog.show();
-		
   }
  
 	public boolean tableExists (String table){
@@ -819,89 +841,145 @@ public class SheepManagement extends ListActivity {
 					} catch (RemoteException e) {
 						// In this case the service has crashed before we could even do anything with it
 					}
-					}    	    	
+					} else{ 
+						Log.i("in ScanEID", " mService is null " );
+					}
 			 } 
-    public void takeNote( View v )
-    {	    	
-    	final Context context = this;
-		//	First fill the predefined note spinner with possibilities
-    	predefined_notes = new ArrayList<String>();
-		predefined_notes.add("Select a Predefined Note");
-//		    		Log.i ("takeNote", " after adding Select a Predefined Note");
-    	// Select All fields from predefined_notes_table to build the spinner
-        cmd = "select * from predefined_notes_table";
-//			        Log.i ("takeNote", " cmd is " + cmd);
-        crsr = dbh.exec( cmd );  
-        cursor   = ( Cursor ) crsr;
-    	dbh.moveToFirstRecord();
-         // looping through all rows and adding to list
-    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-    		predefined_notes.add(cursor.getString(1));
-//			    		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
-    	}
-    	cursor.close();    
-    	Log.i ("takeNote", " after set the predefined note spinner ");
-    	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
-    	//Implement take a note stuff here
-    	if (thissheep_id == 0) {
-    		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
-    	}
-    	else {
-//			    		Log.i ("takeNote", " got a sheep, need to get a note to add");
-    		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-//			    		Log.i ("takeNote", " after getting new alertdialogbuilder");
-    		
-    		LayoutInflater li = LayoutInflater.from(context);
-			View promptsView = li.inflate(R.layout.note_prompt, null);
-//						Log.i ("takeNote", " after inflating layout");	
+		     public void takeNote( View v )
+		     {	    	
+		     	final Context context = this;
+		 		//	First fill the predefined note spinner with possibilities
+		     	predefined_notes = new ArrayList<String>();
+		 		predefined_notes.add("Select a Predefined Note");
+//		 		Log.i ("takeNote", " after adding Select a Predefined Note");
+		     	// Select All fields from predefined_notes_table to build the spinner
+		         cmd = "select * from predefined_notes_table";
+//		         Log.i ("takeNote", " cmd is " + cmd);
+		         crsr = dbh.exec( cmd );  
+		         cursor   = ( Cursor ) crsr;
+		     	dbh.moveToFirstRecord();
+		          // looping through all rows and adding to list
+		     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+		     		predefined_notes.add(cursor.getString(1));
+//		     		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
+		     	}
+		     	cursor.close();    
+		     	Log.i ("takeNote", " after set the predefined note spinner ");
+		     	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
+		     	//Implement take a note stuff here
+		     	if (thissheep_id == 0) {
+		     		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
+		     	}
+		     	else {
+//		     		Log.i ("takeNote", " got a sheep, need to get a note to add");
+		     		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+//		     		Log.i ("takeNote", " after getting new alertdialogbuilder");
+		     		
+		     		LayoutInflater li = LayoutInflater.from(context);
+		 			View promptsView = li.inflate(R.layout.note_prompt, null);
+//		 			Log.i ("takeNote", " after inflating layout");	
 
-			// set view note_prompt to alertdialog builder
-			alertDialogBuilder.setView(promptsView);
-			Log.i ("takeNote", " after setting view");
-		   	// Creating adapter for spinner
-	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, predefined_notes);
-//				    	Log.i ("takeNote", " after create new array adapter for the spinner ");
-	    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//				    	Log.i ("takeNote", " after set dropdown resource for the spinner ");
-	    	predefined_note_spinner = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner);
-//				    	Log.i ("takeNote", " after set promptsView for the spinner ");
-	    	predefined_note_spinner.setAdapter (dataAdapter);
-//						Log.i ("takeNote", " after set the adapter for the spinner ");
-			predefined_note_spinner.setSelection(0);
-//						Log.i ("takeNote", " after set spinner to location 0");
-			
-			final EditText userInput = (EditText) promptsView
-					.findViewById(R.id.note_text);
+		 			// set view note_prompt to alertdialog builder
+		 			alertDialogBuilder.setView(promptsView);
+		 			Log.i ("takeNote", " after setting view");
+		 		   	// Creating adapter for predefined notes spinners
+		 	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, predefined_notes);
+		 	    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		 	    	predefined_note_spinner01 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner01);
+		 	    	predefined_note_spinner01.setAdapter (dataAdapter);
+		 			predefined_note_spinner01.setSelection(0);
+		 			
+		 	    	predefined_note_spinner02 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner02);
+		 	    	predefined_note_spinner02.setAdapter (dataAdapter);
+		 			predefined_note_spinner02.setSelection(0);
 
-			// set dialog message
-			alertDialogBuilder
-				.setCancelable(false)
-				.setPositiveButton("Save Note",
-				  new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog,int id) {
-					// get user input and set it to result
-					// edit text
-					String note_text = String.valueOf(userInput.getText());
-					//	Get id_predefinednotesid from a spinner here 
-					int predefined_note = predefined_note_spinner.getSelectedItemPosition();
-					// Update the notes table with the data
-					cmd = String.format("insert into note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid) " +
-	    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note);
-	    			Log.i("update notes ", "before cmd " + cmd);
-	    			dbh.exec( cmd );	
-	    			Log.i("update notes ", "after cmd exec");
-				    }
-				  })
-				.setNegativeButton("Cancel",
-				  new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog,int id) {
-					dialog.cancel();
-				    }
-				  });
-			// create alert dialog
-			AlertDialog alertDialog = alertDialogBuilder.create();
-			// show it
-			alertDialog.show();
-    	}   	
-    }
+		 	    	predefined_note_spinner03 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner03);
+		 	    	predefined_note_spinner03.setAdapter (dataAdapter);
+		 			predefined_note_spinner03.setSelection(0);
+
+		 	    	predefined_note_spinner04 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner04);
+		 	    	predefined_note_spinner04.setAdapter (dataAdapter);
+		 			predefined_note_spinner04.setSelection(0);
+
+		 	    	predefined_note_spinner05 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner05);
+		 	    	predefined_note_spinner05.setAdapter (dataAdapter);
+		 			predefined_note_spinner05.setSelection(0);
+
+		 			final EditText userInput = (EditText) promptsView
+		 					.findViewById(R.id.note_text);
+
+		 			// set dialog message
+		 			alertDialogBuilder
+		 				.setCancelable(false)
+		 				.setPositiveButton("Save Note",
+		 				  new DialogInterface.OnClickListener() {
+		 				    public void onClick(DialogInterface dialog,int id) {
+		 					// get user input and set it to result
+		 					// edit text
+		 					String note_text = String.valueOf(userInput.getText());
+		 					//	Get id_predefinednotesid from a spinner here 
+		 					int predefined_note01 = predefined_note_spinner01.getSelectedItemPosition();
+		 					int predefined_note02 = predefined_note_spinner02.getSelectedItemPosition();
+		 					int predefined_note03 = predefined_note_spinner03.getSelectedItemPosition();
+		 					int predefined_note04 = predefined_note_spinner04.getSelectedItemPosition();
+		 					int predefined_note05 = predefined_note_spinner05.getSelectedItemPosition();
+		 					// Update the notes table with the data
+		 					cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, " +
+		 							"id_predefinednotesid01) " +
+		 							"values ( %s, '%s', '%s', '%s', %s )",
+		 	    					thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note01);
+		 	    			Log.i("update notes ", "before cmd " + cmd);
+		 	    			dbh.exec( cmd );	
+		 	    			Log.i("update notes ", "after cmd exec");
+		 	    			Log.i("take note","first note written");
+		 	    			if (predefined_note02 > 0) {
+		 	    	 			Log.i("take note","second note written");
+		 	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+		 	 							"id_predefinednotesid01) " +
+		 	 							"values ( %s, '%s', '%s', %s)",
+		 	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note02 );
+		 	 	    			Log.i("update notes ", "before cmd " + cmd);
+		 	 	    			dbh.exec( cmd );	
+		 	    	 		}
+		 	    			if (predefined_note03 > 0) {
+		 	    	 			Log.i("take note","third note written");
+		 	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+		 	 							"id_predefinednotesid01) " +
+		 	 							"values ( %s, '%s', '%s', %s)",
+		 	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note03 );
+		 	 	    			Log.i("update notes ", "before cmd " + cmd);
+		 	 	    			dbh.exec( cmd );	
+		 	    	 		}
+		 	    			if (predefined_note04 > 0) {
+		 	    	 			Log.i("take note","fourth note written");
+		 	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+		 	 							"id_predefinednotesid01) " +
+		 	 							"values ( %s, '%s', '%s', %s)",
+		 	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note04 );
+		 	 	    			Log.i("update notes ", "before cmd " + cmd);
+		 	 	    			dbh.exec( cmd );	
+		 	    	 		}
+		 	    			if (predefined_note05 > 0) {
+		 	    	 			Log.i("take note","fifth note written");
+		 	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+		 	 							"id_predefinednotesid01) " +
+		 	 							"values ( %s, '%s', '%s', %s)",
+		 	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note05 );
+		 	 	    			Log.i("update notes ", "before cmd " + cmd);
+		 	 	    			dbh.exec( cmd );	
+		 	    	 		}
+		 				    }
+		 				  })
+		 				.setNegativeButton("Cancel",
+		 				  new DialogInterface.OnClickListener() {
+		 				    public void onClick(DialogInterface dialog,int id) {
+		 					dialog.cancel();
+		 				    }
+		 				  });
+		 			// create alert dialog
+		 			AlertDialog alertDialog = alertDialogBuilder.create();
+		 			// show it
+		 			alertDialog.show();
+		     	}   	
+		     }
 }

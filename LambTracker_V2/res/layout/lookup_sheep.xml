@@ -219,7 +219,11 @@
         	android:textSize="18sp"
         	android:typeface="monospace" />       
        </GridLayout>  
-      
+      <ListView 
+			android:id="@+id/list2" 
+	  		android:layout_height="150dp"
+	  		android:layout_width="fill_parent">
+		</ListView>
 <RelativeLayout
     android:id="@+id/BottomButtonBar"
     android:orientation="horizontal" 

@@ -7,7 +7,27 @@
     android:padding="10dp" >
  
  	<Spinner
-        android:id="@+id/predefined_note_spinner"
+        android:id="@+id/predefined_note_spinner01"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+       android:textSize="18sp" />
+ 	<Spinner
+        android:id="@+id/predefined_note_spinner02"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+       android:textSize="18sp" />
+ 	<Spinner
+        android:id="@+id/predefined_note_spinner03"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+       android:textSize="18sp" />
+ 	<Spinner
+        android:id="@+id/predefined_note_spinner04"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+       android:textSize="18sp" />
+ 	<Spinner
+        android:id="@+id/predefined_note_spinner05"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
        android:textSize="18sp" />
