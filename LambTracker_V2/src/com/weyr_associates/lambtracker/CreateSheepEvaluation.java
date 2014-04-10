@@ -48,17 +48,22 @@ public class CreateSheepEvaluation extends Activity {
 	public Button button;
 	public int trait01, trait02, trait03, trait04, trait05, trait06, trait07, trait08, trait09, trait10;
 	public int trait11, trait12, trait13, trait14, trait15;
-	public int trait10_unitid, trait11_unitid, trait12_unitid, trait13_unitid, trait14_unitid, trait15_unitid;
+	public int trait16, trait17, trait18, trait19, trait20;
+	public int trait11_unitid, trait12_unitid, trait13_unitid, trait14_unitid, trait15_unitid;
 	public String trait01_label, trait02_label, trait03_label, trait04_label, trait05_label, trait06_label, 
 		trait07_label, trait08_label, trait09_label, trait10_label, trait11_label, trait12_label, 
-		trait13_label, trait14_label, trait15_label ; 
-	public String  trait10_units, trait11_units, trait12_units, trait13_units, trait14_units, trait15_units; 
-	public Spinner trait01_spinner, trait02_spinner, trait03_spinner, trait04_spinner, trait05_spinner, 
-		trait06_spinner,trait07_spinner, trait08_spinner, trait09_spinner, trait10_spinner, trait11_spinner,
-		trait12_spinner, trait13_spinner, trait14_spinner, trait15_spinner ;
-	public Spinner trait10_units_spinner, trait11_units_spinner, trait12_units_spinner, trait13_units_spinner, 
+		trait13_label, trait14_label, trait15_label, trait16_label, trait17_label, trait18_label, trait19_label,
+		trait20_label; 
+	public String  trait11_units, trait12_units, trait13_units, trait14_units, trait15_units; 
+	public Spinner trait01_spinner, trait02_spinner, trait03_spinner, trait04_spinner, 
+		trait05_spinner, trait06_spinner,trait07_spinner, trait08_spinner, trait09_spinner, 
+		trait10_spinner;
+	public Spinner trait11_spinner,trait12_spinner, trait13_spinner, trait14_spinner, trait15_spinner ;
+	public Spinner trait16_spinner,trait17_spinner, trait18_spinner, trait19_spinner, trait20_spinner ;
+	public Spinner trait11_units_spinner, trait12_units_spinner, trait13_units_spinner, 
 		trait14_units_spinner, trait15_units_spinner;
-	public List<String> scored_evaluation_traits, data_evaluation_traits, trait_units;
+	public List<String> scored_evaluation_traits, data_evaluation_traits, 
+		custom_evaluation_traits, trait_units;
 	
 	ArrayAdapter<String> dataAdapter;
 	String     	cmd;
@@ -74,21 +79,6 @@ public class CreateSheepEvaluation extends Activity {
         // enable the Create an evaluation button when we come in to start this task
     	Button btn2 = (Button) findViewById( R.id.create_evaluation_task_btn );
     	btn2.setEnabled(true);
-    	
-//    	trait01_label = "Select a Trait";
-//    	trait02_label = "Select a Trait";
-//    	trait03_label = "Select a Trait";
-//    	trait04_label = "Select a Trait";
-//    	trait05_label = "Select a Trait";
-//    	trait06_label = "Select a Trait";
-//    	trait07_label = "Select a Trait";
-//    	trait09_label = "Select a Trait";
-//    	trait10_label = "Select a Trait";
-//    	trait11_label = "Select a Trait";
-//    	trait12_label = "Select a Trait";
-//    	trait13_label = "Select a Trait";
-//    	trait14_label = "Select a Trait";
-//    	trait15_label = "Select a Trait";
       	
         // Select All fields from trait table that are scored type and get set to fill the spinners
         cmd = "select * from evaluation_trait_table where trait_type = 1";
@@ -99,6 +89,7 @@ public class CreateSheepEvaluation extends Activity {
         // looping through all rows and adding to list all the scored evaluation types
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		scored_evaluation_traits.add(cursor.getString(1));
+    		Log.i("scored ", "traits is " + cursor.getString(1));
     	}
     	cursor.close();
     	dataAdapter = new ArrayAdapter<String>(this,
@@ -148,7 +139,7 @@ public class CreateSheepEvaluation extends Activity {
 				
 		Log.i("create eval", "got score spinners initialized");
 		
-		// Now set up for the two real data traits
+		// Now set up for the five real data traits
 		data_evaluation_traits = new ArrayList<String>();
         
         // Select All fields from trait table that are real data type and get set to fill the spinners
@@ -197,7 +188,7 @@ public class CreateSheepEvaluation extends Activity {
 //        Log.i("units ", "executed command " + cmd);
         cursor   = ( Cursor ) crsr;
     	dbh.moveToFirstRecord();
-    	trait_units.add("Select Measurement Units");
+    	trait_units.add("Select Units");
        // looping through all rows and adding to list
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		trait_units.add(cursor.getString(1));
@@ -229,6 +220,47 @@ public class CreateSheepEvaluation extends Activity {
     	trait15_units_spinner.setSelection(0);
 
     	Log.i("create eval", "got units spinners initialized");
+    	
+		// Now set up for the five custom data traits
+		custom_evaluation_traits = new ArrayList<String>();
+        
+        // Select All fields from trait table that are custom data type and get set to fill the spinners
+        cmd = "select * from evaluation_trait_table where trait_type = 3";
+        crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+    	custom_evaluation_traits.add("Select a Trait");
+        // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		custom_evaluation_traits.add(cursor.getString(1));
+    	}
+    	cursor.close();
+//        Log.i("createEval ", "below got custom traits");
+    	dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, custom_evaluation_traits);
+    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
+
+    	trait16_spinner = (Spinner) findViewById(R.id.trait16_spinner);	
+    	trait16_spinner.setAdapter (dataAdapter);
+    	trait16_spinner.setSelection(0);
+		
+		trait17_spinner = (Spinner) findViewById(R.id.trait17_spinner);
+		trait17_spinner.setAdapter (dataAdapter);
+		trait17_spinner.setSelection(0);
+		
+    	trait18_spinner = (Spinner) findViewById(R.id.trait18_spinner);	
+    	trait18_spinner.setAdapter (dataAdapter);
+    	trait18_spinner.setSelection(0);
+		
+    	trait19_spinner = (Spinner) findViewById(R.id.trait19_spinner);	
+    	trait19_spinner.setAdapter (dataAdapter);
+    	trait19_spinner.setSelection(0);
+		
+    	trait20_spinner = (Spinner) findViewById(R.id.trait20_spinner);	
+    	trait20_spinner.setAdapter (dataAdapter);
+    	trait20_spinner.setSelection(0);
+	
+		Log.i("create eval", "got custom spinners initialized");   	
 		       	
     	cmd = "select * from last_eval_table";
     	crsr = dbh.exec( cmd );
@@ -269,7 +301,16 @@ public class CreateSheepEvaluation extends Activity {
     	cursor.moveToNext();
     	trait15 = dbh.getInt(1);
     	trait15_unitid = dbh.getInt(2);
-    	
+    	trait16 = dbh.getInt(1);
+    	cursor.moveToNext();	
+    	trait17 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait18 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait19 = dbh.getInt(1);
+    	cursor.moveToNext();
+    	trait20 = dbh.getInt(1);
+     	
     	cursor.close();
       	
 //    	Log.i("results last ","eval trait01 "+String.valueOf(trait01));
@@ -567,7 +608,62 @@ public class CreateSheepEvaluation extends Activity {
 //	        	Log.i("units were 0", "Set the trait11 spinner to zero as units required");
 	        	trait15_spinner.setSelection(0);
 	        }
-    	}	    	
+    	}	 
+    	if (trait16!=0){
+        	cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table " +
+	    			"where id_traitid='%s'", trait16);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait16_label = dbh.getStr(0);
+	        i = scored_evaluation_traits.indexOf(trait16_label);
+	        trait16_spinner.setSelection(i);
+	        cursor.close();
+    	}
+    	if (trait17!=0){
+        	cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table " +
+	    			"where id_traitid='%s'", trait17);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait17_label = dbh.getStr(0);
+	        i = scored_evaluation_traits.indexOf(trait17_label);
+	        trait17_spinner.setSelection(i);
+	        cursor.close();
+    	}
+ 	   	if (trait18!=0) {
+	        cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table " +
+	    			"where id_traitid='%s'", trait18);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait18_label = dbh.getStr(0);
+	        i = scored_evaluation_traits.indexOf(trait18_label);
+	        trait18_spinner.setSelection(i);
+	        cursor.close();
+    	}
+ 	   if (trait19!=0){
+       	cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table " +
+	    			"where id_traitid='%s'", trait19);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait19_label = dbh.getStr(0);
+	        i = scored_evaluation_traits.indexOf(trait19_label);
+	        trait19_spinner.setSelection(i);
+	        cursor.close();
+   	}
+ 	  if (trait20!=0){
+      	cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table " +
+	    			"where id_traitid='%s'", trait20);
+	    	crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        trait20_label = dbh.getStr(0);
+	        i = scored_evaluation_traits.indexOf(trait20_label);
+	        trait20_spinner.setSelection(i);
+	        cursor.close();
+ 	  }
 
 //    	    Log.i("Create eval", "The selected traits are: ");
 //	    	Log.i("Create eval", "trait01 " + trait01_label);
@@ -579,16 +675,7 @@ public class CreateSheepEvaluation extends Activity {
 //	    	Log.i("Create eval", "trait07 " + trait07_label);
 //	    	Log.i("Create eval", "trait08 " + trait08_label);    	
 	}
- 
-//	private class SpinnerActivity extends Activity implements OnItemSelectedListener {
-//		because we only get the spinner data when the user selects the create an evaluation 
-//		this class is not needed.
-//			}
-//		@Override
-//		public void onNothingSelected(AdapterView<?> arg0) {
-//			
-//		}
-//	}
+
 		 // user clicked the 'back' button
 		public void backBtn( View v )
 		{
@@ -636,6 +723,11 @@ public class CreateSheepEvaluation extends Activity {
 	    	trait13_units_spinner.setSelection(0);
 	    	trait14_units_spinner.setSelection(0);
 	    	trait15_units_spinner.setSelection(0);
+	    	trait16_spinner.setSelection(0);
+	    	trait17_spinner.setSelection(0);
+	    	trait18_spinner.setSelection(0);
+	    	trait19_spinner.setSelection(0);
+	    	trait20_spinner.setSelection(0);
 	    }	   
 
 	    public void createEval( View v )
@@ -666,6 +758,12 @@ public class CreateSheepEvaluation extends Activity {
 	    	trait14_units_spinner = (Spinner) findViewById(R.id.trait14_units_spinner);
 	    	trait15_units_spinner = (Spinner) findViewById(R.id.trait15_units_spinner);
 	    	
+	    	trait16_spinner = (Spinner) findViewById(R.id.trait16_spinner);
+	    	trait17_spinner = (Spinner) findViewById(R.id.trait17_spinner);
+	    	trait18_spinner = (Spinner) findViewById(R.id.trait18_spinner);
+	    	trait19_spinner = (Spinner) findViewById(R.id.trait19_spinner);
+	    	trait20_spinner = (Spinner) findViewById(R.id.trait20_spinner);
+	    	
 	    	// fill the labels with the contents of the various spinners
 	    	trait01_label = trait01_spinner.getSelectedItem().toString();
 	    	trait02_label = trait02_spinner.getSelectedItem().toString();
@@ -688,6 +786,12 @@ public class CreateSheepEvaluation extends Activity {
 	    	trait13_units = trait13_units_spinner.getSelectedItem().toString();
 	    	trait14_units = trait14_units_spinner.getSelectedItem().toString();
 	    	trait15_units = trait15_units_spinner.getSelectedItem().toString();
+	    	
+	    	trait16_label = trait16_spinner.getSelectedItem().toString();
+	    	trait17_label = trait17_spinner.getSelectedItem().toString();
+	    	trait18_label = trait18_spinner.getSelectedItem().toString();
+	    	trait19_label = trait19_spinner.getSelectedItem().toString();
+	    	trait20_label = trait20_spinner.getSelectedItem().toString();
 	    	
 //	    	Log.i("Create eval", "The selected traits are: ");
 //	    	Log.i("Create eval", "trait01 " + trait01_label);
@@ -959,6 +1063,65 @@ public class CreateSheepEvaluation extends Activity {
 	        dbh.moveToFirstRecord();
 	        trait15_unitid = dbh.getInt(0);
 	    	}
+	    	
+	    if (trait16_label == "Select a Trait") {
+    			trait16 = 0;
+    	}else
+    	{
+    	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
+    			"where trait_name='%s'", trait16_label);
+//    	Log.i("query trait1", cmd);
+    	crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+        trait16 = dbh.getInt(0);
+        }
+	    if (trait17_label == "Select a Trait") {
+    			trait17 = 0;
+    	}else
+    	{
+    	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
+    			"where trait_name='%s'", trait17_label);
+//    	Log.i("query trait1", cmd);
+    	crsr = dbh.exec( cmd );
+        cursor   = ( Cursor ) crsr;
+        dbh.moveToFirstRecord();
+        trait17 = dbh.getInt(0);
+        }
+	    if (trait18_label == "Select a Trait") {
+			trait18 = 0;
+	    }else
+	    {
+	    	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
+	    			"where trait_name='%s'", trait18_label);
+	    	crsr = dbh.exec( cmd );
+	    	cursor   = ( Cursor ) crsr;
+	    	dbh.moveToFirstRecord();
+    	trait18 = dbh.getInt(0);
+    }
+	if (trait19_label == "Select a Trait") {
+			trait19 = 0;
+	}else
+	{
+	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
+			"where trait_name='%s'", trait19_label);
+	crsr = dbh.exec( cmd );
+    cursor   = ( Cursor ) crsr;
+    dbh.moveToFirstRecord();
+    trait19 = dbh.getInt(0);
+    }
+	if (trait20_label == "Select a Trait") {
+			trait20 = 0;
+	}else
+	{
+	cmd = String.format("select evaluation_trait_table.id_traitid from evaluation_trait_table " +
+			"where trait_name='%s'", trait20_label);
+//	Log.i("query trait1", cmd);
+	crsr = dbh.exec( cmd );
+    cursor   = ( Cursor ) crsr;
+    dbh.moveToFirstRecord();
+    trait20 = dbh.getInt(0);
+    }
 //	        Log.i("results new ","eval trait01 "+String.valueOf(trait01));
 //	    	Log.i("results new ","eval trait02 "+String.valueOf(trait02));
 //	    	Log.i("results new ","eval trait03 "+String.valueOf(trait03));
@@ -1012,6 +1175,16 @@ public class CreateSheepEvaluation extends Activity {
 	    	cmd  = String.format( "update last_eval_table set id_traitid=%s where id_lastevalid=15", trait15);
 	    	dbh.exec( cmd );
 	    	cmd  = String.format( "update last_eval_table set id_unitsid=%s where id_lastevalid=15", trait15_unitid );
+	    	dbh.exec( cmd );
+	    	cmd  = String.format( "update last_eval_table set id_traitid=%s where id_lastevalid=16", trait16 );
+	    	dbh.exec( cmd );
+	    	cmd  = String.format( "update last_eval_table set id_traitid=%s where id_lastevalid=17", trait17 );
+	    	dbh.exec( cmd );
+	    	cmd  = String.format( "update last_eval_table set id_traitid=%s where id_lastevalid=18", trait18 );
+	    	dbh.exec( cmd );
+	    	cmd  = String.format( "update last_eval_table set id_traitid=%s where id_lastevalid=19", trait19 );
+	    	dbh.exec( cmd );
+	    	cmd  = String.format( "update last_eval_table set id_traitid=%s where id_lastevalid=20", trait20 );
 	    	dbh.exec( cmd );
 	    	
 	    	// verify what we stored used in debugging

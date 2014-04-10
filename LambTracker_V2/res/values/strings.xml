@@ -78,7 +78,7 @@
         Farm or Scanning an EID tag. Then select the scores for each trait. When finished select Save Scores
         to write the data to the database with an evaluation date of today. </string>
     <string name="help_create_evaluate">Create a list of traits to evaluate on this run with the sheep. 
-        You may select 10 scored items and 5 real data items. </string>
+        You may select 10 scored items, 5 real data items and 5 custom items. </string>
     <string name="help_look_up_sheep">Select a sheep using the EID reader or by entering in a federal or farm tag number. 
    	    All the tags for that sheep will be displayed in the scrolling view below. If you need to correct tags you will need to do 
    	    that separately in the desktop application. The notese for this sheep are shown below the tags.  </string>
@@ -146,8 +146,9 @@
     <string name="tag_date_on_lbl">Tag Date On</string>
     <string name="tag_date_off_lbl">Tag Date Off</string>
     <string name="new_tag_lbl">New Tag Number</string>
-    <string name="select_scored_traits.lbl">Select Traits Scored 1 to 5</string>
-    <string name="select_value_traits.lbl">Select Traits with Real values</string>
+    <string name="select_scored_traits.lbl">Select up to 10 Traits Scored 1 to 5</string>
+    <string name="select_value_traits.lbl">Select up to 5 Traits with Real values</string>
+    <string name="select_custom_traits.lbl">Select up to 5 Custom Traits</string>
     <string name="sql_command_lbl">SQL Command</string>
     <string name="results_lbl">Results</string>
     <string name="take_note_lbl">Enter Note:</string>
