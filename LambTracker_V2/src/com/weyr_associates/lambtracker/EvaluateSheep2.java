@@ -528,6 +528,7 @@ public class EvaluateSheep2 extends Activity {
 	    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_custom_item, table, false);
 	    	tempLabel = user_evaluation_traits.get(ii);
 //	    	Log.i("in first loop", " tempLabel is " + tempLabel);
+	    	// TODO
 	    	//	Set the text for the radiogroup label
 	    	((TextView)row.findViewById(R.id.radioGroup1_lbl)).setText(tempLabel);
 	    	//	Get the text for the buttons
@@ -555,7 +556,7 @@ public class EvaluateSheep2 extends Activity {
 	    	radioGroup = ((RadioGroup) row.findViewById(R.id.radioGroup1));
 	    	addRadioButtons(user_trait_number_items.get(ii), radioBtnText);	    	
 	    	table.addView(row);	    	
-	    	Log.i("evaluate ", " after inflate the row");		    	
+//	    	Log.i("evaluate ", " after inflate the row");		    	
     	}
     	
        	// make the alert button normal and disabled
@@ -715,7 +716,7 @@ public class EvaluateSheep2 extends Activity {
 //    				Log.i("in save scores", " after get child row ");
     				tempTrait = user_trait_numbers.get (ii);
 //    				Log.i("in save scores", " trait number is " + String.valueOf(tempTrait));
-    				RadioGroup rg=(RadioGroup)findViewById(R.id.radioGroup1);
+    				RadioGroup rg = ((RadioGroup) row1.findViewById(R.id.radioGroup1));
 //    				Log.i("in save scores", " after get radiogroup view ");
 	    			try {
 //	    				Log.i("in save scores", " in try block ");
@@ -849,21 +850,13 @@ public class EvaluateSheep2 extends Activity {
 			finish();
 	    }
 	 
-	public void showAlert(View v)
-	{
+	public void showAlert(View v) {
 //		String	alert_text;
 		String 			dbname = getString(R.string.real_database_file); 
         String          cmd;    
         Object 			crsr;
  		// Display alerts here   	
 				AlertDialog.Builder builder = new AlertDialog.Builder( this );
-//				cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_id =%d", sheep_id);
-////				Log.i("evalGetAlert ", cmd);  
-//				crsr = dbh.exec( cmd );
-//		        cursor   = ( Cursor ) crsr;
-//		        dbh.moveToFirstRecord();		       
-//		        alert_text = (dbh.getStr(0));
-//		        Log.i("evalShowAlert ", alert_text); 
 				builder.setMessage( alert_text )
 			           .setTitle( R.string.alert_warning );
 				builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
@@ -930,11 +923,15 @@ public class EvaluateSheep2 extends Activity {
 			TV.setText ( "" );
 			}
 		}
-				
 		//	Clear the radio group checks
-		Log.i("in clear button", " ready to clear the radio group "); 
-		RadioGroup rg=(RadioGroup)findViewById(R.id.radioGroup1);
-		rg.clearCheck();
+		table = (TableLayout) findViewById(R.id.TableLayout03);
+		if (nRecs3 != 0) {
+			for( int ii = 0; ii < nRecs3; ii++ ){	
+			TableRow row1= (TableRow)table.getChildAt(ii);
+			RadioGroup rg = ((RadioGroup) row1.findViewById(R.id.radioGroup1));
+			rg.clearCheck();
+			}
+		}
 		
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
@@ -1108,7 +1105,9 @@ public class EvaluateSheep2 extends Activity {
 			    	showAlert(v);
 				}        	
 		}else{
-	        	return;
+				thissheep_id = 0;
+				sheep_id = 0;
+				return;
 	        }
 	        Log.i("lookForSheep", " out of the if statement");
         	}
