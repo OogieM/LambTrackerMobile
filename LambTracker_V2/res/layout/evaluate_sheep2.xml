@@ -200,10 +200,6 @@
             android:typeface="monospace" />       
     </GridLayout>
     
-  <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
   <ScrollView
 	    android:id="@+id/scroll01"
 	    android:layout_width="fill_parent"
@@ -220,14 +216,14 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="2dp"
 	    android:background="@android:color/black"
-	    android:layout_below="@id/scroll01">
+	    >
 	</View>
 	
     <ScrollView
 	    android:id="@+id/scroll02"
 	    android:layout_width="fill_parent"
-	    android:layout_height="50dp"
-	   	android:layout_below="@id/dividerbar">
+	    android:layout_height="50dp">
+	   	
 			<TableLayout
 		       android:id="@+id/TableLayout02"
 		       android:layout_width="fill_parent"
@@ -239,22 +235,23 @@
 	    android:id="@+id/dividerbar02"
 	    android:layout_width="fill_parent"
 	    android:layout_height="2dp"
-	    android:background="@android:color/black"
-	    android:layout_below="@id/scroll02">
+	    android:background="@android:color/black">
+	   
 	</View>
 	
     <ScrollView
 	    android:id="@+id/scroll03"
 	    android:layout_width="fill_parent"
-	    android:layout_height="175dp"
-	   	android:layout_below="@id/dividerbar02">
+	    android:layout_height="175dp">
+	   	
 			<TableLayout
 		       android:id="@+id/TableLayout03"
 		       android:layout_width="fill_parent"
 		       android:layout_height="wrap_content">
 			</TableLayout>  
   	</ScrollView>   
-</RelativeLayout>
+
+    
 	
 <RelativeLayout
     android:id="@+id/BottomButtonBar"
