@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android">
 
+	<TextView
+        android:id="@+id/radioGroup1_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:typeface="monospace" />  
+            
     <RadioGroup
         android:id="@+id/radioGroup1"
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-  </RadioGroup>
+        android:layout_height="175dp">
+  	</RadioGroup>
 
 </TableRow>

@@ -240,11 +240,13 @@ public class EvaluateSheep2 extends Activity {
 		Log.i("Evaluate", "Got EID " + LastEID);
 		TV = (TextView) findViewById (R.id.inputText);
 		TV.setText( LastEID );
+		//	Only looking for sheep that are here. 
 		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off , sheep_table.alert01 " +
 				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +	
 				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-				"where id_type_table.id_typeid = 2 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", LastEID);
+				"where id_type_table.id_typeid = 2 and id_info_table.tag_date_off is null and " +
+				"sheep_table.remove_date is null and id_info_table.tag_number='%s'", LastEID);
 		Log.i("Got EID", " ready for command " + cmd); 
 		Object crsr = dbh.exec( cmd ); 
     	cursor   = (Cursor) crsr;
@@ -499,52 +501,67 @@ public class EvaluateSheep2 extends Activity {
 //    	Log.i("evaluate2", " cmd is " + cmd);
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
+        startManagingCursor(cursor);
         nRecs3    = cursor.getCount();
     	dbh.moveToFirstRecord();
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
         	user_evaluation_traits.add(cursor.getString(0));
-	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
+//	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
 	    	user_trait_numbers.add(cursor.getInt(1));
-	    	Log.i("evaluate2", " trait id number is " + String.valueOf(cursor.getInt(1)));
+//	    	Log.i("evaluate2", " trait id number is " + String.valueOf(cursor.getInt(1)));
 	    	user_trait_number_items.add(cursor.getInt(2));
-	    	Log.i("evaluate2", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
+//	    	Log.i("evaluate2", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
     	}
     	cursor.close();  
         
      	Log.i("evaluate2", "number of records in user traits cursor is " + String.valueOf(nRecs3));
     	inflater = getLayoutInflater();	
+    	TableLayout table = (TableLayout) findViewById(R.id.TableLayout03);	
     	for( int ii = 0; ii < nRecs3; ii++ ){	
 //    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
-    		Log.i ("in for loop", " user trait number is " + String.valueOf(user_trait_numbers.get(ii)));
+    		Log.i ("in first loop", " user trait number is " + String.valueOf(user_trait_numbers.get(ii)));
 //    		Log.i ("in for loop", " trait name is " + user_evaluation_traits.get(ii));
-    		TV = (TextView) findViewById(R.id.radioGroup1_lbl);       
-            TV.setText (user_evaluation_traits.get(ii));
-    		Log.i ("in for loop", " number of trait entries is " + String.valueOf(user_trait_number_items.get(ii)));
-//			Log.i("in for loop", " after TableLayout");		    	
+//    		TV = (TextView) findViewById(R.id.radioGroup1_lbl);       
+//            TV.setText (user_evaluation_traits.get(ii));
+    		Log.i ("in first loop", " number of trait entries is " + String.valueOf(user_trait_number_items.get(ii)));
+
+    		
+//			TableLayout table = (TableLayout) findViewById(R.id.TableLayout03);	
+// TODO			
+	    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_custom_item, table, false);
+	    	tempLabel = user_evaluation_traits.get(ii);
+	    	Log.i("in first loop", " tempLabel is " + tempLabel);
+	    	//	Set the text for the radiogroup label
+	    	((TextView)row.findViewById(R.id.radioGroup1_lbl)).setText(tempLabel);
 	    	//	Get the text for the buttons
 	    	tempText = String.valueOf(user_trait_numbers.get(ii));
-	    	Log.i("in for loop", "trait numbers is " + tempText);
+	    	Log.i("in first loop", "trait numbers is " + tempText);
 	    	cmd = String.format("select custom_evaluation_traits_table.custom_evaluation_item " +
 	    			" from custom_evaluation_traits_table " +
 	    			" where custom_evaluation_traits_table.id_traitid = '%s' "+
 	    			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ", tempText);
-//	    	Log.i("evaluate2", " cmd is " + cmd);	    	
+	    	Log.i("evaluate2", " ready to get button text cmd is " + cmd);	    	
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
+	        startManagingCursor(cursor);
 	        nRecs4    = cursor.getCount();
+	        Log.i ("getting button", " text have " + String.valueOf(nRecs4) + " buttons to build");
 	        dbh.moveToFirstRecord();		        
 	        ArrayList buttons = new ArrayList();
 	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	        	buttons.add (cursor.getString(0));
-		    	Log.i("evaluate2", " radio button text is " + cursor.getString(0));
+		    	Log.i("2nd for loop", " radio button text is " + cursor.getString(0));
 	    	}
-//	        TableRow row = (TableRow)inflater.inflate(R.layout.eval_custom_item, table, false);
-	        
 	        radioBtnText = (String[]) buttons.toArray(new String [buttons.size()]);
-	    	cursor.close();  
+//	    	cursor.close();  
 	    	// Build the radio buttons here
-	    	radioGroup = ((RadioGroup) findViewById(R.id.radioGroup1));
+//	        ((TextView)row.findViewById(R.id.radioGroup1_lbl)).setText(tempLabel);
+	    	radioGroup = ((RadioGroup) row.findViewById(R.id.radioGroup1));
 	    	addRadioButtons(user_trait_number_items.get(ii), radioBtnText);
+	    	
+	    	table.addView(row);
+	    	
+	    	Log.i("evaluate ", " after inflate the row");		    	
     	}
     	
        	// make the alert button normal and disabled
@@ -573,7 +590,7 @@ public class EvaluateSheep2 extends Activity {
 
   	    //label the button...
   	  	radioBtn.setText(radioBtnText[i]);
-//  	  	Log.i("addradiobuttons", radioBtnText[i]);
+  	  	Log.i("addradiobuttons", radioBtnText[i]);
   	  	radioBtn.setId(i);
 
   	    //add it to the group.
