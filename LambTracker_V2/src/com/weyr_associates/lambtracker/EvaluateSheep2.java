@@ -509,40 +509,35 @@ public class EvaluateSheep2 extends Activity {
         startManagingCursor(cursor);
         nRecs3    = cursor.getCount(); // number of user defined traits to use
     	dbh.moveToFirstRecord();
-    	// TODO
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
         	user_evaluation_traits.add(cursor.getString(0));
-	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
+//	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
 	    	user_trait_numbers.add(cursor.getInt(1));
-	    	Log.i("evaluate2", " trait id number is " + String.valueOf(cursor.getInt(1)));
+//	    	Log.i("evaluate2", " trait id number is " + String.valueOf(cursor.getInt(1)));
 	    	user_trait_number_items.add(cursor.getInt(2));
 //	    	Log.i("evaluate2", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
     	}
-//    	cursor.close();  
-        
-     	Log.i("evaluate2", "number of records in user traits cursor is " + String.valueOf(nRecs3));
+//     	Log.i("evaluate2", "number of records in user traits cursor is " + String.valueOf(nRecs3));
     	inflater = getLayoutInflater();	
     	TableLayout table = (TableLayout) findViewById(R.id.TableLayout03);	
     	for( int ii = 0; ii < nRecs3; ii++ ){	
 //    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
-    		Log.i ("in first loop", " user trait number is " + String.valueOf(user_trait_numbers.get(ii)));
+//    		Log.i ("in first loop", " user trait number is " + String.valueOf(user_trait_numbers.get(ii)));
 //    		Log.i ("in for loop", " trait name is " + user_evaluation_traits.get(ii));
-//    		TV = (TextView) findViewById(R.id.radioGroup1_lbl);       
-//            TV.setText (user_evaluation_traits.get(ii));
-    		Log.i ("in first loop", " number of trait entries is " + String.valueOf(user_trait_number_items.get(ii)));		
+//    		Log.i ("in first loop", " number of trait entries is " + String.valueOf(user_trait_number_items.get(ii)));		
 	    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_custom_item, table, false);
 	    	tempLabel = user_evaluation_traits.get(ii);
-	    	Log.i("in first loop", " tempLabel is " + tempLabel);
+//	    	Log.i("in first loop", " tempLabel is " + tempLabel);
 	    	//	Set the text for the radiogroup label
 	    	((TextView)row.findViewById(R.id.radioGroup1_lbl)).setText(tempLabel);
 	    	//	Get the text for the buttons
 	    	tempText = String.valueOf(user_trait_numbers.get(ii));
-	    	Log.i("in first loop", "trait numbers is " + tempText);
+//	    	Log.i("in first loop", "trait numbers is " + tempText);
 	    	cmd = String.format("select custom_evaluation_traits_table.custom_evaluation_item " +
 	    			" from custom_evaluation_traits_table " +
 	    			" where custom_evaluation_traits_table.id_traitid = '%s' "+
 	    			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ", tempText);
-	    	Log.i("evaluate2", " ready to get button text cmd is " + cmd);	    	
+//	    	Log.i("evaluate2", " ready to get button text cmd is " + cmd);	    	
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
 	        startManagingCursor(cursor);
@@ -553,12 +548,9 @@ public class EvaluateSheep2 extends Activity {
 	        
 	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	        	buttons.add (cursor.getString(0));
-		    	Log.i("2nd for loop", " radio button text is " + cursor.getString(0));
-//		    	user_trait_number_id.add (cursor.getInt(1));
-//		    	Log.i("2nd for loop", " radio button id is " + String.valueOf (cursor.getInt(1)));
+//		    	Log.i("2nd for loop", " radio button text is " + cursor.getString(0));
 	    	}
 	        radioBtnText = (String[]) buttons.toArray(new String [buttons.size()]);
-//	    	cursor.close();  
 	    	// Build the radio buttons here
 	    	radioGroup = ((RadioGroup) row.findViewById(R.id.radioGroup1));
 	    	addRadioButtons(user_trait_number_items.get(ii), radioBtnText);	    	
@@ -713,22 +705,22 @@ public class EvaluateSheep2 extends Activity {
 //    		Log.i("trait15_data ", String.valueOf(trait15_data));
  	    	
  //    		get the User data values  	
-    		Log.i("in save scores", " number user data points is " + String.valueOf(nRecs3));
+//    		Log.i("in save scores", " number user data points is " + String.valueOf(nRecs3));
     		table = (TableLayout) findViewById(R.id.TableLayout03);
-    		Log.i("in save scores", " after find tablelayout03 ");
+//    		Log.i("in save scores", " after find tablelayout03 ");
     		if (nRecs3 != 0) {
     			for( int ii = 0; ii < nRecs3; ii++ ){	
 //    				Log.i("in save scores", " before get child row ");
     				TableRow row1= (TableRow)table.getChildAt(ii);
 //    				Log.i("in save scores", " after get child row ");
     				tempTrait = user_trait_numbers.get (ii);
-    				Log.i("in save scores", " trait number is " + String.valueOf(tempTrait));
+//    				Log.i("in save scores", " trait number is " + String.valueOf(tempTrait));
     				RadioGroup rg=(RadioGroup)findViewById(R.id.radioGroup1);
 //    				Log.i("in save scores", " after get radiogroup view ");
 	    			try {
-	    				Log.i("in save scores", " in try block ");
+//	    				Log.i("in save scores", " in try block ");
 	    				tempRadioBtn = rg.getCheckedRadioButtonId();
-	    				Log.i("try radioBtn ", String.valueOf(tempRadioBtn));
+//	    				Log.i("try radioBtn ", String.valueOf(tempRadioBtn));
 	    				cmd = String.format("select custom_evaluation_traits_table.id_custom_traitid " +
 	    		    			" from custom_evaluation_traits_table " +
 	    		    			" where custom_evaluation_traits_table.id_traitid = %s "+
@@ -738,16 +730,16 @@ public class EvaluateSheep2 extends Activity {
 	    		        startManagingCursor(cursor);
 	    		        dbh.moveToFirstRecord();		        
 	    		        tempRadioBtn = cursor.getInt(0);
-	    		        Log.i("try ", String.valueOf(tempRadioBtn));
+//	    		        Log.i("try ", String.valueOf(tempRadioBtn));
 					} catch (Exception ex) {
 						tempRadioBtn = 0;
-						Log.i("catch ", String.valueOf(tempRadioBtn));
+//						Log.i("catch ", String.valueOf(tempRadioBtn));
 					}
-	    			Log.i("out of try ", "before adding score to user.scores");
-	    			Log.i("index ii ", String.valueOf(ii));
+//	    			Log.i("out of try ", "before adding score to user.scores");
+//	    			Log.i("index ii ", String.valueOf(ii));
 	     			user_scores.add(tempRadioBtn);
-	    			Log.i("user_score ", String.valueOf(user_scores.get(ii)));
-	    			Log.i("user_score ", String.valueOf(tempRadioBtn)); 
+//	    			Log.i("user_score ", String.valueOf(user_scores.get(ii)));
+//	    			Log.i("user_score ", String.valueOf(tempRadioBtn)); 
 	    		}
     	    	for( int ii = nRecs3; ii < 5; ii++ ){	
 //    	    		Log.i("in save scores ", "Filling remainder of user data array with zeros");
@@ -866,7 +858,7 @@ public class EvaluateSheep2 extends Activity {
  		// Display alerts here   	
 				AlertDialog.Builder builder = new AlertDialog.Builder( this );
 //				cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_id =%d", sheep_id);
-//				Log.i("evalGetAlert ", cmd);  
+////				Log.i("evalGetAlert ", cmd);  
 //				crsr = dbh.exec( cmd );
 //		        cursor   = ( Cursor ) crsr;
 //		        dbh.moveToFirstRecord();		       
@@ -881,9 +873,7 @@ public class EvaluateSheep2 extends Activity {
 			       });		
 				AlertDialog dialog = builder.create();
 				dialog.show();
-//				cursor.close();
 	}
-	
 	
 	public void helpBtn( View v )
     {
@@ -899,11 +889,10 @@ public class EvaluateSheep2 extends Activity {
 	       });		
 		AlertDialog dialog = builder.create();
 		dialog.show();
-		
     }
+	
 	public void clearBtn( View v )
     {
-		
 		// clear out the display of everything
 		TextView TV ;
 		RatingBar ratingBar;
@@ -1053,12 +1042,8 @@ public class EvaluateSheep2 extends Activity {
 	    		cursor   = ( Cursor ) crsr; 
 	    		startManagingCursor(cursor);
 
-//	    		recNo    = 1;
 				nRecs1    = cursor.getCount();
 				Log.i("in LookForSheep ", "number of tag records is " + String.valueOf(nRecs1));
-//				colNames = cursor.getColumnNames();
-//				nrCols   = colNames.length;
-				
 				cursor.moveToFirst();				
 				TV = (TextView) findViewById( R.id.sheepnameText );
 		        TV.setText (dbh.getStr(0));
@@ -1134,199 +1119,6 @@ public class EvaluateSheep2 extends Activity {
                 
         	}
 	}	 
-//	// user clicked 'Search Fed' button
-//    public void searchFedTag( View v )
-//    	{
-//    	String          cmd;
-//    	TextView		TV = (TextView) findViewById( R.id.inputText );
-//    	String			fed = TV.getText().toString();
-////    	Log.i("Evaluate ", " federal tag is " + fed);
-//    	Integer			ii;
-//    	// Hide the keyboard when you click the button
-//    	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-//    	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-//    	
-//// 		Start of the actual code to process the button click
-//    	if( fed != null && fed.length() > 0 )
-//    		{
-////			Search for the sheep with the entered federal tag number. 
-////    		assumes no duplicate federal tag numbers, ok for our flock not ok for the general case
-//    		
-//    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-//    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off , sheep_table.alert01 " +
-//    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +	
-//    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-//    				"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", fed);
-////    		Log.i("Evaluate ", cmd);
-//    		}	
-//    	else
-//    	{
-//    		return;
-//     	}
-//    	Object crsr = dbh.exec( cmd ); 
-//    	cursor   = (Cursor) crsr;
-//    	dbh.moveToFirstRecord();
-//		if( dbh.getSize() == 0 )
-//    		{ // no sheep with that federal tag in the database so clear out and return
-//    		clearBtn( v );
-//    		TV = (TextView) findViewById( R.id.sheepnameText );
-//        	TV.setText( "Cannot find this sheep." );
-//        	return;
-//    		}
-//// This section would allow for multiple sheep with same tag if we implement next and previous
-////    	buttons but is commented out for now as our sheep have unique federal tags
-////    	if( dbh.getSize() >1){
-////
-//// 			Enable the previous and next record buttons
-////    		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
-////    		btn2.setEnabled(true);  
-////    		//	Set up the various pointers and cursor data needed to traverse the sequence
-////    		recNo    = 1;
-////    		cursor   = (Cursor) crsr;
-////    		nRecs    = cursor.getCount();
-////    		colNames = cursor.getColumnNames();
-////    		cursor.moveToFirst();
-////    	}
-//		
-//    	fedtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database
-////		Log.i("Evaluate", " id info table id is " + String.valueOf(fedtagid));
-//		
-//    	TV = (TextView) findViewById(R.id.sheepnameText);
-//    	TV.setText(dbh.getStr(0));
-////    	Log.i("Evaluate", " sheep name is " + dbh.getStr(0));
-//    	sheep_id = dbh.getInt(1);
-//    	thissheep_id = sheep_id;
-////    	Log.i("Evaluate", " sheep id is " + String.valueOf(thissheep_id));
-//    	TV = (TextView) findViewById(R.id.fedText)	;
-//    	TV.setText(dbh.getStr(3));
-////    	Log.i("Evaluate", " sheep fed tag is " + dbh.getStr(3));
-//    	String alert_text = dbh.getStr(6);
-////    	Log.i("Evaluate", " sheep alert text is " + alert_text);
-////    	Now to test of the sheep has an alert and if so then set the alerts button to red
-//		if (alert_text != null && !alert_text.isEmpty() ){
-////		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-//			// make the alert button red and enable it and pop up the alert text
-//	    	Button btn = (Button) findViewById( R.id.alert_btn );
-//	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-//	    	btn.setEnabled(true); 
-//	    	showAlert(v);
-//		}
-//    	
-////		Now we need to get the farm tag for that sheep and fill the display with data
-//    	
-//    	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-//		"id_info_table.tag_number, " +
-//		"id_info_table.id_infoid, id_info_table.tag_date_off " +
-//		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-//		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-//		"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", thissheep_id);
-//
-////    	Log.i("Evaluate ", "ready to get farm tags cmd is " + cmd);    	
-//    	crsr = dbh.exec( cmd );
-//    	dbh.moveToFirstRecord();
-//		if( dbh.getSize() == 0 )
-//		{ // This sheep does not have a farm tag installed
-//			TV = (TextView) findViewById( R.id.farmText );
-//			TV.setText( "No tag" );
-//    	} else {
-//    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
-//    		TV5.setText(dbh.getStr(3));
-//    		ii = dbh.getInt(1);
-//    		farmtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database
-//    	}
-//    	}
-//// 	user clicked 'Search Farm Tag' button
-//    public void searchFarmTag( View v )
-//    	{
-//    	String          cmd;
-//    	TextView		TV = (TextView) findViewById( R.id.inputText );
-//    	String			farm = TV.getText().toString();
-//    	Integer			ii;
-//    	// Hide the keyboard when you click the button
-//    	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-//    	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-//    	
-//// 		Start of the actual code to process the button click
-//    	if( farm != null && farm.length() > 0 )
-//    		{
-////			Search for the sheep with the entered farm tag number. 
-////    		assumes no duplicate farm tag numbers, ok for our flock not ok for the general case  
-//    		
-//    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-//    				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off, sheep_table.alert01 " +
-//    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-//    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-//    				"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.tag_number='%s'", farm);
-//    		
-////    		Log.i("Evaluate", "building command search for farm tag ");
-//    		}	
-//    	else
-//    	{
-//    		return;
-//     	}
-//    	Object crsr = dbh.exec( cmd );   	
-//    	dbh.moveToFirstRecord();
-//    	if( dbh.getSize() == 0 )
-//    		{ // no sheep with that farm tag in the database so clear out and return
-//    		clearBtn( v );
-//    		TV = (TextView) findViewById( R.id.sheepnameText );
-//        	TV.setText( "Cannot find this sheep." );
-//        	return;
-//    		}
-////Need to add next and previous buttons if we have duplicate farm tags
-////    	if( dbh.getSize() >1){
-////
-//// 			Enable the previous and next record buttons
-////    		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
-////    		btn2.setEnabled(true);  
-////    		//	Set up the various pointers and cursor data needed to traverse the sequence
-////    		recNo    = 1;
-////    		cursor   = (Cursor) crsr;
-////    		nRecs    = cursor.getCount();
-//////    		colNames = cursor.getColumnNames();
-////    		cursor.moveToFirst();
-////    	}
-//    	
-//    	farmtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database
-//    	TV = (TextView) findViewById(R.id.sheepnameText);
-//    	TV.setText(dbh.getStr(0));
-//    	sheep_id = dbh.getInt(1);
-//    	TV = (TextView) findViewById(R.id.farmText)	;
-//    	TV.setText(dbh.getStr(3));
-//    	ii = dbh.getInt(1);
-//    	
-////    	Now to test of the sheep has an alert and if so then set the alerts button to red
-//    	String alert_text = dbh.getStr(6);
-////    	if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-//    	if (alert_text != null && !alert_text.isEmpty() ){
-//			// make the alert button red and enable it and pop up the alert text
-//	    	Button btn = (Button) findViewById( R.id.alert_btn );
-//	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-//	    	btn.setEnabled(true); 
-//	    	showAlert(v);
-//		}
-////		Now we need to get the rest of the tags and fill the display with data
-//		
-//    	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-//		"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off " +
-//		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-//		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-//		"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", ii);
-//    	
-//    	crsr = dbh.exec( cmd );
-//    	dbh.moveToFirstRecord();
-//    	
-//		if( dbh.getSize() == 0 )
-//		{ // This sheep does not have a federal tag installed
-//			TV = (TextView) findViewById( R.id.fedText );
-//			TV.setText( "No tag" );
-//    	} else {
-//        	fedtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database   	
-//        	TextView TV5 = (TextView) findViewById(R.id.fedText)	;
-//        	TV5.setText(dbh.getStr(3));
-//        	ii = dbh.getInt(1);
-//    	}
-//    	}   
  
     public void takeNote( View v )
     {	    	
