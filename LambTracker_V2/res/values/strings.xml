@@ -81,7 +81,7 @@
         You may select 10 scored items, 5 real data items and 5 custom items. </string>
     <string name="help_look_up_sheep">Select a sheep using the EID reader or by entering in a federal or farm tag number. 
    	    All the tags for that sheep will be displayed in the scrolling view below. If you need to correct tags you will need to do 
-   	    that separately in the desktop application. The notese for this sheep are shown below the tags.  </string>
+   	    that separately in the desktop application. The notes for this sheep are shown below the tags.  </string>
     <string name="help_lambing_sheep">Select a sheep using the EID reader or by entering in another identification. 
    	    All the tags for that sheep will be displayed in the scrolling view below. The ewe\'s last lambing results will be shown.
    	    If there are any lambs from that sheep for this year their identification will also be listed. You can choose to add lambs 
@@ -157,6 +157,7 @@
     <string name="sheep_breed_lbl">Sheep Breed</string>
     <string name="owner_id_lbl">Owner</string>
     <string name="update_eval_lbl">Update Alerts on Save Evaluation?</string>
+    <string name="sheep_note_lbl">Notes</string>
     <string name="include_removed_sheep">Include Removed Sheep in Look Up Sheep?</string>
     
     <string name="delete_sheep">Delete Sheep?</string>
