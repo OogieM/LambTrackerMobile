@@ -817,7 +817,7 @@ public class AddLamb extends Activity {
 		}		
 		//	Set the location to be East Orchard Pasture but will need to modify to be real one based on location of dam
 		id_locationid = 1;
-		//	The following things should be modified to be the value from settings 
+		//	The following things should be modified to be the value from default settings 
 		//	but I haven't implemented settings yet so hard coding them
 		// TODO
 		//	Set the birth_weight_units to be decimal pounds 
