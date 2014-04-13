@@ -569,6 +569,10 @@ public class EvaluateSheep2 extends Activity {
     	btn.setEnabled(false); 
     	btn = (Button) findViewById( R.id.prev_rec_btn );
     	btn.setEnabled(false);
+    	
+//    	make the scan eid button red
+		btn = (Button) findViewById( R.id.scan_eid_btn );
+		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));        	
     }
 	
     private void addRadioButtons(int numButtons, String[] radioBtnText) {
@@ -981,7 +985,7 @@ public class EvaluateSheep2 extends Activity {
 			Message msg = Message.obtain(null, eidService.MSG_SEND_ME_TAGS);
 			msg.replyTo = mMessenger;
 			mService.send(msg);
-		   	//	make the scan eid button green
+		   	//	make the scan eid button green 0x0000FF00, 0xff00ff00
 	    	Button btn = (Button) findViewById( R.id.scan_eid_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xff00ff00));	
 		} catch (RemoteException e) {

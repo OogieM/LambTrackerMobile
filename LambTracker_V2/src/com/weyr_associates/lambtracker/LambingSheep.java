@@ -240,7 +240,7 @@ public class LambingSheep extends ListActivity
 	    	dbh = new DatabaseHandler( this, dbfile );
 //			Added the variable definitions here    	
 	      	String          cmd;
-
+	      	
 	    	 //////////////////////////////////// 
 			CheckIfServiceIsRunning();
 //			LoadPreferences (true);
@@ -261,7 +261,6 @@ public class LambingSheep extends ListActivity
 	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	    		tag_types.add(cursor.getString(1));
 	    	}
-//	    	cursor.close();    	
 	    	
 	    	// Creating adapter for spinner
 	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
@@ -428,9 +427,7 @@ public class LambingSheep extends ListActivity
 //						Log.i("lookForSheep", " after set myadapter2");
 						historylist.setAdapter(myadapter2);
 						};
-	//TODO		
 					// Add display current year lambs here if there are any
-						
 						// First lamb
 						cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
 			    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
@@ -754,6 +751,9 @@ public class LambingSheep extends ListActivity
 			Intent i = null;
 			Log.i("addLamb", " at the beginning");
 			
+			if (thissheep_id == 0){
+				return;
+			}
 			i = new Intent(LambingSheep.this, AddLamb.class);
 			i.putExtra("dam_name", dam_name);
 			i.putExtra("dam_id", thissheep_id);
@@ -777,7 +777,7 @@ public class LambingSheep extends ListActivity
 				Message msg = Message.obtain(null, eidService.MSG_SEND_ME_TAGS);
 				msg.replyTo = mMessenger;
 				mService.send(msg);
-			   	//	make the scan eid button  0x0000FF00, 0xff00ff00
+			   	//	make the scan eid button green 0x0000FF00, 0xff00ff00
 		    	Button btn = (Button) findViewById( R.id.scan_eid_btn );
 		    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xff00ff00));
 				
