@@ -564,7 +564,13 @@ public class LookUpSheep extends ListActivity
 		catch (Exception e) {
 			// In this case there is no adapter so do nothing
 		}
-		Log.i("clear btn", "after changing myadapter");
+		try {
+			Log.i("lookup clrbtn", " before set notes to null");
+			myadapter2.changeCursor(null);
+		} catch (Exception e) {
+			// In this case there is no adapter so do nothing
+		}
+//		Log.i("clear btn", "after changing myadapter and myadapter2");
 		
     }
     private String TodayIs() {

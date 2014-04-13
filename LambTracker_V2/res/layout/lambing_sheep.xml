@@ -134,6 +134,7 @@
 	            android:layout_gravity="left|top"
 	            android:layout_row="0"
 	            android:inputType="none"
+	            android:textStyle="bold"
 	            android:text="@string/tag_number_lbl" />
 	        
 	        <TextView
@@ -143,6 +144,7 @@
 	            android:layout_gravity="left"
 	            android:layout_row="0"
 	            android:inputType="none"
+	            android:textStyle="bold"
 	            android:text="@string/tag_color_abbrev_lbl" />
 	        
 	        <TextView
@@ -152,6 +154,7 @@
 	            android:layout_gravity="left"
 	            android:layout_row="0"
 	            android:inputType="none"
+	            android:textStyle="bold"
 	            android:text="@string/tag_location_abbrev_lbl" />
 	        
 	        <TextView
@@ -161,6 +164,7 @@
 	            android:layout_gravity="left"
 	            android:layout_row="0"
 	            android:inputType="none"
+	            android:textStyle="bold"
 	            android:text="@string/tag_type_abbrev_lbl" />
         
      	</GridLayout>
@@ -181,6 +185,7 @@
             android:layout_height="wrap_content"
 	       	android:layout_gravity="left"
             android:inputType="none"
+            android:textStyle="bold"
             android:text="@string/lambing_history_lbl" 
             android:textSize="14sp"/>
 	    <ListView 

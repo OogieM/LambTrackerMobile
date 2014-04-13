@@ -261,7 +261,7 @@ public class LambingSheep extends ListActivity
 	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	    		tag_types.add(cursor.getString(1));
 	    	}
-	    	cursor.close();    	
+//	    	cursor.close();    	
 	    	
 	    	// Creating adapter for spinner
 	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
@@ -291,6 +291,7 @@ public class LambingSheep extends ListActivity
 			Boolean exists;
 			TextView TV;
 			String 	lambingdate ;
+			String tempString;
 	        exists = true;
 	     // Hide the keyboard when you click the button
 	    	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
@@ -332,13 +333,15 @@ public class LambingSheep extends ListActivity
 		        	thissheep_id = dbh.getInt(0);
 		        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));
 		        	//	Go get the sex of this sheep
-		        	cmd = String.format( "select sheep_table.sex from sheep_table where sheep_id = %s",thissheep_id);
+		        	cmd = String.format( "select sheep_table.sex, sheep_table.remove_date from sheep_table where sheep_id = %s",thissheep_id);
 		        	crsr = dbh.exec( cmd ); 	    		
 		    		cursor   = ( Cursor ) crsr; 
 		    		startManagingCursor(cursor);
 					cursor.moveToFirst();				
 					i =  (dbh.getInt(0));
+					tempString = (dbh.getStr(1));
 					Log.i("LookForSheep", "This sheep is sex " + String.valueOf(i));
+					Log.i("LookForSheep", "This sheep was removed " + tempString);
 					if (i != 2) {
 						// This is not a ewe so set the name to not a ewe, clear out and return
 						clearBtn( v );
@@ -346,7 +349,13 @@ public class LambingSheep extends ListActivity
 			        	TV.setText( "This is not a ewe." );
 			        	return;
 					}
-					
+					if (tempString != null) {
+						// This is a removed sheep so set the name to removed, clear out and return
+						clearBtn( v );
+			    		TV = (TextView) findViewById( R.id.sheepnameText );
+			        	TV.setText( "This sheep was Removed on " + tempString);
+			        	return;
+					}
 		        	Log.i("LookForSheep", " Before finding all tags");		        	
 		    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 		    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
@@ -356,7 +365,8 @@ public class LambingSheep extends ListActivity
 		    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 		    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 		    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-		    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
+		    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null " +
+		    				" order by idtype_name asc", thissheep_id);
 
 		    		crsr = dbh.exec( cmd ); 	    		
 		    		cursor   = ( Cursor ) crsr; 
