@@ -1209,7 +1209,7 @@ public class AddLamb extends Activity {
 		Log.i("in add lamb", " in back btn after stop EID service");
 		clearBtn( null );
 		// Added this to close the database if we go back to the lambing activity  	
-    	stopManagingCursor (cursor);
+//    	stopManagingCursor (cursor);
     	cursor.close();
     	Log.i("in add lamb", " in back btn after close cursor");
     	dbh.closeDB();   	
@@ -1294,7 +1294,7 @@ public class AddLamb extends Activity {
     		predefined_notes.add(cursor.getString(1));
 //    		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
     	}
-    	cursor.close();    
+//    	cursor.close();    
     	Log.i ("takeNote", " after set the predefined note spinner ");
     	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
     	//Implement take a note stuff here

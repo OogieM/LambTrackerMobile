@@ -147,6 +147,7 @@ public class eidService extends Service {
 			default:
 				super.handleMessage(msg);
 			}
+			Log.i("eidService", "after case statement re messages");
 		}
 	}
 	private void InformActivityOfThreadSuicide() {
