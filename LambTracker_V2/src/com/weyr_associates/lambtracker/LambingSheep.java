@@ -569,6 +569,10 @@ public class LambingSheep extends ListActivity
 		// TODO
 		@Override
 		public void onResume (){
+	        String 	dbfile = getString(R.string.real_database_file) ;
+	        Log.i("LookUpSheep", " after get database file");
+	    	dbh = new DatabaseHandler( this, dbfile );
+	    	
 			Log.i("Start resume", " of lambing sheep");
 			super.onResume();
 			Log.i("after ", "super onResume of lambing sheep");
@@ -748,6 +752,12 @@ public class LambingSheep extends ListActivity
 			}
 		}
 		public void addLamb (View v){
+			// Added this to close the database before we go to the add a lamb activity  	
+	    	stopManagingCursor (cursor);
+	    	cursor.close();
+	    	Log.i("in lamb sheep", " in add lamb ");
+	    	dbh.closeDB();   
+	    	
 			Intent i = null;
 			Log.i("addLamb", " at the beginning");
 			

@@ -910,7 +910,7 @@ public class AddLamb extends Activity {
 	  		//	If the tag is a federal tag then make the flock ID 1 for Desert Weyr 
 	  		//	Should be whatever the default is in settings
 	  		//	Also set the lamb name to be this year plus fed tag until we change it
-	  		// once the EID is the federal tag the lamb name has to be the farm tag 
+	  		// 	once the EID is the federal tag the lamb name has to be the farm tag 
 			//	Names cannot be the EID tag number, that is too long. 
 			//	Still need to handle the case of the EID being the official federal tag
 	  		if (tag_type==1){
@@ -1211,11 +1211,12 @@ public class AddLamb extends Activity {
 		// Added this to close the database if we go back to the lambing activity  	
     	stopManagingCursor (cursor);
     	cursor.close();
-//    	Log.i("in add lamb", " in back btn after close cursor");
+    	Log.i("in add lamb", " in back btn after close cursor");
     	dbh.closeDB();   	
     	//Go back to ewe lambing data
     	Log.i("in add lamb", " before finish this activity");
       	finish();
+      	Log.i("in add lamb", " after finish this activity");
 	    }
  
     public void showAlert (View v){    		
