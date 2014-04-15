@@ -315,7 +315,7 @@ public class LambingSheep extends ListActivity
 	    	ListView lambtags02 = (ListView) findViewById(R.id.list4);
 	    	ListView lambtags03 = (ListView) findViewById(R.id.list5);
 	    	
-//	    	Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
+	    	Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
 	        exists = tableExists("sheep_table");
 	        if (exists){
 	        	if( tag_num != null && tag_num.length() > 0 ){
@@ -656,7 +656,7 @@ public class LambingSheep extends ListActivity
 		if (nRecs > 0) {
 			lambingdate = dbh.getStr(1);			
 			lamb01_id = dbh.getInt(3);
-//			Log.i("lookForSheep", " first lamb is id " + String.valueOf(lamb01_id));
+			Log.i("lookForSheep", " first lamb is id " + String.valueOf(lamb01_id));
 			lamb02_id = dbh.getInt(4);
 //			Log.i("lookForSheep", " second lamb is id " + String.valueOf(lamb02_id));
 			lamb03_id = dbh.getInt(5);
