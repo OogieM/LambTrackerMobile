@@ -443,7 +443,7 @@ public class AddLamb extends Activity {
     	Log.i("add a lamb ", " cmd is " + cmd);	    	
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
-        startManagingCursor(cursor);
+//        startManagingCursor(cursor);
         nRecs    = cursor.getCount();
         dbh.moveToFirstRecord();
         if (nRecs > 0) {
@@ -542,7 +542,7 @@ public class AddLamb extends Activity {
 	 		"where sheep_sex_table.sex_sheepid = %s", sex);
 	 		crsr = dbh.exec( cmd );  
 			cursor   = ( Cursor ) crsr;
-			startManagingCursor(cursor);
+//			startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 	  		sex_abbrev = dbh.getStr(0);	
 		}			
@@ -851,7 +851,7 @@ public class AddLamb extends Activity {
 		cmd = String.format("select last_insert_rowid()");
 		crsr = dbh.exec( cmd );  
 		cursor   = ( Cursor ) crsr;
-		startManagingCursor(cursor);
+//		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		lamb_id = dbh.getInt(0);		
 		Log.i("add a lamb ", "the lamb_id is " + String.valueOf(lamb_id));
@@ -886,7 +886,7 @@ public class AddLamb extends Activity {
 	     				"where tag_color_name='%s'", tag_color_label);
 	     	crsr = dbh.exec( cmd );
 	  		cursor   = ( Cursor ) crsr;
-	  		startManagingCursor(cursor);
+//	  		startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 	  		tag_color = dbh.getInt(0);
 	  		Log.i("after ", "getting tag color");
@@ -897,7 +897,7 @@ public class AddLamb extends Activity {
 				"where id_location_abbrev='%s'", tag_location_label);
 	  		crsr = dbh.exec( cmd );
 	  		cursor   = ( Cursor ) crsr;
-	  		startManagingCursor(cursor);
+//	  		startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 	  		tag_loc = dbh.getInt(0);
 	  		
@@ -906,7 +906,7 @@ public class AddLamb extends Activity {
 				"where idtype_name='%s'", tag_type_label);
 	  		crsr = dbh.exec( cmd );
 	  		cursor   = ( Cursor ) crsr;
-	  		startManagingCursor(cursor);
+//	  		startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 	  		tag_type = dbh.getInt(0);
 	  		Log.i("after ", "getting tag type");
@@ -1078,7 +1078,7 @@ public class AddLamb extends Activity {
 			cmd = String.format("select last_insert_rowid()");
 			crsr = dbh.exec( cmd );  
 			cursor   = ( Cursor ) crsr;
-			startManagingCursor(cursor);
+//			startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 	  		lambing_historyid = dbh.getInt(0);		
 			Log.i("add a lamb ", "the lambing_historyid is " + String.valueOf(lambing_historyid));
@@ -1130,7 +1130,7 @@ public class AddLamb extends Activity {
         cmd = "select * from tag_colors_table";
         crsr = dbh.exec( cmd );  
         cursor   = ( Cursor ) crsr;
-        startManagingCursor(cursor);
+//        startManagingCursor(cursor);
     	dbh.moveToFirstRecord();
     	tag_colors.add("Select a Color");
          // looping through all rows and adding to list
@@ -1516,7 +1516,7 @@ public class AddLamb extends Activity {
 			"where idtype_name='%s'", tag_type_label);
   		crsr = dbh.exec( cmd );
   		cursor   = ( Cursor ) crsr;
-  		startManagingCursor(cursor);
+//  		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_type = dbh.getInt(0);
   		Log.i("after ", "getting tag type" + String.valueOf(new_tag_type));  		
@@ -1526,7 +1526,7 @@ public class AddLamb extends Activity {
      				"where tag_color_name='%s'", tag_color_label);
      	crsr = dbh.exec( cmd );
   		cursor   = ( Cursor ) crsr;
-  		startManagingCursor(cursor);
+//  		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_color = dbh.getInt(0);
   		Log.i("after ", "getting tag color" + String.valueOf(new_tag_color));
@@ -1536,7 +1536,7 @@ public class AddLamb extends Activity {
 			"where id_location_abbrev='%s'", tag_location_label);
   		crsr = dbh.exec( cmd );
   		cursor   = ( Cursor ) crsr;
-  		startManagingCursor(cursor);
+//  		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_location = dbh.getInt(0);
   		Log.i("New Location ID ", String.valueOf(new_tag_location));
