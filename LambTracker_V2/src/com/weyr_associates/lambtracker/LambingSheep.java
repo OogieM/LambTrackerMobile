@@ -579,7 +579,7 @@ public class LambingSheep extends ListActivity
 	                TV.setText( "Sheep Database does not exist." ); 
 	        	}
 		}
-		// TODO
+	
 		@Override
 		public void onResume (){
 	    	
