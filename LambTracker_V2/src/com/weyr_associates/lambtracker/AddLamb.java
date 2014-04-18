@@ -509,7 +509,10 @@ public class AddLamb extends Activity {
     	btn = (Button) findViewById( R.id.update_database_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	btn.setEnabled(false);
-    	
+    	//	added this to set alerts and death and remove dates to empty so we don't get a false null     	
+    	lamb_alert_text = "";
+    	death_date = "";
+		remove_date = "";
 		//	Get the date and time to add to the lamb record these are strings not numbers
 		mytoday = TodayIs(); 
 //		Log.i("add a lamb ", " today is " + mytoday);	
@@ -916,15 +919,23 @@ public class AddLamb extends Activity {
 	  		if (tag_type==1){
 	  			tag_flock = 1;
 	  			lamb_name = year + "-" + tag_num;
-	  		}	  		
-	     	// Now go put in a tag record for this tag for this lamb
+	  			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+		  				" tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) values " +
+		  				" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", lamb_id, tag_type, tag_color, tag_color, 
+		  				tag_loc, mytoday, tag_num, tag_flock);
+		  		Log.i("add fed tag ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add fed tag ", "after insert into id_info_table");
+	  		}else{	  		
+	     	// Now go put in a tag record for this tag for this lamb without a flock id
 	  		cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
-	  				" tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) values " +
-	  				" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", lamb_id, tag_type, tag_color, tag_color, 
-	  				tag_loc, mytoday, tag_num, tag_flock);
+	  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+	  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+	  				tag_loc, mytoday, tag_num);
 	  		Log.i("add tag to ", "db cmd is " + cmd);
 			dbh.exec(cmd);
 			Log.i("add tag ", "after insert into id_info_table");
+	  		}
   		}
 		//	End of what has to loop through all IDs for the lamb being added 
 		
@@ -951,7 +962,7 @@ public class AddLamb extends Activity {
 //			Log.i("in try block ", "after try the first DB select ");
 			cursor   = ( Cursor ) crsr;
 //			Log.i("in try block ", "after cursor ");
-			startManagingCursor(cursor);
+//			startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 //	  		Log.i("in try block ", "after move to first ");
 	  		lambing_historyid = dbh.getInt(0);

@@ -562,6 +562,11 @@ public class LambingSheep extends ListActivity
 						// if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
 							// Show the alert		  			
 						showAlert(v);
+						
+						// make the alert button red and enabled
+				    	btn = (Button) findViewById( R.id.alert_btn );
+				    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+				    	btn.setEnabled(true);  				       
 		        	}
 	        	}else{
 		        	return;
@@ -943,7 +948,23 @@ public class LambingSheep extends ListActivity
 			} catch (Exception e) {
 				// In this case there is no adapter so do nothing
 				Log.i("lambing clrbtn", " exception setting myadapter5 third lamb tags to null");
-			}			
+			}
+	       	// make the alert button normal and disabled
+	    	btn = (Button) findViewById( R.id.alert_btn );
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+	    	btn.setEnabled(false);  
+	    	
+	       	//	Disable the Next Record and Prev. Record button until we have multiple records
+	    	btn = (Button) findViewById( R.id.next_rec_btn );
+	    	btn.setEnabled(false); 
+	    	btn = (Button) findViewById( R.id.prev_rec_btn );
+	    	btn.setEnabled(false);
+	    	
+//	    	make the scan eid button red
+			btn = (Button) findViewById( R.id.scan_eid_btn );
+			btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+			Log.i("lambing"," clear button after setting buttons");
+			
 	    }  
 	     public void takeNote( View v )
 	     {	    	
