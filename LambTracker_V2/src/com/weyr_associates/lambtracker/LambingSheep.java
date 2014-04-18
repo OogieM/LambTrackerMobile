@@ -97,15 +97,15 @@ public class LambingSheep extends ListActivity
 					break;			
 				case eidService.MSG_UPDATE_LOG_APPEND:
 					//Bundle b3 = msg.getData();
-					//Log.i("Convert", "Add to Log.");
+					//Log.i("Lambing ", "Add to Log.");
 
 					break;
 				case eidService.MSG_UPDATE_LOG_FULL:
-					//Log.i("Convert", "Log Full.");
+					//Log.i("Lambing ", "Log Full.");
 
 					break;
 				case eidService.MSG_THREAD_SUICIDE:
-					Log.i("Convert", "Service informed Activity of Suicide.");
+					Log.i("Lambing ", "Service informed Activity of Suicide.");
 					doUnbindService();
 					stopService(new Intent(LambingSheep.this, eidService.class));
 
@@ -119,7 +119,7 @@ public class LambingSheep extends ListActivity
 		public ServiceConnection mConnection = new ServiceConnection() {
 			public void onServiceConnected(ComponentName className, IBinder service) {
 				mService = new Messenger(service);
-				Log.i("Convert", "At Service.");
+				Log.i("Lambing ", "At Service.");
 				try {
 					//Register client with service
 					Message msg = Message.obtain(null, eidService.MSG_REGISTER_CLIENT);
@@ -146,45 +146,45 @@ public class LambingSheep extends ListActivity
 
 		private void CheckIfServiceIsRunning() {
 			//If the service is running when the activity starts, we want to automatically bind to it.
-			Log.i("Convert", "At isRunning?.");
+			Log.i("lambing sheep ", "At isRunning?.");
 			if (eidService.isRunning()) {
-				//Log.i("Convert", "is.");
+				Log.i("Lambing ", "is running.");
 				doBindService();
 			} else {
-				//Log.i("Convert", "is not, start it");
+				Log.i("lambing", "is not, start it");
 				startService(new Intent(LambingSheep.this, eidService.class));
 				doBindService();
 			}
-			//Log.i("Convert", "Done isRunning.");
+			Log.i("Lambing ", "Done isRunning.");
 		} 	
 
 		void doBindService() {
 			// Establish a connection with the service.  We use an explicit
 			// class name because there is no reason to be able to let other
 			// applications replace our component.
-			//Log.i("Convert", "At doBind1.");
+			Log.i("lambing", "At doBind1.");
 			bindService(new Intent(this, eidService.class), mConnection, Context.BIND_AUTO_CREATE);
-			//Log.i("Convert", "At doBind2.");
+			Log.i("lambing ", "At doBind2.");
 
 			mIsBound = true;
 
 			if (mService != null) {
-				//Log.i("Convert", "At doBind3.");
+				Log.i("Lambing ", "At doBind3.");
 				try {
 					//Request status update
 					Message msg = Message.obtain(null, eidService.MSG_UPDATE_STATUS, 0, 0);
 					msg.replyTo = mMessenger;
 					mService.send(msg);
-					Log.i("Convert", "At doBind4.");
+					Log.i("Lambing ", "At doBind4.");
 					//Request full log from service.
 					msg = Message.obtain(null, eidService.MSG_UPDATE_LOG_FULL, 0, 0);
 					mService.send(msg);
 				} catch (RemoteException e) {}
 			}
-			//Log.i("Convert", "At doBind5.");
+			Log.i("Lambing ", "At doBind5.");
 		}
 		void doUnbindService() {
-			//Log.i("Convert", "At DoUnbindservice");
+			Log.i("Lambing ", "At DoUnbindservice");
 			if (mService != null) {
 				try {
 					//Stop eidService from sending tags
@@ -220,7 +220,7 @@ public class LambingSheep extends ListActivity
 			btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 //			String eid = this.getIntent().getExtras().getString("com.weyr_associates.lambtracker.LastEID");
 //	    	Log.i("LookUpSheep", " before input text " + eid);  
-//	    	Log.i("LookUpSheep", " before input text " + LastEID);  
+	    	Log.i("LookUpSheep", " before input text " + LastEID);  
 			// 	Display the EID number
 			TextView TV = (TextView) findViewById (R.id.inputText);
 			TV.setText( LastEID );
@@ -235,41 +235,40 @@ public class LambingSheep extends ListActivity
 	        setContentView(R.layout.lambing_sheep);
 	        Log.i("LookUpSheep", " after set content view");
 	        View v = null;
-	        String 	dbfile = getString(R.string.real_database_file) ;
-	        Log.i("LookUpSheep", " after get database file");
-	    	dbh = new DatabaseHandler( this, dbfile );
+//	        String 	dbfile = getString(R.string.real_database_file) ;
+//	        Log.i("LookUpSheep", " after get database file");
+//	    	dbh = new DatabaseHandler( this, dbfile );
 //			Added the variable definitions here    	
 	      	String          cmd;
-
+	      	
 	    	 //////////////////////////////////// 
 			CheckIfServiceIsRunning();
 //			LoadPreferences (true);
-			Log.i("Convert", "back from isRunning");  	
+			Log.i("Lambing ", "back from isRunning");  	
 			////////////////////////////////////    	
 			thissheep_id = 0;
-	     	// Fill the Tag Type Spinner
-	     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
-	    	tag_types = new ArrayList<String>();      	
-	    	
-	    	// Select All fields from id types to build the spinner
-	        cmd = "select * from id_type_table";
-	        crsr = dbh.exec( cmd );  
-	        cursor   = ( Cursor ) crsr;
-	    	dbh.moveToFirstRecord();
-	    	tag_types.add("Select a Type");
-	         // looping through all rows and adding to list
-	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-	    		tag_types.add(cursor.getString(1));
-	    	}
-//	    	cursor.close();    	
-	    	
-	    	// Creating adapter for spinner
-	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
-			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			tag_type_spinner.setAdapter (dataAdapter);
-			tag_type_spinner.setSelection(2);	
-			TextView TV = (TextView) findViewById( R.id.inputText );
-			
+//	     	// Fill the Tag Type Spinner
+//	     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+//	    	tag_types = new ArrayList<String>();      	
+//	    	
+//	    	// Select All fields from id types to build the spinner
+//	        cmd = "select * from id_type_table";
+//	        crsr = dbh.exec( cmd );  
+//	        cursor   = ( Cursor ) crsr;
+//	    	dbh.moveToFirstRecord();
+//	    	tag_types.add("Select a Type");
+//	         // looping through all rows and adding to list
+//	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+//	    		tag_types.add(cursor.getString(1));
+//	    	}
+//	    	
+//	    	// Creating adapter for spinner
+//	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
+//			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//			tag_type_spinner.setAdapter (dataAdapter);
+//			tag_type_spinner.setSelection(2);	
+//			TextView TV = (TextView) findViewById( R.id.inputText );
+			Log.i("lambing"," onCreate before setting buttons");
 	       	// make the alert button normal and disabled
 	    	btn = (Button) findViewById( R.id.alert_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
@@ -284,9 +283,11 @@ public class LambingSheep extends ListActivity
 //	    	make the scan eid button red
 			btn = (Button) findViewById( R.id.scan_eid_btn );
 			btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+			Log.i("lambing"," onCreate after setting buttons");
 	        }
 		
 		public void lookForSheep (View v){
+			Log.i("lookforsheep"," at beginning of look for sheep");
 			int 	lamb01_id, lamb02_id, lamb03_id;
 			Boolean exists;
 			TextView TV;
@@ -314,16 +315,22 @@ public class LambingSheep extends ListActivity
 	    	ListView lambtags02 = (ListView) findViewById(R.id.list4);
 	    	ListView lambtags03 = (ListView) findViewById(R.id.list5);
 	    	
-//	    	Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
+	    	Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
 	        exists = tableExists("sheep_table");
 	        if (exists){
 	        	if( tag_num != null && tag_num.length() > 0 ){
 //	        		Get the sheep id from the id table for this tag number and selected tag type
 		        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
 		        			"and id_info_table.tag_type='%s' ", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
-		        	dbh.exec( cmd );
-		        	dbh.moveToFirstRecord();
-		        	if( dbh.getSize() == 0 )
+		        	
+		        	crsr = dbh.exec( cmd ); 	    		
+		    		cursor   = ( Cursor ) crsr; 
+//		    		startManagingCursor(cursor);
+					cursor.moveToFirst();	
+					nRecs    = cursor.getCount();
+//					dbh.exec( cmd );
+//		        	dbh.moveToFirstRecord();
+		        	if( nRecs == 0 )
 			    		{ // no sheep with that tag in the database so clear out and return
 			    		clearBtn( v );
 			    		TV = (TextView) findViewById( R.id.sheepnameText );
@@ -336,7 +343,7 @@ public class LambingSheep extends ListActivity
 		        	cmd = String.format( "select sheep_table.sex, sheep_table.remove_date from sheep_table where sheep_id = %s",thissheep_id);
 		        	crsr = dbh.exec( cmd ); 	    		
 		    		cursor   = ( Cursor ) crsr; 
-		    		startManagingCursor(cursor);
+//		    		startManagingCursor(cursor);
 					cursor.moveToFirst();				
 					i =  (dbh.getInt(0));
 					tempString = (dbh.getStr(1));
@@ -370,7 +377,7 @@ public class LambingSheep extends ListActivity
 
 		    		crsr = dbh.exec( cmd ); 	    		
 		    		cursor   = ( Cursor ) crsr; 
-		    		startManagingCursor(cursor);
+//		    		startManagingCursor(cursor);
 		    		recNo    = 1;
 					nRecs    = cursor.getCount();
 					colNames = cursor.getColumnNames();
@@ -407,7 +414,7 @@ public class LambingSheep extends ListActivity
 					crsr2 = dbh.exec( cmd ); 	
 					Log.i("lookForSheep", " after run 2nd sqlite command");
 		    		cursor2   = ( Cursor ) crsr2; 
-		    		startManagingCursor(cursor2);
+//		    		startManagingCursor(cursor2);
 					nRecs    = cursor2.getCount();
 					Log.i("lookForSheep", " nRecs is " + String.valueOf(nRecs));
 					cursor2.moveToFirst();	
@@ -428,9 +435,7 @@ public class LambingSheep extends ListActivity
 //						Log.i("lookForSheep", " after set myadapter2");
 						historylist.setAdapter(myadapter2);
 						};
-	//TODO		
 					// Add display current year lambs here if there are any
-						
 						// First lamb
 						cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
 			    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
@@ -445,7 +450,7 @@ public class LambingSheep extends ListActivity
 			    		crsr3 = dbh.exec( cmd ); 
 //			    		Log.i("lookForSheep", " after run 3rd sqlite command");
 			    		cursor3   = ( Cursor ) crsr3; 
-			    		startManagingCursor(cursor3);
+//			    		startManagingCursor(cursor3);
 						nRecs    = cursor3.getCount();
 //						Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
 //						colNames = cursor3.getColumnNames();
@@ -486,7 +491,7 @@ public class LambingSheep extends ListActivity
 			    		crsr4 = dbh.exec( cmd ); 
 			    		Log.i("lookForSheep", " after run 4th sqlite command");
 			    		cursor4   = ( Cursor ) crsr4; 
-			    		startManagingCursor(cursor4);
+//			    		startManagingCursor(cursor4);
 						nRecs    = cursor4.getCount();
 						Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
 //						colNames = cursor3.getColumnNames();
@@ -526,7 +531,7 @@ public class LambingSheep extends ListActivity
 			    		crsr5 = dbh.exec( cmd ); 
 			    		Log.i("lookForSheep", " after run 4th sqlite command");
 			    		cursor5   = ( Cursor ) crsr5; 
-			    		startManagingCursor(cursor5);
+//			    		startManagingCursor(cursor5);
 						nRecs    = cursor5.getCount();
 						Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
 //						colNames = cursor3.getColumnNames();
@@ -557,6 +562,11 @@ public class LambingSheep extends ListActivity
 						// if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
 							// Show the alert		  			
 						showAlert(v);
+						
+						// make the alert button red and enabled
+				    	btn = (Button) findViewById( R.id.alert_btn );
+				    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+				    	btn.setEnabled(true);  				       
 		        	}
 	        	}else{
 		        	return;
@@ -572,14 +582,46 @@ public class LambingSheep extends ListActivity
 		// TODO
 		@Override
 		public void onResume (){
+	    	
 			Log.i("Start resume", " of lambing sheep");
 			super.onResume();
 			Log.i("after ", "super onResume of lambing sheep");
+			
+			String 	dbfile = getString(R.string.real_database_file) ;
+	        Log.i("LookUpSheep", " after get database file");
+	    	dbh = new DatabaseHandler( this, dbfile );
+	    	
 			int 	lamb01_id, lamb02_id, lamb03_id;
 //			Object crsr, crsr2, crsr3, crsr4, crsr5;
 			TextView TV;
 			String 	lambingdate ;
 			Log.i("in resume", " of lambing sheep");
+			
+			Log.i("in lambing", " this sheepid is " + thissheep_id); 
+					
+	     	// Fill the Tag Type Spinner
+	     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+	    	tag_types = new ArrayList<String>();      	
+	    	
+	    	// Select All fields from id types to build the spinner
+	        cmd = "select * from id_type_table";
+	        crsr = dbh.exec( cmd );  
+	        cursor   = ( Cursor ) crsr;
+	    	dbh.moveToFirstRecord();
+	    	tag_types.add("Select a Type");
+	         // looping through all rows and adding to list
+	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+	    		tag_types.add(cursor.getString(1));
+	    	}
+	    	
+	    	// Creating adapter for spinner
+	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
+			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			tag_type_spinner.setAdapter (dataAdapter);
+			tag_type_spinner.setSelection(2);	
+			TV = (TextView) findViewById( R.id.inputText );
+
+			
 			TV = (TextView) findViewById( R.id.lamb01nameText );
 			TV.setText( "" );
 			TV = (TextView) findViewById( R.id.lamb01sexText );
@@ -612,14 +654,14 @@ public class LambingSheep extends ListActivity
 		crsr2 = dbh.exec( cmd ); 	
 		Log.i("inResume", " after get lamb history for this ewe");
 		cursor2   = ( Cursor ) crsr2; 
-		startManagingCursor(cursor2);
+//		startManagingCursor(cursor2);
 		nRecs    = cursor2.getCount();
 		Log.i("inResume", " nRecs is " + String.valueOf(nRecs));
 		cursor2.moveToFirst();	
 		if (nRecs > 0) {
 			lambingdate = dbh.getStr(1);			
 			lamb01_id = dbh.getInt(3);
-//			Log.i("lookForSheep", " first lamb is id " + String.valueOf(lamb01_id));
+			Log.i("lookForSheep", " first lamb is id " + String.valueOf(lamb01_id));
 			lamb02_id = dbh.getInt(4);
 //			Log.i("lookForSheep", " second lamb is id " + String.valueOf(lamb02_id));
 			lamb03_id = dbh.getInt(5);
@@ -647,7 +689,7 @@ public class LambingSheep extends ListActivity
     		crsr3 = dbh.exec( cmd ); 
     		Log.i("lookForSheep", " after run get this year first lamb sqlite command");
     		cursor3   = ( Cursor ) crsr3; 
-    		startManagingCursor(cursor3);
+//    		startManagingCursor(cursor3);
 			nRecs    = cursor3.getCount();
 			Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
 //			colNames = cursor3.getColumnNames();
@@ -687,7 +729,7 @@ public class LambingSheep extends ListActivity
     		crsr4 = dbh.exec( cmd ); 
     		Log.i("lookForSheep", " after run get this year second lamb sqlite command");
     		cursor4   = ( Cursor ) crsr4; 
-    		startManagingCursor(cursor4);
+//    		startManagingCursor(cursor4);
 			nRecs    = cursor4.getCount();
 			Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
 //			colNames = cursor3.getColumnNames();
@@ -726,7 +768,7 @@ public class LambingSheep extends ListActivity
     		crsr5 = dbh.exec( cmd ); 
     		Log.i("lookForSheep", " after run get this year third lamb sqlite command");
     		cursor5   = ( Cursor ) crsr5; 
-    		startManagingCursor(cursor5);
+//    		startManagingCursor(cursor5);
 			nRecs    = cursor5.getCount();
 			Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
 			cursor5.moveToFirst();				
@@ -751,10 +793,21 @@ public class LambingSheep extends ListActivity
 			}
 		}
 		public void addLamb (View v){
+			Log.i("addLamb btn", " at the beginning");
+			// Added this to close the database before we go to the add a lamb activity  	
+//	    	stopManagingCursor (cursor);
+//	    	cursor.close();
+//	    	Log.i("in lambing", " in add lamb  before close database");
+//	    	dbh.closeDB();   
+	    	
 			Intent i = null;
-			Log.i("addLamb", " at the beginning");
-			
+						
+			if (thissheep_id == 0){
+				Log.i("in lambing", " no sheep defined? ");
+				return;
+			}
 			i = new Intent(LambingSheep.this, AddLamb.class);
+			Log.i("addLamb btn", "before put extras ");
 			i.putExtra("dam_name", dam_name);
 			i.putExtra("dam_id", thissheep_id);
 			//	Put the codon values for this ewe 
@@ -762,7 +815,7 @@ public class LambingSheep extends ListActivity
 			i.putExtra("codon171", codon171);
 			i.putExtra("codon154", codon154);
 			i.putExtra("codon136", codon136);
-			
+			Log.i("addLamb btn", "before start activity ");
 			LambingSheep.this.startActivity(i);
 			
 		}
@@ -777,7 +830,7 @@ public class LambingSheep extends ListActivity
 				Message msg = Message.obtain(null, eidService.MSG_SEND_ME_TAGS);
 				msg.replyTo = mMessenger;
 				mService.send(msg);
-			   	//	make the scan eid button  0x0000FF00, 0xff00ff00
+			   	//	make the scan eid button green 0x0000FF00, 0xff00ff00
 		    	Button btn = (Button) findViewById( R.id.scan_eid_btn );
 		    	btn.getBackground().setColorFilter(new LightingColorFilter(0x0000FF00, 0xff00ff00));
 				
@@ -817,7 +870,7 @@ public class LambingSheep extends ListActivity
 	    	doUnbindService();
 			stopService(new Intent(LambingSheep.this, eidService.class));   	
 	    	// Added this to close the database if we go back to the main activity  	
-	    	stopManagingCursor (cursor);
+//	    	stopManagingCursor (cursor);
 	    	cursor.close();
 	    	dbh.closeDB();
 	    	clearBtn( null );
@@ -895,7 +948,23 @@ public class LambingSheep extends ListActivity
 			} catch (Exception e) {
 				// In this case there is no adapter so do nothing
 				Log.i("lambing clrbtn", " exception setting myadapter5 third lamb tags to null");
-			}			
+			}
+	       	// make the alert button normal and disabled
+	    	btn = (Button) findViewById( R.id.alert_btn );
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+	    	btn.setEnabled(false);  
+	    	
+	       	//	Disable the Next Record and Prev. Record button until we have multiple records
+	    	btn = (Button) findViewById( R.id.next_rec_btn );
+	    	btn.setEnabled(false); 
+	    	btn = (Button) findViewById( R.id.prev_rec_btn );
+	    	btn.setEnabled(false);
+	    	
+//	    	make the scan eid button red
+			btn = (Button) findViewById( R.id.scan_eid_btn );
+			btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+			Log.i("lambing"," clear button after setting buttons");
+			
 	    }  
 	     public void takeNote( View v )
 	     {	    	
@@ -915,7 +984,7 @@ public class LambingSheep extends ListActivity
 	     		predefined_notes.add(cursor.getString(1));
 //	     		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
 	     	}
-	     	cursor.close();    
+//	     	cursor.close();    
 	     	Log.i ("takeNote", " after set the predefined note spinner ");
 	     	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
 	     	//Implement take a note stuff here

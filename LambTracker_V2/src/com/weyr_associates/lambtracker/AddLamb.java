@@ -509,7 +509,10 @@ public class AddLamb extends Activity {
     	btn = (Button) findViewById( R.id.update_database_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	btn.setEnabled(false);
-    	
+    	//	added this to set alerts and death and remove dates to empty so we don't get a false null     	
+    	lamb_alert_text = "";
+    	death_date = "";
+		remove_date = "";
 		//	Get the date and time to add to the lamb record these are strings not numbers
 		mytoday = TodayIs(); 
 //		Log.i("add a lamb ", " today is " + mytoday);	
@@ -817,7 +820,7 @@ public class AddLamb extends Activity {
 		}		
 		//	Set the location to be East Orchard Pasture but will need to modify to be real one based on location of dam
 		id_locationid = 1;
-		//	The following things should be modified to be the value from settings 
+		//	The following things should be modified to be the value from default settings 
 		//	but I haven't implemented settings yet so hard coding them
 		// TODO
 		//	Set the birth_weight_units to be decimal pounds 
@@ -910,21 +913,29 @@ public class AddLamb extends Activity {
 	  		//	If the tag is a federal tag then make the flock ID 1 for Desert Weyr 
 	  		//	Should be whatever the default is in settings
 	  		//	Also set the lamb name to be this year plus fed tag until we change it
-	  		// once the EID is the federal tag the lamb name has to be the farm tag 
+	  		// 	once the EID is the federal tag the lamb name has to be the farm tag 
 			//	Names cannot be the EID tag number, that is too long. 
 			//	Still need to handle the case of the EID being the official federal tag
 	  		if (tag_type==1){
 	  			tag_flock = 1;
 	  			lamb_name = year + "-" + tag_num;
-	  		}	  		
-	     	// Now go put in a tag record for this tag for this lamb
+	  			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+		  				" tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) values " +
+		  				" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", lamb_id, tag_type, tag_color, tag_color, 
+		  				tag_loc, mytoday, tag_num, tag_flock);
+		  		Log.i("add fed tag ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add fed tag ", "after insert into id_info_table");
+	  		}else{	  		
+	     	// Now go put in a tag record for this tag for this lamb without a flock id
 	  		cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
-	  				" tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) values " +
-	  				" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", lamb_id, tag_type, tag_color, tag_color, 
-	  				tag_loc, mytoday, tag_num, tag_flock);
+	  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+	  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+	  				tag_loc, mytoday, tag_num);
 	  		Log.i("add tag to ", "db cmd is " + cmd);
 			dbh.exec(cmd);
 			Log.i("add tag ", "after insert into id_info_table");
+	  		}
   		}
 		//	End of what has to loop through all IDs for the lamb being added 
 		
@@ -951,7 +962,7 @@ public class AddLamb extends Activity {
 //			Log.i("in try block ", "after try the first DB select ");
 			cursor   = ( Cursor ) crsr;
 //			Log.i("in try block ", "after cursor ");
-			startManagingCursor(cursor);
+//			startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 //	  		Log.i("in try block ", "after move to first ");
 	  		lambing_historyid = dbh.getInt(0);
@@ -1209,13 +1220,14 @@ public class AddLamb extends Activity {
 		Log.i("in add lamb", " in back btn after stop EID service");
 		clearBtn( null );
 		// Added this to close the database if we go back to the lambing activity  	
-    	stopManagingCursor (cursor);
+//    	stopManagingCursor (cursor);
     	cursor.close();
-//    	Log.i("in add lamb", " in back btn after close cursor");
+    	Log.i("in add lamb", " in back btn after close cursor");
     	dbh.closeDB();   	
     	//Go back to ewe lambing data
     	Log.i("in add lamb", " before finish this activity");
       	finish();
+      	Log.i("in add lamb", " after finish this activity");
 	    }
  
     public void showAlert (View v){    		
@@ -1293,7 +1305,7 @@ public class AddLamb extends Activity {
     		predefined_notes.add(cursor.getString(1));
 //    		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
     	}
-    	cursor.close();    
+//    	cursor.close();    
     	Log.i ("takeNote", " after set the predefined note spinner ");
     	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
     	//Implement take a note stuff here
