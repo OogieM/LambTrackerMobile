@@ -66,9 +66,11 @@
     <string name="title_activity_create_sheep_evaluation">Create Evaluation Task</string>
     <string name="title_activity_lambing_sheep">Lambing Sheep</string>
     <string name="title_activity_add_lamb">Add a Lamb</string>
+    <string name="title_activity_fix_lamb">Fix a Lamb Record</string>
     <string name="title_activity_sheep_management">Sheep Management</string>
     <string name="title_activity_print_labels">Print Labels</string>
     <string name="title_activity_set_lambtracker_defaults">Set LambTracker Defaults</string>
+     <string name="title_activity_set_defaults">SetDefaults</string>
     
     <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
@@ -88,6 +90,7 @@
    	    here to collect data on the birth. </string>
     <string name="help_add_lamb">Add the information on this lamb. Be sure to put the first lamb born in first and the second lamb 
          born in second.  </string>
+    <string name="help_fix_lamb">Edit and update information about a lamb if you did not finish entering in or have errors.  </string>
     <string name="help_print">This prints a single label with the EID as a bar code and the name of the sheep on it.  </string>
     <string name="help_management">Select the management tasks you have done for this sheep and then update the database. </string>
     <string name="convert_fill_fields">Please Fill in all four fields.</string>
@@ -105,6 +108,7 @@
         <item>Evaluate Sheep2</item>
         <item>Look Up a Sheep</item>
         <item>Lambing</item>
+        <item>Fix Lamb Record</item>
         <item>Sheep Management</item>
         <item>Print Labels</item>
         <item>Edit Database</item>
@@ -125,6 +129,7 @@
     <string name="sheep_sire_lbl">Sire</string>
     <string name="sheep_dam_lbl">Dam</string>
     <string name="sheep_stillborn">Stillborn</string>
+    <string name="sheep_stillborn_lbl">Stillborn Status</string>
     <string name="sheep_trimtoes">Trim Toes</string>
     <string name="sheep_givewormer">Give Wormer</string>
     <string name="sheep_givevaccine">Give Vaccine</string>
@@ -154,6 +159,8 @@
     <string name="take_note_lbl">Enter Note:</string>
     <string name="lambing_history_lbl">Lambing History</string>
     <string name="current_lambs_lbl">Current Lambs</string>
+    <string name="current_value_lbl">Current Value</string>
+    <string name="new_value_lbl">New Value</string>
     <string name="sheep_breed_lbl">Sheep Breed</string>
     <string name="owner_id_lbl">Owner</string>
     <string name="update_eval_lbl">Update Alerts on Save Evaluation?</string>
@@ -164,7 +171,7 @@
     <string name="delete_tag">Remove Tag from this Sheep?</string>
     <string name="delete_warning">Delete Warning</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_set_defaults">SetDefaults</string>
+  
    
 
 </resources>

@@ -54,6 +54,7 @@ public class AddLamb extends Activity {
 	public Object 	crsr;
 	public Spinner tag_type_spinner, tag_type_spinner2, tag_location_spinner, tag_color_spinner, lamb_ease_spinner;
 	public List<String> tag_types, tag_locations, tag_colors, lambing_ease;
+	public List<Integer> lambeaseid;
 	ArrayAdapter<String> dataAdapter;
 	public int 		thissheep_id;
 	public int	rear_type, birth_type, sex, lambease, codon171, codon136, codon154;
@@ -359,7 +360,7 @@ public class AddLamb extends Activity {
 		
     	//	Get the text for the lamb ease buttons  
 		lamb_ease_spinner = (Spinner) findViewById(R.id.lamb_ease_spinner);
-    	cmd = String.format("select custom_evaluation_traits_table.custom_evaluation_item " +
+    	cmd = String.format("select custom_evaluation_traits_table.custom_evaluation_item, custom_evaluation_traits_table.id_custom_traitid " +
     			" from custom_evaluation_traits_table " +
     			" where custom_evaluation_traits_table.id_traitid = '%s' "+
     			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ", 24);
@@ -369,9 +370,13 @@ public class AddLamb extends Activity {
         dbh.moveToFirstRecord();
         lambing_ease = new ArrayList<String>();
         lambing_ease.add("Lambing Ease");
+        lambeaseid = new ArrayList <Integer>();
+        lambeaseid.add(0);
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
         	lambing_ease.add (cursor.getString(0));
 	    	Log.i("addlamb", " Lambing ease text is " + cursor.getString(0));
+	    	lambeaseid.add (cursor.getInt(1));
+	    	Log.i("addlamb", " Lambing ease id is " + String.valueOf(cursor.getInt(1)));
     	}        
 
     	// Creating adapter for lambease spinner
@@ -575,6 +580,9 @@ public class AddLamb extends Activity {
 		Log.i("before lambease", " getting ready to get lambease ");
 		lamb_ease_spinner = (Spinner) findViewById(R.id.lamb_ease_spinner);
 		lambease = lamb_ease_spinner.getSelectedItemPosition();
+		Log.i("lambease", " spinner position is " + String.valueOf(lambease));
+		lambease = lambeaseid.get(lambease);
+		Log.i("lambease", " database ID for Lambease position is " + String.valueOf(lambease));
 		if (lambease == 0){
 			//	Need to require a value for lambease here
 			//  Missing data so  display an alert 	
