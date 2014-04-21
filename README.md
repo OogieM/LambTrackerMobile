@@ -7,11 +7,17 @@ We are shepherds, programming of this item is happening in modules as we need to
 
 First module that is working is ConvertToEID which allows the look up of a sheep based on official US federal or farm tags, adding and removing tags and adding an electronic tag.
 
-Second module that is in works is EvaluateSheep to do customized evaluations of a sheep flock including scoring traits, weights and scrotal circumference and other measured characteristics. I am working to add some user defined scored traits where the options are specified by the user. 
+Second module that was finished is EvaluateSheep to do customized evaluations of a sheep flock including scoring traits, weights and scrotal circumference and other measured characteristics. 
 
-LookUpSheep is in process, it works for an EID tag but is failing to look up sheep based on other identification types right now. 
+LookUpSheep is now working but only find the first sheep if there are duplicate tags.
 
-Pieces that are mostly working but have some issues include reading alerts for sheep for items like send to butcher, which ram to put the ewe to and so on. We are using these alerts now as we sort and separate the flock into keep, sell, breed and slaughter groups. 
+Sheep Managment handles toe trimming, wormer and vaccines but needs work for other typical management additions. 
+
+Lambing and it's companion activity AddLamb is done, ready to test with lambing ewes in another few days. 
+
+Alerts and notes are done as are all the breeding records needed to make the lambing module work properly. 
+
+Development will be slow for the next month or so as we lamb out the flock. I'll probably only be doing bug fixes as we uncover isues during lambing. 
 
 System is based on an SQLite database for all flock data.
 
