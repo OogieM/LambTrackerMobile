@@ -461,18 +461,18 @@ public class AddLamb extends Activity {
 	        	Log.i("addlamb", " julian ram in " + String.valueOf(temp_ram_in));
 	        	temp_ram_out = dbh.getReal(5);
 	        	Log.i("addlamb", " julian ram out " + String.valueOf(temp_ram_out));
-	        	// need to figure out if the date is within early date 141 probable start date 147 
+	        	// need to figure out if the date is within early date 142 probable start date 147 
 	        	//	probable end date 150 and end date 155
 	        	// First calculate how many days gestation this is from date ram in
 	        	gestation_length = temp_julian_today - temp_ram_in;
 	        	Log.i("addlamb", " julian gestation is " + String.valueOf(gestation_length));
 	        	// Now need to convert this to a number of days
 	        	//	TODO 
-	        	//	Set gestation to be sorter than normal for testing reset to 142 when we finish 
+	        	//	Set gestation to be shorter than normal for testing reset to 142 when we finish 
 	        	//	debugging. 
 	        	
 	        	Log.i("addlamb", " calculated gestation length is " + String.valueOf(gestation_length));
-	        	if  (gestation_length > 138 && gestation_length < 155) {
+	        	if  (gestation_length > 142 && gestation_length < 155) {
 	        		//	This is the correct record so save the data and bump out
 	        		sire_name = dbh.getStr(3);
 	        		sire_id = dbh.getInt(2);
@@ -490,18 +490,26 @@ public class AddLamb extends Activity {
         TV.setText(sire_name); 
         Log.i("addlamb", " after set display of sire name " + sire_name);
         //	Go get the sire Codon171,154 and 136 values
-        cmd = String.format("select sheep_table.codon171, sheep_table.codon154, " +
-        		" sheep_table.codon136 from sheep_table where sheep_id = '%s' ", sire_id);
-        Log.i("addlamb", " getting codon data cmd is " + cmd);	
-        crsr = dbh.exec( cmd );
-        cursor   = ( Cursor ) crsr;
-        dbh.moveToFirstRecord();
-        sire_codon171 = dbh.getInt(0);
-//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon171));
-        sire_codon154 = dbh.getInt(1);
-//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon154));
-        sire_codon136 = dbh.getInt(2);  
-//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon136));        
+        if (sire_id == 0){
+        	//	Sire not found so set codon values to unknown
+            sire_codon171 = 6;
+        	sire_codon154 = 1;
+        	sire_codon136 = 6; 
+        	
+        }else{
+	        cmd = String.format("select sheep_table.codon171, sheep_table.codon154, " +
+	        		" sheep_table.codon136 from sheep_table where sheep_id = '%s' ", sire_id);
+	        Log.i("addlamb", " getting codon data cmd is " + cmd);	
+	        crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        sire_codon171 = dbh.getInt(0);
+	//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon171));
+	        sire_codon154 = dbh.getInt(1);
+	//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon154));
+	        sire_codon136 = dbh.getInt(2);  
+	//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon136));        
+        }
         }
     }
     public void updateDatabase( View v ){
@@ -522,6 +530,8 @@ public class AddLamb extends Activity {
     	lamb_alert_text = "";
     	death_date = "";
 		remove_date = "";
+		//	Set the lamb name to be empty initially
+		lamb_name = "";
 		//	Get the date and time to add to the lamb record these are strings not numbers
 		mytoday = TodayIs(); 
 //		Log.i("add a lamb ", " today is " + mytoday);	
@@ -566,7 +576,7 @@ public class AddLamb extends Activity {
 			Log.i("stillborn ", String.valueOf(stillborn));
 			death_date = mytoday;
 			remove_date = mytoday;
-//			rear_type = rear_type-1;
+			lamb_name = "Stillborn";
 		}
 		
 		//	Get the Birth Weight
@@ -868,8 +878,6 @@ public class AddLamb extends Activity {
   		lamb_id = dbh.getInt(0);		
 		Log.i("add a lamb ", "the lamb_id is " + String.valueOf(lamb_id));
 		
-		//	Set the lamb name to be empty initially
-		lamb_name = "";
 		// Set the flock ID to be nothing initially
 		tag_flock = 0;
 		
