@@ -54,6 +54,7 @@ public class AddLamb extends Activity {
 	public Object 	crsr;
 	public Spinner tag_type_spinner, tag_type_spinner2, tag_location_spinner, tag_color_spinner, lamb_ease_spinner;
 	public List<String> tag_types, tag_locations, tag_colors, lambing_ease;
+	public List<Integer> lambeaseid;
 	ArrayAdapter<String> dataAdapter;
 	public int 		thissheep_id;
 	public int	rear_type, birth_type, sex, lambease, codon171, codon136, codon154;
@@ -359,7 +360,7 @@ public class AddLamb extends Activity {
 		
     	//	Get the text for the lamb ease buttons  
 		lamb_ease_spinner = (Spinner) findViewById(R.id.lamb_ease_spinner);
-    	cmd = String.format("select custom_evaluation_traits_table.custom_evaluation_item " +
+    	cmd = String.format("select custom_evaluation_traits_table.custom_evaluation_item, custom_evaluation_traits_table.id_custom_traitid " +
     			" from custom_evaluation_traits_table " +
     			" where custom_evaluation_traits_table.id_traitid = '%s' "+
     			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ", 24);
@@ -369,9 +370,13 @@ public class AddLamb extends Activity {
         dbh.moveToFirstRecord();
         lambing_ease = new ArrayList<String>();
         lambing_ease.add("Lambing Ease");
+        lambeaseid = new ArrayList <Integer>();
+        lambeaseid.add(0);
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
         	lambing_ease.add (cursor.getString(0));
-	    	Log.i("addlamb", " Lambing ease text is " + cursor.getString(0));
+//	    	Log.i("addlamb", " Lambing ease text is " + cursor.getString(0));
+	    	lambeaseid.add (cursor.getInt(1));
+//	    	Log.i("addlamb", " Lambing ease id is " + String.valueOf(cursor.getInt(1)));
     	}        
 
     	// Creating adapter for lambease spinner
@@ -423,19 +428,17 @@ public class AddLamb extends Activity {
     			" sheep_breeding_table.breeding_id = breeding_record_table.id_breedingid " +
     			" inner join sheep_table on sheep_id = ram_id " +
     			" where sheep_breeding_table.ewe_id = '%s' ", dam_id);		  
-		//	TODO
 			
 		Calendar calendar = Calendar.getInstance();
 		Log.i("add a lamb ", " after getting a calendar");
-//			jintdate [0] = calendar.get(Calendar.YEAR);
-//			jintdate [1] = calendar.get(Calendar.MONTH) +1;
-//			jintdate [2] = calendar.get(Calendar.DAY_OF_MONTH);
-		// TODO
-		//	Hard Coded a day within the breeding time of AI for testing purposes
-		
-		jintdate [0] = 2014;
-		jintdate [1] = 04;
-		jintdate [2] = 27;
+			jintdate [0] = calendar.get(Calendar.YEAR);
+			jintdate [1] = calendar.get(Calendar.MONTH) +1;
+			jintdate [2] = calendar.get(Calendar.DAY_OF_MONTH);
+		//	Removed the hard coding for testing purposes. 
+		//	Hard Coded a day within the breeding time of AI for testing purposes		
+//		jintdate [0] = 2014;
+//		jintdate [1] = 04;
+//		jintdate [2] = 27;
 		
 //			Log.i("add a lamb ", " before getting julian of today");
 		temp_julian_today = Utilities.toJulian(jintdate);
@@ -460,8 +463,7 @@ public class AddLamb extends Activity {
 	        	// First calculate how many days gestation this is from date ram in
 	        	gestation_length = temp_julian_today - temp_ram_in;
 	        	Log.i("addlamb", " julian gestation is " + String.valueOf(gestation_length));
-	        	// Now need to convert this to a number of days
-	        	
+	        	// Now need to convert this to a number of days	        	
 	        	Log.i("addlamb", " calculated gestation length is " + String.valueOf(gestation_length));
 	        	if  (gestation_length > 142 && gestation_length < 155) {
 	        		//	This is the correct record so save the data and bump out
@@ -481,18 +483,26 @@ public class AddLamb extends Activity {
         TV.setText(sire_name); 
         Log.i("addlamb", " after set display of sire name " + sire_name);
         //	Go get the sire Codon171,154 and 136 values
-        cmd = String.format("select sheep_table.codon171, sheep_table.codon154, " +
-        		" sheep_table.codon136 from sheep_table where sheep_id = '%s' ", sire_id);
-        Log.i("addlamb", " getting codon data cmd is " + cmd);	
-        crsr = dbh.exec( cmd );
-        cursor   = ( Cursor ) crsr;
-        dbh.moveToFirstRecord();
-        sire_codon171 = dbh.getInt(0);
-//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon171));
-        sire_codon154 = dbh.getInt(1);
-//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon154));
-        sire_codon136 = dbh.getInt(2);  
-//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon136));        
+        if (sire_id == 0){
+        	//	Sire not found so set codon values to unknown
+            sire_codon171 = 6;
+        	sire_codon154 = 1;
+        	sire_codon136 = 6; 
+        	
+        }else{
+	        cmd = String.format("select sheep_table.codon171, sheep_table.codon154, " +
+	        		" sheep_table.codon136 from sheep_table where sheep_id = '%s' ", sire_id);
+	        Log.i("addlamb", " getting codon data cmd is " + cmd);	
+	        crsr = dbh.exec( cmd );
+	        cursor   = ( Cursor ) crsr;
+	        dbh.moveToFirstRecord();
+	        sire_codon171 = dbh.getInt(0);
+	//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon171));
+	        sire_codon154 = dbh.getInt(1);
+	//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon154));
+	        sire_codon136 = dbh.getInt(2);  
+	//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon136));        
+        }
         }
     }
     public void updateDatabase( View v ){
@@ -513,6 +523,8 @@ public class AddLamb extends Activity {
     	lamb_alert_text = "";
     	death_date = "";
 		remove_date = "";
+		//	Set the lamb name to be empty initially
+		lamb_name = "";
 		//	Get the date and time to add to the lamb record these are strings not numbers
 		mytoday = TodayIs(); 
 //		Log.i("add a lamb ", " today is " + mytoday);	
@@ -557,7 +569,7 @@ public class AddLamb extends Activity {
 			Log.i("stillborn ", String.valueOf(stillborn));
 			death_date = mytoday;
 			remove_date = mytoday;
-//			rear_type = rear_type-1;
+			lamb_name = "Stillborn";
 		}
 		
 		//	Get the Birth Weight
@@ -575,6 +587,9 @@ public class AddLamb extends Activity {
 		Log.i("before lambease", " getting ready to get lambease ");
 		lamb_ease_spinner = (Spinner) findViewById(R.id.lamb_ease_spinner);
 		lambease = lamb_ease_spinner.getSelectedItemPosition();
+		Log.i("lambease", " spinner position is " + String.valueOf(lambease));
+		lambease = lambeaseid.get(lambease);
+		Log.i("lambease", " database ID for Lambease position is " + String.valueOf(lambease));
 		if (lambease == 0){
 			//	Need to require a value for lambease here
 			//  Missing data so  display an alert 	
@@ -856,14 +871,9 @@ public class AddLamb extends Activity {
   		lamb_id = dbh.getInt(0);		
 		Log.i("add a lamb ", "the lamb_id is " + String.valueOf(lamb_id));
 		
-		//	Set the lamb name to be empty initially
-		lamb_name = "";
 		// Set the flock ID to be nothing initially
 		tag_flock = 0;
 		
-		// TODO
-		//	This will be what has to loop through all IDs for the lamb being added 
-		//	for now just get the first one
 		//	Go get all the tag data for this lamb
 		Log.i("before ", "getting the first tag info");
   		tl = (TableLayout) findViewById(R.id.tag_table);
@@ -944,7 +954,7 @@ public class AddLamb extends Activity {
   		  		" where sheep_id = %s ", lamb_name, lamb_id);
 		Log.i("add sheep_name ", "to db cmd is " + cmd);
 		dbh.exec(cmd);
-		Log.i("add name ", "after insert into sheep_table");
+		Log.i("add name ", "after update into sheep_table");
   		
 		//	Create a lambing history record by first seeing if there is one already for this year
 		//	If so then update the existing one
@@ -1471,7 +1481,7 @@ public class AddLamb extends Activity {
 		}
 		}    	    	
   }
-  // TODO
+ 
   public void updateTag( View v ){
   	Object 			crsr;
   	String 			cmd;
@@ -1629,15 +1639,27 @@ public class AddLamb extends Activity {
   	 
   	  		tl.addView(tr);
   	  		Log.i("after tag ", "after creating the tag table layout");
-  	      	//	Clear out the add tag section by making the values the defaults for a federal tag  	
-  	      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
-  	      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
-  	      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
-  	      	TV  = (TextView) findViewById( R.id.new_tag_number);
-  	      	tag_type_spinner2.setSelection(1);
-  	      	tag_color_spinner.setSelection(5);
-  	      	tag_location_spinner.setSelection(2);
-  	      	TV.setText( "" );
+  	  		if ((new_tag_type == 1) || (new_tag_type == 4)){
+  	  			//	tag type is either Federal or Farm so set defaults to be paint, white on the side
+  	 	      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
+  	  	      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
+  	  	      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
+  	  	      	TV  = (TextView) findViewById( R.id.new_tag_number);
+  	  	      	tag_type_spinner2.setSelection(3);
+  	  	      	tag_color_spinner.setSelection(3);
+  	  	      	tag_location_spinner.setSelection(5);
+  	  	      	TV.setText( "" ); 	  			
+  	  		}else{
+  	  			//	tag type is something else like tattoo or pain so set defaults for a federal tag
+	   	      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
+	  	      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
+	  	      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
+	  	      	TV  = (TextView) findViewById( R.id.new_tag_number);
+	  	      	tag_type_spinner2.setSelection(1);
+	  	      	tag_color_spinner.setSelection(5);
+	  	      	tag_location_spinner.setSelection(2);
+	  	      	TV.setText( "" );
+  	  		}
   		}else{
   			//	bad tag location to ask for a new one
 	  		AlertDialog.Builder builder = new AlertDialog.Builder( this );

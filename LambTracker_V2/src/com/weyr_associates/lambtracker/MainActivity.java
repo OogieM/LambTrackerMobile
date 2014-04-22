@@ -195,7 +195,7 @@ public class MainActivity extends Activity {
 					MainActivity.this.startActivity(i);
 			        break;
 			    case 4:
-//			    	Log.i ("Main case", " In main case statement selected 4");
+			    	Log.i ("Main case", " In main case statement selected 4");
 			    	i = new Intent(MainActivity.this, EvaluateSheep.class);
 			        MainActivity.this.startActivity(i);
 			        break;
@@ -213,22 +213,26 @@ public class MainActivity extends Activity {
 					MainActivity.this.startActivity(i);
 			        break;
 			    case 8:
-					i = new Intent(MainActivity.this, SheepManagement.class);
+					i = new Intent(MainActivity.this, FixLamb.class);
 					MainActivity.this.startActivity(i);
 			        break;
 			    case 9:
+					i = new Intent(MainActivity.this, SheepManagement.class);
+					MainActivity.this.startActivity(i);
+			        break;
+			    case 10:
 					i = new Intent(MainActivity.this, PrintLabels.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 10:
+				case 11:
 					i = new Intent(MainActivity.this, EditDB.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 11:		
+				case 12:		
 					i = new Intent(MainActivity.this, SetDefaults.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 12:		
+				case 13:		
 					i = new Intent(MainActivity.this, TestInterfaceDesigns.class);
 					MainActivity.this.startActivity(i);
 			        break;

@@ -1,11 +1,11 @@
 package com.weyr_associates.lambtracker;
-// This should be the fixed LookUpSheep Class that doesn't leak when the user selects back.
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import android.app.ListActivity;
 import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
@@ -25,28 +25,33 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
-public class LookUpSheep extends ListActivity
+public class FixLamb extends ListActivity
 	{
 	private DatabaseHandler dbh;
 	int             id;
 	String 			logmessages;
 	public int 		thissheep_id, thissire_id, thisdam_id;
 	int             fedtagid, farmtagid, eidtagid;
-	
+	public float 	birth_weight;
+	    
 	public String 	tag_type_label, tag_color_label, tag_location_label, eid_tag_color_label ;
 	public String 	eid_tag_location_label, eidText, alert_text;
 	public String 	thissire_name, thisdam_name;
+	public String	sheep_sex, lambease, rear_type;
 	public Cursor 	cursor, cursor2, cursor3, cursor4;
 	public Object	crsr;
-	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
-	public List<String> tag_types, tag_locations, tag_colors;
+	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner, fix_lamb_spinner, fix_characteristic_spinner ;
+	public List<String> tag_types, tag_locations, tag_colors, fix_lamb, rear_types, sexes, lambing_ease ;
+	public List<Integer> lambeaseid;
 	public Spinner predefined_note_spinner01, predefined_note_spinner02, predefined_note_spinner03;
 	public Spinner predefined_note_spinner04, predefined_note_spinner05;
 	public List<String> predefined_notes;
@@ -101,7 +106,7 @@ public class LookUpSheep extends ListActivity
 			case eidService.MSG_THREAD_SUICIDE:
 				Log.i("Convert", "Service informed Activity of Suicide.");
 				doUnbindService();
-				stopService(new Intent(LookUpSheep.this, eidService.class));
+				stopService(new Intent(FixLamb.this, eidService.class));
 
 				break;
 			default:
@@ -146,7 +151,7 @@ public class LookUpSheep extends ListActivity
 			doBindService();
 		} else {
 			//Log.i("Convert", "is not, start it");
-			startService(new Intent(LookUpSheep.this, eidService.class));
+			startService(new Intent(FixLamb.this, eidService.class));
 			doBindService();
 		}
 		//Log.i("Convert", "Done isRunning.");
@@ -223,11 +228,11 @@ public class LookUpSheep extends ListActivity
     public void onCreate(Bundle savedInstanceState)	
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lookup_sheep);
-        Log.i("LookUpSheep", " after set content view");
+        setContentView(R.layout.fix_lamb);
+        Log.i("FixLamb", " after set content view");
         View v = null;
         String 	dbfile = getString(R.string.real_database_file) ;
-        Log.i("LookUpSheep", " after get database file");
+        Log.i("FixLamb", " after get database file");
     	dbh = new DatabaseHandler( this, dbfile );
     	Object crsr;
     	int     nrCols;
@@ -235,7 +240,7 @@ public class LookUpSheep extends ListActivity
       	String          cmd;
       	String 			results, results2;
     	Boolean			exists;
-
+    	
     	 //////////////////////////////////// 
 		CheckIfServiceIsRunning();
 		Log.i("Convert", "back from isRunning");  	
@@ -263,7 +268,68 @@ public class LookUpSheep extends ListActivity
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_type_spinner.setAdapter (dataAdapter);
 		tag_type_spinner.setSelection(1);	
-
+		
+		//	Set up string arrays for later use
+		rear_types = new ArrayList<String>();      	
+		sexes = new ArrayList<String>(); 
+    	// Select All fields from rear types for use later
+        cmd = "select * from birth_type_table";
+        crsr = dbh.exec( cmd );  
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+    	rear_types.add("Select Rear Type");
+         // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		rear_types.add(cursor.getString(1));
+    	}
+    	// Select All fields from sex for use later
+        cmd = "select * from sheep_sex_table";
+        crsr = dbh.exec( cmd );  
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+    	sexes.add("Select Sex");
+         // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		sexes.add(cursor.getString(1));
+    	}
+    	
+//    	Get the text for the lamb ease buttons  
+    		cmd = String.format("select custom_evaluation_traits_table.custom_evaluation_item, custom_evaluation_traits_table.id_custom_traitid " +
+        			" from custom_evaluation_traits_table " +
+        			" where custom_evaluation_traits_table.id_traitid = '%s' "+
+        			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ", 24);
+        	//    	Log.i("evaluate2", " cmd is " + cmd);	    	
+        	crsr = dbh.exec( cmd );
+            cursor   = ( Cursor ) crsr;
+            dbh.moveToFirstRecord();
+            lambing_ease = new ArrayList<String>();
+            lambing_ease.add("Lambing Ease");           
+            lambeaseid = new ArrayList <Integer>();
+            lambeaseid.add(0);
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            	lambing_ease.add (cursor.getString(0));
+    	    	Log.i("addlamb", " Lambing ease text is " + cursor.getString(0));
+    	    	lambeaseid.add (cursor.getInt(1));
+//    	    	Log.i("addlamb", " Lambing ease id is " + String.valueOf(cursor.getInt(1)));
+    	    	}        
+                       
+			//	Fill the fix the lamb data spinner
+		fix_lamb_spinner = (Spinner) findViewById(R.id.fix_lamb_spinner);
+    	fix_lamb = new ArrayList<String>(); 
+    	fix_lamb.add("Select a Characteristic to Correct");
+    	fix_lamb.add("Rear Type");
+    	fix_lamb.add("Lamb Sex");
+//    	fix_lamb.add("Lamb Birth Weight");
+    	fix_lamb.add("Lambing Ease");
+    	//Removed the option to change a record to be a stillborn after the fact. 
+//    	fix_lamb.add("Lamb Stillborn?");
+    	
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, fix_lamb);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		fix_lamb_spinner.setAdapter (dataAdapter);
+		fix_lamb_spinner.setSelection(0);	
+    	
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
@@ -280,6 +346,7 @@ public class LookUpSheep extends ListActivity
 		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 
         }
+	
 	public void lookForSheep (View v){
 
 		Object crsr, crsr2, crsr3, crsr4;
@@ -305,7 +372,7 @@ public class LookUpSheep extends ListActivity
 	        	 Log.i("LookForSheep", " command is  " + cmd);
 	        	crsr = dbh.exec( cmd );
 	        	cursor   = ( Cursor ) crsr; 
-	    		startManagingCursor(cursor);
+//	    		startManagingCursor(cursor);
 	        	dbh.moveToFirstRecord();
 	        	if( dbh.getSize() == 0 )
 		    		{ // no sheep with that  tag in the database so clear out and return
@@ -322,32 +389,27 @@ public class LookUpSheep extends ListActivity
 	    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 	    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
 	    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
-	    				"sheep_table.sire_id, sheep_table.dam_id, sheep_table.birth_date, birth_type_table.birth_type," +
-	    				"sheep_sex_table.sex_name " +
-	    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-	    				"inner join birth_type_table on id_birthtypeid = sheep_table.birth_type " +
-	    				"inner join sheep_sex_table on sheep_sex_table.sex_sheepid = sheep_table.sex " +
+	    				"sheep_table.sire_id, sheep_table.dam_id, sheep_sex_table.sex_name, sheep_table.birth_weight, " +
+	    				"custom_evaluation_traits_table.custom_evaluation_item, birth_type_table.birth_type  " +
+	    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " + 
+	    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid  " +
+	    				"inner join custom_evaluation_traits_table on sheep_table.lambease = custom_evaluation_traits_table.id_custom_traitid " +
+	    				"inner join birth_type_table on sheep_table.rear_type = birth_type_table.id_birthtypeid " +
 	    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 	    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 	    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
 	    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
 
-	    		crsr = dbh.exec( cmd ); 	    		
+	    		crsr = dbh.exec( cmd ); 
+	    		Log.i("LookForSheep", " command is " + cmd);
 	    		cursor   = ( Cursor ) crsr; 
-	    		startManagingCursor(cursor);
+//	    		startManagingCursor(cursor);
 	    		recNo    = 1;
 				nRecs    = cursor.getCount();
 				colNames = cursor.getColumnNames();
 				cursor.moveToFirst();				
 				TV = (TextView) findViewById( R.id.sheepnameText );
 		        TV.setText (dbh.getStr(0));
-		        TV = (TextView) findViewById( R.id.birth_date );
-		        TV.setText (dbh.getStr(11));
-		        TV = (TextView) findViewById( R.id.birth_type );
-		        TV.setText (dbh.getStr(12));
-		        TV = (TextView) findViewById( R.id.sheep_sex );
-		        TV.setText (dbh.getStr(13));
-		        
 		        alert_text = dbh.getStr(8);
 		    	
 		        //	Get the sire and dam id numbers
@@ -356,6 +418,27 @@ public class LookUpSheep extends ListActivity
 		        thisdam_id = dbh.getInt(10);
 		        Log.i("LookForSheep", " Dam is " + String.valueOf(thisdam_id));
 		        
+		        // TODO        
+		        //	Get the various things we can change
+		        sheep_sex = dbh.getStr(11);
+		        Log.i("LookForSheep", " sheep sex is " + sheep_sex);
+		        birth_weight = dbh.getReal(12);
+		        Log.i("LookForSheep", " birth weight is " + String.valueOf(birth_weight));
+		        lambease = dbh.getStr(13);
+		        rear_type = dbh.getStr(14);
+		        
+		     // Display the selections in the fields	
+		        TV = (TextView) findViewById( R.id.rearType );
+		        TV.setText (rear_type); 
+		        TV = (TextView) findViewById( R.id.sheepSex );
+		        TV.setText (sheep_sex);	
+		        TV = (TextView) findViewById( R.id.birth_weight );
+//		        Log.i("LookForSheep", " before set textview for birthweight ");	
+		        TV.setText (String.valueOf(birth_weight));
+//		        Log.i("LookForSheep", " after get textview for birthweight ");
+		        TV = (TextView) findViewById( R.id.lambEase );
+		        TV.setText (lambease);		        
+		        		        
 		        //	Go get the sire name
 		        if (thissire_id != 0){
 			        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thissire_id);
@@ -363,7 +446,7 @@ public class LookUpSheep extends ListActivity
 			        crsr2 = dbh.exec( cmd);
 			        Log.i("LookForSheep", " after second db lookup");
 			        cursor2   = ( Cursor ) crsr2; 
-		    		startManagingCursor(cursor2);
+//		    		startManagingCursor(cursor2);
 		    		cursor2.moveToFirst();
 		    		TV = (TextView) findViewById( R.id.sireName );
 		    		thissire_name = dbh.getStr(0);
@@ -375,7 +458,7 @@ public class LookUpSheep extends ListActivity
 			        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thisdam_id);
 			        crsr3 = dbh.exec( cmd);
 			        cursor3   = ( Cursor ) crsr3; 
-		    		startManagingCursor(cursor3);
+//		    		startManagingCursor(cursor3);
 		    		cursor3.moveToFirst();
 		    		TV = (TextView) findViewById( R.id.damName );
 		    		thisdam_name = dbh.getStr(0);
@@ -396,7 +479,7 @@ public class LookUpSheep extends ListActivity
 		        Log.i("LookForSheep", "after setting myadapter");
 		        setListAdapter(myadapter);
 		        Log.i("LookForSheep", "after setting list adapter");
-
+		        
 		    	// Now we need to check and see if there is an alert for this sheep
 //		       	Log.i("Alert Text is " , alert_text);
 //		    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
@@ -418,7 +501,7 @@ public class LookUpSheep extends ListActivity
 	        	 Log.i("LookForSheep", " command is  " + cmd);
 	        	crsr4 = dbh.exec( cmd );
 	        	cursor4   = ( Cursor ) crsr4; 
-	    		startManagingCursor(cursor4);
+//	    		startManagingCursor(cursor4);
 	    		nRecs    = cursor4.getCount();
 	    		Log.i("lookForSheep", " nRecs is " + String.valueOf(nRecs));
 	    		cursor4.moveToFirst();	
@@ -439,12 +522,142 @@ public class LookUpSheep extends ListActivity
 	        	return;
 	        }
 	        Log.i("lookForSheep", " out of the if statement");
+			fix_lamb_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+				public void onItemSelected (AdapterView<?> parent,View view, int pos, long id ) {
+					TextView 		TV ;
+					ArrayAdapter<String> dataAdapter;
+				// Have the position of the field to change so go get the data
+				switch (pos){
+				case 1:
+					// Item selected is Rear Type
+					TV = (TextView) findViewById( R.id.fix_characteristic );
+					TV.setText(rear_type );
+					// Set up the spinner to show rear type options
+					fix_characteristic_spinner = (Spinner) findViewById(R.id.fix_characteristic_spinner);
+			     	dataAdapter = new ArrayAdapter<String>(FixLamb.this,android.R.layout.simple_spinner_item, rear_types);
+			     	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			     	fix_characteristic_spinner.setAdapter (dataAdapter);
+			     	fix_characteristic_spinner.setSelection(0);
+					
+					break;
+				case 2:
+					// Item selected is Lamb Sex
+					TV = (TextView) findViewById( R.id.fix_characteristic );
+					TV.setText( sheep_sex );
+					// Set up the spinner to show sex options
+					fix_characteristic_spinner = (Spinner) findViewById(R.id.fix_characteristic_spinner);
+			     	dataAdapter = new ArrayAdapter<String>(FixLamb.this,android.R.layout.simple_spinner_item, sexes);
+			     	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			     	fix_characteristic_spinner.setAdapter (dataAdapter);
+			     	fix_characteristic_spinner.setSelection(0);
+					
+					break;
+//				case 3:
+//					// Item selected is Lamb Birth Weight
+//					TV = (TextView) findViewById( R.id.fix_characteristic );
+//					TV.setText( "Birth Weight" );
+//					break;
+				case 3:
+					// Item selected is Lambing Ease
+					TV = (TextView) findViewById( R.id.fix_characteristic );
+					TV.setText(lambease );
+					fix_characteristic_spinner = (Spinner) findViewById(R.id.fix_characteristic_spinner);
+			     	dataAdapter = new ArrayAdapter<String>(FixLamb.this,android.R.layout.simple_spinner_item, lambing_ease);
+			     	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			     	fix_characteristic_spinner.setAdapter (dataAdapter);
+			     	fix_characteristic_spinner.setSelection(0);					
+					break;
+				default:
+					//	Nothing set so do nothing
+					break;
+				}
+			}
+			public void onNothingSelected(AdapterView<?> parent){
+			}
+			});
         	}
     		else {
     			clearBtn( null );
             	TV = (TextView) findViewById( R.id.sheepnameText );
                 TV.setText( "Sheep Database does not exist." );                
         	}
+	}
+	
+	public void updateDatabase( View v ){
+		TextView TV;
+    	//	TODO   	
+		// Disable Update Database button and make it red to prevent getting 2 records at one time
+    	btn = (Button) findViewById( R.id.update_database_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+    	btn.setEnabled(false);
+    	
+    	//	Go get the value we are changing and what it needs to be
+    	fix_characteristic_spinner = (Spinner) findViewById(R.id.fix_characteristic_spinner);
+    	int char_pos = fix_characteristic_spinner.getSelectedItemPosition();
+    	String char_value = fix_characteristic_spinner.getSelectedItem().toString();
+    	fix_lamb_spinner = (Spinner) findViewById(R.id.fix_lamb_spinner);
+    	int char_type = fix_lamb_spinner.getSelectedItemPosition();
+    	switch (char_type){
+		case 1:
+			// 	Item selected is Rear Type
+			//	Now update the sheep record with the new rear type
+			cmd = String.format("update sheep_table set rear_type = '%s' " +
+	  		  		" where sheep_id = %s ", char_pos, thissheep_id);
+			Log.i("change rear type ", "the db cmd is " + cmd);
+			dbh.exec(cmd);
+			Log.i("change rear type ", "after update rear type in sheep_table");
+			TV = (TextView) findViewById( R.id.rearType );
+			TV.setText(char_value);		
+			TV = (TextView) findViewById( R.id.fix_characteristic );
+			TV.setText(char_value);	
+			break;
+		case 2:
+			// Item selected is Lamb Sex
+			//	Now update the sheep record with the new sex 
+			cmd = String.format("update sheep_table set sex = '%s' " +
+	  		  		" where sheep_id = %s ", char_pos, thissheep_id);
+			Log.i("change sex ", "the db cmd is " + cmd);
+			dbh.exec(cmd);
+			Log.i("change sex ", "after update sex in sheep_table");
+			TV = (TextView) findViewById( R.id.sheepSex );
+			TV.setText( char_value );
+			TV = (TextView) findViewById( R.id.fix_characteristic );
+			TV.setText(char_value);
+			break;
+//		case 3:
+//			// Item selected is Lamb Birth Weight
+//			TV = (TextView) findViewById( R.id.birth_weight );
+//			TV.setText( "Birth Weight" );
+//			TV = (TextView) findViewById( R.id.fix_characteristic );
+//			TV.setText(char_value);
+//			break;
+		case 3:
+			// Item selected is Lambing Ease
+			//	Now update the sheep record with the new lambease 
+			//	Need to go get the proper location from the lambeaseid array	     	
+	     	char_pos = lambeaseid.get(char_pos);
+			Log.i("lambease", " database ID for Lambease position is " + String.valueOf(char_pos));
+			
+			cmd = String.format("update sheep_table set lambease = %s " +
+	  		  		" where sheep_id = %s ", char_pos, thissheep_id);
+			Log.i("change lambease ", "the db cmd is " + cmd);
+			dbh.exec(cmd);
+			Log.i("change lambease ", "after update lambease in sheep_table");
+			TV = (TextView) findViewById( R.id.lambEase );
+			TV.setText(char_value );
+			TV = (TextView) findViewById( R.id.fix_characteristic );
+			TV.setText(char_value);
+			break;
+		default:
+			//	Nothing set so do nothing
+			break;
+		}
+    	
+    	
+		// Enable Update Database button and make it normal 
+    	btn = (Button) findViewById( R.id.update_database_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000)); 
+    	btn.setEnabled(true);
 	}
 //  user clicked 'Scan' button    
  public void scanEid( View v){
@@ -493,16 +706,16 @@ public class LookUpSheep extends ListActivity
     // user clicked the 'back' button
     public void backBtn( View v )
 	    {
-//    	Log.i("Back Button", " In the lookupsheep back code at beginning");   
+//    	Log.i("Back Button", " In the FixLamb back code at beginning");   
     	doUnbindService();
-//    	Log.i("Back Button", " In lookupsheep back after dounbindservice");   
-		stopService(new Intent(LookUpSheep.this, eidService.class));   	
-//    	Log.i("Back Button", " In lookupsheep back after stop service");   
+//    	Log.i("Back Button", " In FixLamb back after dounbindservice");   
+		stopService(new Intent(FixLamb.this, eidService.class));   	
+//    	Log.i("Back Button", " In FixLamb back after stop service");   
     	// Added this to close the database if we go back to the main activity  
     	//	Close cursors if there are any but fall out if we don't have any in use
 		try {
 //			Log.i("Back Button", " In try stmt cursor");   
-			stopManagingCursor (cursor);
+//			stopManagingCursor (cursor);
 			cursor.close();
 		}
 		catch (Exception e) {
@@ -511,7 +724,7 @@ public class LookUpSheep extends ListActivity
 		}
 		try {
 //			Log.i("Back Button", " In try stmt cursor2");   
-			stopManagingCursor (cursor2);
+//			stopManagingCursor (cursor2);
 			cursor2.close();
 		}
 		catch (Exception e) {
@@ -520,7 +733,7 @@ public class LookUpSheep extends ListActivity
 		}
 		try {
 //			Log.i("Back Button", " In try stmt cursor3");   
-			stopManagingCursor (cursor3);
+//			stopManagingCursor (cursor3);
 			cursor3.close();
 		}
 		catch (Exception e) {
@@ -746,3 +959,4 @@ public class LookUpSheep extends ListActivity
 			return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
 		}
 	}
+
