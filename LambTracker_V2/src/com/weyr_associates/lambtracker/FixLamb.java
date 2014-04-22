@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 import android.app.ListActivity;
 import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
@@ -48,8 +49,9 @@ public class FixLamb extends ListActivity
 	public String	sheep_sex, lambease, rear_type;
 	public Cursor 	cursor, cursor2, cursor3, cursor4;
 	public Object	crsr;
-	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner, fix_lamb_spinner ;
-	public List<String> tag_types, tag_locations, tag_colors, fix_lamb;
+	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner, fix_lamb_spinner, fix_characteristic_spinner ;
+	public List<String> tag_types, tag_locations, tag_colors, fix_lamb, rear_types, sexes, lambing_ease ;
+	public List<Integer> lambeaseid;
 	public Spinner predefined_note_spinner01, predefined_note_spinner02, predefined_note_spinner03;
 	public Spinner predefined_note_spinner04, predefined_note_spinner05;
 	public List<String> predefined_notes;
@@ -238,7 +240,7 @@ public class FixLamb extends ListActivity
       	String          cmd;
       	String 			results, results2;
     	Boolean			exists;
-
+    	
     	 //////////////////////////////////// 
 		CheckIfServiceIsRunning();
 		Log.i("Convert", "back from isRunning");  	
@@ -267,14 +269,60 @@ public class FixLamb extends ListActivity
 		tag_type_spinner.setAdapter (dataAdapter);
 		tag_type_spinner.setSelection(1);	
 		
-		//	Fill the fix the lamb data spinner
+		//	Set up string arrays for later use
+		rear_types = new ArrayList<String>();      	
+		sexes = new ArrayList<String>(); 
+    	// Select All fields from rear types for use later
+        cmd = "select * from birth_type_table";
+        crsr = dbh.exec( cmd );  
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+    	rear_types.add("Select Rear Type");
+         // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		rear_types.add(cursor.getString(1));
+    	}
+    	// Select All fields from sex for use later
+        cmd = "select * from sheep_sex_table";
+        crsr = dbh.exec( cmd );  
+        cursor   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+    	sexes.add("Select Sex");
+         // looping through all rows and adding to list
+    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+    		sexes.add(cursor.getString(1));
+    	}
+    	
+//    	Get the text for the lamb ease buttons  
+    		cmd = String.format("select custom_evaluation_traits_table.custom_evaluation_item, custom_evaluation_traits_table.id_custom_traitid " +
+        			" from custom_evaluation_traits_table " +
+        			" where custom_evaluation_traits_table.id_traitid = '%s' "+
+        			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ", 24);
+        	//    	Log.i("evaluate2", " cmd is " + cmd);	    	
+        	crsr = dbh.exec( cmd );
+            cursor   = ( Cursor ) crsr;
+            dbh.moveToFirstRecord();
+            lambing_ease = new ArrayList<String>();
+            lambing_ease.add("Lambing Ease");           
+            lambeaseid = new ArrayList <Integer>();
+            lambeaseid.add(0);
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            	lambing_ease.add (cursor.getString(0));
+    	    	Log.i("addlamb", " Lambing ease text is " + cursor.getString(0));
+    	    	lambeaseid.add (cursor.getInt(1));
+//    	    	Log.i("addlamb", " Lambing ease id is " + String.valueOf(cursor.getInt(1)));
+    	    	}        
+                       
+			//	Fill the fix the lamb data spinner
 		fix_lamb_spinner = (Spinner) findViewById(R.id.fix_lamb_spinner);
     	fix_lamb = new ArrayList<String>(); 
     	fix_lamb.add("Select a Characteristic to Correct");
+    	fix_lamb.add("Rear Type");
     	fix_lamb.add("Lamb Sex");
-    	fix_lamb.add("Lamb Birth Weight");
+//    	fix_lamb.add("Lamb Birth Weight");
     	fix_lamb.add("Lambing Ease");
-    	fix_lamb.add("Lamb Stillborn?");
+    	//Removed the option to change a record to be a stillborn after the fact. 
+//    	fix_lamb.add("Lamb Stillborn?");
     	
     	// Creating adapter for spinner
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, fix_lamb);
@@ -298,6 +346,7 @@ public class FixLamb extends ListActivity
 		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 
         }
+	
 	public void lookForSheep (View v){
 
 		Object crsr, crsr2, crsr3, crsr4;
@@ -341,7 +390,7 @@ public class FixLamb extends ListActivity
 	    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
 	    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
 	    				"sheep_table.sire_id, sheep_table.dam_id, sheep_sex_table.sex_name, sheep_table.birth_weight, " +
-	    				"custom_evaluation_traits_table.custom_evaluation_item, birth_type_table.birth_type " +
+	    				"custom_evaluation_traits_table.custom_evaluation_item, birth_type_table.birth_type  " +
 	    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " + 
 	    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid  " +
 	    				"inner join custom_evaluation_traits_table on sheep_table.lambease = custom_evaluation_traits_table.id_custom_traitid " +
@@ -372,21 +421,23 @@ public class FixLamb extends ListActivity
 		        // TODO        
 		        //	Get the various things we can change
 		        sheep_sex = dbh.getStr(11);
+		        Log.i("LookForSheep", " sheep sex is " + sheep_sex);
 		        birth_weight = dbh.getReal(12);
 		        Log.i("LookForSheep", " birth weight is " + String.valueOf(birth_weight));
 		        lambease = dbh.getStr(13);
 		        rear_type = dbh.getStr(14);
 		        
-		     // Display the selections in the fields			       
-		        TV = (TextView) findViewById( R.id.sheepSex );
-		        TV.setText (sheep_sex);	
-		        Log.i("LookForSheep", " before set textview for birthweight ");	
-		        TV.setText (String.valueOf(birth_weight));
-		        Log.i("LookForSheep", " after get textview for birthweight ");
-		        TV = (TextView) findViewById( R.id.lambEase );
-		        TV.setText (lambease);
+		     // Display the selections in the fields	
 		        TV = (TextView) findViewById( R.id.rearType );
 		        TV.setText (rear_type); 
+		        TV = (TextView) findViewById( R.id.sheepSex );
+		        TV.setText (sheep_sex);	
+		        TV = (TextView) findViewById( R.id.birth_weight );
+//		        Log.i("LookForSheep", " before set textview for birthweight ");	
+		        TV.setText (String.valueOf(birth_weight));
+//		        Log.i("LookForSheep", " after get textview for birthweight ");
+		        TV = (TextView) findViewById( R.id.lambEase );
+		        TV.setText (lambease);		        
 		        		        
 		        //	Go get the sire name
 		        if (thissire_id != 0){
@@ -471,6 +522,59 @@ public class FixLamb extends ListActivity
 	        	return;
 	        }
 	        Log.i("lookForSheep", " out of the if statement");
+			fix_lamb_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+				public void onItemSelected (AdapterView<?> parent,View view, int pos, long id ) {
+					TextView 		TV ;
+					ArrayAdapter<String> dataAdapter;
+				// Have the position of the field to change so go get the data
+				switch (pos){
+				case 1:
+					// Item selected is Rear Type
+					TV = (TextView) findViewById( R.id.fix_characteristic );
+					TV.setText(rear_type );
+					// Set up the spinner to show rear type options
+					fix_characteristic_spinner = (Spinner) findViewById(R.id.fix_characteristic_spinner);
+			     	dataAdapter = new ArrayAdapter<String>(FixLamb.this,android.R.layout.simple_spinner_item, rear_types);
+			     	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			     	fix_characteristic_spinner.setAdapter (dataAdapter);
+			     	fix_characteristic_spinner.setSelection(0);
+					
+					break;
+				case 2:
+					// Item selected is Lamb Sex
+					TV = (TextView) findViewById( R.id.fix_characteristic );
+					TV.setText( sheep_sex );
+					// Set up the spinner to show sex options
+					fix_characteristic_spinner = (Spinner) findViewById(R.id.fix_characteristic_spinner);
+			     	dataAdapter = new ArrayAdapter<String>(FixLamb.this,android.R.layout.simple_spinner_item, sexes);
+			     	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			     	fix_characteristic_spinner.setAdapter (dataAdapter);
+			     	fix_characteristic_spinner.setSelection(0);
+					
+					break;
+//				case 3:
+//					// Item selected is Lamb Birth Weight
+//					TV = (TextView) findViewById( R.id.fix_characteristic );
+//					TV.setText( "Birth Weight" );
+//					break;
+				case 3:
+					// Item selected is Lambing Ease
+					TV = (TextView) findViewById( R.id.fix_characteristic );
+					TV.setText(lambease );
+					fix_characteristic_spinner = (Spinner) findViewById(R.id.fix_characteristic_spinner);
+			     	dataAdapter = new ArrayAdapter<String>(FixLamb.this,android.R.layout.simple_spinner_item, lambing_ease);
+			     	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			     	fix_characteristic_spinner.setAdapter (dataAdapter);
+			     	fix_characteristic_spinner.setSelection(0);					
+					break;
+				default:
+					//	Nothing set so do nothing
+					break;
+				}
+			}
+			public void onNothingSelected(AdapterView<?> parent){
+			}
+			});
         	}
     		else {
     			clearBtn( null );
@@ -480,16 +584,79 @@ public class FixLamb extends ListActivity
 	}
 	
 	public void updateDatabase( View v ){
-    	//	TODO
-    	
+		TextView TV;
+    	//	TODO   	
 		// Disable Update Database button and make it red to prevent getting 2 records at one time
     	btn = (Button) findViewById( R.id.update_database_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	btn.setEnabled(false);
     	
+    	//	Go get the value we are changing and what it needs to be
+    	fix_characteristic_spinner = (Spinner) findViewById(R.id.fix_characteristic_spinner);
+    	int char_pos = fix_characteristic_spinner.getSelectedItemPosition();
+    	String char_value = fix_characteristic_spinner.getSelectedItem().toString();
+    	fix_lamb_spinner = (Spinner) findViewById(R.id.fix_lamb_spinner);
+    	int char_type = fix_lamb_spinner.getSelectedItemPosition();
+    	switch (char_type){
+		case 1:
+			// 	Item selected is Rear Type
+			//	Now update the sheep record with the new rear type
+			cmd = String.format("update sheep_table set rear_type = '%s' " +
+	  		  		" where sheep_id = %s ", char_pos, thissheep_id);
+			Log.i("change rear type ", "the db cmd is " + cmd);
+			dbh.exec(cmd);
+			Log.i("change rear type ", "after update rear type in sheep_table");
+			TV = (TextView) findViewById( R.id.rearType );
+			TV.setText(char_value);		
+			TV = (TextView) findViewById( R.id.fix_characteristic );
+			TV.setText(char_value);	
+			break;
+		case 2:
+			// Item selected is Lamb Sex
+			//	Now update the sheep record with the new sex 
+			cmd = String.format("update sheep_table set sex = '%s' " +
+	  		  		" where sheep_id = %s ", char_pos, thissheep_id);
+			Log.i("change sex ", "the db cmd is " + cmd);
+			dbh.exec(cmd);
+			Log.i("change sex ", "after update sex in sheep_table");
+			TV = (TextView) findViewById( R.id.sheepSex );
+			TV.setText( char_value );
+			TV = (TextView) findViewById( R.id.fix_characteristic );
+			TV.setText(char_value);
+			break;
+//		case 3:
+//			// Item selected is Lamb Birth Weight
+//			TV = (TextView) findViewById( R.id.birth_weight );
+//			TV.setText( "Birth Weight" );
+//			TV = (TextView) findViewById( R.id.fix_characteristic );
+//			TV.setText(char_value);
+//			break;
+		case 3:
+			// Item selected is Lambing Ease
+			//	Now update the sheep record with the new lambease 
+			//	Need to go get the proper location from the lambeaseid array	     	
+	     	char_pos = lambeaseid.get(char_pos);
+			Log.i("lambease", " database ID for Lambease position is " + String.valueOf(char_pos));
+			
+			cmd = String.format("update sheep_table set lambease = %s " +
+	  		  		" where sheep_id = %s ", char_pos, thissheep_id);
+			Log.i("change lambease ", "the db cmd is " + cmd);
+			dbh.exec(cmd);
+			Log.i("change lambease ", "after update lambease in sheep_table");
+			TV = (TextView) findViewById( R.id.lambEase );
+			TV.setText(char_value );
+			TV = (TextView) findViewById( R.id.fix_characteristic );
+			TV.setText(char_value);
+			break;
+		default:
+			//	Nothing set so do nothing
+			break;
+		}
+    	
+    	
 		// Enable Update Database button and make it normal 
     	btn = (Button) findViewById( R.id.update_database_btn );
-    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000)); 
     	btn.setEnabled(true);
 	}
 //  user clicked 'Scan' button    

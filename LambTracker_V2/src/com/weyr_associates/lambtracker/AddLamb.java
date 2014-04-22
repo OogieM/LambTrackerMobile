@@ -374,9 +374,9 @@ public class AddLamb extends Activity {
         lambeaseid.add(0);
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
         	lambing_ease.add (cursor.getString(0));
-	    	Log.i("addlamb", " Lambing ease text is " + cursor.getString(0));
+//	    	Log.i("addlamb", " Lambing ease text is " + cursor.getString(0));
 	    	lambeaseid.add (cursor.getInt(1));
-	    	Log.i("addlamb", " Lambing ease id is " + String.valueOf(cursor.getInt(1)));
+//	    	Log.i("addlamb", " Lambing ease id is " + String.valueOf(cursor.getInt(1)));
     	}        
 
     	// Creating adapter for lambease spinner
@@ -428,17 +428,14 @@ public class AddLamb extends Activity {
     			" sheep_breeding_table.breeding_id = breeding_record_table.id_breedingid " +
     			" inner join sheep_table on sheep_id = ram_id " +
     			" where sheep_breeding_table.ewe_id = '%s' ", dam_id);		  
-		//	TODO
 			
 		Calendar calendar = Calendar.getInstance();
 		Log.i("add a lamb ", " after getting a calendar");
 			jintdate [0] = calendar.get(Calendar.YEAR);
 			jintdate [1] = calendar.get(Calendar.MONTH) +1;
 			jintdate [2] = calendar.get(Calendar.DAY_OF_MONTH);
-		// TODO
-			//	Removed the hard coding for testing purposes. 
-		//	Hard Coded a day within the breeding time of AI for testing purposes
-		
+		//	Removed the hard coding for testing purposes. 
+		//	Hard Coded a day within the breeding time of AI for testing purposes		
 //		jintdate [0] = 2014;
 //		jintdate [1] = 04;
 //		jintdate [2] = 27;
@@ -466,11 +463,7 @@ public class AddLamb extends Activity {
 	        	// First calculate how many days gestation this is from date ram in
 	        	gestation_length = temp_julian_today - temp_ram_in;
 	        	Log.i("addlamb", " julian gestation is " + String.valueOf(gestation_length));
-	        	// Now need to convert this to a number of days
-	        	//	TODO 
-	        	//	Set gestation to be shorter than normal for testing reset to 142 when we finish 
-	        	//	debugging. 
-	        	
+	        	// Now need to convert this to a number of days	        	
 	        	Log.i("addlamb", " calculated gestation length is " + String.valueOf(gestation_length));
 	        	if  (gestation_length > 142 && gestation_length < 155) {
 	        		//	This is the correct record so save the data and bump out
@@ -881,9 +874,6 @@ public class AddLamb extends Activity {
 		// Set the flock ID to be nothing initially
 		tag_flock = 0;
 		
-		// TODO
-		//	This will be what has to loop through all IDs for the lamb being added 
-		//	for now just get the first one
 		//	Go get all the tag data for this lamb
 		Log.i("before ", "getting the first tag info");
   		tl = (TableLayout) findViewById(R.id.tag_table);
@@ -964,7 +954,7 @@ public class AddLamb extends Activity {
   		  		" where sheep_id = %s ", lamb_name, lamb_id);
 		Log.i("add sheep_name ", "to db cmd is " + cmd);
 		dbh.exec(cmd);
-		Log.i("add name ", "after insert into sheep_table");
+		Log.i("add name ", "after update into sheep_table");
   		
 		//	Create a lambing history record by first seeing if there is one already for this year
 		//	If so then update the existing one
@@ -1491,7 +1481,7 @@ public class AddLamb extends Activity {
 		}
 		}    	    	
   }
-  // TODO
+ 
   public void updateTag( View v ){
   	Object 			crsr;
   	String 			cmd;
