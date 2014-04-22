@@ -307,7 +307,7 @@
         android:text="@string/sheep_birth_weight_lbl"/>
       
       <TextView
-        	android:id="@+id/birthWeight"
+        	android:id="@+id/birth_weight"
         	android:layout_width="195dp"
        	 	android:layout_height="wrap_content"
            	android:layout_column="1"

@@ -24,8 +24,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.content.Context;
 import android.database.Cursor;
@@ -378,19 +380,8 @@ public class FixLamb extends ListActivity
 		     // Display the selections in the fields			       
 		        TV = (TextView) findViewById( R.id.sheepSex );
 		        TV.setText (sheep_sex);	
-		        TV = (TextView) findViewById( R.id.birth_weight );
-		        
-//		        try {
-//    				tempData = Float.valueOf(TV.getText().toString());
-//				} catch (Exception ex) {
-//					tempData = 0.0f;
-		        
-		        // TODO ix the update
-		        
 		        Log.i("LookForSheep", " before set textview for birthweight ");	
-		        float temp_float= (float) birth_weight;
-		        String temp_string = Float.toString(temp_float);
-		        TV.setText (temp_string);
+		        TV.setText (String.valueOf(birth_weight));
 		        Log.i("LookForSheep", " after get textview for birthweight ");
 		        TV = (TextView) findViewById( R.id.lambEase );
 		        TV.setText (lambease);
@@ -486,6 +477,20 @@ public class FixLamb extends ListActivity
             	TV = (TextView) findViewById( R.id.sheepnameText );
                 TV.setText( "Sheep Database does not exist." );                
         	}
+	}
+	
+	public void updateDatabase( View v ){
+    	//	TODO
+    	
+		// Disable Update Database button and make it red to prevent getting 2 records at one time
+    	btn = (Button) findViewById( R.id.update_database_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+    	btn.setEnabled(false);
+    	
+		// Enable Update Database button and make it normal 
+    	btn = (Button) findViewById( R.id.update_database_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+    	btn.setEnabled(true);
 	}
 //  user clicked 'Scan' button    
  public void scanEid( View v){

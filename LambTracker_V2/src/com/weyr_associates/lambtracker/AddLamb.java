@@ -432,15 +432,16 @@ public class AddLamb extends Activity {
 			
 		Calendar calendar = Calendar.getInstance();
 		Log.i("add a lamb ", " after getting a calendar");
-//			jintdate [0] = calendar.get(Calendar.YEAR);
-//			jintdate [1] = calendar.get(Calendar.MONTH) +1;
-//			jintdate [2] = calendar.get(Calendar.DAY_OF_MONTH);
+			jintdate [0] = calendar.get(Calendar.YEAR);
+			jintdate [1] = calendar.get(Calendar.MONTH) +1;
+			jintdate [2] = calendar.get(Calendar.DAY_OF_MONTH);
 		// TODO
+			//	Removed the hard coding for testing purposes. 
 		//	Hard Coded a day within the breeding time of AI for testing purposes
 		
-		jintdate [0] = 2014;
-		jintdate [1] = 04;
-		jintdate [2] = 27;
+//		jintdate [0] = 2014;
+//		jintdate [1] = 04;
+//		jintdate [2] = 27;
 		
 //			Log.i("add a lamb ", " before getting julian of today");
 		temp_julian_today = Utilities.toJulian(jintdate);
@@ -460,15 +461,18 @@ public class AddLamb extends Activity {
 	        	Log.i("addlamb", " julian ram in " + String.valueOf(temp_ram_in));
 	        	temp_ram_out = dbh.getReal(5);
 	        	Log.i("addlamb", " julian ram out " + String.valueOf(temp_ram_out));
-	        	// need to figure out if the date is within early date 142 probable start date 147 
+	        	// need to figure out if the date is within early date 141 probable start date 147 
 	        	//	probable end date 150 and end date 155
 	        	// First calculate how many days gestation this is from date ram in
 	        	gestation_length = temp_julian_today - temp_ram_in;
 	        	Log.i("addlamb", " julian gestation is " + String.valueOf(gestation_length));
 	        	// Now need to convert this to a number of days
+	        	//	TODO 
+	        	//	Set gestation to be sorter than normal for testing reset to 142 when we finish 
+	        	//	debugging. 
 	        	
 	        	Log.i("addlamb", " calculated gestation length is " + String.valueOf(gestation_length));
-	        	if  (gestation_length > 142 && gestation_length < 155) {
+	        	if  (gestation_length > 138 && gestation_length < 155) {
 	        		//	This is the correct record so save the data and bump out
 	        		sire_name = dbh.getStr(3);
 	        		sire_id = dbh.getInt(2);
