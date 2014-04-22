@@ -1639,15 +1639,27 @@ public class AddLamb extends Activity {
   	 
   	  		tl.addView(tr);
   	  		Log.i("after tag ", "after creating the tag table layout");
-  	      	//	Clear out the add tag section by making the values the defaults for a federal tag  	
-  	      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
-  	      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
-  	      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
-  	      	TV  = (TextView) findViewById( R.id.new_tag_number);
-  	      	tag_type_spinner2.setSelection(1);
-  	      	tag_color_spinner.setSelection(5);
-  	      	tag_location_spinner.setSelection(2);
-  	      	TV.setText( "" );
+  	  		if ((new_tag_type == 1) || (new_tag_type == 4)){
+  	  			//	tag type is either Federal or Farm so set defaults to be paint, white on the side
+  	 	      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
+  	  	      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
+  	  	      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
+  	  	      	TV  = (TextView) findViewById( R.id.new_tag_number);
+  	  	      	tag_type_spinner2.setSelection(3);
+  	  	      	tag_color_spinner.setSelection(3);
+  	  	      	tag_location_spinner.setSelection(5);
+  	  	      	TV.setText( "" ); 	  			
+  	  		}else{
+  	  			//	tag type is something else like tattoo or pain so set defaults for a federal tag
+	   	      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
+	  	      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
+	  	      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
+	  	      	TV  = (TextView) findViewById( R.id.new_tag_number);
+	  	      	tag_type_spinner2.setSelection(1);
+	  	      	tag_color_spinner.setSelection(5);
+	  	      	tag_location_spinner.setSelection(2);
+	  	      	TV.setText( "" );
+  	  		}
   		}else{
   			//	bad tag location to ask for a new one
 	  		AlertDialog.Builder builder = new AlertDialog.Builder( this );
