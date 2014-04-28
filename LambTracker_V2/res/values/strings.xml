@@ -90,7 +90,8 @@
    	    here to collect data on the birth. </string>
     <string name="help_add_lamb">Add the information on this lamb. Be sure to put the first lamb born in first and the second lamb 
          born in second.  </string>
-    <string name="help_fix_lamb">Edit and update information about a lamb if you did not finish entering in or have errors.  </string>
+    <string name="help_fix_lamb">Edit and update information about a lamb if you did not finish entering in or have errors. Currently 
+        you can only edit the rearing type, sex and lambease values. </string>
     <string name="help_print">This prints a single label with the EID as a bar code and the name of the sheep on it.  </string>
     <string name="help_management">Select the management tasks you have done for this sheep and then update the database. </string>
     <string name="convert_fill_fields">Please Fill in all four fields.</string>

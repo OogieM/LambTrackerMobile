@@ -321,8 +321,6 @@ public class FixLamb extends ListActivity
     	fix_lamb.add("Lamb Sex");
 //    	fix_lamb.add("Lamb Birth Weight");
     	fix_lamb.add("Lambing Ease");
-    	//Removed the option to change a record to be a stillborn after the fact. 
-//    	fix_lamb.add("Lamb Stillborn?");
     	
     	// Creating adapter for spinner
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, fix_lamb);
@@ -692,7 +690,7 @@ public class FixLamb extends ListActivity
     {
    	// Display help here   	
 		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-		builder.setMessage( R.string.help_look_up_sheep)
+		builder.setMessage( R.string.help_fix_lamb)
 	           .setTitle( R.string.help_warning );
 		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
 	           public void onClick(DialogInterface dialog, int idx) {
@@ -768,8 +766,7 @@ public class FixLamb extends ListActivity
 
    
     // user clicked 'clear' button
-    public void clearBtn( View v )
-	    {
+    public void clearBtn( View v ){
 		TextView TV ;
 		TV = (TextView) findViewById( R.id.inputText );
 		TV.setText( "" );		
@@ -779,8 +776,16 @@ public class FixLamb extends ListActivity
 		TV.setText( "" );
 		TV = (TextView) findViewById( R.id.damName );
 		TV.setText( "" );
+		TV = (TextView) findViewById( R.id.rearType );
+		TV.setText( "" );
+		TV = (TextView) findViewById( R.id.sheepSex );
+		TV.setText( "" );
+        TV = (TextView) findViewById( R.id.birth_weight );
+        TV.setText( "" );
+        TV = (TextView) findViewById( R.id.lambEase );
+        TV.setText( "" );
 		//	Need to clear out the rest of the tags here 
-		Log.i("clear btn", "before changing myadapter");
+//		Log.i("clear btn", "before changing myadapter");
 		try {
 			myadapter.changeCursor(null);
 		}
@@ -788,13 +793,12 @@ public class FixLamb extends ListActivity
 			// In this case there is no adapter so do nothing
 		}
 		try {
-			Log.i("lookup clrbtn", " before set notes to null");
+//			Log.i("lookup clrbtn", " before set notes to null");
 			myadapter2.changeCursor(null);
 		} catch (Exception e) {
 			// In this case there is no adapter so do nothing
 		}
-//		Log.i("clear btn", "after changing myadapter and myadapter2");
-		
+//		Log.i("clear btn", "after changing myadapter and myadapter2");		
     }
     private String TodayIs() {
  		Calendar calendar = Calendar.getInstance();
