@@ -574,6 +574,7 @@ public void formatSheepRecord (View v){
     // user clicked 'clear' button
     public void clearBtn( View v )
 	    {
+    	thissheep_id = 0;
 		TextView TV ;
 		TV = (TextView) findViewById( R.id.inputText );
 		TV.setText( "" );		
@@ -623,29 +624,49 @@ public void formatSheepRecord (View v){
      public void takeNote( View v )
      {	    	
      	final Context context = this;
- 		//	First fill the predefined note spinner with possibilities
-     	predefined_notes = new ArrayList<String>();
- 		predefined_notes.add("Select a Predefined Note");
-// 		Log.i ("takeNote", " after adding Select a Predefined Note");
-     	// Select All fields from predefined_notes_table to build the spinner
-         cmd = "select * from predefined_notes_table";
-//         Log.i ("takeNote", " cmd is " + cmd);
-         crsr = dbh.exec( cmd );  
-         cursor5   = ( Cursor ) crsr;
-     	dbh.moveToFirstRecord();
-          // looping through all rows and adding to list
-     	for (cursor5.moveToFirst(); !cursor5.isAfterLast(); cursor5.moveToNext()){
-     		predefined_notes.add(cursor5.getString(1));
-//     		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
-     	}
-     	cursor5.close();    
-     	Log.i ("takeNote", " after set the predefined note spinner ");
-     	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
-     	//Implement take a note stuff here
+// 		//	First fill the predefined note spinner with possibilities
+//     	predefined_notes = new ArrayList<String>();
+// 		predefined_notes.add("Select a Predefined Note");
+//// 		Log.i ("takeNote", " after adding Select a Predefined Note");
+//     	// Select All fields from predefined_notes_table to build the spinner
+//         cmd = "select * from predefined_notes_table";
+////         Log.i ("takeNote", " cmd is " + cmd);
+//         crsr = dbh.exec( cmd );  
+//         cursor5   = ( Cursor ) crsr;
+//     	dbh.moveToFirstRecord();
+//          // looping through all rows and adding to list
+//     	for (cursor5.moveToFirst(); !cursor5.isAfterLast(); cursor5.moveToNext()){
+//     		predefined_notes.add(cursor5.getString(1));
+////     		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
+//     	}
+//     	cursor5.close();    
+//     	Log.i ("takeNote", " after set the predefined note spinner ");
+//     	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
+//     	//Implement take a note stuff here
      	if (thissheep_id == 0) {
      		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
+     		return;
      	}
      	else {
+     		//	First fill the predefined note spinner with possibilities
+         	predefined_notes = new ArrayList<String>();
+     		predefined_notes.add("Select a Predefined Note");
+//     		Log.i ("takeNote", " after adding Select a Predefined Note");
+         	// Select All fields from predefined_notes_table to build the spinner
+             cmd = "select * from predefined_notes_table";
+//             Log.i ("takeNote", " cmd is " + cmd);
+             crsr = dbh.exec( cmd );  
+             cursor5   = ( Cursor ) crsr;
+         	dbh.moveToFirstRecord();
+              // looping through all rows and adding to list
+         	for (cursor5.moveToFirst(); !cursor5.isAfterLast(); cursor5.moveToNext()){
+         		predefined_notes.add(cursor5.getString(1));
+//         		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
+         	}
+         	cursor5.close();    
+         	Log.i ("takeNote", " after set the predefined note spinner ");
+         	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
+         	//Implement take a note stuff here
 //     		Log.i ("takeNote", " got a sheep, need to get a note to add");
      		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 //     		Log.i ("takeNote", " after getting new alertdialogbuilder");
@@ -691,7 +712,8 @@ public void formatSheepRecord (View v){
  				    public void onClick(DialogInterface dialog,int id) {
  					// get user input and set it to result
  					// edit text
- 					String note_text = String.valueOf(userInput.getText());
+ 					String note_text = dbh.fixApostrophes(String.valueOf(userInput.getText()));
+ 					Log.i("update notes ", "note text is " + note_text);
  					//	Get id_predefinednotesid from a spinner here 
  					int predefined_note01 = predefined_note_spinner01.getSelectedItemPosition();
  					int predefined_note02 = predefined_note_spinner02.getSelectedItemPosition();
@@ -699,22 +721,33 @@ public void formatSheepRecord (View v){
  					int predefined_note04 = predefined_note_spinner04.getSelectedItemPosition();
  					int predefined_note05 = predefined_note_spinner05.getSelectedItemPosition();
  					// Update the notes table with the data
- 					cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, " +
+ 					if (predefined_note01 > 0) {
+ 						cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, " +
  							"id_predefinednotesid01) " +
  							"values ( %s, '%s', '%s', '%s', %s )",
  	    					thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note01);
- 	    			Log.i("update notes ", "before cmd " + cmd);
- 	    			dbh.exec( cmd );	
- 	    			Log.i("update notes ", "after cmd exec");
- 	    			Log.i("take note","first note written");
+	 	    			Log.i("update notes ", "before cmd " + cmd);
+	 	    			dbh.exec( cmd );	
+	 	    			Log.i("update notes ", "after cmd exec");
+	 	    			Log.i("take note","first note written with predefined note");
+ 				    }else{
+ 				    	//	no predefined note so write one without it
+ 				    	cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time) " +
+ 	 							"values ( %s, '%s', '%s', '%s')",
+ 	 	    					thissheep_id, note_text, TodayIs(), TimeIs());
+	 	    			Log.i("update notes ", "before cmd " + cmd);
+	 	    			dbh.exec( cmd );	
+	 	    			Log.i("update notes ", "after cmd exec");
+	 	    			Log.i("take note","first note written ");
+ 				    }
  	    			if (predefined_note02 > 0) {
- 	    	 			Log.i("take note","second note written");
  	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
  	 							"id_predefinednotesid01) " +
  	 							"values ( %s, '%s', '%s', %s)",
  	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note02 );
  	 	    			Log.i("update notes ", "before cmd " + cmd);
- 	 	    			dbh.exec( cmd );	
+ 	 	    			dbh.exec( cmd );
+ 	 	    			Log.i("take note","second note written");
  	    	 		}
  	    			if (predefined_note03 > 0) {
  	    	 			Log.i("take note","third note written");

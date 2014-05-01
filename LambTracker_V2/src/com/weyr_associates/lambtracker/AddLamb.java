@@ -446,7 +446,6 @@ public class AddLamb extends Activity {
     	Log.i("add a lamb ", " cmd is " + cmd);	    	
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
-//        startManagingCursor(cursor);
         nRecs    = cursor.getCount();
         dbh.moveToFirstRecord();
         if (nRecs > 0) {
@@ -554,7 +553,6 @@ public class AddLamb extends Activity {
 	 		"where sheep_sex_table.sex_sheepid = %s", sex);
 	 		crsr = dbh.exec( cmd );  
 			cursor   = ( Cursor ) crsr;
-//			startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 	  		sex_abbrev = dbh.getStr(0);	
 		}			
@@ -926,6 +924,7 @@ public class AddLamb extends Activity {
 	  		// 	once the EID is the federal tag the lamb name has to be the farm tag 
 			//	Names cannot be the EID tag number, that is too long. 
 			//	Still need to handle the case of the EID being the official federal tag
+	  		//	TODO
 	  		if (tag_type==1){
 	  			tag_flock = 1;
 	  			lamb_name = year + "-" + tag_num;
@@ -972,7 +971,6 @@ public class AddLamb extends Activity {
 //			Log.i("in try block ", "after try the first DB select ");
 			cursor   = ( Cursor ) crsr;
 //			Log.i("in try block ", "after cursor ");
-//			startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 //	  		Log.i("in try block ", "after move to first ");
 	  		lambing_historyid = dbh.getInt(0);
@@ -995,14 +993,13 @@ public class AddLamb extends Activity {
 	  		}
 	  		Log.i("add a lamb ", "the lambing_notes are " + lambing_notes);	  		
 	  		// Then update the record by adding this lambs' ID in the next slot
-	  		//	presumes we have one lamb in there already so the new on is either lamb02 or lamb03
+	  		//	presumes we have one lamb in there already so the new one is either lamb02 or lamb03
 	  		if (lamb02_id != 0 ){
 	  			//	have 2 lambs already
 	  			Log.i("in if stmt ", "lamb02_id " + String.valueOf(lamb02_id));
 	  			Log.i("in try block ", " have 2 lambs so add a third to record");
-//	  			Update the lambs born and rear_type
+//	  			Update the lambs born
 	  			lambs_born = lambs_born +1;
-//	  			rear_type = rear_type +1;
 	  			cmd = String.format("update lambing_history_table set " +
 		  				"lambing_notes = '%s', lambs_born = %s, " +
 		  				" lamb03_id = %s " +
@@ -1016,16 +1013,16 @@ public class AddLamb extends Activity {
 						"birth_type = %s, rear_type = %s " +
 		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb_id);
 		  		dbh.exec( cmd ); 
-		  		Log.i("in try block ", " after update sheep record  for last lamb to add birth record");
+		  		Log.i("in try block ", " after update sheep record  for third lamb to add birth record");
 		  		cmd = String.format("update sheep_table set sheep_birth_record = %s," +
-						"birth_type = %s, rear_type = %s " +
-		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb02_id);
+						"birth_type = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lamb02_id);
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record for second lamb to add birth record");
 		  		cmd = String.format("update sheep_table set sheep_birth_record = %s," +
-						"birth_type = %s, rear_type = %s " +
-		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb01_id);
+						"birth_type = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lamb01_id);
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record for first lamb to add birth record");
@@ -1054,11 +1051,11 @@ public class AddLamb extends Activity {
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record to add birth record");
 		  		cmd = String.format("update sheep_table set sheep_birth_record = %s," +
-						"birth_type = %s, rear_type = %s " +
-		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb01_id);
+						"birth_type = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lamb01_id);
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
-		  		Log.i("in try block ", " after update sheep record for first lamb to correct rear type and birth type");
+		  		Log.i("in try block ", " after update sheep record for first lamb to correct birth type");
 	  			
 				//	done with this lamb so force back to the ewe screen
 				backBtn(v);
@@ -1070,7 +1067,6 @@ public class AddLamb extends Activity {
 			lambing_time = mytime;
 //			Update the lambs born and rear type fields
   			lambs_born = lambs_born +1;
-//  			rear_type = rear_type + 1;
 //			Log.i("in catch block ", " after setting date and time");
   			if (stillborn){
 	  			lambing_notes = "S"; 
@@ -1088,7 +1084,6 @@ public class AddLamb extends Activity {
 			cmd = String.format("select last_insert_rowid()");
 			crsr = dbh.exec( cmd );  
 			cursor   = ( Cursor ) crsr;
-//			startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 	  		lambing_historyid = dbh.getInt(0);		
 			Log.i("add a lamb ", "the lambing_historyid is " + String.valueOf(lambing_historyid));
@@ -1230,7 +1225,6 @@ public class AddLamb extends Activity {
 		Log.i("in add lamb", " in back btn after stop EID service");
 		clearBtn( null );
 		// Added this to close the database if we go back to the lambing activity  	
-//    	stopManagingCursor (cursor);
     	cursor.close();
     	Log.i("in add lamb", " in back btn after close cursor");
     	dbh.closeDB();   	
