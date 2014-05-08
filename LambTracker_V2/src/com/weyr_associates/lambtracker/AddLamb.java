@@ -452,6 +452,7 @@ public class AddLamb extends Activity {
         if (nRecs > 0) {
 	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	        	Log.i("addlamb", " in for loop checking breeding dates ");
+	        	Log.i("addlamb", " in for loop this breeding record is this cursor " + String.valueOf(cursor.getCount()));	
 	        	// Check the dates and see if this is the right record
 	        	// Get the date ram in and date ram out
 	        	temp_ram_in = dbh.getReal(4);
