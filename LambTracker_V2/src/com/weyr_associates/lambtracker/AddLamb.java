@@ -275,9 +275,9 @@ public class AddLamb extends Activity {
     	String[] radioBtnText;
        	Boolean			exists;
        	TextView TV;
-       	Float temp_ram_in, temp_ram_out;
-       	double	gestation_length;
-       	Double temp_julian_today;
+       	float temp_ram_in, temp_ram_out;
+       	double	gestation_length, first_gestation_possible, last_gestation_possible;
+       	double temp_julian_today;
        	int [] jintdate = new int[] {0,0,0};
 
    	 //////////////////////////////////// 
@@ -415,20 +415,6 @@ public class AddLamb extends Activity {
 		//	Now need to figure out who the sire is based on date and breeding records.
 		//  First put an empty string in as sire name
 		sire_name = "Sire not found";
-		//	Then go get the breeding records for this ewe.
-		cmd = String.format("select sheep_breeding_table.ewe_id, " +
-				" sheep_breeding_table.breeding_id, " +
-				" breeding_record_table.ram_id, " +
-				" sheep_table.sheep_name, " +
-				" julianday(breeding_record_table.date_ram_in), " +
-    			" julianday(breeding_record_table.date_ram_out),  " +
-    			" breeding_record_table.service_type " +
-    			" from breeding_record_table " +
-    			" left outer join sheep_breeding_table on " +
-    			" sheep_breeding_table.breeding_id = breeding_record_table.id_breedingid " +
-    			" inner join sheep_table on sheep_id = ram_id " +
-    			" where sheep_breeding_table.ewe_id = '%s' ", dam_id);		  
-			
 		Calendar calendar = Calendar.getInstance();
 		Log.i("add a lamb ", " after getting a calendar");
 			jintdate [0] = calendar.get(Calendar.YEAR);
@@ -442,11 +428,26 @@ public class AddLamb extends Activity {
 		
 //			Log.i("add a lamb ", " before getting julian of today");
 		temp_julian_today = Utilities.toJulian(jintdate);
-//			Log.i("addlamb", " julian today is " + String.valueOf(temp_julian_today));
+		Log.i("addlamb", " julian today is " + String.valueOf(temp_julian_today));
+		
+		//	Then go get the breeding records for this ewe.
+		cmd = String.format("select sheep_breeding_table.ewe_id, " +
+				" sheep_breeding_table.breeding_id, " +
+				" breeding_record_table.ram_id, " +
+				" sheep_table.sheep_name, " +
+				" julianday(breeding_record_table.date_ram_in), " +
+    			" julianday(breeding_record_table.date_ram_out),  " +
+    			" breeding_record_table.service_type " +
+    			" from breeding_record_table " +
+    			" left outer join sheep_breeding_table on " +
+    			" sheep_breeding_table.breeding_id = breeding_record_table.id_breedingid " +
+    			" inner join sheep_table on sheep_id = ram_id " +
+    			" where sheep_breeding_table.ewe_id = '%s' ", dam_id);		  					
     	Log.i("add a lamb ", " cmd is " + cmd);	    	
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
         nRecs    = cursor.getCount();
+        Log.i("addlamb", "number of breeding records is " + String.valueOf (nRecs));
         dbh.moveToFirstRecord();
         if (nRecs > 0) {
 	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
@@ -457,21 +458,31 @@ public class AddLamb extends Activity {
 	        	Log.i("addlamb", " julian ram in " + String.valueOf(temp_ram_in));
 	        	temp_ram_out = dbh.getReal(5);
 	        	Log.i("addlamb", " julian ram out " + String.valueOf(temp_ram_out));
-	        	// need to figure out if the date is within early date 142 probable start date 147 
-	        	//	probable end date 150 and end date 155
+	        	// need to figure out if the date is within early date 142 probable start date 147 from ram in
+	        	//	probable end date 150 and end date 155 from ram out
+	       
+	        	//	Calculate the first possible and last possible for this breeding record
+	        	//	Should make these dates a preference or settings in LambTracker
+	        	// TODO
+	        	first_gestation_possible = temp_ram_in + 142.0;
+	        	Log.i("addlamb", " julian first gestation is " + String.valueOf(first_gestation_possible));
+	        	last_gestation_possible = temp_ram_out + 155.0;
+	        	Log.i("addlamb", " julian last gestation is " + String.valueOf(last_gestation_possible));        	
 	        	// First calculate how many days gestation this is from date ram in
 	        	gestation_length = temp_julian_today - temp_ram_in;
-	        	Log.i("addlamb", " julian gestation is " + String.valueOf(gestation_length));
-	        	// Now need to convert this to a number of days	        	
 	        	Log.i("addlamb", " calculated gestation length is " + String.valueOf(gestation_length));
-	        	if  (gestation_length > 142 && gestation_length < 155) {
+	        	
+	        	if  (temp_julian_today > first_gestation_possible && temp_julian_today < last_gestation_possible) {
 	        		//	This is the correct record so save the data and bump out
+	        		Log.i("addlamb", " correct breeding record is this cursor " + String.valueOf(cursor.getCount()));
 	        		sire_name = dbh.getStr(3);
 	        		sire_id = dbh.getInt(2);
 	        		service_type = dbh.getInt(6);
-	        		//	make the gestation an integer
+	        		//	make the gestation length an integer so it can be added to the lambing history record. 
 	        		real_gestation_length = (int)gestation_length;
 	        		Log.i("addlamb", " gestation length is " + String.valueOf(real_gestation_length));
+	        		Log.i("addLamb" , "before break out of for loop");
+	        		break;
 	        	}        	
         	// The sire we have is 
         	Log.i("addlamb", " in for loop sire is " + sire_name);	

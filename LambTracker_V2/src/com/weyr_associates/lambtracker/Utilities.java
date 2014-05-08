@@ -1,5 +1,21 @@
 package com.weyr_associates.lambtracker;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.database.Cursor;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.app.ListActivity;
+
 
 /**
  * Write a description of class Utilities here.
@@ -13,6 +29,17 @@ public class Utilities
     public static double SECS_PER_DAY = 86400.0;
     public static double HALFSECOND   = 0.5;
 
+    public static Spinner predefined_note_spinner01;
+	public static Spinner predefined_note_spinner02;
+	public static Spinner predefined_note_spinner03;
+	public static Spinner predefined_note_spinner04, predefined_note_spinner05;
+	public static List<String> predefined_notes;
+	public int 		thissheep_id;
+	private static DatabaseHandler dbh;
+	public static Cursor 	cursor5;
+	public static Object	crsr;
+	static ArrayAdapter<String> dataAdapter;
+	static String     	cmd;
     /**
      * Constructor for objects of class Utilities
      */
@@ -21,7 +48,7 @@ public class Utilities
 
     }
 
-   public static double toJulian( int[] ymd )
+public static double toJulian( int[] ymd )
     {
     int year       = ymd[0]; // yyyy
     int month      = ymd[1]; // jan=1, feb=2,...
@@ -119,4 +146,183 @@ public int[] fromJulianWithTime( double julian )
     }
 
 
+public static String takeNote( View v, final Integer thissheep_id, final Context context )
+{	    	
+//	final Context context = this;
+//	
+	Log.i ("takeNote", " in beginning " + String.valueOf(thissheep_id));
+	if (thissheep_id == 0) {
+		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
+		return "no sheep";
+	}
+	else {
+		//	First fill the predefined note spinner with possibilities
+    	predefined_notes = new ArrayList<String>();
+		predefined_notes.add("Select a Predefined Note");
+		Log.i ("takeNote", " after adding Select a Predefined Note");
+    	// Select All fields from predefined_notes_table to build the spinner
+        cmd = "select * from predefined_notes_table";
+        Log.i ("takeNote", " cmd is " + cmd);
+        crsr = dbh.exec( cmd ); 
+        Log.i ("takeNote", " after executing the dbh command " + cmd);
+        cursor5   = ( Cursor ) crsr;
+    	dbh.moveToFirstRecord();
+         // looping through all rows and adding to list
+    	for (cursor5.moveToFirst(); !cursor5.isAfterLast(); cursor5.moveToNext()){
+    		predefined_notes.add(cursor5.getString(1));
+    		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor5.getString(1)));
+    	}
+    	cursor5.close();    
+    	Log.i ("takeNote", " after set the predefined note spinner ");
+    	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
+    	//Implement take a note stuff here
+//		Log.i ("takeNote", " got a sheep, need to get a note to add");
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+//		Log.i ("takeNote", " after getting new alertdialogbuilder");
+		
+		LayoutInflater li = LayoutInflater.from(context);
+		View promptsView = li.inflate(R.layout.note_prompt, null);
+//		Log.i ("takeNote", " after inflating layout");	
+
+		// set view note_prompt to alertdialog builder
+		alertDialogBuilder.setView(promptsView);
+		Log.i ("takeNote", " after setting view");
+	   	// Creating adapter for predefined notes spinners
+    	dataAdapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item, predefined_notes);
+    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    	predefined_note_spinner01 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner01);
+    	predefined_note_spinner01.setAdapter (dataAdapter);
+		predefined_note_spinner01.setSelection(0);
+		
+    	predefined_note_spinner02 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner02);
+    	predefined_note_spinner02.setAdapter (dataAdapter);
+		predefined_note_spinner02.setSelection(0);
+
+    	predefined_note_spinner03 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner03);
+    	predefined_note_spinner03.setAdapter (dataAdapter);
+		predefined_note_spinner03.setSelection(0);
+
+    	predefined_note_spinner04 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner04);
+    	predefined_note_spinner04.setAdapter (dataAdapter);
+		predefined_note_spinner04.setSelection(0);
+
+    	predefined_note_spinner05 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner05);
+    	predefined_note_spinner05.setAdapter (dataAdapter);
+		predefined_note_spinner05.setSelection(0);
+
+		final EditText userInput = (EditText) promptsView
+				.findViewById(R.id.note_text);
+
+		// set dialog message
+		alertDialogBuilder
+			.setCancelable(false)
+			.setPositiveButton("Save Note",
+			  new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface dialog,int id) {
+				// get user input and set it to result
+				// edit text
+				String note_text = dbh.fixApostrophes(String.valueOf(userInput.getText()));
+				Log.i("update notes ", "note text is " + note_text);
+				//	Get id_predefinednotesid from a spinner here 
+				int predefined_note01 = predefined_note_spinner01.getSelectedItemPosition();
+				int predefined_note02 = predefined_note_spinner02.getSelectedItemPosition();
+				int predefined_note03 = predefined_note_spinner03.getSelectedItemPosition();
+				int predefined_note04 = predefined_note_spinner04.getSelectedItemPosition();
+				int predefined_note05 = predefined_note_spinner05.getSelectedItemPosition();
+				// Update the notes table with the data
+				if (predefined_note01 > 0) {
+					cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, " +
+						"id_predefinednotesid01) " +
+						"values ( %s, '%s', '%s', '%s', %s )",
+    					thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note01);
+	    			Log.i("update notes ", "before cmd " + cmd);
+	    			dbh.exec( cmd );	
+	    			Log.i("update notes ", "after cmd exec");
+	    			Log.i("take note","first note written with predefined note");
+			    }else{
+			    	//	no predefined note so write one without it
+			    	cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time) " +
+ 							"values ( %s, '%s', '%s', '%s')",
+ 	    					thissheep_id, note_text, TodayIs(), TimeIs());
+	    			Log.i("update notes ", "before cmd " + cmd);
+	    			dbh.exec( cmd );	
+	    			Log.i("update notes ", "after cmd exec");
+	    			Log.i("take note","first note written ");
+			    }
+    			if (predefined_note02 > 0) {
+    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+ 							"id_predefinednotesid01) " +
+ 							"values ( %s, '%s', '%s', %s)",
+ 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note02 );
+ 	    			Log.i("update notes ", "before cmd " + cmd);
+ 	    			dbh.exec( cmd );
+ 	    			Log.i("take note","second note written");
+    	 		}
+    			if (predefined_note03 > 0) {
+    	 			Log.i("take note","third note written");
+    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+ 							"id_predefinednotesid01) " +
+ 							"values ( %s, '%s', '%s', %s)",
+ 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note03 );
+ 	    			Log.i("update notes ", "before cmd " + cmd);
+ 	    			dbh.exec( cmd );	
+    	 		}
+    			if (predefined_note04 > 0) {
+    	 			Log.i("take note","fourth note written");
+    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+ 							"id_predefinednotesid01) " +
+ 							"values ( %s, '%s', '%s', %s)",
+ 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note04 );
+ 	    			Log.i("update notes ", "before cmd " + cmd);
+ 	    			dbh.exec( cmd );	
+    	 		}
+    			if (predefined_note05 > 0) {
+    	 			Log.i("take note","fifth note written");
+    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
+ 							"id_predefinednotesid01) " +
+ 							"values ( %s, '%s', '%s', %s)",
+ 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note05 );
+ 	    			Log.i("update notes ", "before cmd " + cmd);
+ 	    			dbh.exec( cmd );	
+    	 		}
+			    }
+			  })
+			.setNegativeButton("Cancel",
+			  new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface dialog,int id) {
+				dialog.cancel();
+			    }
+			  });
+		// create alert dialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		// show it
+		alertDialog.show();
+	} 
+	return "got note";
+}
+private static String TimeIs() {
+	Calendar calendar = Calendar.getInstance();
+    //12 hour format
+//	int hour = cal.get(Calendar.HOUR);
+    //24 hour format
+	int hourofday = calendar.get(Calendar.HOUR_OF_DAY);
+	int minute = calendar.get(Calendar.MINUTE);
+	int second = calendar.get(Calendar.SECOND);
+	  
+	return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
+}
+private static String TodayIs() {
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		int month = calendar.get(Calendar.MONTH);
+		int year = calendar.get(Calendar.YEAR);
+		return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
+	}
+ private static String Make2Digits(int i) {
+		if (i < 10) {
+			return "0" + i;
+		} else {
+			return Integer.toString(i);
+		}
+	}
 }

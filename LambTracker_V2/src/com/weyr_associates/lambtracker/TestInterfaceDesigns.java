@@ -4,6 +4,8 @@ package com.weyr_associates.lambtracker;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
+import android.graphics.LightingColorFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,7 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -28,6 +32,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioButton;
@@ -35,7 +40,12 @@ import android.widget.RadioGroup;
 
 public class TestInterfaceDesigns extends Activity{
 		private DatabaseHandler dbh;
-		private Cursor 	cursor;
+		public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
+		private int			    recNo;
+		public Button btn;
+		public List<String> tag_types, tag_locations;
+
+		private Cursor 	cursor, cursor5;
 		public RadioGroup radioGroup;
 		public Spinner test_dynamic_spinner, trait_spinner;
 		List<String> tag_colors, evaluation_traits;
@@ -52,175 +62,55 @@ public class TestInterfaceDesigns extends Activity{
 	    GridViewAdapter gridviewAdapter;
 		String          cmd;
 		String	tempLabel, tempText;
+		public int 		thissheep_id;
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.test_interface_designs);
 			String dbname = getString(R.string.real_database_file); 
 	    	dbh = new DatabaseHandler( this, dbname );	
-	    	scored_evaluation_traits = new ArrayList<String>();
-	    	data_evaluation_traits = new ArrayList<String>();
-	    	user_evaluation_traits = new ArrayList<String>();
 
-	    	scored_trait_numbers = new ArrayList<Integer>();
-	    	data_trait_numbers = new ArrayList<Integer>();
-	    	user_trait_numbers = new ArrayList<Integer>();
-	    	user_trait_number_items = new ArrayList<Integer>();
+			
+			// take note set up
+			final Context context = this;
+			
+	     	// Fill the Tag Type Spinner
+	     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+	    	tag_types = new ArrayList<String>();      	
 	    	
-	    	//	Set up the scored traits and inflate the layout
-	    	cmd = String.format("select evaluation_trait_table.trait_name, evaluation_trait_table.id_traitid " +
-		        	"from evaluation_trait_table inner join last_eval_table where " +
-	        		" evaluation_trait_table.id_traitid = last_eval_table.id_traitid and evaluation_trait_table.trait_type = 1 ") ;
-	    	Log.i("scored traits", " cmd is " + cmd);
-	    	crsr = dbh.exec( cmd );
-	        cursor   = ( Cursor ) crsr;
-	        nRecs    = cursor.getCount();
-	        dbh.moveToFirstRecord();
-	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-	        	scored_trait_numbers.add(cursor.getInt(1));
-//	        	tempTraitNumber = cursor.getInt(1);
-	        	Log.i("1st for loop ", "scored traits trait number is " + String.valueOf(cursor.getInt(1)));
-		    	scored_evaluation_traits.add(cursor.getString(0));
-		    	Log.i("1st for loop ", "scored traits trait name is " + cursor.getString(0));
-	    	}
-	    	cursor.close();    	
-//	    	Log.i("test designs", "number of records in cursor is " + String.valueOf(nRecs));
-	    	LayoutInflater inflater = getLayoutInflater();	
-//	    	Log.i ("test designs", scored_evaluation_traits.get(0));
-	    	for( int ii = 0; ii < nRecs; ii++ ){	
-	    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
-	    		Log.i ("in for loop", " scored trait name is " + scored_evaluation_traits.get(ii));
-    			TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);	
-    			Log.i("scored traits", " after TableLayout");
-		    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_item_entry, table, false);
-		    	tempLabel = scored_evaluation_traits.get(ii);
-//		    	Log.i("in for loop", " tempLabel is " + tempLabel);
-		    	((TextView)row.findViewById(R.id.rb1_lbl)).setText(tempLabel);
-//		    	Log.i("in for loop", " after set text view");
-		    	table.addView(row);
-	    	}
-	    	
-	    	//	Set up the data traits and inflate the layout
-	    	cmd = String.format("select evaluation_trait_table.trait_name, evaluation_trait_table.id_traitid " +
-		        	"from evaluation_trait_table inner join last_eval_table where " +
-	        		" evaluation_trait_table.id_traitid = last_eval_table.id_traitid and evaluation_trait_table.trait_type = 2 ") ;
-	    	Log.i("data traits", " cmd is " + cmd);
-	    	crsr = dbh.exec( cmd );
-	        cursor   = ( Cursor ) crsr;
-	        nRecs2    = cursor.getCount();
-	        dbh.moveToFirstRecord();
-	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-	        	data_trait_numbers.add(cursor.getInt(1));
-//	        	tempTraitNumber = cursor.getInt(1);
-	        	Log.i("data traits", " trait number is " + String.valueOf(cursor.getInt(1)));
-		    	data_evaluation_traits.add(cursor.getString(0));
-		    	Log.i("data traits", " trait name is " + cursor.getString(0));
-	    	}
-	    	cursor.close();    	
-//	    	Log.i("test designs", "number of records in cursor is " + String.valueOf(nRecs));
-	    	inflater = getLayoutInflater();	
-//	    	Log.i ("test designs", scored_evaluation_traits.get(0));
-	    	for( int ii = 0; ii < nRecs2; ii++ ){	
-	    		Log.i("in for loop" , " ii is " + String.valueOf(ii));
-	    		Log.i ("in for loop", "data trait name is " + data_evaluation_traits.get(ii));
-    			TableLayout table = (TableLayout) findViewById(R.id.TableLayout02);	
-    			Log.i("data traits", " after TableLayout");
-		    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_data_item_entry, table, false);
-		    	tempLabel = data_evaluation_traits.get(ii);
-//		    	Log.i("in for loop", " tempLabel is " + tempLabel);
-		    	((TextView)row.findViewById(R.id.data_lbl)).setText(tempLabel);
-//		    	Log.i("in for loop", " after set text view");
-		    	table.addView(row);
-	    	}
-	        
-	    	// Set up the user traits
-	  
-	    	cmd = String.format("select evaluation_trait_table.trait_name, custom_evaluation_name_table.id_traitid , " +
-		        	"custom_evaluation_name_table.custom_eval_number " +
-	    			"from evaluation_trait_table inner join last_eval_table on " +
-		        	" evaluation_trait_table.id_traitid = last_eval_table.id_traitid" +
-		        	" inner join custom_evaluation_name_table on evaluation_trait_table.id_traitid = " +
-	        		" custom_evaluation_name_table.id_traitid where evaluation_trait_table.trait_type = 3 ") ;
-	    	Log.i("user traits", " cmd is " + cmd);
-	    	crsr = dbh.exec( cmd );
-	        cursor   = ( Cursor ) crsr;
-	        nRecs3    = cursor.getCount();
-	        dbh.moveToFirstRecord();
-	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-	        	user_evaluation_traits.add(cursor.getString(0));
-		    	Log.i("user traits", " trait name is " + cursor.getString(0));
-		    	user_trait_numbers.add(cursor.getInt(1));
-	        	Log.i("user traits", " trait id number is " + String.valueOf(cursor.getInt(1)));
-		    	user_trait_number_items.add(cursor.getInt(2));
-		    	Log.i("user traits", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
-	    	}
-	    	cursor.close();  
-	    	
-//	    	Log.i("test designs", "number of records in cursor is " + String.valueOf(nRecs));
-	    	inflater = getLayoutInflater();	
-//	    	Log.i ("test designs", scored_evaluation_traits.get(0));
-	    	for( int ii = 0; ii < nRecs3; ii++ ){	
-	    		Log.i("user traits" , " ii is " + String.valueOf(ii));
-	    		Log.i ("in for loop", " user trait number is " + String.valueOf(user_trait_numbers.get(ii)));
-	    		Log.i ("in for loop", " user trait name is " + user_evaluation_traits.get(ii));
-	    		Log.i ("in for loop", " number of trait entries is " + String.valueOf(user_trait_number_items.get(ii)));
-    			TableLayout table = (TableLayout) findViewById(R.id.TableLayout03);	
-    			Log.i("user traits", " after TableLayout");		    	
-		    	//	Get the text for the buttons
-		    	tempText = String.valueOf(user_trait_numbers.get(ii));
-		    	Log.i("in for loop", "trait numbers is " + tempText);
-		    	cmd = String.format("select custom_evaluation_traits_table.custom_evaluation_item " +
-		    			" from custom_evaluation_traits_table " +
-		    			" where custom_evaluation_traits_table.id_traitid = '%s' "+
-		    			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ", tempText);
-		    	Log.i("test designs", " cmd is " + cmd);
-		    	crsr = dbh.exec( cmd );
-		        cursor   = ( Cursor ) crsr;
-		        nRecs4    = cursor.getCount();
-		        dbh.moveToFirstRecord();		        
-		        ArrayList buttons = new ArrayList();
-		        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-		        	buttons.add (cursor.getString(0));
-			    	Log.i("user traits", " radio button text is " + cursor.getString(0));
-		    	}
-		        TableRow row = (TableRow)inflater.inflate(R.layout.eval_custom_item, table, false);
-		        
-		        radioBtnText = (String[]) buttons.toArray(new String [buttons.size()]);
-		    	cursor.close();  
-		    	// Build the radio buttons here
-		    	radioGroup = ((RadioGroup)row.findViewById(R.id.radioGroup1));
-		    	addRadioButtons(user_trait_number_items.get(ii), radioBtnText);
-		    	table.addView(row);
-	    	}
-	    	
-	    	test_dynamic_spinner = (Spinner) findViewById(R.id.test_dynamic_spinner);
-//	    	Log.i("testinterface", "in onCreate below test spinner");
-	    	tag_colors = new ArrayList<String>();
-	         
-	        // Select All fields from tag colors to build the spinner
-	        cmd = "select * from tag_colors_table";
-	        Object crsr = dbh.exec( cmd );  
-	        cursor   = ( Cursor ) crsr;
+	    	// Select All fields from id types to build the spinner
+	        cmd = "select * from id_type_table";
+	        crsr = dbh.exec( cmd );  
+	        cursor5   = ( Cursor ) crsr;
 	    	dbh.moveToFirstRecord();
-	    	tag_colors.add("Select a Color");
-	    	// Log.i("testinterface", "in onCreate below got tag color table");
-	        // looping through all rows and adding to list
-	    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-	    		tag_colors.add(cursor.getString(2));
+	    	tag_types.add("Select a Type");
+	         // looping through all rows and adding to list
+	    	for (cursor5.moveToFirst(); !cursor5.isAfterLast(); cursor5.moveToNext()){
+	    		tag_types.add(cursor5.getString(1));
 	    	}
-	    	cursor.close();
-	        Log.i("testinterface", "below if loop");
-		        // Creating adapter for spinner
-		        dataAdapter = new ArrayAdapter<String>(this,
-		                android.R.layout.simple_spinner_item, tag_colors);
-	
+	    	
+	    	// Creating adapter for spinner
+	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
 			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			test_dynamic_spinner.setAdapter (dataAdapter);
-			test_dynamic_spinner.setSelection(0);
-//			Log.i("Activity", "In Spinner");
-			test_dynamic_spinner.setOnItemSelectedListener(new SpinnerActivity());	
-			
-			
+			tag_type_spinner.setAdapter (dataAdapter);
+			//	set initial tag type to look for to be federal tag
+			tag_type_spinner.setSelection(1);	
+
+	       	// make the alert button normal and disabled
+	    	btn = (Button) findViewById( R.id.alert_btn );
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+	    	btn.setEnabled(false);  
+	 // TODO   	
+	       	//	Disable the Next Record and Prev. Record button until we have multiple records
+	    	btn = (Button) findViewById( R.id.next_rec_btn );
+	    	btn.setEnabled(false); 
+	    	btn = (Button) findViewById( R.id.prev_rec_btn );
+	    	btn.setEnabled(false);
+	    	
+			//	make the scan eid button red
+			btn = (Button) findViewById( R.id.scan_eid_btn );
+			btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+
 			}
 	
 		  // user clicked the 'saveScores' button
@@ -283,6 +173,8 @@ public class TestInterfaceDesigns extends Activity{
 ////	    			realScore = Float.valueOf(TV.getText().toString());
 //	    			Log.i("radio button position ", String.valueOf(idx)); 
 	    		}
+	    		
+	    		// testing for the note button
 	    }
 	    private void addRadioButtons(int numButtons, String[] radioBtnText) {
 	    	  int i;
@@ -304,105 +196,189 @@ public class TestInterfaceDesigns extends Activity{
 	    	    radioGroup.addView(radioBtn, i);
 	    	  }
 	    	}        
-	private class SpinnerActivity extends Activity implements OnItemSelectedListener {
-		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
-			Log.i("Activity", "In Spinner activity before the case statement");
-			String teststring;
-			teststring = String.valueOf (parent.getSelectedItemPosition());
-			// Log.i("Spinner", "Position = "+teststring);
 
-				switch (parent.getSelectedItemPosition()){		
-				case 0:
-			        // Don't want to do anything until something is selected so just break at position zero
-					break;
-			    case 1:
-			    	teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			    	break;
-				case 2:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 3:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 4:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 5:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 6:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 7:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 8:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 9:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 10:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 11:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 12:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 13:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 14:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 15:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 16:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 17:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 18:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-				case 19:
-					teststring = String.valueOf (parent.getSelectedItemPosition());
-			    	teststring = test_dynamic_spinner.getSelectedItem().toString();
-			        break;
-			        
-			}
-			
+		public void lookForSheep (View v){
+
+			Object crsr, crsr2, crsr3, crsr4;
+			Boolean exists;
+			TextView TV;
+			ListView notelist = (ListView) findViewById(R.id.list2);
+	        exists = true;
+	     // Hide the keyboard when you click the button
+	    	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+	    	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+	    	
+	        TV = (TextView) findViewById( R.id.inputText );
+	    	String	tag_num = TV.getText().toString();
+	    	
+	        Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
+	        Log.i("LookForSheep", " got to lookForSheep with Tag type of " + tag_type_spinner.getSelectedItemPosition());
+	        exists = tableExists("sheep_table");
+	        if (exists){
+	        	if( tag_num != null && tag_num.length() > 0 ){
+//	        		Get the sheep id from the id table for this tag number and selected tag type
+		        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
+		        			"and id_info_table.tag_type='%s' and id_info_table.tag_date_off is null", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
+		        	Log.i("LookForSheep", " command is  " + cmd);
+		        	crsr = dbh.exec( cmd );
+		        	cursor   = ( Cursor ) crsr; 
+		        	recNo    = 1;
+					nRecs    = cursor.getCount();
+					Log.i("LookUpSheep", " nRecs = "+ String.valueOf(nRecs));
+//					colNames = cursor.getColumnNames();
+//		    		startManagingCursor(cursor);
+		        	dbh.moveToFirstRecord();
+		        	if( dbh.getSize() == 0 )
+			    		{ // no sheep with that tag in the database so clear out and return
+			    		clearBtn( v );
+			    		TV = (TextView) findViewById( R.id.sheepnameText );
+			        	TV.setText( "Cannot find this sheep." );
+			        	return;
+			    		}
+		        	// TODO add the next record previous record stuff in here
+		        	if (nRecs >1){
+		        		//	Have multiple sheep with this tag so enable next button
+		            	btn = (Button) findViewById( R.id.next_rec_btn );
+		            	btn.setEnabled(true);       		
+		        	}
+//		        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));	        	
+		        	//	We need to call the format the record method
+		        	formatSheepRecord(v);
+					}else{
+		        	return;
+		        }
+		        Log.i("lookForSheep", " out of the if statement");
+	        	}
+	    		else {
+	    			clearBtn( null );
+	            	TV = (TextView) findViewById( R.id.sheepnameText );
+	                TV.setText( "Sheep Database does not exist." );                
+	        	}
 		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> arg0) {
-			// TODO Auto-generated method stub
+		public void formatSheepRecord (View v){
+			Object crsr, crsr2, crsr3, crsr4;
+			TextView TV;
+			ListView notelist = (ListView) findViewById(R.id.list2);
 			
+			thissheep_id = cursor.getInt(0);	        	
+			Log.i("format record", "This sheep is record " + String.valueOf(thissheep_id));	        	
+			
+//			Log.i("format record", " recNo = "+ String.valueOf(recNo));
+			cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+					"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+					"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
+					"sheep_table.sire_id, sheep_table.dam_id, sheep_table.birth_date, birth_type_table.birth_type," +
+					"sheep_sex_table.sex_name " +
+					"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+					"inner join birth_type_table on id_birthtypeid = sheep_table.birth_type " +
+					"inner join sheep_sex_table on sheep_sex_table.sex_sheepid = sheep_table.sex " +
+					"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+					"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+					"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+					"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
+
+			crsr = dbh.exec( cmd ); 	    		
+			cursor5   = ( Cursor ) crsr; 
+			cursor5.moveToFirst();				
+			TV = (TextView) findViewById( R.id.sheepnameText );
+		    TV.setText (dbh.getStr(0));
+//		    TV = (TextView) findViewById( R.id.birth_date );
+//		    TV.setText (dbh.getStr(11));
+//		    TV = (TextView) findViewById( R.id.birth_type );
+//		    TV.setText (dbh.getStr(12));
+//		    TV = (TextView) findViewById( R.id.sheep_sex );
+//		    TV.setText (dbh.getStr(13));
+//		    
+//		    alert_text = dbh.getStr(8);
+//			
+//		    //	Get the sire and dam id numbers
+//		    thissire_id = dbh.getInt(9);
+//		    Log.i("format record", " Sire is " + String.valueOf(thissire_id));
+//		    thisdam_id = dbh.getInt(10);
+//		    Log.i("format record", " Dam is " + String.valueOf(thisdam_id));
+//		    
+//		    //	Go get the sire name
+//		    if (thissire_id != 0){
+//		        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thissire_id);
+//		        Log.i("format record", " cmd is " + cmd);		        
+//		        crsr2 = dbh.exec( cmd);
+//		        Log.i("format record", " after second db lookup");
+//		        cursor2   = ( Cursor ) crsr2; 
+////				startManagingCursor(cursor2);
+//				cursor2.moveToFirst();
+//				TV = (TextView) findViewById( R.id.sireName );
+//				thissire_name = dbh.getStr(0);
+//				TV.setText (thissire_name);	 
+//				Log.i("format record", " Sire is " + thissire_name);
+//		        Log.i("format record", " Sire is " + String.valueOf(thissire_id));
+//		    }
+//		    if(thisdam_id != 0){
+//		        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thisdam_id);
+//		        crsr3 = dbh.exec( cmd);
+//		        cursor3   = ( Cursor ) crsr3; 
+////				startManagingCursor(cursor3);
+//				cursor3.moveToFirst();
+//				TV = (TextView) findViewById( R.id.damName );
+//				thisdam_name = dbh.getStr(0);
+//				TV.setText (thisdam_name);	
+//				Log.i("format record", " Dam is " + thisdam_name);
+//		        Log.i("format record", " Dam is " + String.valueOf(thisdam_id));
+//		    }    		
+//			Log.i("FormatRecord", " before formatting results");
+//			
+//			//	Get set up to try to use the CursorAdapter to display all the tag data
+//			//	Select only the columns I need for the tag display section
+//		    String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+//			Log.i("FormatRecord", "after setting string array fromColumns");
+//			//	Set the views for each column for each line. A tag takes up 1 line on the screen
+//		    int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+//		    Log.i("FormatRecord", "after setting string array toViews");
+//		    myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor5 ,fromColumns, toViews, 0);
+//		    Log.i("FormatRecord", "after setting myadapter");
+//		    setListAdapter(myadapter);
+//		    Log.i("FormatRecord", "after setting list adapter");
+//
+//			// Now we need to check and see if there is an alert for this sheep
+////		   	Log.i("Alert Text is " , alert_text);
+////			Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
+//			if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+//		       	// make the alert button red
+//		    	Button btn = (Button) findViewById( R.id.alert_btn );
+//		    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+//		    	btn.setEnabled(true); 
+//		    	//	testing whether I can put up an alert box here without issues
+//		    	showAlert(v);
+//			}
+//			//	Now go get all the notes for this sheep and format them
+//			cmd = String.format( "select sheep_note_table.id_noteid as _id, sheep_note_table.note_date, sheep_note_table.note_time, " +
+//					"sheep_note_table.note_text, predefined_notes_table.predefined_note_text " +
+//					" from sheep_note_table left join predefined_notes_table " +
+//					"on predefined_notes_table.id_predefinednotesid = sheep_note_table.id_predefinednotesid01" +
+//					" where sheep_id='%s' "+
+//					"order by note_date desc ", thissheep_id);  	        	
+//			Log.i("format record", " command is  " + cmd);
+//			crsr4 = dbh.exec( cmd );
+//			cursor4   = ( Cursor ) crsr4; 
+////			startManagingCursor(cursor4);
+//			nRecs4    = cursor4.getCount();
+//			Log.i("lookForSheep", " nRecs4 is " + String.valueOf(nRecs4));
+//			cursor4.moveToFirst();	
+//			if (nRecs4 > 0) {
+//		    	// format the note records
+//				//	Select only the columns I need for the note display section
+//		    	String[] fromColumns2 = new String[ ]{ "note_date", "note_time", "note_text", "predefined_note_text"};
+//				Log.i("LookForSheep", "after setting string array fromColumns for notes");
+//				//	Set the views for each column for each line. A tag takes up 1 line on the screen
+//				int[] toViews2 = new int[] { R.id.note_date, R.id.note_time, R.id.note_text, R.id.predefined_note_text};
+//		        Log.i("LookForSheep", "after setting string array toViews for notes");
+//		        myadapter2 = new SimpleCursorAdapter(this, R.layout.note_entry, cursor4 ,fromColumns2, toViews2, 0);
+//		        Log.i("LookForSheep", "after setting myadapter to show notes");
+//		        notelist.setAdapter(myadapter2);
+//		        Log.i("LookForSheep", "after setting list adapter to show notes");			
+//			}   
 		}
-	}
+	
 	  // user clicked the 'back' button
     public void backBtn( View v )
     {
@@ -417,6 +393,30 @@ public class TestInterfaceDesigns extends Activity{
         gridviewAdapter = new GridViewAdapter(getApplicationContext(), R.layout.eval_item_entry, data);
         gridview.setAdapter(gridviewAdapter);
     }
+	public boolean tableExists (String table){
+		try {
+	        dbh.exec("select * from "+ table);   
+	        return true;
+		} catch (SQLiteException e) {
+			return false;
+	        		}
+	        	}
+    public void doNote( View v )
+    {	 
+    	Log.i("testing interface ", "In doNote method");
+    	String testing;
+    	testing = Utilities.takeNote(v, thissheep_id, this);
+    	Log.i("testing interface ", "take note string is " + testing);
+    }
+    public void clearBtn( View v )
+    {
+	thissheep_id = 0;
+	TextView TV ;
+	TV = (TextView) findViewById( R.id.inputText );
+	TV.setText( "" );		
+	TV = (TextView) findViewById( R.id.sheepnameText );
+	TV.setText( "" );
 
+    }
     }
     

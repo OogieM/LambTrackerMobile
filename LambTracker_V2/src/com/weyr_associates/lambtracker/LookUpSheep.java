@@ -624,25 +624,6 @@ public void formatSheepRecord (View v){
      public void takeNote( View v )
      {	    	
      	final Context context = this;
-// 		//	First fill the predefined note spinner with possibilities
-//     	predefined_notes = new ArrayList<String>();
-// 		predefined_notes.add("Select a Predefined Note");
-//// 		Log.i ("takeNote", " after adding Select a Predefined Note");
-//     	// Select All fields from predefined_notes_table to build the spinner
-//         cmd = "select * from predefined_notes_table";
-////         Log.i ("takeNote", " cmd is " + cmd);
-//         crsr = dbh.exec( cmd );  
-//         cursor5   = ( Cursor ) crsr;
-//     	dbh.moveToFirstRecord();
-//          // looping through all rows and adding to list
-//     	for (cursor5.moveToFirst(); !cursor5.isAfterLast(); cursor5.moveToNext()){
-//     		predefined_notes.add(cursor5.getString(1));
-////     		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
-//     	}
-//     	cursor5.close();    
-//     	Log.i ("takeNote", " after set the predefined note spinner ");
-//     	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
-//     	//Implement take a note stuff here
      	if (thissheep_id == 0) {
      		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
      		return;
