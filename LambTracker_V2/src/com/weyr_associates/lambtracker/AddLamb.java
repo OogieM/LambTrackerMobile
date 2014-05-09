@@ -452,7 +452,10 @@ public class AddLamb extends Activity {
         if (nRecs > 0) {
 	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	        	Log.i("addlamb", " in for loop checking breeding dates ");
-	        	Log.i("addlamb", " in for loop this breeding record is this cursor " + String.valueOf(cursor.getCount()));	
+	        	Log.i("addlamb", " in for loop this breeding record is cursor " + String.valueOf(cursor.getPosition()));	
+	        	Log.i("addlamb", " in for loop this breeding record is id " + String.valueOf(dbh.getInt(1)));	
+	        	Log.i("addlamb", " in top loop sire is " + sire_name);	
+	        	Log.i("addlamb", " in top loop sire_id is " + String.valueOf(sire_id));	
 	        	// Check the dates and see if this is the right record
 	        	// Get the date ram in and date ram out
 	        	temp_ram_in = dbh.getReal(4);
@@ -461,7 +464,6 @@ public class AddLamb extends Activity {
 	        	Log.i("addlamb", " julian ram out " + String.valueOf(temp_ram_out));
 	        	// need to figure out if the date is within early date 142 probable start date 147 from ram in
 	        	//	probable end date 150 and end date 155 from ram out
-	       
 	        	//	Calculate the first possible and last possible for this breeding record
 	        	//	Should make these dates a preference or settings in LambTracker
 	        	// TODO
@@ -475,7 +477,7 @@ public class AddLamb extends Activity {
 	        	
 	        	if  (temp_julian_today > first_gestation_possible && temp_julian_today < last_gestation_possible) {
 	        		//	This is the correct record so save the data and bump out
-	        		Log.i("addlamb", " correct breeding record is this cursor " + String.valueOf(cursor.getCount()));
+	        		Log.i("addlamb", " correct breeding record is this cursor " + String.valueOf(cursor.getPosition()));
 	        		sire_name = dbh.getStr(3);
 	        		sire_id = dbh.getInt(2);
 	        		service_type = dbh.getInt(6);
