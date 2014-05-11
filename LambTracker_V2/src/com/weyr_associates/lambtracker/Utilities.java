@@ -20,8 +20,8 @@ import android.app.ListActivity;
 /**
  * Write a description of class Utilities here.
  * 
- * @author ww 
- * @version 2013-02-15
+ * @author ww added to by em
+ * @version 2014-05-11
  */
 public class Utilities 
 {
@@ -147,10 +147,13 @@ public int[] fromJulianWithTime( double julian )
 
 
 public static String takeNote( View v, final Integer thissheep_id, final Context context )
-{	    	
-//	final Context context = this;
+{	 
+    String 	dbfile = context.getString (R.string.real_database_file) ;
+    Log.i("takeNote", " after get database file in Utilities");
+	dbh = new DatabaseHandler( context, dbfile );
+
 //	
-	Log.i ("takeNote", " in beginning " + String.valueOf(thissheep_id));
+	Log.i ("takeNote", " in beginning of take a note the sheep id is " + String.valueOf(thissheep_id));
 	if (thissheep_id == 0) {
 		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
 		return "no sheep";
@@ -300,7 +303,7 @@ public static String takeNote( View v, final Integer thissheep_id, final Context
 	} 
 	return "got note";
 }
-private static String TimeIs() {
+public static String TimeIs() {
 	Calendar calendar = Calendar.getInstance();
     //12 hour format
 //	int hour = cal.get(Calendar.HOUR);
@@ -311,18 +314,23 @@ private static String TimeIs() {
 	  
 	return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
 }
-private static String TodayIs() {
+public static String TodayIs() {
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		int month = calendar.get(Calendar.MONTH);
 		int year = calendar.get(Calendar.YEAR);
 		return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
 	}
- private static String Make2Digits(int i) {
+ public static String Make2Digits(int i) {
 		if (i < 10) {
 			return "0" + i;
 		} else {
 			return Integer.toString(i);
 		}
+	}
+ public static String YearIs() {
+		Calendar calendar = Calendar.getInstance();
+		int year = calendar.get(Calendar.YEAR);
+		return Integer.toString(year) ;
 	}
 }

@@ -72,7 +72,7 @@ public class TestInterfaceDesigns extends Activity{
 
 			
 			// take note set up
-			final Context context = this;
+//			final Context context = this;
 			
 	     	// Fill the Tag Type Spinner
 	     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);

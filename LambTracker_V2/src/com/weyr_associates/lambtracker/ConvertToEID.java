@@ -668,7 +668,7 @@ public class ConvertToEID extends Activity {
     	           public void onClick(DialogInterface dialog, int idx) {
     	               // User clicked OK button -- remove the federal tag
     	        	   // add a tag_date_off of today to the tag   	       		
-    	        	   	String today = TodayIs();
+    	        	   	String today = Utilities.TodayIs();
     	        	   	Log.i("removefedtag", String.valueOf(fedtagid));
     	        	   	String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", fedtagid );
     	        	   	Log.i("removefedtag", " command is " + cmd);
@@ -706,7 +706,7 @@ public class ConvertToEID extends Activity {
     	           public void onClick(DialogInterface dialog, int idx) {
     	               // User clicked OK button -- remove the farm tag
     	        	   //add a tag_date_off of today to the tag
-    	        	   String today = TodayIs();
+    	        	   String today = Utilities.TodayIs();
  //   	        	   Log.i("removefarmtag", today);
     	        	   Log.i("removefarmtag", " farm tag record is " + String.valueOf(farmtagid) );
     	       		   String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", farmtagid );
