@@ -44,8 +44,9 @@ public class ConvertToEID extends Activity {
 	public String eid_tag_location_label, eidText, alert_text;
 	public Spinner tag_type_spinner, tag_type_spinner2, tag_location_spinner, tag_color_spinner, eid_tag_color_spinner, eid_tag_location_spinner;
 	public List<String> tag_types, tag_locations, tag_colors;
-	public Spinner predefined_note_spinner01, predefined_note_spinner02, predefined_note_spinner03;
-	public Spinner predefined_note_spinner04, predefined_note_spinner05;public List<String> predefined_notes;
+//	public Spinner predefined_note_spinner01, predefined_note_spinner02, predefined_note_spinner03;
+//	public Spinner predefined_note_spinner04, predefined_note_spinner05;
+//	public List<String> predefined_notes;
 	ArrayAdapter<String> dataAdapter;
 	String     	cmd;
 	Integer 	i;
@@ -325,144 +326,7 @@ public class ConvertToEID extends Activity {
     	clearBtn( null );   	
     	finish();
 	    }
-    // user clicked the 'Take Note' button
-    public void takeNote( View v )
-    {	    	
-    	final Context context = this;
-		//	First fill the predefined note spinner with possibilities
-    	predefined_notes = new ArrayList<String>();
-		predefined_notes.add("Select a Predefined Note");
-//		Log.i ("takeNote", " after adding Select a Predefined Note");
-    	// Select All fields from predefined_notes_table to build the spinner
-        cmd = "select * from predefined_notes_table";
-//        Log.i ("takeNote", " cmd is " + cmd);
-        crsr = dbh.exec( cmd );  
-        cursor   = ( Cursor ) crsr;
-    	dbh.moveToFirstRecord();
-         // looping through all rows and adding to list
-    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-    		predefined_notes.add(cursor.getString(1));
-//    		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
-    	}
-    	cursor.close();    
-    	Log.i ("takeNote", " after set the predefined note spinner ");
-    	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
-    	//Implement take a note stuff here
-    	if (thissheep_id == 0) {
-    		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
-    	}
-    	else {
-//    		Log.i ("takeNote", " got a sheep, need to get a note to add");
-    		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-//    		Log.i ("takeNote", " after getting new alertdialogbuilder");
-    		
-    		LayoutInflater li = LayoutInflater.from(context);
-			View promptsView = li.inflate(R.layout.note_prompt, null);
-//			Log.i ("takeNote", " after inflating layout");	
-
-			// set view note_prompt to alertdialog builder
-			alertDialogBuilder.setView(promptsView);
-			Log.i ("takeNote", " after setting view");
-		   	// Creating adapter for predefined notes spinners
-	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, predefined_notes);
-	    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    	predefined_note_spinner01 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner01);
-	    	predefined_note_spinner01.setAdapter (dataAdapter);
-			predefined_note_spinner01.setSelection(0);
-			
-	    	predefined_note_spinner02 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner02);
-	    	predefined_note_spinner02.setAdapter (dataAdapter);
-			predefined_note_spinner02.setSelection(0);
-
-	    	predefined_note_spinner03 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner03);
-	    	predefined_note_spinner03.setAdapter (dataAdapter);
-			predefined_note_spinner03.setSelection(0);
-
-	    	predefined_note_spinner04 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner04);
-	    	predefined_note_spinner04.setAdapter (dataAdapter);
-			predefined_note_spinner04.setSelection(0);
-
-	    	predefined_note_spinner05 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner05);
-	    	predefined_note_spinner05.setAdapter (dataAdapter);
-			predefined_note_spinner05.setSelection(0);
-
-			final EditText userInput = (EditText) promptsView
-					.findViewById(R.id.note_text);
-
-			// set dialog message
-			alertDialogBuilder
-				.setCancelable(false)
-				.setPositiveButton("Save Note",
-				  new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog,int id) {
-					// get user input and set it to result
-					// edit text
-					String note_text = String.valueOf(userInput.getText());
-					//	Get id_predefinednotesid from a spinner here 
-					int predefined_note01 = predefined_note_spinner01.getSelectedItemPosition();
-					int predefined_note02 = predefined_note_spinner02.getSelectedItemPosition();
-					int predefined_note03 = predefined_note_spinner03.getSelectedItemPosition();
-					int predefined_note04 = predefined_note_spinner04.getSelectedItemPosition();
-					int predefined_note05 = predefined_note_spinner05.getSelectedItemPosition();
-					// Update the notes table with the data
-					cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, " +
-							"id_predefinednotesid01) " +
-							"values ( %s, '%s', '%s', '%s', %s )",
-	    					thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note01);
-	    			Log.i("update notes ", "before cmd " + cmd);
-	    			dbh.exec( cmd );	
-	    			Log.i("update notes ", "after cmd exec");
-	    			Log.i("take note","first note written");
-	    			if (predefined_note02 > 0) {
-	    	 			Log.i("take note","second note written");
-	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-	 							"id_predefinednotesid01) " +
-	 							"values ( %s, '%s', '%s', %s)",
-	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note02 );
-	 	    			Log.i("update notes ", "before cmd " + cmd);
-	 	    			dbh.exec( cmd );	
-	    	 		}
-	    			if (predefined_note03 > 0) {
-	    	 			Log.i("take note","third note written");
-	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-	 							"id_predefinednotesid01) " +
-	 							"values ( %s, '%s', '%s', %s)",
-	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note03 );
-	 	    			Log.i("update notes ", "before cmd " + cmd);
-	 	    			dbh.exec( cmd );	
-	    	 		}
-	    			if (predefined_note04 > 0) {
-	    	 			Log.i("take note","fourth note written");
-	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-	 							"id_predefinednotesid01) " +
-	 							"values ( %s, '%s', '%s', %s)",
-	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note04 );
-	 	    			Log.i("update notes ", "before cmd " + cmd);
-	 	    			dbh.exec( cmd );	
-	    	 		}
-	    			if (predefined_note05 > 0) {
-	    	 			Log.i("take note","fifth note written");
-	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-	 							"id_predefinednotesid01) " +
-	 							"values ( %s, '%s', '%s', %s)",
-	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note05 );
-	 	    			Log.i("update notes ", "before cmd " + cmd);
-	 	    			dbh.exec( cmd );	
-	    	 		}
-				    }
-				  })
-				.setNegativeButton("Cancel",
-				  new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog,int id) {
-					dialog.cancel();
-				    }
-				  });
-			// create alert dialog
-			AlertDialog alertDialog = alertDialogBuilder.create();
-			// show it
-			alertDialog.show();
-    	}   	
-    }   
+ 
 // user clicked the 'help' button
     public void helpBtn( View v )
     {
@@ -733,20 +597,10 @@ public class ConvertToEID extends Activity {
     		dialog.show();
     		}
     	}  
-    private String TodayIs() {
-		Calendar calendar = Calendar.getInstance();
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		int month = calendar.get(Calendar.MONTH);
-		int year = calendar.get(Calendar.YEAR);
-		return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
-	}
-    private String Make2Digits(int i) {
-		if (i < 10) {
-			return "0" + i;
-		} else {
-			return Integer.toString(i);
-		}
-	}
+    public void doNote( View v )
+    {	 
+    	Utilities.takeNote(v, thissheep_id, this);
+    }
 //     user clicked 'Scan' button    
     public void scanEid( View v){
     	// Here is where I need to get a tag scanned and put the data into the variable LastEID
@@ -804,24 +658,20 @@ public class ConvertToEID extends Activity {
 	    			"where tag_color_name='%s'", eid_tag_color_label);
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
-	        startManagingCursor(cursor);
 	        dbh.moveToFirstRecord();
 	        eid_colorid = dbh.getInt(0);
-//	        cursor.close();
 	    	eid_tag_location_label = eid_tag_location_spinner.getSelectedItem().toString();
 	    	Log.i("update everything ", "EID location is " + eid_tag_location_label);
 	    	cmd = String.format("select id_location_table.id_locationid from id_location_table " +
 	    			"where id_location_abbrev='%s'", eid_tag_location_label);
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
-	        startManagingCursor(cursor);
 	        dbh.moveToFirstRecord();
 	        eid_locationid = dbh.getInt(0);
-//	        cursor.close();
 	    }
 	 
 	    //	Need to add tests to see what data we really have and only update if there is some
-	    String today = TodayIs();
+	    String today = Utilities.TodayIs();
 	    if (fedtagid != 0) {
 	    	// 	update the Federal tag data if it has changed?
 	    	//	not implemented at this time. Assumed we either are adding new tags or taking off tags first
@@ -839,11 +689,9 @@ public class ConvertToEID extends Activity {
 	    	    			"where tag_color_name='%s'", fed_colorText);
 	    	    	crsr = dbh.exec( cmd );
 	    	        cursor   = ( Cursor ) crsr;
-	    	        startManagingCursor(cursor);
 	    	        dbh.moveToFirstRecord();
 	    	        fed_colorid = dbh.getInt(0);
 	    	        Log.i("update everything ", "fed color integer " + String.valueOf(fed_colorid));
-//	    	        cursor.close();
 	    	        
 	    		    TV = (TextView) findViewById( R.id.fed_locationText );
 	    		    fed_locationText = TV.getText().toString();
@@ -852,10 +700,8 @@ public class ConvertToEID extends Activity {
 	    	    			"where id_location_abbrev='%s'", fed_locationText);
 	    	    	crsr = dbh.exec( cmd );
 	    	        cursor   = ( Cursor ) crsr;
-	    	        startManagingCursor(cursor);
 	    	        dbh.moveToFirstRecord();
 	    	        fed_locationid = dbh.getInt(0);
-//	    	        cursor.close();
 	    	        // Set the flock ID to be the Desert Weyr Flock
 	    	        // Will have to change to handle the general case. 
 	    	        // In our case we assume all  federal tags being applied are with our 
@@ -901,11 +747,9 @@ public class ConvertToEID extends Activity {
 	    	    			"where id_location_abbrev='%s'", farm_locationText);
 	    	    	crsr = dbh.exec( cmd );
 	    	        cursor   = ( Cursor ) crsr;
-	    	        startManagingCursor(cursor);
 	    	        dbh.moveToFirstRecord();
 	    	        farm_locationid = dbh.getInt(0);
 	    	        Log.i("updatefarm ", "farm color integer " + String.valueOf(farm_locationid));
-//	    	        cursor.close();
 	    		    TV = (TextView) findViewById( R.id.farm_colorText );
 	    		    farm_colorText = TV.getText().toString();
 	    		    Log.i("updatefarm ", "farm color " + farm_colorText);
@@ -913,17 +757,14 @@ public class ConvertToEID extends Activity {
 	    	    			"where tag_color_name='%s'", farm_colorText);
 	    	    	crsr = dbh.exec( cmd );
 	    	        cursor   = ( Cursor ) crsr;
-	    	        startManagingCursor(cursor);
 	    	        dbh.moveToFirstRecord();
 	    	        farm_colorid = dbh.getInt(0);
 	    	        Log.i("updatefarm ", "farm location integer " + String.valueOf(farm_locationid));
-//	    	        cursor.close();
 	    			//have a farm tag but no farmtagid so add a new record;
 	    			Log.i("updatefarm ", "tag record id is 0 but have farm tag data need to add a new record to id_info_table here");
 	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
 	    					"values ( %s, 4, %s, %s, %s, '%s', %s )", thissheep_id, farm_colorid, farm_colorid, farm_locationid, today, farmText);
 	    			dbh.exec( cmd );	
-//	    			cursor.close();
 	    		}
 	    		else{
 	    			// no farm tag to enter so return
@@ -944,14 +785,12 @@ public class ConvertToEID extends Activity {
 	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
 	    					"values ( %s, 2, %s, %s, %s, '%s', '%s' )", thissheep_id, eid_colorid, eid_colorid, eid_locationid, today, eidText);
 	    			dbh.exec( cmd );	
-//	    			cursor.close();
 	    		}
 	    		else{
 	    			// no EID tag to enter so return
 	    			Log.i("updateEID ", "no eid tag so nothing to do");
 	    		}
 	    	}
-//	    cursor.close();
 	    clearBtn( v );
 	    }
     public void addNewTag( View v ){
@@ -980,7 +819,6 @@ public class ConvertToEID extends Activity {
         cmd = "select * from tag_colors_table";
         crsr = dbh.exec( cmd );  
         cursor   = ( Cursor ) crsr;
-        startManagingCursor(cursor);
     	dbh.moveToFirstRecord();
     	tag_colors.add("Select a Color");
          // looping through all rows and adding to list
@@ -1075,31 +913,25 @@ public class ConvertToEID extends Activity {
 			"where idtype_name='%s'", tag_type_label);
     		crsr = dbh.exec( cmd );
     		cursor   = ( Cursor ) crsr;
-    		startManagingCursor(cursor);
     		dbh.moveToFirstRecord();
     		new_tag_type = dbh.getInt(0);
-//    		cursor.close();
     		
        		cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
        				"where tag_color_name='%s'", tag_color_label);
        	    crsr = dbh.exec( cmd );
     		cursor   = ( Cursor ) crsr;
-    		startManagingCursor(cursor);
     		dbh.moveToFirstRecord();
     		new_tag_color = dbh.getInt(0);
-//    		cursor.close();
 
     		cmd = String.format("select id_location_table.id_locationid, id_location_table.id_location_abbrev from id_location_table " +
 			"where id_location_name='%s'", tag_location_label);
     		crsr = dbh.exec( cmd );
     		cursor   = ( Cursor ) crsr;
-    		startManagingCursor(cursor);
     		dbh.moveToFirstRecord();
     		new_tag_location = dbh.getInt(0);
 //    		Log.i("New Location ID ", String.valueOf(new_tag_location));
      		tag_location_label = dbh.getStr(1);
-//    		Log.i("New Location ", tag_location_label);
-//    		cursor.close();
+//    		Log.i("New Location ", tag_location_label);//    		cursor.close();
     		
     	   	// 	Fill the new tag data with where it is in the screen display
         	//	Integers to hold the info new_tag_type, new_tag_color, new_tag_location
@@ -1147,16 +979,4 @@ public class ConvertToEID extends Activity {
 			return false;
 	        		}
 	        	}
-	   private String TimeIs() {
-			Calendar calendar = Calendar.getInstance();
-	        //12 hour format
-//			int hour = cal.get(Calendar.HOUR);
-	        //24 hour format
-			int hourofday = calendar.get(Calendar.HOUR_OF_DAY);
-			int minute = calendar.get(Calendar.MINUTE);
-			int second = calendar.get(Calendar.SECOND);
-			  
-			return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
-		}
-
 }

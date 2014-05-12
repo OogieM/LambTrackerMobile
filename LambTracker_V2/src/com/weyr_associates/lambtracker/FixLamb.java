@@ -550,11 +550,6 @@ public class FixLamb extends ListActivity
 			     	fix_characteristic_spinner.setSelection(0);
 					
 					break;
-//				case 3:
-//					// Item selected is Lamb Birth Weight
-//					TV = (TextView) findViewById( R.id.fix_characteristic );
-//					TV.setText( "Birth Weight" );
-//					break;
 				case 3:
 					// Item selected is Lambing Ease
 					TV = (TextView) findViewById( R.id.fix_characteristic );
@@ -588,69 +583,72 @@ public class FixLamb extends ListActivity
     	btn = (Button) findViewById( R.id.update_database_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	btn.setEnabled(false);
-    	
+    	Log.i("update DB ", "after disabling the update button");
     	//	Go get the value we are changing and what it needs to be
-    	fix_characteristic_spinner = (Spinner) findViewById(R.id.fix_characteristic_spinner);
-    	int char_pos = fix_characteristic_spinner.getSelectedItemPosition();
-    	String char_value = fix_characteristic_spinner.getSelectedItem().toString();
-    	fix_lamb_spinner = (Spinner) findViewById(R.id.fix_lamb_spinner);
     	int char_type = fix_lamb_spinner.getSelectedItemPosition();
-    	switch (char_type){
-		case 1:
-			// 	Item selected is Rear Type
-			//	Now update the sheep record with the new rear type
-			cmd = String.format("update sheep_table set rear_type = '%s' " +
-	  		  		" where sheep_id = %s ", char_pos, thissheep_id);
-			Log.i("change rear type ", "the db cmd is " + cmd);
-			dbh.exec(cmd);
-			Log.i("change rear type ", "after update rear type in sheep_table");
-			TV = (TextView) findViewById( R.id.rearType );
-			TV.setText(char_value);		
-			TV = (TextView) findViewById( R.id.fix_characteristic );
-			TV.setText(char_value);	
-			break;
-		case 2:
-			// Item selected is Lamb Sex
-			//	Now update the sheep record with the new sex 
-			cmd = String.format("update sheep_table set sex = '%s' " +
-	  		  		" where sheep_id = %s ", char_pos, thissheep_id);
-			Log.i("change sex ", "the db cmd is " + cmd);
-			dbh.exec(cmd);
-			Log.i("change sex ", "after update sex in sheep_table");
-			TV = (TextView) findViewById( R.id.sheepSex );
-			TV.setText( char_value );
-			TV = (TextView) findViewById( R.id.fix_characteristic );
-			TV.setText(char_value);
-			break;
-//		case 3:
-//			// Item selected is Lamb Birth Weight
-//			TV = (TextView) findViewById( R.id.birth_weight );
-//			TV.setText( "Birth Weight" );
-//			TV = (TextView) findViewById( R.id.fix_characteristic );
-//			TV.setText(char_value);
-//			break;
-		case 3:
-			// Item selected is Lambing Ease
-			//	Now update the sheep record with the new lambease 
-			//	Need to go get the proper location from the lambeaseid array	     	
-	     	char_pos = lambeaseid.get(char_pos);
-			Log.i("lambease", " database ID for Lambease position is " + String.valueOf(char_pos));
-			
-			cmd = String.format("update sheep_table set lambease = %s " +
-	  		  		" where sheep_id = %s ", char_pos, thissheep_id);
-			Log.i("change lambease ", "the db cmd is " + cmd);
-			dbh.exec(cmd);
-			Log.i("change lambease ", "after update lambease in sheep_table");
-			TV = (TextView) findViewById( R.id.lambEase );
-			TV.setText(char_value );
-			TV = (TextView) findViewById( R.id.fix_characteristic );
-			TV.setText(char_value);
-			break;
-		default:
-			//	Nothing set so do nothing
-			break;
-		}
-    	
+    	Log.i("update DB ", "we will be changing this item " + String.valueOf(char_type));
+    	//	test if we haven't selected anything to change then don't try to update
+	    	if (char_type > 0)  {
+	    	fix_characteristic_spinner = (Spinner) findViewById(R.id.fix_characteristic_spinner);
+	    	int char_pos = fix_characteristic_spinner.getSelectedItemPosition();
+	    	Log.i("update DB ", "the item to fix is this position" + String.valueOf(char_pos));
+	    	String char_value = fix_characteristic_spinner.getSelectedItem().toString();
+	    	Log.i("update DB ", "the item to fix is this text" + char_value);
+	    	fix_lamb_spinner = (Spinner) findViewById(R.id.fix_lamb_spinner);
+	    	
+	    	switch (char_pos){
+			case 1:
+				// 	Item selected is Rear Type
+				//	Now update the sheep record with the new rear type
+				cmd = String.format("update sheep_table set rear_type = '%s' " +
+		  		  		" where sheep_id = %s ", char_pos, thissheep_id);
+				Log.i("change rear type ", "the db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("change rear type ", "after update rear type in sheep_table");
+				TV = (TextView) findViewById( R.id.rearType );
+				TV.setText(char_value);		
+				TV = (TextView) findViewById( R.id.fix_characteristic );
+				TV.setText(char_value);	
+				break;
+			case 2:
+				// Item selected is Lamb Sex
+				//	Now update the sheep record with the new sex 
+				cmd = String.format("update sheep_table set sex = '%s' " +
+		  		  		" where sheep_id = %s ", char_pos, thissheep_id);
+				Log.i("change sex ", "the db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("change sex ", "after update sex in sheep_table");
+				TV = (TextView) findViewById( R.id.sheepSex );
+				TV.setText( char_value );
+				TV = (TextView) findViewById( R.id.fix_characteristic );
+				TV.setText(char_value);
+				break;
+			case 3:
+				// Item selected is Lambing Ease
+				//	Now update the sheep record with the new lambease 
+				//	Need to go get the proper location from the lambeaseid array	     	
+		     	char_pos = lambeaseid.get(char_pos);
+				Log.i("lambease", " database ID for Lambease position is " + String.valueOf(char_pos));
+				
+				cmd = String.format("update sheep_table set lambease = %s " +
+		  		  		" where sheep_id = %s ", char_pos, thissheep_id);
+				Log.i("change lambease ", "the db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("change lambease ", "after update lambease in sheep_table");
+				TV = (TextView) findViewById( R.id.lambEase );
+				TV.setText(char_value );
+				TV = (TextView) findViewById( R.id.fix_characteristic );
+				TV.setText(char_value);
+				break;
+			default:
+				//	Nothing set so do nothing
+				Log.i("in update", " default section case stmt with nothing set");
+				break;
+			}    
+    	}else{
+    		//	We didn't select anything to change so break out
+    		Log.i("in update", " after the test had nothing set");
+    	}
     	
 		// Enable Update Database button and make it normal 
     	btn = (Button) findViewById( R.id.update_database_btn );
@@ -802,171 +800,11 @@ public class FixLamb extends ListActivity
 		}
 //		Log.i("clear btn", "after changing myadapter and myadapter2");		
     }
-//    private String TodayIs() {
-// 		Calendar calendar = Calendar.getInstance();
-// 		int day = calendar.get(Calendar.DAY_OF_MONTH);
-// 		int month = calendar.get(Calendar.MONTH);
-// 		int year = calendar.get(Calendar.YEAR);
-// 		return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
-// 	}
-//     private String Make2Digits(int i) {
-// 		if (i < 10) {
-// 			return "0" + i;
-// 		} else {
-// 			return Integer.toString(i);
-// 		}
-// 	}
-//     public void takeNote( View v )
-//     {	    	
-//     	final Context context = this;
-// 		//	First fill the predefined note spinner with possibilities
-//     	predefined_notes = new ArrayList<String>();
-// 		predefined_notes.add("Select a Predefined Note");
-//// 		Log.i ("takeNote", " after adding Select a Predefined Note");
-//     	// Select All fields from predefined_notes_table to build the spinner
-//         cmd = "select * from predefined_notes_table";
-////         Log.i ("takeNote", " cmd is " + cmd);
-//         crsr = dbh.exec( cmd );  
-//         cursor   = ( Cursor ) crsr;
-//     	dbh.moveToFirstRecord();
-//          // looping through all rows and adding to list
-//     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-//     		predefined_notes.add(cursor.getString(1));
-////     		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
-//     	}
-//     	cursor.close();    
-//     	Log.i ("takeNote", " after set the predefined note spinner ");
-//     	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
-//     	//Implement take a note stuff here
-//     	if (thissheep_id == 0) {
-//     		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
-//     	}
-//     	else {
-////     		Log.i ("takeNote", " got a sheep, need to get a note to add");
-//     		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-////     		Log.i ("takeNote", " after getting new alertdialogbuilder");
-//     		
-//     		LayoutInflater li = LayoutInflater.from(context);
-// 			View promptsView = li.inflate(R.layout.note_prompt, null);
-//// 			Log.i ("takeNote", " after inflating layout");	
-//
-// 			// set view note_prompt to alertdialog builder
-// 			alertDialogBuilder.setView(promptsView);
-// 			Log.i ("takeNote", " after setting view");
-// 		   	// Creating adapter for predefined notes spinners
-// 	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, predefined_notes);
-// 	    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// 	    	predefined_note_spinner01 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner01);
-// 	    	predefined_note_spinner01.setAdapter (dataAdapter);
-// 			predefined_note_spinner01.setSelection(0);
-// 			
-// 	    	predefined_note_spinner02 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner02);
-// 	    	predefined_note_spinner02.setAdapter (dataAdapter);
-// 			predefined_note_spinner02.setSelection(0);
-//
-// 	    	predefined_note_spinner03 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner03);
-// 	    	predefined_note_spinner03.setAdapter (dataAdapter);
-// 			predefined_note_spinner03.setSelection(0);
-//
-// 	    	predefined_note_spinner04 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner04);
-// 	    	predefined_note_spinner04.setAdapter (dataAdapter);
-// 			predefined_note_spinner04.setSelection(0);
-//
-// 	    	predefined_note_spinner05 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner05);
-// 	    	predefined_note_spinner05.setAdapter (dataAdapter);
-// 			predefined_note_spinner05.setSelection(0);
-//
-// 			final EditText userInput = (EditText) promptsView
-// 					.findViewById(R.id.note_text);
-//
-// 			// set dialog message
-// 			alertDialogBuilder
-// 				.setCancelable(false)
-// 				.setPositiveButton("Save Note",
-// 				  new DialogInterface.OnClickListener() {
-// 				    public void onClick(DialogInterface dialog,int id) {
-// 					// get user input and set it to result
-// 					// edit text
-// 					String note_text = String.valueOf(userInput.getText());
-// 					//	Get id_predefinednotesid from a spinner here 
-// 					int predefined_note01 = predefined_note_spinner01.getSelectedItemPosition();
-// 					int predefined_note02 = predefined_note_spinner02.getSelectedItemPosition();
-// 					int predefined_note03 = predefined_note_spinner03.getSelectedItemPosition();
-// 					int predefined_note04 = predefined_note_spinner04.getSelectedItemPosition();
-// 					int predefined_note05 = predefined_note_spinner05.getSelectedItemPosition();
-// 					// Update the notes table with the data
-// 					cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, " +
-// 							"id_predefinednotesid01) " +
-// 							"values ( %s, '%s', '%s', '%s', %s )",
-// 	    					thissheep_id, note_text, Utilities.TodayIs(), Utilities.TimeIs(), predefined_note01);
-// 	    			Log.i("update notes ", "before cmd " + cmd);
-// 	    			dbh.exec( cmd );	
-// 	    			Log.i("update notes ", "after cmd exec");
-// 	    			Log.i("take note","first note written");
-// 	    			if (predefined_note02 > 0) {
-// 	    	 			Log.i("take note","second note written");
-// 	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-// 	 							"id_predefinednotesid01) " +
-// 	 							"values ( %s, '%s', '%s', %s)",
-// 	 	    					thissheep_id, Utilities.TodayIs(), Utilities.TimeIs(), predefined_note02 );
-// 	 	    			Log.i("update notes ", "before cmd " + cmd);
-// 	 	    			dbh.exec( cmd );	
-// 	    	 		}
-// 	    			if (predefined_note03 > 0) {
-// 	    	 			Log.i("take note","third note written");
-// 	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-// 	 							"id_predefinednotesid01) " +
-// 	 							"values ( %s, '%s', '%s', %s)",
-// 	 	    					thissheep_id, Utilities.TodayIs(), Utilities.TimeIs(), predefined_note03 );
-// 	 	    			Log.i("update notes ", "before cmd " + cmd);
-// 	 	    			dbh.exec( cmd );	
-// 	    	 		}
-// 	    			if (predefined_note04 > 0) {
-// 	    	 			Log.i("take note","fourth note written");
-// 	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-// 	 							"id_predefinednotesid01) " +
-// 	 							"values ( %s, '%s', '%s', %s)",
-// 	 	    					thissheep_id, Utilities.TodayIs(), Utilities.TimeIs(), predefined_note04 );
-// 	 	    			Log.i("update notes ", "before cmd " + cmd);
-// 	 	    			dbh.exec( cmd );	
-// 	    	 		}
-// 	    			if (predefined_note05 > 0) {
-// 	    	 			Log.i("take note","fifth note written");
-// 	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-// 	 							"id_predefinednotesid01) " +
-// 	 							"values ( %s, '%s', '%s', %s)",
-// 	 	    					thissheep_id, Utilities.TodayIs(), Utilities.TimeIs(), predefined_note05 );
-// 	 	    			Log.i("update notes ", "before cmd " + cmd);
-// 	 	    			dbh.exec( cmd );	
-// 	    	 		}
-// 				    }
-// 				  })
-// 				.setNegativeButton("Cancel",
-// 				  new DialogInterface.OnClickListener() {
-// 				    public void onClick(DialogInterface dialog,int id) {
-// 					dialog.cancel();
-// 				    }
-// 				  });
-// 			// create alert dialog
-// 			AlertDialog alertDialog = alertDialogBuilder.create();
-// 			// show it
-// 			alertDialog.show();
-//     	}   	
-//     }
+
      public void doNote( View v )
      {	 
      	Utilities.takeNote(v, thissheep_id, this);
      }
-//	    private String TimeIs() {
-//			Calendar calendar = Calendar.getInstance();
-//	        //12 hour format
-////			int hour = cal.get(Calendar.HOUR);
-//	        //24 hour format
-//			int hourofday = calendar.get(Calendar.HOUR_OF_DAY);
-//			int minute = calendar.get(Calendar.MINUTE);
-//			int second = calendar.get(Calendar.SECOND);
-//			  
-//			return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
-//		}
+
 	}
 

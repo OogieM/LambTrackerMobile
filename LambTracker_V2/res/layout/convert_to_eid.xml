@@ -394,7 +394,7 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
            	android:layout_toRightOf="@+id/clear_form_btn"
-            android:onClick="takeNote"
+            android:onClick="doNote"
             android:text="@string/take_note_btn"
             android:textSize="14sp" />
        	
