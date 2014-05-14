@@ -94,8 +94,11 @@
         you can only edit the rearing type, sex and lambease values. </string>
     <string name="help_print">This prints a single label with the EID as a bar code and the name of the sheep on it.  </string>
     <string name="help_management">Select the management tasks you have done for this sheep and then update the database. </string>
+    
     <string name="convert_fill_fields">Please Fill in all four fields.</string>
-    <string name="add_lamb_fill_fields">Please Fill in a Lambease value.</string>
+    <string name="add_lamb_fill_title">Add a Lamb</string>
+    <string name="add_lamb_fill_reartype">Please Fill in a Rearing Type value.</string>
+    <string name="add_lamb_fill_lambease">Please Fill in a Lambease value.</string>
     <string name="drug_loc_fill_fields">Please Fill in a Shot Location.</string>
     <string name="enter_tag_data">Enter Tag Data</string>
     <string name="wrong_id_location">Invalid ID Location</string>
@@ -131,6 +134,7 @@
     <string name="sheep_dam_lbl">Dam</string>
     <string name="sheep_stillborn">Stillborn</string>
     <string name="sheep_stillborn_lbl">Stillborn Status</string>
+    <string name="mark_ewe">Mark Ewe</string>
     <string name="sheep_trimtoes">Trim Toes</string>
     <string name="sheep_givewormer">Give Wormer</string>
     <string name="sheep_givevaccine">Give Vaccine</string>

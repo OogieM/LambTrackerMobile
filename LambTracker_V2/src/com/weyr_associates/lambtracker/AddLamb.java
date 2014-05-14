@@ -50,8 +50,8 @@ public class AddLamb extends Activity {
 	Integer 	i;	
 	public Button btn;
 	public String alert_text;
-	public Cursor 	cursor;
-	public Object 	crsr;
+	public Cursor 	cursor, cursor2;
+	public Object 	crsr, crsr2;
 	public Spinner tag_type_spinner, tag_type_spinner2, tag_location_spinner, tag_color_spinner, lamb_ease_spinner;
 	public List<String> tag_types, tag_locations, tag_colors, lambing_ease;
 	public List<Integer> lambeaseid;
@@ -65,8 +65,8 @@ public class AddLamb extends Activity {
 	public int lamb_id, lamb_codon171, lamb_codon154, lamb_codon136;
 	public int flock_prefix, id_sheepbreedid, id_locationid, id_ownerid;
 	public int	service_type, birth_weight_units, lamb_birth_record;
-	public CheckBox 	stillbornbox;
-	public boolean stillborn;
+	public CheckBox 	stillbornbox, markewebox;
+	public boolean stillborn, markewe;
 	public Float birth_weight;
 	public double	real_gestation_length;
 	public RadioGroup radioGroup;
@@ -397,6 +397,10 @@ public class AddLamb extends Activity {
 		//	Fill lambing_notes with empty string until we read them from the history
 		lambing_notes = "";
 		
+		//	Fill the mark ewe box default to checked 
+		markewebox = (CheckBox) findViewById(R.id.checkBoxMarkEwe);
+		markewebox.setChecked (true);
+		
 		Bundle extras = getIntent().getExtras();
 		// get extras here from the lambing screen. Mostly ewe's data for scrapie genetics	
 		if (extras!= null){
@@ -516,9 +520,13 @@ public class AddLamb extends Activity {
   		TextView temp_tag_num, temp_tag_color, temp_tag_loc, temp_tag_type;
   		String tag_num;
   		int tag_color, tag_loc, tag_type, tag_flock;
+  		Integer temp_id;
   		String year = Utilities.YearIs();
   		TableLayout tl;
     	Object crsr;
+    	Context context = this;
+		String title;
+		String message;
     	
 		// Disable Update Database button and make it red to prevent getting 2 records at one time
     	btn = (Button) findViewById( R.id.update_database_btn );
@@ -542,7 +550,20 @@ public class AddLamb extends Activity {
 		rg=(RadioGroup)findViewById(R.id.radioRearType);
  		rear_type = rg.getCheckedRadioButtonId()+1;
 		Log.i("rear_type ", String.valueOf(rear_type));
-		
+		if (rear_type == 0){
+			//	Need to require a value for rearing type here Nothing selected to set default to be single
+			// TODO Tried to get an alert here but can't have 2 in one activity 
+//			title = getResources().getString(R.string.add_lamb_fill_title);
+//			message = getResources().getString(R.string.add_lamb_fill_reartype);;
+//			Utilities.alertDialogShow( context, title, message);
+			// make update database button normal and enabled so we can try again
+       		btn = (Button) findViewById( R.id.update_database_btn );
+       		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+        	btn.setEnabled(true);
+        	//	Defaulted to rear-type of 1 so the later query won't crash
+			rear_type = 1;			
+		}
+			
   		//	Get the radio group selected for the sex
 		Log.i("before radio group", " getting ready to get the sex ");
 		rg=(RadioGroup)findViewById(R.id.radioGroupSex);
@@ -576,13 +597,23 @@ public class AddLamb extends Activity {
 			lamb_name = "Stillborn";
 		}
 		
+		//	Get the value of the checkbox for mark ewe
+		Log.i("before checkbox", " getting ready to get mark ewe or not ");
+		markewebox = (CheckBox) findViewById(R.id.checkBoxMarkEwe);
+		if (markewebox.isChecked()){
+			markewe = true;
+			Log.i("markewe ", String.valueOf(markewe));
+			// When we get to adding tags for the lamb we'll as a paint brand for ewe if there is one
+			//	for the lamb.
+		}
+		
 		//	Get the Birth Weight
 		Log.i("before weight", " getting ready to get birth weight ");
 		TV = (TextView) findViewById(R.id.birth_weight);
 		try {
 			birth_weight = Float.valueOf(TV.getText().toString());
 		} catch (Exception e) {
-			//	set birth_weight to 0
+			//	set birth_weight to 0 because nothing filled in
 			birth_weight = 0.0f;
 		}	
 		Log.i("birth_weight ", String.valueOf(birth_weight));
@@ -597,9 +628,16 @@ public class AddLamb extends Activity {
 		if (lambease == 0){
 			//	Need to require a value for lambease here
 			//  Missing data so  display an alert 	
+			
+			//	testing my utility alert
+//			 context = this;
+//			 title = ("Testing fill lambease");
+//			 message = "testing this is a message";
+//			Utilities.alertDialogShow( context, title, message);
+			
     		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-    		builder.setMessage( R.string.add_lamb_fill_fields )
-    	           .setTitle( R.string.add_lamb_fill_fields );
+    		builder.setMessage( R.string.add_lamb_fill_lambease )
+    	           .setTitle( R.string.add_lamb_fill_lambease );
     		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int idx) {
     	               	// User clicked OK button 
@@ -826,7 +864,9 @@ public class AddLamb extends Activity {
 		lamb_codon154 = 1;
 		lamb_codon136 = 6;
 		//	Fill all the misc variables for the sheep record
+		// TODO
 		//	Set breed based on sire and dam breed
+		// Need to get the default breed form settings or preferences
 		//	Need to fix for the general case of crossbred lambs but for now set to crossbred if dam is Sooner
 		//	Sooner is sheep_id 58
 		//	otherwise the default set to be Black Welsh
@@ -878,7 +918,7 @@ public class AddLamb extends Activity {
 		tag_flock = 0;
 		
 		//	Go get all the tag data for this lamb
-		Log.i("before ", "getting the first tag info");
+		Log.i("before ", "getting the lamb tag info");
   		tl = (TableLayout) findViewById(R.id.tag_table);
   		Log.i("in table ", "after get the table view");
   		int i;
@@ -891,8 +931,9 @@ public class AddLamb extends Activity {
 	  		temp_tag_loc = (TextView) tr.getChildAt(2);
 	  		temp_tag_type = (TextView) tr.getChildAt(3);
 	  		Log.i("in table ", "after get the children of that row values");
-	  		
+	  		//	Get what tag number this is
 	  		tag_num = temp_tag_num.getText().toString();
+	  		//	Get the color for the tag
 	  		tag_color_label = temp_tag_color.getText().toString();
 	  		Log.i("before ", "getting tag color looking for " + tag_color_label);
 	  		cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
@@ -902,7 +943,7 @@ public class AddLamb extends Activity {
 	  		dbh.moveToFirstRecord();
 	  		tag_color = dbh.getInt(0);
 	  		Log.i("after ", "getting tag color");
-	  		
+	  		//	Get the location for the tag
 	  		tag_location_label = temp_tag_loc.getText().toString();
 	  		Log.i("before ", "getting tag location looking for " + tag_location_label);
 	  		cmd = String.format("select id_location_table.id_locationid, id_location_table.id_location_abbrev from id_location_table " +
@@ -911,7 +952,7 @@ public class AddLamb extends Activity {
 	  		cursor   = ( Cursor ) crsr;
 	  		dbh.moveToFirstRecord();
 	  		tag_loc = dbh.getInt(0);
-	  		
+	  		//	Get wht tag type it is
 	  		tag_type_label = temp_tag_type.getText().toString(); 		
 	  		cmd = String.format("select id_type_table.id_typeid from id_type_table " +
 				"where idtype_name='%s'", tag_type_label);
@@ -920,16 +961,25 @@ public class AddLamb extends Activity {
 	  		dbh.moveToFirstRecord();
 	  		tag_type = dbh.getInt(0);
 	  		Log.i("after ", "getting tag type");
+	  		
+	  		// TODO
 	  		//	If the tag is a federal tag then make the flock ID 1 for Desert Weyr 
 	  		//	Should be whatever the default is in settings
 	  		//	Also set the lamb name to be this year plus fed tag until we change it
 	  		// 	once the EID is the federal tag the lamb name has to be the farm tag 
 			//	Names cannot be the EID tag number, that is too long. 
-			//	Still need to handle the case of the EID being the official federal tag
-	  		//	TODO
-	  		if (tag_type==1){
-	  			tag_flock = 1;
-	  			lamb_name = year + "-" + tag_num;
+			//	Still need to handle the case of the EID being the official federal tag	  		
+	  		// 	Current plan is to add a field the database that denotes 
+	  		//	whether this tag is an official governmental ID or not 0 for false or not official and 
+	  		//	1 for true or yes is the official ID
+	  		
+	  		// Decided to try a switch statement here since the multiple if's are not working
+	  		
+	  		switch (tag_type){		
+			case 1: //	Tag is a federal tag
+				//	Set the flock to be the flock ID Should be a preference default not a fixed number
+				
+				tag_flock = 1;
 	  			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
 		  				" tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) values " +
 		  				" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", lamb_id, tag_type, tag_color, tag_color, 
@@ -937,16 +987,158 @@ public class AddLamb extends Activity {
 		  		Log.i("add fed tag ", "db cmd is " + cmd);
 				dbh.exec(cmd);
 				Log.i("add fed tag ", "after insert into id_info_table");
-	  		}else{	  		
-	     	// Now go put in a tag record for this tag for this lamb without a flock id
-	  		cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
-	  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
-	  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
-	  				tag_loc, mytoday, tag_num);
-	  		Log.i("add tag to ", "db cmd is " + cmd);
-			dbh.exec(cmd);
-			Log.i("add tag ", "after insert into id_info_table");
+				break;
+			case 2:	//	Tag is an electronic tag 
+				cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+		  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+		  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+		  				tag_loc, mytoday, tag_num);
+		  		Log.i("add tag to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into id_info_table");
+				break;
+			case 3:	// Tag is a paint brand
+		  		if (markewe){
+		  			// We have a paint mark for the lamb and the checkbox for the ewe is true
+		  			// Go see if there is a current active paint mark for the ewe
+		  			try {
+		  				cmd = String.format("select sheep_id from id_info_table where sheep_id = '%s' and " +
+			  					"tag_type = 3 and tag_date_off is null", dam_id);
+		  				// if command works we have a tag already so break out
+		  				Log.i("in try ewe tag ", "db cmd is " + cmd);
+		  				crsr2 = dbh.exec( cmd );  
+		  				Log.i("in try ewe tag ", "after execute db command" + cmd);
+		  				cursor2   = ( Cursor ) crsr2;
+		  		  		dbh.moveToFirstRecord();
+		  		  		temp_id = dbh.getInt(0);
+		  		  		Log.i("in try ewe tag ", "after try to read a record");
+		  			}
+		  				 catch (Exception e) {
+		  					//	No record found so insert one 
+		  					Log.i("in catch ", " need to add a ewe tag");
+		  					cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+		  			  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+		  			  				" (%s, %s, %s,%s,%s, '%s', '%s') ", dam_id, tag_type, tag_color, tag_color, 
+		  			  				tag_loc, mytoday, tag_num);
+		  			  		Log.i("add ewe tag to ", "db cmd is " + cmd);
+		  					dbh.exec(cmd);
+		  					Log.i("add tag ", "after insert into id_info_table");		 
+		  			} 	
+		  		}
+  				//	Add a lamb paint brand record for sure no matter what. 
+  				cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+  		  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+  		  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+  		  				tag_loc, mytoday, tag_num);
+  		  		Log.i("add tag to ", "db cmd is " + cmd);
+  				dbh.exec(cmd);
+  				Log.i("add tag ", "after insert into id_info_table");
+		  		break;
+			case 4:	// Tag is a farm tag
+				//	Set the lamb name to be the farm tag plus the year of birth
+				lamb_name = year + "-" + tag_num;
+				cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+		  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+		  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+		  				tag_loc, mytoday, tag_num);
+		  		Log.i("add tag to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into id_info_table");
+				break;
+			case 5:	// Tag is a tattoo
+				cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+		  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+		  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+		  				tag_loc, mytoday, tag_num);
+		  		Log.i("add tag to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into id_info_table");
+				break;
+			case 6:	// Tag is a split
+				cmd = String.format("insert into id_info_table (sheep_id, tag_type, " +
+		  				"  tag_location, tag_date_on, tag_number) values " +
+		  				" (%s, %s, %s, '%s', '%s') ", lamb_id, tag_type, tag_loc, mytoday, tag_num);
+		  		Log.i("add tag to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into id_info_table");
+				break;
+			case 7:	// Tag is a notch
+				cmd = String.format("insert into id_info_table (sheep_id, tag_type, " +
+		  				"  tag_location, tag_date_on, tag_number) values " +
+		  				" (%s, %s, %s, '%s', '%s') ", lamb_id, tag_type, tag_loc, mytoday, tag_num);
+		  		Log.i("add tag to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into id_info_table");
+				break;
+	  		
 	  		}
+	  		
+//	  		if (tag_type==4){
+//	  			//	Farm tag so make the lamb name the year plus the tag number
+//	  			lamb_name = year + "-" + tag_num;
+//	  		}
+//	  		if ((tag_type==3) && (markewe)){
+//	  			// We have a paint mark for the lamb and the checkbox for the ewe is true
+//	  			// Go see if there is a current active paint mark for the ewe
+//	  			try {
+//	  				cmd = String.format("select sheep_id from id_info_table where sheep_id = '%s' and " +
+//		  					"tag_type = 3 and tag_date_off is null", dam_id);
+//	  				// if command works we have a tag already so break out
+//	  				Log.i("in try ewe tag ", "db cmd is " + cmd);
+//	  				crsr2 = dbh.exec( cmd );  
+//	  				Log.i("in try ewe tag ", "after execute db command" + cmd);
+//	  				cursor2   = ( Cursor ) crsr2;
+//	  		  		dbh.moveToFirstRecord();
+//	  		  		temp_id = dbh.getInt(0);
+//	  		  		Log.i("in try ewe tag ", "after try to read a record");
+//	  				break;
+//	  			}
+//	  				 catch (Exception e) {
+//	  					//	No record found so insert one 
+//	  					Log.i("in catch ", " need to add a ewe tag");
+//	  					cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+//	  			  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+//	  			  				" (%s, %s, %s,%s,%s, '%s', '%s') ", dam_id, tag_type, tag_color, tag_color, 
+//	  			  				tag_loc, mytoday, tag_num);
+//	  			  		Log.i("add ewe tag to ", "db cmd is " + cmd);
+//	  					dbh.exec(cmd);
+//	  					Log.i("add tag ", "after insert into id_info_table");		 
+//	  			} 	
+//	  			finally {
+//	  				//	Add a lamb paint brand record for sure no matter what. 
+//	  				cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+//	  		  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+//	  		  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+//	  		  				tag_loc, mytoday, tag_num);
+//	  		  		Log.i("add tag to ", "db cmd is " + cmd);
+//	  				dbh.exec(cmd);
+//	  				Log.i("add tag ", "after insert into id_info_table");
+//	  				
+//	  			}
+//	  		}
+	  		
+//	  		if (tag_type==1){
+//	  			tag_flock = 1;
+//	  			//	This was for when the alternative ID was federal 
+//	  			//	now commented out because the name ID is the farm tag
+////	  			lamb_name = year + "-" + tag_num;
+//	  			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+//		  				" tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) values " +
+//		  				" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", lamb_id, tag_type, tag_color, tag_color, 
+//		  				tag_loc, mytoday, tag_num, tag_flock);
+//		  		Log.i("add fed tag ", "db cmd is " + cmd);
+//				dbh.exec(cmd);
+//				Log.i("add fed tag ", "after insert into id_info_table");
+//	  		}else{	  		
+//	     	// Now go put in a tag record for this tag for this lamb without a flock id
+//	  		cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+//	  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+//	  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+//	  				tag_loc, mytoday, tag_num);
+//	  		Log.i("add tag to ", "db cmd is " + cmd);
+//			dbh.exec(cmd);
+//			Log.i("add tag ", "after insert into id_info_table");
+//	  		}
   		}
 		//	End of what has to loop through all IDs for the lamb being added 
 		
@@ -1148,8 +1340,9 @@ public class AddLamb extends Activity {
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_colors);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_color_spinner.setAdapter (dataAdapter);
+		//	TODO
 		//	Set the tag color to be the default should be from settings but not implemented yet.
-		tag_color_spinner.setSelection(5); // set to orange
+		tag_color_spinner.setSelection(5); // set to orange for non-EID tags
 				
     	// Fill the Tag Location Spinner
 		tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
@@ -1169,18 +1362,11 @@ public class AddLamb extends Activity {
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_locations);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_location_spinner.setAdapter (dataAdapter);
+		//	TODO
 		//	Set the tag location to be the left ear by default should be from settings
 		tag_location_spinner.setSelection(2); // left ear for non EID tags   
     }
 
-	public boolean tableExists (String table){
-		try {
-	        dbh.exec("select * from "+ table);   
-	        return true;
-		} catch (SQLiteException e) {
-			return false;
-	        		}
-	        	}
 	private void addRadioButtons(int numButtons, String[] radioBtnText) {
 	  	  int i;
 
@@ -1356,7 +1542,6 @@ public class AddLamb extends Activity {
 			"where idtype_name='%s'", tag_type_label);
   		crsr = dbh.exec( cmd );
   		cursor   = ( Cursor ) crsr;
-//  		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_type = dbh.getInt(0);
   		Log.i("after ", "getting tag type" + String.valueOf(new_tag_type));  		
@@ -1366,7 +1551,6 @@ public class AddLamb extends Activity {
      				"where tag_color_name='%s'", tag_color_label);
      	crsr = dbh.exec( cmd );
   		cursor   = ( Cursor ) crsr;
-//  		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_color = dbh.getInt(0);
   		Log.i("after ", "getting tag color" + String.valueOf(new_tag_color));
@@ -1376,7 +1560,6 @@ public class AddLamb extends Activity {
 			"where id_location_abbrev='%s'", tag_location_label);
   		crsr = dbh.exec( cmd );
   		cursor   = ( Cursor ) crsr;
-//  		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_location = dbh.getInt(0);
   		Log.i("New Location ID ", String.valueOf(new_tag_location));
@@ -1471,23 +1654,26 @@ public class AddLamb extends Activity {
   	  		Log.i("after tag ", "after creating the tag table layout");
   	  		if ((new_tag_type == 1) || (new_tag_type == 4)){
   	  			//	tag type is either Federal or Farm so set defaults to be paint, white on the side
+  	  			//	TODO should be set via preferences or settings
   	 	      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
   	  	      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
   	  	      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
   	  	      	TV  = (TextView) findViewById( R.id.new_tag_number);
-  	  	      	tag_type_spinner2.setSelection(3);
-  	  	      	tag_color_spinner.setSelection(3);
-  	  	      	tag_location_spinner.setSelection(5);
+  	  	      	tag_type_spinner2.setSelection(3);	// Paint type
+  	  	      	tag_color_spinner.setSelection(3);	//	White
+  	  	      	tag_location_spinner.setSelection(5);	// Side 
   	  	      	TV.setText( "" ); 	  			
   	  		}else{
-  	  			//	tag type is something else like tattoo or pain so set defaults for a federal tag
+  	  			//	tag type is something else like tattoo or paint so set defaults for a farm tag
+  	  			//	TODO
+  	  			//	Needs to be fixed to be defaults or settings. 
 	   	      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
 	  	      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
 	  	      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
 	  	      	TV  = (TextView) findViewById( R.id.new_tag_number);
-	  	      	tag_type_spinner2.setSelection(1);
-	  	      	tag_color_spinner.setSelection(5);
-	  	      	tag_location_spinner.setSelection(2);
+	  	      	tag_type_spinner2.setSelection(4);	// Farm type
+	  	      	tag_color_spinner.setSelection(5);	//	Orange color
+	  	      	tag_location_spinner.setSelection(2);	//	Left ear
 	  	      	TV.setText( "" );
   	  		}
   		}else{

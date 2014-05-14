@@ -396,20 +396,20 @@ public class FixLamb extends ListActivity
 	    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 	    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 	    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-	    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
-
-	    		crsr = dbh.exec( cmd ); 
+	    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);	
 	    		Log.i("LookForSheep", " command is " + cmd);
+	    		crsr = dbh.exec( cmd ); 
 	    		cursor   = ( Cursor ) crsr; 
-//	    		startManagingCursor(cursor);
-	    		recNo    = 1;
-				nRecs    = cursor.getCount();
-				colNames = cursor.getColumnNames();
-				cursor.moveToFirst();				
+//	    		recNo    = 1;
+//				nRecs    = cursor.getCount();
+	    		Log.i("LookForSheep", " number of tags found is " + String.valueOf(cursor.getCount()));
+//				colNames = cursor.getColumnNames();
+				cursor.moveToFirst();	
+				Log.i("LookForSheep", " This sheep is " + dbh.getStr(0));
 				TV = (TextView) findViewById( R.id.sheepnameText );
 		        TV.setText (dbh.getStr(0));
 		        alert_text = dbh.getStr(8);
-		    	
+		        Log.i("LookForSheep", " Alert text is " + dbh.getStr(8));
 		        //	Get the sire and dam id numbers
 		        thissire_id = dbh.getInt(9);
 		        Log.i("LookForSheep", " Sire is " + String.valueOf(thissire_id));

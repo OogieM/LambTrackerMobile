@@ -5,13 +5,16 @@ import java.util.Calendar;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.graphics.LightingColorFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.app.ListActivity;
@@ -333,4 +336,19 @@ public static String TodayIs() {
 		int year = calendar.get(Calendar.YEAR);
 		return Integer.toString(year) ;
 	}
+ 
+ public static void alertDialogShow(Context context, String title, String message) {
+		AlertDialog.Builder builder = new AlertDialog.Builder( context );
+		builder.setMessage( message)
+	           .setTitle( title );
+		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+	           public void onClick(DialogInterface dialog, int idx) {
+	               // User clicked OK button 
+	               }
+	       });		
+		AlertDialog dialog = builder.create();
+		dialog.show();		 
+ }
 }
+ 
+ 
