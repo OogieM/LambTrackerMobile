@@ -617,6 +617,8 @@ public class EvaluateSheep2 extends Activity {
     	   	
     	// I got the sheep id from the search by federal or farm or EID tag
     	// it's in the sheep_id variable
+    
+    	Log.i("in save scores", " thissheep id is " + String.valueOf(thissheep_id)); 
     	
     	Log.i("in save scores", " sheep id is " + String.valueOf(sheep_id));  
     	
@@ -810,7 +812,7 @@ public class EvaluateSheep2 extends Activity {
     		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date, eval_time) " +
     		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s," +
     		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s','%s') ", 
-    				sheep_id, trait01, trait01_data, trait02, trait02_data, trait03, trait03_data,
+    		thissheep_id, trait01, trait01_data, trait02, trait02_data, trait03, trait03_data,
     				trait04, trait04_data, trait05, trait05_data, trait06, trait06_data,
     				trait07, trait07_data, trait08, trait08_data, trait09, trait09_data, 
     				trait10, trait10_data, trait11, trait11_data, trait12, trait12_data, 
@@ -843,7 +845,7 @@ public class EvaluateSheep2 extends Activity {
 	   public void backBtn( View v )
 	    {
 		   cursor.close(); 
-		   stopManagingCursor (cursor);
+//		   stopManagingCursor (cursor);
 		   dbh.closeDB();
 		   	doUnbindService();
 			stopService(new Intent(EvaluateSheep2.this, eidService.class));
@@ -996,6 +998,7 @@ public class EvaluateSheep2 extends Activity {
 		        	return;
 		    		}
 	        	thissheep_id = dbh.getInt(0);
+	        	sheep_id = thissheep_id;
 	        
 	        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));
 	        	Log.i("LookForSheep", " Before finding all tags");
@@ -1079,19 +1082,19 @@ public class EvaluateSheep2 extends Activity {
 			    	//	testing whether I can put up an alert box here without issues
 			    	showAlert(v);
 				}        	
-		}else{
-				thissheep_id = 0;
-				sheep_id = 0;
-				return;
-	        }
+		};
+//        	else{
+////				thissheep_id = 0;
+////				sheep_id = 0;
+//				return;
+//	        }
 	        Log.i("lookForSheep", " out of the if statement");
-        	}
-    		else {
+    }
+    else {
     			clearBtn( null );
-            	TV = (TextView) findViewById( R.id.sheepnameText );
-                TV.setText( "Sheep Database does not exist." ); 
-                
-        	}
+        	TV = (TextView) findViewById( R.id.sheepnameText );
+            TV.setText( "Sheep Database does not exist." );            
+    	}
 	}	 
     public void doNote( View v )
     {	 

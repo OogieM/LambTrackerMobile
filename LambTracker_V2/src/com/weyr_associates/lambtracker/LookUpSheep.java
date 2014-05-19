@@ -18,6 +18,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
@@ -292,8 +294,8 @@ public class LookUpSheep extends ListActivity
     	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
     	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     	
-        TV = (TextView) findViewById( R.id.inputText );
-    	String	tag_num = TV.getText().toString();
+        TV = (EditText) findViewById( R.id.inputText );
+        String	tag_num = TV.getText().toString();
     	
         Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
         Log.i("LookForSheep", " got to lookForSheep with Tag type of " + tag_type_spinner.getSelectedItemPosition());

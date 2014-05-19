@@ -39,6 +39,8 @@
     <string name="remove_tag_btn">Remove Tag</string>
     <string name="remove_fedtag_btn">Remove Fed Tag</string>
     <string name="remove_farmtag_btn">Remove Farm Tag</string>
+    <string name="remove_eidtag_btn">Remove EID Tag</string>
+    <string name="remove_paint_btn">Remove Paint Mark</string>
     <string name="search_fed_btn">Search Federal Tag</string>
     <string name="search_farm_btn">Search Farm Tag</string>
     <string name="search_other_btn">Search Other ID</string>
@@ -142,12 +144,14 @@
     <string name="federal_id_lbl">Federal ID</string>
     <string name="farm_id_lbl">Farm ID</string>
     <string name="electronic_id_lbl">Electronic ID</string>
+    <string name="paint_id_lbl">Paint ID</string>
     <string name="input_id_lbl">Input Search String</string>
     <string name="tag_number_lbl">Tag Number</string>
     <string name="tag_record_lbl">ID #</string>
     <string name="tag_type_lbl">Tag Type</string>
     <string name="tag_type_abbrev_lbl">Type</string>
     <string name="tag_color_lbl">Tag Color</string>
+    <string name="paint_color_lbl">Paint Color</string>
     <string name="tag_color_abbrev_lbl">Color</string>
     <string name="tag_color_male_lbl">Tag Color Male Side</string>
     <string name="tag_color_female_lbl">Tag Color Female Side</string>
