@@ -24,6 +24,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +70,7 @@ public class SheepManagement extends ListActivity {
 	public int drug_gone; // 0 = false 1 = true
 	public int	drug_type, which_wormer, which_vaccine;
 	public RadioGroup radioGroup;
-	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine;
+	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxweight;
 	public String note_text;
 	public int predefined_note01, predefined_note02, predefined_note03, predefined_note04, predefined_note05;
 	private int             nRecs;
@@ -320,7 +321,8 @@ public class SheepManagement extends ListActivity {
 				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				wormer_spinner.setAdapter (dataAdapter);
 				//	Set the wormer to be a specific one 
-//				wormer_spinner.setSelection(1);	
+				//	Should be a preference or default but fixed to be Ivermectin for now
+				wormer_spinner.setSelection(1);	
 							
 			// Fill the Vaccine Spinner
 	    	vaccine_spinner = (Spinner) findViewById(R.id.vaccine_spinner);
@@ -519,6 +521,10 @@ public class SheepManagement extends ListActivity {
 	
 	 public void updateDatabase( View v ){
 	    	
+		 	TextView TV;
+		 	String temp_string;
+	    	Float trait11_data = 0.0f;
+	    	
 			// Disable Update Database button and make it red to prevent getting 2 records at one time
 	    	btn = (Button) findViewById( R.id.update_database_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -608,6 +614,52 @@ public class SheepManagement extends ListActivity {
 //				cmd = String.format("Select meat_withdrawal_units, user_meat_withdrawal from drug_table where drug_id = %s", i);
 //				Log.i("drug withdrawal ", "db cmd is " + cmd);
 			}	
+			
+			//	Take a weight if checked
+					boxweight = (CheckBox) findViewById(R.id.checkBoxTakeWeight);
+					if (boxweight.isChecked()){
+						//	get a sheep weight
+			    		TV = (TextView) findViewById(R.id.trait11_data);
+			    		temp_string = TV.getText().toString();
+			    		if(TextUtils.isEmpty(temp_string)){
+			    	        // EditText was empty
+			    	        // so no real data collected just break out
+			    			trait11_data = 0.0f;
+//			    			Log.i("save trait11", "float data is " + String.valueOf(trait11_data));
+			    	    }
+			    		else {
+			    			trait11_data = Float.valueOf(TV.getText().toString());
+			    			Log.i("save trait11", "float data is " + String.valueOf(trait11_data));
+			    		}
+						//	go update the database with a sheep evaluation record for this weight and this sheep
+			    		//	Get the date and time to enter into the database.
+			    		String mytoday = Utilities.TodayIs();
+			    		String mytime = Utilities.TimeIs();
+			       		
+			    		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
+			    		"trait_name01, trait_score01, trait_name02, trait_score02, trait_name03, trait_score03, " +
+			    		"trait_name04, trait_score04, trait_name05, trait_score05, trait_name06, trait_score06," +
+			    		"trait_name07, trait_score07, trait_name08, trait_score08, trait_name09, trait_score09, " +
+			    		"trait_name10, trait_score10, trait_name11, trait_score11, trait_name12, trait_score12, " +
+			    		"trait_name13, trait_score13, trait_name14, trait_score14, trait_name15, trait_score15, " +
+			    		"trait_name16, trait_score16, trait_name17, trait_score17, trait_name18, trait_score18, " +
+			    		"trait_name19, trait_score19, trait_name20, trait_score20, " +
+			    		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date, eval_time) " +
+			    		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s," +
+			    		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s','%s') ", 
+			    		thissheep_id, 0, 0, 0, 0, 0, 0,
+			    				0, 0, 0, 0, 0, 0,
+			    				0, 0, 0, 0, 0, 0, 
+			    				0, 0, 16, trait11_data, 0, 0, 
+			    				0, 0, 0, 0, 0, 0, 
+			    				0, 0, 0, 0, 0, 0,
+			    				0, 0, 0, 0, 
+			    				1, 0, 0, 0, 0, mytoday, mytime );
+			    		Log.i("add evaluation ", "cmd is "+ cmd);
+						dbh.exec(cmd);
+						Log.i("add evaluation ", "after insert into sheep_evaluation_table");
+					}	
+			
 		
 			clearBtn( null );
 	 }

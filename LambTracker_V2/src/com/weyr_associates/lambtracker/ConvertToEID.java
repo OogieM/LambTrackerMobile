@@ -283,6 +283,7 @@ public class ConvertToEID extends Activity {
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_type_spinner.setAdapter (dataAdapter);
 		//	Default to looking up federal tag number
+		//	Should be a preference as to which type is the default look-up 
 		tag_type_spinner.setSelection(1);	
 		
     	//	Set up the location and color spinners
