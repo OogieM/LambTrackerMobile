@@ -424,11 +424,34 @@ public class SheepManagement extends ListActivity {
 	        	cmd = String.format( "select sheep_table.sex from sheep_table where sheep_id = %s",thissheep_id);
 	        	crsr = dbh.exec( cmd ); 	    		
 	    		cursor   = ( Cursor ) crsr; 
-//	    		startManagingCursor(cursor);
 				cursor.moveToFirst();				
 				i =  (dbh.getInt(0));
 				Log.i("LookForSheep", "This sheep is sex " + String.valueOf(i));	
 				
+	        	try {
+	        		Log.i("try block", " Before finding an electronic tag if it exists");		        		        	
+		        	cmd = String.format( "select sheep_table.sheep_id, id_type_table.idtype_name, " +
+		    				"id_info_table.tag_number " +
+		    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+		    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+		    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null and " +
+		    				"id_info_table.tag_type = 2 order by idtype_name asc", thissheep_id);
+		    		crsr = dbh.exec( cmd ); 	    		
+		    		cursor   = ( Cursor ) crsr; 		    	
+					cursor.moveToFirst();	
+					Log.i("getlastEID filled", "This sheep is id " + String.valueOf(dbh.getInt(0)));
+					Log.i("getlastEID filled", "This sheep id type is " + dbh.getStr(1));
+					LastEID = dbh.getStr(2);
+					Log.i("LastEID is ", dbh.getStr(2));
+	        	}
+	        	catch(Exception r)
+	    	    {
+	        		LastEID = "000_000000000000";
+	        		Log.v("fill LAST EID ", " in sheep management RunTimeException: " + r);
+	    	    }	 
+	        	
+	        	
+	        	
 	        	Log.i("LookForSheep", " Before finding all tags");		        	
 	        	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 	    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
@@ -700,9 +723,9 @@ public class SheepManagement extends ListActivity {
 	    {
     	doUnbindService();
 		stopService(new Intent(SheepManagement.this, eidService.class));   	
-    	// Added this to close the database if we go back to the main activity  	//    	stopManagingCursor (cursor);
+    	// Added this to close the database if we go back to the main activity  	
     	cursor.close();
-    	try {//    		stopManagingCursor (cursor2);
+    	try {
     		cursor2.close();
     	}catch (Exception r)
     	{
@@ -778,6 +801,10 @@ public class SheepManagement extends ListActivity {
 		boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
 		boxtrimtoes.setChecked(false);
 //		Log.i("clear btn", "after clear trim toes checkbox");
+		boxweight = (CheckBox) findViewById(R.id.checkBoxTakeWeight);
+		boxweight.setChecked(false);
+		TV = (TextView) findViewById( R.id.trait11_data );
+		TV.setText( "" );
 		// Enable Update Database button and make it normal
     	btn = (Button) findViewById( R.id.update_database_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));
