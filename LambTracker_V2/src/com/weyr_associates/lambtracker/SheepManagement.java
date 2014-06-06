@@ -70,7 +70,7 @@ public class SheepManagement extends ListActivity {
 	public int drug_gone; // 0 = false 1 = true
 	public int	drug_type, which_wormer, which_vaccine;
 	public RadioGroup radioGroup;
-	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxweight;
+	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxweight, boxscrapieblood;
 	public String note_text;
 	public int predefined_note01, predefined_note02, predefined_note03, predefined_note04, predefined_note05;
 	private int             nRecs;
@@ -449,8 +449,7 @@ public class SheepManagement extends ListActivity {
 	        		LastEID = "000_000000000000";
 	        		Log.v("fill LAST EID ", " in sheep management RunTimeException: " + r);
 	    	    }	 
-	        	
-	        	
+	        	        	
 	        	
 	        	Log.i("LookForSheep", " Before finding all tags");		        	
 	        	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
@@ -613,7 +612,30 @@ public class SheepManagement extends ListActivity {
     			Log.i("update notes ", "after cmd exec");
 				Log.i("toes trimmed ", String.valueOf(boxtrimtoes));					
 			}			
-
+// TODO
+//			//	Get the value of the checkbox for take scrapie blood
+//			Log.i("before checkbox", " getting ready to see if we collected scrapie blood or not ");
+			boxscrapieblood = (CheckBox) findViewById(R.id.checkBoxScrapieBlood);
+			if (boxscrapieblood.isChecked()){
+				//	go update the database with blood pull date and time as a note 
+				note_text = "Blood for Scrapie Genetics";
+				predefined_note01 = 47; // hard coded the code for blood sample taken
+				// TODO
+				//	This will have to be changed for the general case
+				cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid01) " +
+    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, Utilities.TodayIs(), Utilities.TimeIs(), predefined_note01);
+    			Log.i("update notes ", "before cmd " + cmd);
+    			dbh.exec( cmd );	
+    			Log.i("update notes ", "after cmd exec");
+				Log.i("blood taken ", String.valueOf(boxscrapieblood));	
+				//	Update the sheep record to remove the scrapie blood in alert
+				cmd = String.format("update sheep_table set alert01 = replace " +
+						"( alert01, 'Scrapie Blood', '') where sheep_id =%d ", thissheep_id ) ;
+				Log.i("update alerts ", "before cmd " + cmd);
+				dbh.exec( cmd );			
+			}			
+			
+			
 			//	Need to figure out the id_drugid for what we are giving this sheep
 			boxwormer = (CheckBox) findViewById(R.id.checkBoxGiveWormer);
 			if (boxwormer.isChecked()){
@@ -656,8 +678,8 @@ public class SheepManagement extends ListActivity {
 			    		}
 						//	go update the database with a sheep evaluation record for this weight and this sheep
 			    		//	Get the date and time to enter into the database.
-			    		String mytoday = Utilities.TodayIs();
-			    		String mytime = Utilities.TimeIs();
+//			    		String mytoday = Utilities.TodayIs();
+//			    		String mytime = Utilities.TimeIs();
 			       		
 			    		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
 			    		"trait_name01, trait_score01, trait_name02, trait_score02, trait_name03, trait_score03, " +
@@ -677,7 +699,7 @@ public class SheepManagement extends ListActivity {
 			    				0, 0, 0, 0, 0, 0, 
 			    				0, 0, 0, 0, 0, 0,
 			    				0, 0, 0, 0, 
-			    				1, 0, 0, 0, 0, mytoday, mytime );
+			    				1, 0, 0, 0, 0, Utilities.TodayIs(), Utilities.TimeIs() );
 			    		Log.i("add evaluation ", "cmd is "+ cmd);
 						dbh.exec(cmd);
 						Log.i("add evaluation ", "after insert into sheep_evaluation_table");

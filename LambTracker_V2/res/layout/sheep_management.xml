@@ -245,20 +245,28 @@
         	android:gravity="left"
         	android:textSize="18sp"
         	android:typeface="monospace" />       
-       </GridLayout>  
+       	</GridLayout>  
+     	<CheckBox
+	        android:id="@+id/checkBoxScrapieBlood"
+	        android:layout_width="300dp"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="left|center"
+	        android:text="@string/sheep_scrapieblood"/>
+        
 	<GridLayout 
         	android:id="@+id/managementtasks"
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
         	android:columnCount="2"
        		android:rowCount="6">
+              
 	      <CheckBox
 	        android:id="@+id/checkBoxTrimToes"
 	        android:layout_width="150dp"
 	        android:layout_height="wrap_content"
 	        android:layout_column="0"
 	        android:layout_gravity="left|center"
-	        android:layout_row="0"
+	        android:layout_row="1"
 	        android:text="@string/sheep_trimtoes"/>
   
 		  <CheckBox
@@ -267,7 +275,7 @@
 		        android:layout_height="wrap_content"
 		        android:layout_column="0"
 		        android:layout_gravity="left|center"
-		        android:layout_row="1"
+		        android:layout_row="2"
 		        android:text="@string/sheep_givewormer"/>
 		  <Spinner
 		        android:id="@+id/wormer_spinner"
@@ -275,7 +283,7 @@
 		        android:layout_height="wrap_content"
 		        android:layout_column="1"
 		        android:layout_gravity="left|center"
-		        android:layout_row="1"
+		        android:layout_row="2"
 		        android:textSize="18sp" />     	
  
 		  <CheckBox
@@ -284,7 +292,7 @@
 		        android:layout_height="wrap_content"
 		        android:layout_column="0"
 		        android:layout_gravity="left|center"
-		        android:layout_row="2"
+		        android:layout_row="3"
 		        android:text="@string/sheep_givevaccine"/>
 		<Spinner
 		        android:id="@+id/vaccine_spinner"
@@ -292,7 +300,7 @@
 		        android:layout_height="wrap_content"
 		        android:layout_column="1"
 		        android:layout_gravity="left|center"
-		        android:layout_row="2"
+		        android:layout_row="3"
 		        android:textSize="18sp" /> 
 		        
 		<RadioGroup
@@ -301,7 +309,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_column="1"
 	        android:layout_gravity="left|center"
-	        android:layout_row="3"
+	        android:layout_row="4"
 	        android:orientation="horizontal">
 	  	</RadioGroup>
 
@@ -311,7 +319,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_column="0"
 	        android:layout_gravity="left|center"
-	        android:layout_row="4"
+	        android:layout_row="5"
 	        android:text="@string/sheep_takeweight"/>
         
         <EditText
