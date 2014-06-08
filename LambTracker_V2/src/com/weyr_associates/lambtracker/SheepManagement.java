@@ -551,7 +551,9 @@ public class SheepManagement extends ListActivity {
 	    	btn = (Button) findViewById( R.id.update_database_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 	    	btn.setEnabled(false);
-	    	
+    		//	Get the date and time to enter into the database.
+    		String mytoday = Utilities.TodayIs();
+    		String mytime = Utilities.TimeIs();
 			boxvaccine = (CheckBox) findViewById(R.id.checkBoxGiveVaccine);
 			if (boxvaccine.isChecked()){
 				//	Go get which vaccine was selected in the spinner
@@ -589,7 +591,7 @@ public class SheepManagement extends ListActivity {
 		 		}else{
 					cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
 			  				" drug_time_on, drug_location) values " +
-			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, Utilities.TodayIs(), Utilities.TimeIs(), drug_loc);
+			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, drug_loc);
 			  		Log.i("add drug to ", "db cmd is " + cmd);
 					dbh.exec(cmd);
 					Log.i("add tag ", "after insert into sheep_drug_table");	
@@ -606,7 +608,7 @@ public class SheepManagement extends ListActivity {
 				// TODO
 				//	This will have to be changed for the general case
 				cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid01) " +
-    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, Utilities.TodayIs(), Utilities.TimeIs(), predefined_note01);
+    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, mytoday, mytime, predefined_note01);
     			Log.i("update notes ", "before cmd " + cmd);
     			dbh.exec( cmd );	
     			Log.i("update notes ", "after cmd exec");
@@ -623,7 +625,7 @@ public class SheepManagement extends ListActivity {
 				// TODO
 				//	This will have to be changed for the general case
 				cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid01) " +
-    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, Utilities.TodayIs(), Utilities.TimeIs(), predefined_note01);
+    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, mytoday, mytime, predefined_note01);
     			Log.i("update notes ", "before cmd " + cmd);
     			dbh.exec( cmd );	
     			Log.i("update notes ", "after cmd exec");
@@ -632,7 +634,8 @@ public class SheepManagement extends ListActivity {
 				cmd = String.format("update sheep_table set alert01 = replace " +
 						"( alert01, 'Scrapie Blood', '') where sheep_id =%d ", thissheep_id ) ;
 				Log.i("update alerts ", "before cmd " + cmd);
-				dbh.exec( cmd );			
+				dbh.exec( cmd );
+				Log.i("update alerts ", "after cmd " + cmd);
 			}			
 			
 			
@@ -650,7 +653,7 @@ public class SheepManagement extends ListActivity {
 				//	Drug location 5 is by mouth
 				cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
 		  				" drug_time_on, drug_location) values " +
-		  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, Utilities.TodayIs(), Utilities.TimeIs(), 5);
+		  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, 5);
 		  		Log.i("add drug to ", "db cmd is " + cmd);
 				dbh.exec(cmd);
 				Log.i("add tag ", "after insert into sheep_drug_table");
@@ -677,9 +680,6 @@ public class SheepManagement extends ListActivity {
 			    			Log.i("save trait11", "float data is " + String.valueOf(trait11_data));
 			    		}
 						//	go update the database with a sheep evaluation record for this weight and this sheep
-			    		//	Get the date and time to enter into the database.
-//			    		String mytoday = Utilities.TodayIs();
-//			    		String mytime = Utilities.TimeIs();
 			       		
 			    		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
 			    		"trait_name01, trait_score01, trait_name02, trait_score02, trait_name03, trait_score03, " +
@@ -699,13 +699,11 @@ public class SheepManagement extends ListActivity {
 			    				0, 0, 0, 0, 0, 0, 
 			    				0, 0, 0, 0, 0, 0,
 			    				0, 0, 0, 0, 
-			    				1, 0, 0, 0, 0, Utilities.TodayIs(), Utilities.TimeIs() );
+			    				1, 0, 0, 0, 0, mytoday, mytime );
 			    		Log.i("add evaluation ", "cmd is "+ cmd);
 						dbh.exec(cmd);
 						Log.i("add evaluation ", "after insert into sheep_evaluation_table");
 					}	
-			
-		
 			clearBtn( null );
 	 }
 	public void printLabel( View v ){ 
@@ -823,6 +821,10 @@ public class SheepManagement extends ListActivity {
 		boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
 		boxtrimtoes.setChecked(false);
 //		Log.i("clear btn", "after clear trim toes checkbox");
+		boxscrapieblood = (CheckBox) findViewById(R.id.checkBoxScrapieBlood);
+		boxscrapieblood.setChecked(false);
+//		Log.i("clear btn", "after scrapie blood checkbox");		
+		
 		boxweight = (CheckBox) findViewById(R.id.checkBoxTakeWeight);
 		boxweight.setChecked(false);
 		TV = (TextView) findViewById( R.id.trait11_data );
