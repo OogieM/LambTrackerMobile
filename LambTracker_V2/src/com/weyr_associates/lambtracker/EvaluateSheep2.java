@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.weyr_associates.lambtracker.EvaluateSheep.IncomingHandler;
+//import com.weyr_associates.lambtracker.EvaluateSheep2.IncomingHandler;
 
 import android.R.string;
 import android.app.Activity;
@@ -844,11 +844,10 @@ public class EvaluateSheep2 extends Activity {
 	
 	   public void backBtn( View v )
 	    {
-		   cursor.close(); 
-//		   stopManagingCursor (cursor);
-		   dbh.closeDB();
 		   	doUnbindService();
 			stopService(new Intent(EvaluateSheep2.this, eidService.class));
+			cursor.close(); 
+			dbh.closeDB();
 			clearBtn( null );   	
 			finish();
 	    }
@@ -905,37 +904,42 @@ public class EvaluateSheep2 extends Activity {
 		TV.setText( "" );
 		
 		//	Clear the rating bars
-		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
-		Log.i("in clear button", " number rating bars is " + String.valueOf(nRecs)); 
-		if (nRecs != 0) {
-			for( int ii = 0; ii < nRecs; ii++ ){	
-				Log.i("in clear button", " in 1st for loop ii is" + String.valueOf(ii)); 
+		try {
+			TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
+			Log.i("in clear button", " number rating bars is " + String.valueOf(nRecs)); 
+			if (nRecs != 0) {
+				for( int ii = 0; ii < nRecs; ii++ ){	
+					Log.i("in clear button", " in 1st for loop ii is" + String.valueOf(ii)); 
+					TableRow row1= (TableRow)table.getChildAt(ii);
+					ratingBar = (RatingBar) row1.getChildAt(1);
+					ratingBar.setRating(0.0f);			
+					Log.i("RatingBar01 ", String.valueOf(ratingBar.getRating()));  
+				}
+			}
+			//	Clear the real scored traits
+			Log.i("in clear button", " number scored traits is " + String.valueOf(nRecs2));
+			table = (TableLayout) findViewById(R.id.TableLayout02);
+			if (nRecs2 != 0) {
+				for( int ii = 0; ii < nRecs2; ii++ ){	
 				TableRow row1= (TableRow)table.getChildAt(ii);
-				ratingBar = (RatingBar) row1.getChildAt(1);
-				ratingBar.setRating(0.0f);			
-				Log.i("RatingBar01 ", String.valueOf(ratingBar.getRating()));  
+				TV = (EditText ) row1.getChildAt(1);
+				TV.setText ( "" );
+				}
 			}
-		}
-		//	Clear the real scored traits
-		Log.i("in clear button", " number scored traits is " + String.valueOf(nRecs2));
-		table = (TableLayout) findViewById(R.id.TableLayout02);
-		if (nRecs2 != 0) {
-			for( int ii = 0; ii < nRecs2; ii++ ){	
-			TableRow row1= (TableRow)table.getChildAt(ii);
-			TV = (EditText ) row1.getChildAt(1);
-			TV.setText ( "" );
+			//	Clear the radio group checks
+			Log.i("in clear button", " number radio group traits is " + String.valueOf(nRecs3));
+			table = (TableLayout) findViewById(R.id.TableLayout03);
+			if (nRecs3 != 0) {
+				for( int ii = 0; ii < nRecs3; ii++ ){	
+				TableRow row1= (TableRow)table.getChildAt(ii);
+				RadioGroup rg = ((RadioGroup) row1.findViewById(R.id.radioGroup1));
+				rg.clearCheck();
+				}
 			}
+		}catch (Exception e){
+			//	something failed so log it
+			Log.i("in clear button", " in catch of try clearing rating, real and radio groups " );
 		}
-		//	Clear the radio group checks
-		table = (TableLayout) findViewById(R.id.TableLayout03);
-		if (nRecs3 != 0) {
-			for( int ii = 0; ii < nRecs3; ii++ ){	
-			TableRow row1= (TableRow)table.getChildAt(ii);
-			RadioGroup rg = ((RadioGroup) row1.findViewById(R.id.radioGroup1));
-			rg.clearCheck();
-			}
-		}
-		
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));

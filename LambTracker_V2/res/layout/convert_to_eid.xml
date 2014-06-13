@@ -88,7 +88,7 @@
             android:layout_height="50dp"
             android:layout_toRightOf="@+id/alert_btn"
             android:onClick="scanEid"
-            android:text="@string/scan_add_eid_btn"
+            android:text="@string/scan_eid_btn"
             android:textSize="14sp" />    
   </RelativeLayout>
        

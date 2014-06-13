@@ -196,7 +196,6 @@ public class ConvertToEID extends Activity {
 	// use EID reader to look up a sheep
 	public void gotEID( )
     {
-//		Object crsr;		
 	   	//	make the scan eid button red
     	btn = (Button) findViewById( R.id.scan_eid_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -204,6 +203,7 @@ public class ConvertToEID extends Activity {
     	TextView TV = (TextView) findViewById (R.id.eidText);
     	TV.setText( LastEID );   	
 		Log.i("Convert", "Got EID");
+		// Fill the 
 	}	
 	
 /////////////////////////////////////////////////////	
@@ -333,7 +333,6 @@ public class ConvertToEID extends Activity {
 	    {
 		doUnbindService();
 		stopService(new Intent(ConvertToEID.this, eidService.class));
-//		stopManagingCursor (cursor);
 		cursor.close();
        	dbh.closeDB();
     	clearBtn( null );   	
@@ -542,7 +541,6 @@ public class ConvertToEID extends Activity {
 				        break;
 		    		} // end of case switch
 		    	} // end of for loop
-//		    	cursor.close();
 //		    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
 				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
 			       	// make the alert button red
