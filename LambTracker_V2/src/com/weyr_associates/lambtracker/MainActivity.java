@@ -187,7 +187,7 @@ public class MainActivity extends Activity {
 			        break;
 			    case 2:
 //			    	Log.i ("Main case", " In main case statement selected 2");
-			    	i = new Intent(MainActivity.this, ConvertToEID.class);
+			    	i = new Intent(MainActivity.this, IDManagement.class);
 					MainActivity.this.startActivity(i);
 			        break;
 			    case 3:
@@ -523,7 +523,7 @@ public class MainActivity extends Activity {
 	// Convert to EID by updating what tags are where on each sheep
 	public void convertToEID( )
     {
-	Intent convertSheep = new Intent( this, ConvertToEID.class );
+	Intent convertSheep = new Intent( this, IDManagement.class );
 	startActivity(convertSheep);
 	}
 	

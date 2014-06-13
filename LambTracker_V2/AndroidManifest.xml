@@ -76,7 +76,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.weyr_associates.lambtracker.ConvertToEID"
+            android:name="com.weyr_associates.lambtracker.IDManagement"
             android:configChanges="orientation"
             android:label="@string/title_activity_convert_to_eid"
             android:screenOrientation="portrait"

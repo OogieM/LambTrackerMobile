@@ -32,7 +32,7 @@ import android.widget.TextView;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
-public class ConvertToEID extends Activity {
+public class IDManagement extends Activity {
 	private DatabaseHandler dbh;
 	int             fedtagid, farmtagid, eidtagid, paintid; // These are record IDs not sheep IDs
 	public Cursor 	cursor;
@@ -85,7 +85,7 @@ public class ConvertToEID extends Activity {
 			case eidService.MSG_THREAD_SUICIDE:
 				Log.i("Convert", "Service informed Activity of Suicide.");
 				doUnbindService();
-				stopService(new Intent(ConvertToEID.this, eidService.class));
+				stopService(new Intent(IDManagement.this, eidService.class));
 				
 				break;
 			default:
@@ -130,7 +130,7 @@ public class ConvertToEID extends Activity {
 			doBindService();
 		} else {
 //			Log.i("Convert", "is not, start it");
-			startService(new Intent(ConvertToEID.this, eidService.class));
+			startService(new Intent(IDManagement.this, eidService.class));
 			doBindService();
 		}
 //		Log.i("Convert", "Done isRunning.");
@@ -332,7 +332,7 @@ public class ConvertToEID extends Activity {
     public void backBtn( View v )
 	    {
 		doUnbindService();
-		stopService(new Intent(ConvertToEID.this, eidService.class));
+		stopService(new Intent(IDManagement.this, eidService.class));
 		cursor.close();
        	dbh.closeDB();
     	clearBtn( null );   	
