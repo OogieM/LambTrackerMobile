@@ -23,7 +23,8 @@ import android.app.ListActivity;
 /**
  * Write a description of class Utilities here.
  * 
- * @author ww added to by em
+ * @author ww 
+ * em added the take note utility
  * @version 2014-05-11
  */
 public class Utilities 

@@ -71,7 +71,7 @@
     
     <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
-    <string name="help_convert">Select a sheep based on some form of ID. The system assumes there are no duplicate
+    <string name="help_manage_id">Select a sheep based on some form of ID. The system assumes there are no duplicate
          farm tags and no duplicate federal tags. There can be duplicates where one is a federal tag and one is a farm tag. </string>
     <string name="help_evaluate">Evaluate sheep based on the criteria you select. Use the select to locate a sheep by Federal, 
         Farm or Scanning an EID tag. Then select the scores for each trait. When finished select Save Scores
@@ -80,7 +80,7 @@
         You may select 10 scored items, 5 real data items and 5 custom items. </string>
     <string name="help_look_up_sheep">Select a sheep using the EID reader or by entering in another form of identification. 
    	    All the tags for that sheep will be displayed in the scrolling view below. If you need to correct tags you will need to do 
-   	    that separately in the ID Managment task. The notes for this sheep are shown below the tags.  </string>
+   	    that separately in the ID Management task. The notes for this sheep are shown below the tags.  </string>
     <string name="help_lambing_sheep">Select a sheep using the EID reader or by entering in another identification. 
    	    All the tags for that sheep will be displayed in the scrolling view below. The ewe\'s last lambing results will be shown.
    	    If there are any lambs from that sheep for this year their identification will also be listed. You can choose to add lambs 
