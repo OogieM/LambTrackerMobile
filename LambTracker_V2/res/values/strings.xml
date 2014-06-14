@@ -71,8 +71,8 @@
     
     <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
-    <string name="help_manage_id">Select a sheep based on some form of ID. The system assumes there are no duplicate
-         farm tags and no duplicate federal tags. There can be duplicates where one is a federal tag and one is a farm tag. </string>
+    <string name="help_manage_id">Select a sheep based on some form of ID. Currently federal, farm, electronic, paint and name 
+        ID types are recognized. Soon we will be adding tattoo, split and ear notch as ways to look up a sheep.  </string>
     <string name="help_evaluate">Evaluate sheep based on the criteria you select. Use the select to locate a sheep by Federal, 
         Farm or Scanning an EID tag. Then select the scores for each trait. When finished select Save Scores
         to write the data to the database with an evaluation date of today. </string>

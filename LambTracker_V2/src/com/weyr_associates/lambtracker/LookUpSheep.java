@@ -311,8 +311,6 @@ public class LookUpSheep extends ListActivity
 	        	recNo    = 1;
 				nRecs    = cursor.getCount();
 				Log.i("LookUpSheep", " nRecs = "+ String.valueOf(nRecs));
-//				colNames = cursor.getColumnNames();
-//	    		startManagingCursor(cursor);
 	        	dbh.moveToFirstRecord();
 	        	if( dbh.getSize() == 0 )
 		    		{ // no sheep with that tag in the database so clear out and return
