@@ -205,11 +205,55 @@ public class IDManagement extends Activity {
     	TextView TV = (TextView) findViewById (R.id.eidText);
     	TV.setText( LastEID );   	
 		Log.i("Convert", "Got EID");
-		// Fill the 
+       	// Fill the Tag Type Spinner
+     	// TODO    	    	    	
+    	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
+
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		tag_type_spinner2.setAdapter (dataAdapter);
+		tag_type_spinner2.setSelection(0);	
+		Log.i ("in add tag", " after set tag_type_spinner");
+		
+//    	// Fill the Tag Color Spinner
+    	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_colors);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		tag_color_spinner.setAdapter (dataAdapter);
+		tag_color_spinner.setSelection(0);
+		Log.i ("in add tag", " after set tag_color_spinner");	
+		
+    	// Fill the Tag Location Spinner
+		tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
+    	// Creating adapter for spinner
+    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_locations);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		tag_location_spinner.setAdapter (dataAdapter);
+		tag_location_spinner.setSelection(0);
+		Log.i ("in add tag", " after set tag_location_spinner");
+		btn = (Button) findViewById( R.id.update_display_btn );
+		if (btn.isEnabled()){
+			//	 We are adding a new EID tag so put it in the new tag field
+			TV = (TextView) findViewById (R.id.new_tag_number);
+	    	TV.setText( LastEID );  
+	    	//	Set the tag type to default electronic
+	    	tag_type_spinner2.setSelection(2);
+	    	//	Set the tag color to be the default EID color
+	    	// TODO
+	    	//	need to fix this from the defaults but for now is set to yellow
+	    	tag_color_spinner.setSelection(1);
+	    	//	Set the tag location to default Right Ear
+	    	// TODO
+	    	//	need to fix this from the defaults but for now is set to RE
+	    	tag_location_spinner.setSelection(1);	    	
+		}
+			
 	}	
 	
 /////////////////////////////////////////////////////	
-// TODO  On Create Section	
+//  On Create Section	
 	@Override
     public void onCreate(Bundle savedInstanceState)	
     {
@@ -425,7 +469,8 @@ public class IDManagement extends Activity {
     					if( tag_num != null && tag_num.length() > 0 ){       		
     						// Get the sheep id from the id table for this tag number and selected tag type
 			        		cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
-				        			"and id_info_table.tag_type='%s' and id_info_table.tag_date_off is null "
+				        			"and id_info_table.tag_type='%s' and (id_info_table.tag_date_off is null or" +
+				        			" id_info_table.tag_date_off = '') "
 				        			, tag_num , tag_type_spinner.getSelectedItemPosition());  
 				        	Log.i("searchByNumber", "command is " + cmd);
 				        	crsr = dbh.exec( cmd );
@@ -503,40 +548,6 @@ public class IDManagement extends Activity {
 				        break;
     				} // end of case switch   			
     		}else {
-//	        	if( tag_num != null && tag_num.length() > 0 ){       		
-//	//        		Get the sheep id from the id table for this tag number and selected tag type
-//	        		//	Have already determined it's not a name, split or notch
-//		        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
-//		        			"and id_info_table.tag_type='%s' and id_info_table.tag_date_off is null "
-//		        			, tag_num , tag_type_spinner.getSelectedItemPosition());  
-//		        	Log.i("searchByNumber", "command is " + cmd);
-//		        	crsr = dbh.exec( cmd );
-//		    		cursor   = ( Cursor ) crsr; 
-//		        	recNo    = 1;
-//					nRecs    = cursor.getCount();
-//					Log.i("searchByNumber", " nRecs = "+ String.valueOf(nRecs));
-//		        	dbh.moveToFirstRecord();
-//		        	Log.i("searchByNumber", " the cursor is of size " + String.valueOf(dbh.getSize()));
-//		        	if( dbh.getSize() == 0 ){ 
-//		        		// no sheep with that  tag in the database so clear out and return
-//			    		clearBtn( v );
-//			    		TV = (TextView) findViewById( R.id.sheepnameText );
-//			        	TV.setText( "Cannot find this sheep." );
-//			        	return;
-//			    	}
-//		        	thissheep_id = dbh.getInt(0);
-//		        	Log.i("searchByNumber", "This sheep is record " + String.valueOf(thissheep_id));
-//		        	if (nRecs >1){
-//		        		//	Have multiple sheep with this tag so enable next button
-//		            	btn = (Button) findViewById( R.id.next_rec_btn );
-//		            	btn.setEnabled(true);       		
-//		        	}
-//		        	Log.i("searchByNumber", " Before finding all tags");	        	
-//		        	findTagsShowAlert (v, thissheep_id);
-//		        	return;
-//	        	}
-//	        	Log.i("searchByNumber", "This sheep is record " + String.valueOf(thissheep_id));
-//    		}else {
     			clearBtn( null );
             	TV = (TextView) findViewById( R.id.sheepnameText );
                 TV.setText( "Sheep Database does not exist." ); 
@@ -552,7 +563,8 @@ public class IDManagement extends Activity {
 				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
+				"where id_info_table.sheep_id ='%s' and (id_info_table.tag_date_off is null or" +
+				        			" id_info_table.tag_date_off = '') order by idtype_name asc", thissheep_id);
 		Log.i("lookForSheep", "command is " + cmd);
 		crsr2 = dbh.exec( cmd ); 
 		Log.i("lookForSheep", " after second query to get all tags. found  " + String.valueOf(dbh.getSize()));	        	
@@ -1098,9 +1110,10 @@ public class IDManagement extends Activity {
     	}
     
     public void updateTag( View v ){
-    	Object 			crsr;
     	String 			cmd;
     	TextView 		TV;
+    	btn = (Button) findViewById( R.id.update_display_btn );
+    	btn.setEnabled(false); 
     	// Get the data from the add tag section of the screen
     	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
     	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);

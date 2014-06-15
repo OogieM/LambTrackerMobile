@@ -41,7 +41,7 @@
     <string name="remove_farmtag_btn">Remove Farm Tag</string>
     <string name="remove_eidtag_btn">Remove EID Tag</string>
     <string name="remove_paint_btn">Remove Paint Mark</string>
-    <string name="add_new_tag_btn">Add Non EID Tag</string>
+    <string name="add_new_tag_btn">Add New Tag</string>
     <string name="save_evaluation_scores_btn">Save Scores</string>
     <string name="create_evaluation_task_btn">Create Evaluation</string>
     <string name="look_up_sheep_btn">Look Up Sheep</string>
