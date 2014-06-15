@@ -496,7 +496,7 @@
       		android:layout_gravity="left"
      	 	android:layout_row="1"
             android:enabled="true"
-            android:inputType="number"
+            android:inputType="text"
             android:textSize="18sp"
             android:typeface="monospace" >
            </EditText>

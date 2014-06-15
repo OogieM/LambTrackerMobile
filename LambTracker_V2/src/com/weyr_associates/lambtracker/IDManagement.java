@@ -202,7 +202,7 @@ public class IDManagement extends Activity {
     	btn = (Button) findViewById( R.id.scan_eid_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	// 	Display the EID number
-    	TextView TV = (TextView) findViewById (R.id.eidText);
+    	TextView TV = (TextView) findViewById (R.id.inputText);
     	TV.setText( LastEID );   	
 		Log.i("Convert", "Got EID");
        	// Fill the Tag Type Spinner
@@ -496,7 +496,7 @@ public class IDManagement extends Activity {
 				        	}
 				        	Log.i("searchByNumber", " Before finding all tags");	        	
 				        	findTagsShowAlert (v, thissheep_id);
-				        	return;
+//				        	return;
     					}
     					break;
 				    case 6:
@@ -835,6 +835,12 @@ public class IDManagement extends Activity {
     	int		fed_colorid, farm_colorid, eid_colorid, fed_locationid, farm_locationid, eid_locationid;
     	int 	paint_colorid, paint_locationid ;
     	int	 	flock_id; // pointer into the flock id table so for the federal tag flock ID record
+    	int		official_id_type;
+    	//	Disable the update database button so we don't get 2 records entered
+       	btn = (Button) findViewById( R.id.update_database_btn );
+    	btn.setEnabled(false); 
+    	
+    	official_id_type = 1;
     	eid_colorid = 0;
     	eid_locationid = 0;
     	eidText = null;
@@ -1011,8 +1017,22 @@ public class IDManagement extends Activity {
 	    	Log.i("updateEID ", "tag record id is not zero, needs update here");
 		    }
 	    	else {
+	    		Log.i("updateeid ", "beginning of update eid code");
+	    		//	assume ID is not an official one at this time so 
+	    		int official_id_flag = 0;
+	    		// get the first 3 digits of the EID tag number
+	    		String str = eidText;
+	    		Log.i("updateeid ", "string of eid " + str);
+	    		str = str.substring(0,3);
+	    		Boolean isOfficial = "840".equals(str);
+	    		Log.i("updateeid ", "substring of eid " + str);
+	    		if (isOfficial){
+	    			official_id_type = 2;
+	    			official_id_flag = 1;
+	    		}
 	    		// eidtagid is zero so need to test whether there is an EID tag and add a record if there is one
-	    		if (eidText != null && !eidText.isEmpty()){
+	    			if (eidText != null && !eidText.isEmpty()){
+	    		
 	    			TV = (TextView) findViewById( R.id.eid_locationText);
 	    			eid_locationText = TV.getText().toString();
 	    		    Log.i("updateeid ", "eid location " + eid_locationText);
@@ -1035,8 +1055,8 @@ public class IDManagement extends Activity {
 	    	        Log.i("updateeid ", "eid location integer " + String.valueOf(eid_locationid));
 	    			//have an EID tag but no eidtagid so add a new record;
 	    			Log.i("updateEID ", "tag record id is 0 need to add a new record to id_info_table here");
-	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
-	    					"values ( %s, 2, %s, %s, %s, '%s', '%s' )", thissheep_id, eid_colorid, eid_colorid, eid_locationid, today, eidText);
+	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number, official_id) " +
+	    					"values ( %s, 2, %s, %s, %s, '%s', '%s', %s )", thissheep_id, eid_colorid, eid_colorid, eid_locationid, today, eidText, official_id_flag);
 	    			dbh.exec( cmd );	
 	    		}
 	    		else{
@@ -1045,6 +1065,9 @@ public class IDManagement extends Activity {
 	    		}
 	    	}
 	    clearBtn( v );
+//		Enable the update database button so we can continue to update
+       	btn = (Button) findViewById( R.id.update_database_btn );
+    	btn.setEnabled(true); 
     }
     public void addNewTag( View v ){
 //    	Object crsr;
@@ -1174,44 +1197,74 @@ public class IDManagement extends Activity {
     		
     	   	// 	Fill the new tag data with where it is in the screen display
         	//	Integers to hold the info new_tag_type, new_tag_color, new_tag_location
-    		
-        	if (new_tag_type == 1){
-        		//	Federal Tag so update federal section and set needs database update
-        		// 	by setting id of 0 meaning either no tag or needs update
-        		Log.i("in if", "Got a new federal tag type");
-        	    TV  = (TextView) findViewById( R.id.fedText );
-        	    TV.setText(new_tag_number);
-        	    TV = (TextView) findViewById( R.id.fed_colorText );
-        	    TV.setText(tag_color_label);
-        	    TV = (TextView) findViewById( R.id.fed_locationText );
-        	    TV.setText(tag_location_label);
-        	    fedtagid = 0;
-         	}
-        	if (new_tag_type == 2){
-        		//	EID Tag so update eid section and set needs database update
-        		//	by setting id of 0 meaning either no tag or needs update       		
-        		Log.i("in if", "Got a new eid tag type");
-        	    TV  = (TextView) findViewById( R.id.eidText );
-        	    TV.setText(new_tag_number);
-        	    TV = (TextView) findViewById( R.id.eid_colorText );
-        	    TV.setText(tag_color_label);
-        	    TV = (TextView) findViewById( R.id.eid_locationText );
-        	    TV.setText(tag_location_label);
-        	    eidtagid = 0;
-        	}
-        	if (new_tag_type == 3){
-        		//	Paint mark so update paint section and set needs database update
-        		// 	by setting id of 0 meaning either no tag or needs update
-        		Log.i("in if", "Got a new paint mark type");
-        	    TV  = (TextView) findViewById( R.id.paintText );
-        	    TV.setText(new_tag_number);
-        	    TV = (TextView) findViewById( R.id.paint_colorText );
-        	    TV.setText(tag_color_label);
-        	    TV = (TextView) findViewById( R.id.paint_locationText );
-        	    TV.setText(tag_location_label);
-        	    paintid = 0;
-         	}
-        	if (new_tag_type == 4){
+    		switch (new_tag_type) {   		
+    		case 1:
+    			if (fedtagid != 0){
+    				//	Already have a federal tag must delete one first
+    	    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+    	    		builder.setMessage( R.string.id_management_remove_tag )
+    	    	           .setTitle( R.string.id_management_remove_tag_header );
+    	    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+    	    	           public void onClick(DialogInterface dialog, int idx) {
+    	    	               // User clicked OK button 
+    	     	    		   return;
+    	    	               }
+    	    	       });		
+    	    		AlertDialog dialog = builder.create();
+    	    		dialog.show();		  				
+    			}else{
+	        		//	Federal Tag so update federal section and set needs database update
+	        		// 	by setting id of 0 meaning either no tag or needs update
+	        		Log.i("in if", "Got a new federal tag type");
+	        	    TV  = (TextView) findViewById( R.id.fedText );
+	        	    TV.setText(new_tag_number);
+	        	    TV = (TextView) findViewById( R.id.fed_colorText );
+	        	    TV.setText(tag_color_label);
+	        	    TV = (TextView) findViewById( R.id.fed_locationText );
+	        	    TV.setText(tag_location_label);
+	        	    fedtagid = 0;
+    			}
+    			break;
+    		case 2:
+    			if (eidtagid != 0){
+    				//	Already have an EID tag must delete one first
+    	    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+    	    		builder.setMessage( R.string.id_management_remove_tag )
+    	    	           .setTitle( R.string.id_management_remove_tag_header );
+    	    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+    	    	           public void onClick(DialogInterface dialog, int idx) {
+    	    	               // User clicked OK button 
+    	     	    		   return;
+    	    	               }
+    	    	       });		
+    	    		AlertDialog dialog = builder.create();
+    	    		dialog.show();		  				
+    			}else{
+            		//	EID Tag so update eid section and set needs database update
+            		//	by setting id of 0 meaning either no tag or needs update       		
+            		Log.i("in if", "Got a new eid tag type");
+            	    TV  = (TextView) findViewById( R.id.eidText );
+            	    TV.setText(new_tag_number);
+            	    TV = (TextView) findViewById( R.id.eid_colorText );
+            	    TV.setText(tag_color_label);
+            	    TV = (TextView) findViewById( R.id.eid_locationText );
+            	    TV.setText(tag_location_label);
+            	    eidtagid = 0;
+    			}
+    			break;
+    		case 3:
+	    		//	Paint mark so update paint section and set needs database update
+	    		// 	by setting id of 0 meaning either no tag or needs update
+	    		Log.i("in if", "Got a new paint mark type");
+	    	    TV  = (TextView) findViewById( R.id.paintText );
+	    	    TV.setText(new_tag_number);
+	    	    TV = (TextView) findViewById( R.id.paint_colorText );
+	    	    TV.setText(tag_color_label);
+	    	    TV = (TextView) findViewById( R.id.paint_locationText );
+	    	    TV.setText(tag_location_label);
+	    	    paintid = 0;
+    			break;
+    		case 4:
         		//	Farm Tag so update farm section and set needs database update
         		//	by setting id of 0 meaning either no tag or needs update       		
         		Log.i("in if", "Got a new farm tag type");
@@ -1222,15 +1275,19 @@ public class IDManagement extends Activity {
         	    TV = (TextView) findViewById( R.id.farm_locationText );
         	    TV.setText(tag_location_label);
         	    farmtagid = 0;
-        	}
+    			break;
+    		default:
+    			break;
+    		}
         	//	Clear out the add tag section    	
         	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
         	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
         	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
         	TV  = (TextView) findViewById( R.id.new_tag_number);
-        	tag_type_spinner2.setSelection(1);
-        	tag_color_spinner.setSelection(1);
-        	tag_location_spinner.setSelection(2);
+        	//	Should reset these to the defaults per user preferences btu for now just set to need data
+        	tag_type_spinner2.setSelection(0);
+        	tag_color_spinner.setSelection(0);
+        	tag_location_spinner.setSelection(0);
         	TV.setText( "" );
         	}
      	}

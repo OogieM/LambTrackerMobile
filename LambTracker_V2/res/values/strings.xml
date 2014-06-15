@@ -48,11 +48,11 @@
     <string name="add_lamb_btn">Add a Lamb</string>
     <string name="print_label_btn">Print Label</string>
     <string name="load_sheeplist">Load Sheep Database</string>
-     <string name="look_up_sheep">Look up a Sheep by EID</string>
+    <string name="look_up_sheep">Look up a Sheep by EID</string>
     <string name="copy_real_db_action">copyRealDB</string>
     <string name="select_file_db_action">selectFileDB</string>
     <string name="show_real_db_action">showRealDB</string>
-     <string name="title_activity_load_sheep_list">Manage Sheep Database</string>
+    <string name="title_activity_load_sheep_list">Manage Sheep Database</string>
     <string name="title_activity_look_up_sheep">Look Up Sheep</string>
     <string name="title_activity_edit_database">Edit Sheep Database</string>
     <string name="title_activity_lamb_tracker_receiver">Lamb Tracker Receiver</string>
@@ -93,6 +93,8 @@
     <string name="help_management">Select the management tasks you have done for this sheep and then update the database. </string>
     
     <string name="convert_fill_fields">Please Fill in all four fields.</string>
+    <string name="id_management_remove_tag">Remove the existing tag of this type before adding a new one.</string>
+    <string name="id_management_remove_tag_header">Tag Remove Problem</string>
     <string name="add_lamb_fill_title">Add a Lamb</string>
     <string name="add_lamb_fill_reartype">Please Fill in a Rearing Type value.</string>
     <string name="add_lamb_fill_lambease">Please Fill in a Lambease value.</string>
