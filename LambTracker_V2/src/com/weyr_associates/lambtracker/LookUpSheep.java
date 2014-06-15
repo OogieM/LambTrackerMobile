@@ -293,6 +293,11 @@ public class LookUpSheep extends ListActivity
      // Hide the keyboard when you click the button
     	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
     	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+      	//	Disable the Next Record and Prev. Record button until we have multiple records
+    	btn = (Button) findViewById( R.id.next_rec_btn );
+    	btn.setEnabled(false); 
+    	btn = (Button) findViewById( R.id.prev_rec_btn );
+    	btn.setEnabled(false);
     	
         TV = (EditText) findViewById( R.id.inputText );
         String	tag_num = TV.getText().toString();
@@ -300,44 +305,137 @@ public class LookUpSheep extends ListActivity
         Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
         Log.i("LookForSheep", " got to lookForSheep with Tag type of " + tag_type_spinner.getSelectedItemPosition());
         exists = tableExists("sheep_table");
-        if (exists){
-        	if( tag_num != null && tag_num.length() > 0 ){
-//        		Get the sheep id from the id table for this tag number and selected tag type
-	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
-	        			"and id_info_table.tag_type='%s' and id_info_table.tag_date_off is null", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
-	        	Log.i("LookForSheep", " command is  " + cmd);
-	        	crsr = dbh.exec( cmd );
-	        	cursor   = ( Cursor ) crsr; 
-	        	recNo    = 1;
-				nRecs    = cursor.getCount();
-				Log.i("LookUpSheep", " nRecs = "+ String.valueOf(nRecs));
-	        	dbh.moveToFirstRecord();
-	        	if( dbh.getSize() == 0 )
-		    		{ // no sheep with that tag in the database so clear out and return
-		    		clearBtn( v );
-		    		TV = (TextView) findViewById( R.id.sheepnameText );
-		        	TV.setText( "Cannot find this sheep." );
-		        	return;
-		    		}
-	        	// TODO add the next record previous record stuff in here
-	        	if (nRecs >1){
-	        		//	Have multiple sheep with this tag so enable next button
-	            	btn = (Button) findViewById( R.id.next_rec_btn );
-	            	btn.setEnabled(true);       		
-	        	}
-//	        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));	        	
-	        	//	We need to call the format the record method
-	        	formatSheepRecord(v);
-				}else{
-	        	return;
-	        }
-	        Log.i("lookForSheep", " out of the if statement");
-        	}
-    		else {
+        if (exists){       	
+    			switch (tag_type_spinner.getSelectedItemPosition()){
+    				case 1:
+    				case 2:
+    				case 3:
+    				case 4:
+    				case 5:
+    					if( tag_num != null && tag_num.length() > 0 ){       		
+    						// Get the sheep id from the id table for this tag number and selected tag type
+			        		cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
+				        			"and id_info_table.tag_type='%s' and (id_info_table.tag_date_off is null or" +
+				        			" id_info_table.tag_date_off = '') "
+				        			, tag_num , tag_type_spinner.getSelectedItemPosition());  
+				        	Log.i("searchByNumber", "command is " + cmd);
+				        	crsr = dbh.exec( cmd );
+				    		cursor   = ( Cursor ) crsr; 
+				        	recNo    = 1;
+							nRecs    = cursor.getCount();
+							Log.i("searchByNumber", " nRecs = "+ String.valueOf(nRecs));
+				        	dbh.moveToFirstRecord();
+				        	Log.i("searchByNumber", " the cursor is of size " + String.valueOf(dbh.getSize()));
+				        	if( dbh.getSize() == 0 ){ 
+				        		// no sheep with that  tag in the database so clear out and return
+					    		clearBtn( v );
+					    		TV = (TextView) findViewById( R.id.sheepnameText );
+					        	TV.setText( "Cannot find this sheep." );
+					        	return;
+					    	}
+				        	thissheep_id = dbh.getInt(0);
+				        	Log.i("searchByNumber", "This sheep is record " + String.valueOf(thissheep_id));
+				        	if (nRecs >1){
+				        		//	Have multiple sheep with this tag so enable next button
+				            	btn = (Button) findViewById( R.id.next_rec_btn );
+				            	btn.setEnabled(true);       		
+				        	}
+				        	Log.i("searchByNumber", " Before finding all tags");	        	
+				        	//	We need to call the format the record method
+				        	formatSheepRecord(v);   	
+    					}
+    					break;
+				    case 6:
+				    	//	got a split
+				    	//	Assume no split ears at this time. 
+				    	//	Needs modification for future use
+				    	TV = (TextView) findViewById( R.id.sheepnameText );
+			        	TV.setText( "Cannot search on splits yet." );
+				    	// TODO
+				        break;
+				    case 7:
+				    	//	got a notch
+				    	//	Assume no notches at this time. 
+				    	//	Needs modification for future use
+				    	TV = (TextView) findViewById( R.id.sheepnameText );
+			        	TV.setText( "Cannot search on notches yet." );
+				    	// TODO
+				        break;
+				    case 8:
+				    	//	got a name				    	
+				    	// TODO
+			        	tag_num = "%" + tag_num + "%";
+			        	cmd = String.format( "select sheep_id, sheep_name from sheep_table where sheep_name like '%s'" +
+			        			" and (remove_date is null or remove_date = '') "
+			        			, tag_num );  
+			        	Log.i("searchByName", "command is " + cmd);
+			        	crsr = dbh.exec( cmd );
+			    		cursor   = ( Cursor ) crsr; 
+			        	recNo    = 1;
+						nRecs    = cursor.getCount();
+						Log.i("searchByName", " nRecs = "+ String.valueOf(nRecs));
+			        	dbh.moveToFirstRecord();
+			        	Log.i("searchByName", " the cursor is of size " + String.valueOf(dbh.getSize()));
+			        	if( dbh.getSize() == 0 )
+				    		{ // no sheep with that name in the database so clear out and return
+				    		clearBtn( v );
+				    		TV = (TextView) findViewById( R.id.sheepnameText );
+				        	TV.setText( "Cannot find this sheep." );
+				        	return;
+				    		}
+			        	thissheep_id = dbh.getInt(0);			        	
+			        	if (nRecs >1){
+			        		//	Have multiple sheep with this name so enable next button
+			            	btn = (Button) findViewById( R.id.next_rec_btn );
+			            	btn.setEnabled(true);       		
+			        	}
+			        	//	We need to call the format the record method
+			        	formatSheepRecord(v);   	
+				        break;
+    				} // end of case switch   			
+    		}else {
     			clearBtn( null );
             	TV = (TextView) findViewById( R.id.sheepnameText );
-                TV.setText( "Sheep Database does not exist." );                
-        	}
+                TV.setText( "Sheep Database does not exist." ); 
+         	}
+//        if (exists){
+//        	if( tag_num != null && tag_num.length() > 0 ){
+////        		Get the sheep id from the id table for this tag number and selected tag type
+//	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
+//	        			"and id_info_table.tag_type='%s' and id_info_table.tag_date_off is null", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
+//	        	Log.i("LookForSheep", " command is  " + cmd);
+//	        	crsr = dbh.exec( cmd );
+//	        	cursor   = ( Cursor ) crsr; 
+//	        	recNo    = 1;
+//				nRecs    = cursor.getCount();
+//				Log.i("LookUpSheep", " nRecs = "+ String.valueOf(nRecs));
+//	        	dbh.moveToFirstRecord();
+//	        	if( dbh.getSize() == 0 )
+//		    		{ // no sheep with that tag in the database so clear out and return
+//		    		clearBtn( v );
+//		    		TV = (TextView) findViewById( R.id.sheepnameText );
+//		        	TV.setText( "Cannot find this sheep." );
+//		        	return;
+//		    		}
+//	        	// TODO add the next record previous record stuff in here
+//	        	if (nRecs >1){
+//	        		//	Have multiple sheep with this tag so enable next button
+//	            	btn = (Button) findViewById( R.id.next_rec_btn );
+//	            	btn.setEnabled(true);       		
+//	        	}
+////	        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));	        	
+//	        	//	We need to call the format the record method
+//	        	formatSheepRecord(v);
+//				}else{
+//	        	return;
+//	        }
+//	        Log.i("lookForSheep", " out of the if statement");
+//        	}
+//    		else {
+//    			clearBtn( null );
+//            	TV = (TextView) findViewById( R.id.sheepnameText );
+//                TV.setText( "Sheep Database does not exist." );                
+//        	}
 	}
 	// TODO
 	
@@ -354,7 +452,7 @@ public void formatSheepRecord (View v){
 			"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
 			"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
 			"sheep_table.sire_id, sheep_table.dam_id, sheep_table.birth_date, birth_type_table.birth_type," +
-			"sheep_sex_table.sex_name " +
+			"sheep_sex_table.sex_name, sheep_table.birth_weight " +
 			"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
 			"inner join birth_type_table on id_birthtypeid = sheep_table.birth_type " +
 			"inner join sheep_sex_table on sheep_sex_table.sex_sheepid = sheep_table.sex " +
@@ -374,6 +472,8 @@ public void formatSheepRecord (View v){
     TV.setText (dbh.getStr(12));
     TV = (TextView) findViewById( R.id.sheep_sex );
     TV.setText (dbh.getStr(13));
+    TV = (TextView) findViewById( R.id.birth_weight );
+    TV.setText (String.valueOf(dbh.getReal(14)));
     
     alert_text = dbh.getStr(8);
 	
