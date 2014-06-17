@@ -2,7 +2,7 @@ package com.weyr_associates.lambtracker;
 
 import java.util.Calendar;
 
-import com.weyr_associates.lambtracker.EvaluateSheep.IncomingHandler;
+//	import com.weyr_associates.lambtracker.EvaluateSheep.IncomingHandler;
 
 import android.app.Activity;
 import android.app.PendingIntent;

@@ -35,32 +35,29 @@
     <string name="take_note_btn">Take Note</string>
     <string name="ok">OK</string>
     <string name="scan_eid_btn">Scan EID Tag</string>
-    <string name="scan_add_eid_btn">Scan to add EID Tag</string>
-    <string name="remove_tag_btn">Remove Tag</string>
-    <string name="remove_fedtag_btn">Remove Fed Tag</string>
-    <string name="remove_farmtag_btn">Remove Farm Tag</string>
     <string name="search_fed_btn">Search Federal Tag</string>
     <string name="search_farm_btn">Search Farm Tag</string>
-    <string name="search_other_btn">Search Other ID</string>
-    <string name="add_new_tag_btn">Add Non EID Tag</string>
+    <string name="remove_fedtag_btn">Remove Fed Tag</string>
+    <string name="remove_farmtag_btn">Remove Farm Tag</string>
+    <string name="remove_eidtag_btn">Remove EID Tag</string>
+    <string name="remove_paint_btn">Remove Paint Mark</string>
+    <string name="add_new_tag_btn">Add New Tag</string>
     <string name="save_evaluation_scores_btn">Save Scores</string>
     <string name="create_evaluation_task_btn">Create Evaluation</string>
     <string name="look_up_sheep_btn">Look Up Sheep</string>
     <string name="add_lamb_btn">Add a Lamb</string>
     <string name="print_label_btn">Print Label</string>
     <string name="load_sheeplist">Load Sheep Database</string>
-    <string name="do_sheeptask">Do Sheep Tasks</string>
     <string name="look_up_sheep">Look up a Sheep by EID</string>
     <string name="copy_real_db_action">copyRealDB</string>
     <string name="select_file_db_action">selectFileDB</string>
     <string name="show_real_db_action">showRealDB</string>
-    <string name="title_activity_do_sheep_task">Demo Lambing Data</string>
     <string name="title_activity_load_sheep_list">Manage Sheep Database</string>
     <string name="title_activity_look_up_sheep">Look Up Sheep</string>
     <string name="title_activity_edit_database">Edit Sheep Database</string>
     <string name="title_activity_lamb_tracker_receiver">Lamb Tracker Receiver</string>
     <string name="title_activity_incoming_receiver">IncomingReceiver</string>
-    <string name="title_activity_convert_to_eid">Convert To EID</string>
+    <string name="title_activity_convert_to_eid">ID Management</string>
     <string name="title_activity_evaluate_sheep">Evaluate Sheep</string>
     <string name="title_activity_test_interface_designs">Test Interface Designs</string>
     <string name="title_activity_create_sheep_evaluation">Create Evaluation Task</string>
@@ -74,27 +71,33 @@
     
     <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
-    <string name="help_convert">Select a sheep based on either Federal or Farm tag. The system assumes there are no duplicate
-         farm tags and no duplicate federal tags. There can be duplicates where one is a federal tag and one is a farm tag. </string>
+    <string name="help_manage_id">Select a sheep based on some form of ID. Currently federal, farm, electronic, paint and name 
+        ID types are recognized. Soon we will be adding tattoo, split and ear notch as ways to look up a sheep.  </string>
     <string name="help_evaluate">Evaluate sheep based on the criteria you select. Use the select to locate a sheep by Federal, 
         Farm or Scanning an EID tag. Then select the scores for each trait. When finished select Save Scores
         to write the data to the database with an evaluation date of today. </string>
     <string name="help_create_evaluate">Create a list of traits to evaluate on this run with the sheep. 
         You may select 10 scored items, 5 real data items and 5 custom items. </string>
-    <string name="help_look_up_sheep">Select a sheep using the EID reader or by entering in a federal or farm tag number. 
+    <string name="help_look_up_sheep">Select a sheep using the EID reader or by entering in another form of identification. 
    	    All the tags for that sheep will be displayed in the scrolling view below. If you need to correct tags you will need to do 
-   	    that separately in the desktop application. The notes for this sheep are shown below the tags.  </string>
+   	    that separately in the ID Management task. The notes for this sheep are shown below the tags.  </string>
     <string name="help_lambing_sheep">Select a sheep using the EID reader or by entering in another identification. 
    	    All the tags for that sheep will be displayed in the scrolling view below. The ewe\'s last lambing results will be shown.
    	    If there are any lambs from that sheep for this year their identification will also be listed. You can choose to add lambs 
    	    here to collect data on the birth. </string>
     <string name="help_add_lamb">Add the information on this lamb. Be sure to put the first lamb born in first and the second lamb 
          born in second.  </string>
-    <string name="help_fix_lamb">Edit and update information about a lamb if you did not finish entering in or have errors.  </string>
+    <string name="help_fix_lamb">Edit and update information about a lamb if you did not finish entering in or have errors. Currently 
+        you can only edit the rearing type, sex and lambease values. </string>
     <string name="help_print">This prints a single label with the EID as a bar code and the name of the sheep on it.  </string>
     <string name="help_management">Select the management tasks you have done for this sheep and then update the database. </string>
+    
     <string name="convert_fill_fields">Please Fill in all four fields.</string>
-    <string name="add_lamb_fill_fields">Please Fill in a Lambease value.</string>
+    <string name="id_management_remove_tag">Remove the existing tag of this type before adding a new one.</string>
+    <string name="id_management_remove_tag_header">Tag Remove Problem</string>
+    <string name="add_lamb_fill_title">Add a Lamb</string>
+    <string name="add_lamb_fill_reartype">Please Fill in a Rearing Type value.</string>
+    <string name="add_lamb_fill_lambease">Please Fill in a Lambease value.</string>
     <string name="drug_loc_fill_fields">Please Fill in a Shot Location.</string>
     <string name="enter_tag_data">Enter Tag Data</string>
     <string name="wrong_id_location">Invalid ID Location</string>
@@ -102,10 +105,9 @@
     <string-array name="sheep_task_array">
         <item>Choose a Flock Task</item>
         <item>Manage Sheep Database</item>
-        <item>Convert to EID</item>
+        <item>ID Management</item>
         <item>Create a Sheep Evaluation Task</item>
         <item>Evaluate Sheep</item>
-        <item>Evaluate Sheep2</item>
         <item>Look Up a Sheep</item>
         <item>Lambing</item>
         <item>Fix Lamb Record</item>
@@ -130,19 +132,24 @@
     <string name="sheep_dam_lbl">Dam</string>
     <string name="sheep_stillborn">Stillborn</string>
     <string name="sheep_stillborn_lbl">Stillborn Status</string>
+    <string name="mark_ewe">Mark Ewe</string>
+    <string name="sheep_scrapieblood">Take Scrapie Blood Sample</string>
     <string name="sheep_trimtoes">Trim Toes</string>
     <string name="sheep_givewormer">Give Wormer</string>
     <string name="sheep_givevaccine">Give Vaccine</string>
+    <string name="sheep_takeweight">Take Weight</string>
     <string name="sheep_shear">Shear Sheep</string>
     <string name="federal_id_lbl">Federal ID</string>
     <string name="farm_id_lbl">Farm ID</string>
     <string name="electronic_id_lbl">Electronic ID</string>
+    <string name="paint_id_lbl">Paint ID</string>
     <string name="input_id_lbl">Input Search String</string>
     <string name="tag_number_lbl">Tag Number</string>
     <string name="tag_record_lbl">ID #</string>
     <string name="tag_type_lbl">Tag Type</string>
     <string name="tag_type_abbrev_lbl">Type</string>
     <string name="tag_color_lbl">Tag Color</string>
+    <string name="paint_color_lbl">Paint Color</string>
     <string name="tag_color_abbrev_lbl">Color</string>
     <string name="tag_color_male_lbl">Tag Color Male Side</string>
     <string name="tag_color_female_lbl">Tag Color Female Side</string>

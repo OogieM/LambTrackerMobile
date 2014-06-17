@@ -187,7 +187,7 @@ public class MainActivity extends Activity {
 			        break;
 			    case 2:
 //			    	Log.i ("Main case", " In main case statement selected 2");
-			    	i = new Intent(MainActivity.this, ConvertToEID.class);
+			    	i = new Intent(MainActivity.this, IDManagement.class);
 					MainActivity.this.startActivity(i);
 			        break;
 			    case 3:
@@ -195,44 +195,44 @@ public class MainActivity extends Activity {
 					MainActivity.this.startActivity(i);
 			        break;
 			    case 4:
-			    	Log.i ("Main case", " In main case statement selected 4");
-			    	i = new Intent(MainActivity.this, EvaluateSheep.class);
-			        MainActivity.this.startActivity(i);
-			        break;
-			    case 5:
+//			    	Log.i ("Main case", " In main case statement selected 4");
+//			    	i = new Intent(MainActivity.this, EvaluateSheep.class);
+//			        MainActivity.this.startActivity(i);
+//			        break;
+//			    case 5:
 //			    	Log.i ("Main case", " In main case statement selected 5");
 			    	i = new Intent(MainActivity.this, EvaluateSheep2.class);
 			        MainActivity.this.startActivity(i);
 			        break;
-			    case 6:
+			    case 5:
 					i = new Intent(MainActivity.this, LookUpSheep.class);
 					MainActivity.this.startActivity(i);
 					break;
-			    case 7:
+			    case 6:
 					i = new Intent(MainActivity.this, LambingSheep.class);
 					MainActivity.this.startActivity(i);
 			        break;
-			    case 8:
+			    case 7:
 					i = new Intent(MainActivity.this, FixLamb.class);
 					MainActivity.this.startActivity(i);
 			        break;
-			    case 9:
+			    case 8:
 					i = new Intent(MainActivity.this, SheepManagement.class);
 					MainActivity.this.startActivity(i);
 			        break;
-			    case 10:
+			    case 9:
 					i = new Intent(MainActivity.this, PrintLabels.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 11:
+				case 10:
 					i = new Intent(MainActivity.this, EditDB.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 12:		
+				case 11:		
 					i = new Intent(MainActivity.this, SetDefaults.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 13:		
+				case 12:		
 					i = new Intent(MainActivity.this, TestInterfaceDesigns.class);
 					MainActivity.this.startActivity(i);
 			        break;
@@ -523,7 +523,7 @@ public class MainActivity extends Activity {
 	// Convert to EID by updating what tags are where on each sheep
 	public void convertToEID( )
     {
-	Intent convertSheep = new Intent( this, ConvertToEID.class );
+	Intent convertSheep = new Intent( this, IDManagement.class );
 	startActivity(convertSheep);
 	}
 	

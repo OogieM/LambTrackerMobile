@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.weyr_associates.lambtracker.EvaluateSheep.IncomingHandler;
+//import com.weyr_associates.lambtracker.EvaluateSheep2.IncomingHandler;
 
 import android.R.string;
 import android.app.Activity;
@@ -65,7 +65,7 @@ public class EvaluateSheep2 extends Activity {
 	private int			    recNo;
 	public int             nRecs, nRecs1, nRecs2, nRecs3, nRecs4;
 	
-	private String[]        colNames;
+//	private String[]        colNames;
 	List<Integer> which_traits, user_scores;
 	List<Float> real_scores;
 	public List<String> scored_evaluation_traits, data_evaluation_traits, trait_units, user_evaluation_traits;
@@ -251,7 +251,7 @@ public class EvaluateSheep2 extends Activity {
 		Log.i("Got EID", " ready for command " + cmd); 
 		Object crsr = dbh.exec( cmd ); 
     	cursor   = (Cursor) crsr;
-    	startManagingCursor(cursor);
+//    	startManagingCursor(cursor);
     	dbh.moveToFirstRecord();
     	if( dbh.getSize() == 0 )
 			{ // no sheep with that EID tag in the database so clear out and return
@@ -364,14 +364,13 @@ public class EvaluateSheep2 extends Activity {
         cmd = "select * from id_type_table";
         crsr = dbh.exec( cmd );  
         cursor   = ( Cursor ) crsr;
-        startManagingCursor(cursor);
+//        startManagingCursor(cursor);
     	dbh.moveToFirstRecord();
     	tag_types.add("Select a Type");
          // looping through all rows and adding to list
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		tag_types.add(cursor.getString(1));
     	}
-//    	cursor.close();    	   	
     	// Creating adapter for spinner
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -382,7 +381,7 @@ public class EvaluateSheep2 extends Activity {
 		cmd = "select * from last_eval_table";
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
-        startManagingCursor(cursor);
+//        startManagingCursor(cursor);
         dbh.moveToFirstRecord();
         
     	trait01 = dbh.getInt(1);
@@ -437,7 +436,7 @@ public class EvaluateSheep2 extends Activity {
 //    	Log.i("evaluate2", " cmd is " + cmd);
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
-        startManagingCursor(cursor);
+//        startManagingCursor(cursor);
         nRecs    = cursor.getCount();
         Log.i("evaluate2", " nRecs is " + String.valueOf(nRecs));
         dbh.moveToFirstRecord();
@@ -447,7 +446,6 @@ public class EvaluateSheep2 extends Activity {
 	    	scored_evaluation_traits.add(cursor.getString(0));
 //	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
     	}
-//    	cursor.close();    	
     	Log.i("evaluate2", "number of records in scored traits cursor is " + String.valueOf(nRecs));
     	LayoutInflater inflater = getLayoutInflater();	
 //    	Log.i ("evaluate2", scored_evaluation_traits.get(0));
@@ -470,7 +468,7 @@ public class EvaluateSheep2 extends Activity {
 //    	Log.i("test designs", " cmd is " + cmd);
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
-        startManagingCursor(cursor);
+//        startManagingCursor(cursor);
         nRecs2    = cursor.getCount();
         dbh.moveToFirstRecord();
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
@@ -479,7 +477,6 @@ public class EvaluateSheep2 extends Activity {
 	    	data_evaluation_traits.add(cursor.getString(0));
 //	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
     	}
-//    	cursor.close();    	
     	Log.i("evaluate2", "number of records in data traits cursor is " + String.valueOf(nRecs2));
     	inflater = getLayoutInflater();	
 //    	Log.i ("evaluate2", scored_evaluation_traits.get(0));
@@ -506,7 +503,7 @@ public class EvaluateSheep2 extends Activity {
 //    	Log.i("evaluate2", " cmd is " + cmd);
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
-        startManagingCursor(cursor);
+//        startManagingCursor(cursor);
         nRecs3    = cursor.getCount(); // number of user defined traits to use
     	dbh.moveToFirstRecord();
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
@@ -541,7 +538,7 @@ public class EvaluateSheep2 extends Activity {
 //	    	Log.i("evaluate2", " ready to get button text cmd is " + cmd);	    	
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
-	        startManagingCursor(cursor);
+//	        startManagingCursor(cursor);
 	        nRecs4    = cursor.getCount();
 	        Log.i ("getting button", " text have " + String.valueOf(nRecs4) + " buttons to build");
 	        dbh.moveToFirstRecord();		        
@@ -620,6 +617,8 @@ public class EvaluateSheep2 extends Activity {
     	   	
     	// I got the sheep id from the search by federal or farm or EID tag
     	// it's in the sheep_id variable
+    
+    	Log.i("in save scores", " thissheep id is " + String.valueOf(thissheep_id)); 
     	
     	Log.i("in save scores", " sheep id is " + String.valueOf(sheep_id));  
     	
@@ -732,7 +731,7 @@ public class EvaluateSheep2 extends Activity {
 	    		    			" and custom_evaluation_traits_table.custom_evaluation_order =  %s ", tempTrait, tempRadioBtn+1);
 	    				crsr = dbh.exec( cmd );
 	    		        cursor   = ( Cursor ) crsr;
-	    		        startManagingCursor(cursor);
+//	    		        startManagingCursor(cursor);
 	    		        dbh.moveToFirstRecord();		        
 	    		        tempRadioBtn = cursor.getInt(0);
 //	    		        Log.i("try ", String.valueOf(tempRadioBtn));
@@ -799,8 +798,8 @@ public class EvaluateSheep2 extends Activity {
 //    		Log.i("number ","eval trait20 "+String.valueOf(trait20_data));
     		
     		//	Get the date and time to enter into the database.
-    		String mytoday = TodayIs();
-    		String mytime = TimeIs();
+    		String mytoday = Utilities.TodayIs();
+    		String mytime = Utilities.TimeIs();
        		
     		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
     		"trait_name01, trait_score01, trait_name02, trait_score02, trait_name03, trait_score03, " +
@@ -813,7 +812,7 @@ public class EvaluateSheep2 extends Activity {
     		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date, eval_time) " +
     		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s," +
     		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s','%s') ", 
-    				sheep_id, trait01, trait01_data, trait02, trait02_data, trait03, trait03_data,
+    		thissheep_id, trait01, trait01_data, trait02, trait02_data, trait03, trait03_data,
     				trait04, trait04_data, trait05, trait05_data, trait06, trait06_data,
     				trait07, trait07_data, trait08, trait08_data, trait09, trait09_data, 
     				trait10, trait10_data, trait11, trait11_data, trait12, trait12_data, 
@@ -845,11 +844,10 @@ public class EvaluateSheep2 extends Activity {
 	
 	   public void backBtn( View v )
 	    {
-		   cursor.close(); 
-		   stopManagingCursor (cursor);
-		   dbh.closeDB();
 		   	doUnbindService();
 			stopService(new Intent(EvaluateSheep2.this, eidService.class));
+			cursor.close(); 
+			dbh.closeDB();
 			clearBtn( null );   	
 			finish();
 	    }
@@ -906,37 +904,42 @@ public class EvaluateSheep2 extends Activity {
 		TV.setText( "" );
 		
 		//	Clear the rating bars
-		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
-		Log.i("in clear button", " number rating bars is " + String.valueOf(nRecs)); 
-		if (nRecs != 0) {
-			for( int ii = 0; ii < nRecs; ii++ ){	
-				Log.i("in clear button", " in 1st for loop ii is" + String.valueOf(ii)); 
+		try {
+			TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
+			Log.i("in clear button", " number rating bars is " + String.valueOf(nRecs)); 
+			if (nRecs != 0) {
+				for( int ii = 0; ii < nRecs; ii++ ){	
+					Log.i("in clear button", " in 1st for loop ii is" + String.valueOf(ii)); 
+					TableRow row1= (TableRow)table.getChildAt(ii);
+					ratingBar = (RatingBar) row1.getChildAt(1);
+					ratingBar.setRating(0.0f);			
+					Log.i("RatingBar01 ", String.valueOf(ratingBar.getRating()));  
+				}
+			}
+			//	Clear the real scored traits
+			Log.i("in clear button", " number scored traits is " + String.valueOf(nRecs2));
+			table = (TableLayout) findViewById(R.id.TableLayout02);
+			if (nRecs2 != 0) {
+				for( int ii = 0; ii < nRecs2; ii++ ){	
 				TableRow row1= (TableRow)table.getChildAt(ii);
-				ratingBar = (RatingBar) row1.getChildAt(1);
-				ratingBar.setRating(0.0f);			
-				Log.i("RatingBar01 ", String.valueOf(ratingBar.getRating()));  
+				TV = (EditText ) row1.getChildAt(1);
+				TV.setText ( "" );
+				}
 			}
-		}
-		//	Clear the real scored traits
-		Log.i("in clear button", " number scored traits is " + String.valueOf(nRecs2));
-		table = (TableLayout) findViewById(R.id.TableLayout02);
-		if (nRecs2 != 0) {
-			for( int ii = 0; ii < nRecs2; ii++ ){	
-			TableRow row1= (TableRow)table.getChildAt(ii);
-			TV = (EditText ) row1.getChildAt(1);
-			TV.setText ( "" );
+			//	Clear the radio group checks
+			Log.i("in clear button", " number radio group traits is " + String.valueOf(nRecs3));
+			table = (TableLayout) findViewById(R.id.TableLayout03);
+			if (nRecs3 != 0) {
+				for( int ii = 0; ii < nRecs3; ii++ ){	
+				TableRow row1= (TableRow)table.getChildAt(ii);
+				RadioGroup rg = ((RadioGroup) row1.findViewById(R.id.radioGroup1));
+				rg.clearCheck();
+				}
 			}
+		}catch (Exception e){
+			//	something failed so log it
+			Log.i("in clear button", " in catch of try clearing rating, real and radio groups " );
 		}
-		//	Clear the radio group checks
-		table = (TableLayout) findViewById(R.id.TableLayout03);
-		if (nRecs3 != 0) {
-			for( int ii = 0; ii < nRecs3; ii++ ){	
-			TableRow row1= (TableRow)table.getChildAt(ii);
-			RadioGroup rg = ((RadioGroup) row1.findViewById(R.id.radioGroup1));
-			rg.clearCheck();
-			}
-		}
-		
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
@@ -949,32 +952,6 @@ public class EvaluateSheep2 extends Activity {
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));        	
     	btn.setEnabled(true);
     }
-	   private String TodayIs() {
-			Calendar calendar = Calendar.getInstance();
-			int day = calendar.get(Calendar.DAY_OF_MONTH);
-			int month = calendar.get(Calendar.MONTH);
-			int year = calendar.get(Calendar.YEAR);
-			  
-			return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
-		}
-	    private String Make2Digits(int i) {
-			if (i < 10) {
-				return "0" + i;
-			} else {
-				return Integer.toString(i);
-			}
-		}	
-		   private String TimeIs() {
-				Calendar calendar = Calendar.getInstance();
-		        //12 hour format
-//				int hour = cal.get(Calendar.HOUR);
-		        //24 hour format
-				int hourofday = calendar.get(Calendar.HOUR_OF_DAY);
-				int minute = calendar.get(Calendar.MINUTE);
-				int second = calendar.get(Calendar.SECOND);
-				  
-				return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
-			}
 
 //  user clicked 'Scan' button    
  public void scanEid( View v){
@@ -1025,6 +1002,7 @@ public class EvaluateSheep2 extends Activity {
 		        	return;
 		    		}
 	        	thissheep_id = dbh.getInt(0);
+	        	sheep_id = thissheep_id;
 	        
 	        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));
 	        	Log.i("LookForSheep", " Before finding all tags");
@@ -1041,7 +1019,7 @@ public class EvaluateSheep2 extends Activity {
 	    		crsr = dbh.exec( cmd ); 
 	    		Log.i("LookForSheep", " after finding tags");
 	    		cursor   = ( Cursor ) crsr; 
-	    		startManagingCursor(cursor);
+//	    		startManagingCursor(cursor);
 
 				nRecs1    = cursor.getCount();
 				Log.i("in LookForSheep ", "number of tag records is " + String.valueOf(nRecs1));
@@ -1108,158 +1086,25 @@ public class EvaluateSheep2 extends Activity {
 			    	//	testing whether I can put up an alert box here without issues
 			    	showAlert(v);
 				}        	
-		}else{
-				thissheep_id = 0;
-				sheep_id = 0;
-				return;
-	        }
+		};
+//        	else{
+////				thissheep_id = 0;
+////				sheep_id = 0;
+//				return;
+//	        }
 	        Log.i("lookForSheep", " out of the if statement");
-        	}
-    		else {
-    			clearBtn( null );
-            	TV = (TextView) findViewById( R.id.sheepnameText );
-                TV.setText( "Sheep Database does not exist." ); 
-                
-        	}
-	}	 
- 
-    public void takeNote( View v )
-    {	    	
-    	final Context context = this;
-		//	First fill the predefined note spinner with possibilities
-    	predefined_notes = new ArrayList<String>();
-		predefined_notes.add("Select a Predefined Note");
-//		Log.i ("takeNote", " after adding Select a Predefined Note");
-    	// Select All fields from predefined_notes_table to build the spinner
-        cmd = "select * from predefined_notes_table";
-//        Log.i ("takeNote", " cmd is " + cmd);
-        crsr = dbh.exec( cmd );  
-        cursor   = ( Cursor ) crsr;
-    	dbh.moveToFirstRecord();
-         // looping through all rows and adding to list
-    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-    		predefined_notes.add(cursor.getString(1));
-//    		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
-    	}
-    	cursor.close();    
-    	Log.i ("takeNote", " after set the predefined note spinner ");
-    	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
-    	//Implement take a note stuff here
-    	if (thissheep_id == 0) {
-    		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
-    	}
-    	else {
-//    		Log.i ("takeNote", " got a sheep, need to get a note to add");
-    		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-//    		Log.i ("takeNote", " after getting new alertdialogbuilder");
-    		
-    		LayoutInflater li = LayoutInflater.from(context);
-			View promptsView = li.inflate(R.layout.note_prompt, null);
-//			Log.i ("takeNote", " after inflating layout");	
-
-			// set view note_prompt to alertdialog builder
-			alertDialogBuilder.setView(promptsView);
-			Log.i ("takeNote", " after setting view");
-		   	// Creating adapter for predefined notes spinners
-	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, predefined_notes);
-	    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    	predefined_note_spinner01 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner01);
-	    	predefined_note_spinner01.setAdapter (dataAdapter);
-			predefined_note_spinner01.setSelection(0);
-			
-	    	predefined_note_spinner02 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner02);
-	    	predefined_note_spinner02.setAdapter (dataAdapter);
-			predefined_note_spinner02.setSelection(0);
-
-	    	predefined_note_spinner03 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner03);
-	    	predefined_note_spinner03.setAdapter (dataAdapter);
-			predefined_note_spinner03.setSelection(0);
-
-	    	predefined_note_spinner04 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner04);
-	    	predefined_note_spinner04.setAdapter (dataAdapter);
-			predefined_note_spinner04.setSelection(0);
-
-	    	predefined_note_spinner05 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner05);
-	    	predefined_note_spinner05.setAdapter (dataAdapter);
-			predefined_note_spinner05.setSelection(0);
-
-			final EditText userInput = (EditText) promptsView
-					.findViewById(R.id.note_text);
-
-			// set dialog message
-			alertDialogBuilder
-				.setCancelable(false)
-				.setPositiveButton("Save Note",
-				  new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog,int id) {
-					// get user input and set it to result
-					// edit text
-					String note_text = String.valueOf(userInput.getText());
-					//	Get id_predefinednotesid from a spinner here 
-					int predefined_note01 = predefined_note_spinner01.getSelectedItemPosition();
-					int predefined_note02 = predefined_note_spinner02.getSelectedItemPosition();
-					int predefined_note03 = predefined_note_spinner03.getSelectedItemPosition();
-					int predefined_note04 = predefined_note_spinner04.getSelectedItemPosition();
-					int predefined_note05 = predefined_note_spinner05.getSelectedItemPosition();
-					// Update the notes table with the data
-					cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, " +
-							"id_predefinednotesid01) " +
-							"values ( %s, '%s', '%s', '%s', %s )",
-	    					thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note01);
-	    			Log.i("update notes ", "before cmd " + cmd);
-	    			dbh.exec( cmd );	
-	    			Log.i("update notes ", "after cmd exec");
-	    			Log.i("take note","first note written");
-	    			if (predefined_note02 > 0) {
-	    	 			Log.i("take note","second note written");
-	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-	 							"id_predefinednotesid01) " +
-	 							"values ( %s, '%s', '%s', %s)",
-	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note02 );
-	 	    			Log.i("update notes ", "before cmd " + cmd);
-	 	    			dbh.exec( cmd );	
-	    	 		}
-	    			if (predefined_note03 > 0) {
-	    	 			Log.i("take note","third note written");
-	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-	 							"id_predefinednotesid01) " +
-	 							"values ( %s, '%s', '%s', %s)",
-	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note03 );
-	 	    			Log.i("update notes ", "before cmd " + cmd);
-	 	    			dbh.exec( cmd );	
-	    	 		}
-	    			if (predefined_note04 > 0) {
-	    	 			Log.i("take note","fourth note written");
-	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-	 							"id_predefinednotesid01) " +
-	 							"values ( %s, '%s', '%s', %s)",
-	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note04 );
-	 	    			Log.i("update notes ", "before cmd " + cmd);
-	 	    			dbh.exec( cmd );	
-	    	 		}
-	    			if (predefined_note05 > 0) {
-	    	 			Log.i("take note","fifth note written");
-	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-	 							"id_predefinednotesid01) " +
-	 							"values ( %s, '%s', '%s', %s)",
-	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note05 );
-	 	    			Log.i("update notes ", "before cmd " + cmd);
-	 	    			dbh.exec( cmd );	
-	    	 		}
-				    }
-				  })
-				.setNegativeButton("Cancel",
-				  new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog,int id) {
-					dialog.cancel();
-				    }
-				  });
-			// create alert dialog
-			AlertDialog alertDialog = alertDialogBuilder.create();
-			// show it
-			alertDialog.show();
-    	}   	
     }
+    else {
+    			clearBtn( null );
+        	TV = (TextView) findViewById( R.id.sheepnameText );
+            TV.setText( "Sheep Database does not exist." );            
+    	}
+	}	 
+    public void doNote( View v )
+    {	 
+    	Utilities.takeNote(v, thissheep_id, this);
+    }
+
 	public boolean tableExists (String table){
 		try {
 	        dbh.exec("select * from "+ table);   

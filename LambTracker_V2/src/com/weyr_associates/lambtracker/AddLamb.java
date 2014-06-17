@@ -50,8 +50,8 @@ public class AddLamb extends Activity {
 	Integer 	i;	
 	public Button btn;
 	public String alert_text;
-	public Cursor 	cursor;
-	public Object 	crsr;
+	public Cursor 	cursor, cursor2;
+	public Object 	crsr, crsr2;
 	public Spinner tag_type_spinner, tag_type_spinner2, tag_location_spinner, tag_color_spinner, lamb_ease_spinner;
 	public List<String> tag_types, tag_locations, tag_colors, lambing_ease;
 	public List<Integer> lambeaseid;
@@ -65,8 +65,8 @@ public class AddLamb extends Activity {
 	public int lamb_id, lamb_codon171, lamb_codon154, lamb_codon136;
 	public int flock_prefix, id_sheepbreedid, id_locationid, id_ownerid;
 	public int	service_type, birth_weight_units, lamb_birth_record;
-	public CheckBox 	stillbornbox;
-	public boolean stillborn;
+	public CheckBox 	stillbornbox, markewebox;
+	public boolean stillborn, markewe;
 	public Float birth_weight;
 	public double	real_gestation_length;
 	public RadioGroup radioGroup;
@@ -81,9 +81,6 @@ public class AddLamb extends Activity {
 	public String tag_type_label, tag_color_label, tag_location_label, new_tag_number, eid_tag_color_label ;
 	public String eid_tag_location_label, eidText;
 	public Spinner eid_tag_color_spinner, eid_tag_location_spinner;
-	public Spinner predefined_note_spinner01, predefined_note_spinner02, predefined_note_spinner03;
-	public Spinner predefined_note_spinner04, predefined_note_spinner05;
-	public List<String> predefined_notes;
 	private int             nRecs;
 	
 	/////////////////////////////////////////////////////
@@ -273,11 +270,11 @@ public class AddLamb extends Activity {
     	Object crsr;
     	ArrayList radiobtnlist;
     	String[] radioBtnText;
-       	Boolean			exists;
+//       	Boolean			exists;
        	TextView TV;
-       	Float temp_ram_in, temp_ram_out;
-       	double	gestation_length;
-       	Double temp_julian_today;
+       	float temp_ram_in, temp_ram_out;
+       	double	gestation_length, first_gestation_possible, last_gestation_possible;
+       	double temp_julian_today;
        	int [] jintdate = new int[] {0,0,0};
 
    	 //////////////////////////////////// 
@@ -400,6 +397,10 @@ public class AddLamb extends Activity {
 		//	Fill lambing_notes with empty string until we read them from the history
 		lambing_notes = "";
 		
+		//	Fill the mark ewe box default to checked 
+		markewebox = (CheckBox) findViewById(R.id.checkBoxMarkEwe);
+		markewebox.setChecked (true);
+		
 		Bundle extras = getIntent().getExtras();
 		// get extras here from the lambing screen. Mostly ewe's data for scrapie genetics	
 		if (extras!= null){
@@ -415,6 +416,16 @@ public class AddLamb extends Activity {
 		//	Now need to figure out who the sire is based on date and breeding records.
 		//  First put an empty string in as sire name
 		sire_name = "Sire not found";
+		Calendar calendar = Calendar.getInstance();
+		Log.i("add a lamb ", " after getting a calendar");
+			jintdate [0] = calendar.get(Calendar.YEAR);
+			jintdate [1] = calendar.get(Calendar.MONTH) +1;
+			jintdate [2] = calendar.get(Calendar.DAY_OF_MONTH);
+		
+//			Log.i("add a lamb ", " before getting julian of today");
+		temp_julian_today = Utilities.toJulian(jintdate);
+		Log.i("addlamb", " julian today is " + String.valueOf(temp_julian_today));
+		
 		//	Then go get the breeding records for this ewe.
 		cmd = String.format("select sheep_breeding_table.ewe_id, " +
 				" sheep_breeding_table.breeding_id, " +
@@ -427,52 +438,50 @@ public class AddLamb extends Activity {
     			" left outer join sheep_breeding_table on " +
     			" sheep_breeding_table.breeding_id = breeding_record_table.id_breedingid " +
     			" inner join sheep_table on sheep_id = ram_id " +
-    			" where sheep_breeding_table.ewe_id = '%s' ", dam_id);		  
-			
-		Calendar calendar = Calendar.getInstance();
-		Log.i("add a lamb ", " after getting a calendar");
-			jintdate [0] = calendar.get(Calendar.YEAR);
-			jintdate [1] = calendar.get(Calendar.MONTH) +1;
-			jintdate [2] = calendar.get(Calendar.DAY_OF_MONTH);
-		//	Removed the hard coding for testing purposes. 
-		//	Hard Coded a day within the breeding time of AI for testing purposes		
-//		jintdate [0] = 2014;
-//		jintdate [1] = 04;
-//		jintdate [2] = 27;
-		
-//			Log.i("add a lamb ", " before getting julian of today");
-		temp_julian_today = Utilities.toJulian(jintdate);
-//			Log.i("addlamb", " julian today is " + String.valueOf(temp_julian_today));
+    			" where sheep_breeding_table.ewe_id = '%s' ", dam_id);		  					
     	Log.i("add a lamb ", " cmd is " + cmd);	    	
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
-//        startManagingCursor(cursor);
         nRecs    = cursor.getCount();
+        Log.i("addlamb", "number of breeding records is " + String.valueOf (nRecs));
         dbh.moveToFirstRecord();
         if (nRecs > 0) {
 	        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	        	Log.i("addlamb", " in for loop checking breeding dates ");
+	        	Log.i("addlamb", " in for loop this breeding record is cursor " + String.valueOf(cursor.getPosition()));	
+	        	Log.i("addlamb", " in for loop this breeding record is id " + String.valueOf(dbh.getInt(1)));	
+	        	Log.i("addlamb", " in top loop sire is " + sire_name);	
+	        	Log.i("addlamb", " in top loop sire_id is " + String.valueOf(sire_id));	
 	        	// Check the dates and see if this is the right record
 	        	// Get the date ram in and date ram out
 	        	temp_ram_in = dbh.getReal(4);
 	        	Log.i("addlamb", " julian ram in " + String.valueOf(temp_ram_in));
 	        	temp_ram_out = dbh.getReal(5);
 	        	Log.i("addlamb", " julian ram out " + String.valueOf(temp_ram_out));
-	        	// need to figure out if the date is within early date 142 probable start date 147 
-	        	//	probable end date 150 and end date 155
+	        	// need to figure out if the date is within early date 142 from ram in
+	        	// and end date 155 from ram out
+	        	//	Calculate the first possible and last possible for this breeding record
+	        	//	Should make these dates a preference or settings in LambTracker
+	        	// TODO
+	        	first_gestation_possible = temp_ram_in + 142.0;
+	        	Log.i("addlamb", " julian first gestation is " + String.valueOf(first_gestation_possible));
+	        	last_gestation_possible = temp_ram_out + 155.0;
+	        	Log.i("addlamb", " julian last gestation is " + String.valueOf(last_gestation_possible));        	
 	        	// First calculate how many days gestation this is from date ram in
 	        	gestation_length = temp_julian_today - temp_ram_in;
-	        	Log.i("addlamb", " julian gestation is " + String.valueOf(gestation_length));
-	        	// Now need to convert this to a number of days	        	
 	        	Log.i("addlamb", " calculated gestation length is " + String.valueOf(gestation_length));
-	        	if  (gestation_length > 142 && gestation_length < 155) {
+	        	
+	        	if  (temp_julian_today > first_gestation_possible && temp_julian_today < last_gestation_possible) {
 	        		//	This is the correct record so save the data and bump out
+	        		Log.i("addlamb", " correct breeding record is this cursor " + String.valueOf(cursor.getPosition()));
 	        		sire_name = dbh.getStr(3);
 	        		sire_id = dbh.getInt(2);
 	        		service_type = dbh.getInt(6);
-	        		//	make the gestation an integer
+	        		//	make the gestation length an integer so it can be added to the lambing history record. 
 	        		real_gestation_length = (int)gestation_length;
 	        		Log.i("addlamb", " gestation length is " + String.valueOf(real_gestation_length));
+	        		Log.i("addLamb" , "before break out of for loop");
+	        		break;
 	        	}        	
         	// The sire we have is 
         	Log.i("addlamb", " in for loop sire is " + sire_name);	
@@ -511,9 +520,13 @@ public class AddLamb extends Activity {
   		TextView temp_tag_num, temp_tag_color, temp_tag_loc, temp_tag_type;
   		String tag_num;
   		int tag_color, tag_loc, tag_type, tag_flock;
-  		String year = YearIs();
+  		Integer temp_id;
+  		String year = Utilities.YearIs();
   		TableLayout tl;
     	Object crsr;
+    	Context context = this;
+		String title;
+		String message;
     	
 		// Disable Update Database button and make it red to prevent getting 2 records at one time
     	btn = (Button) findViewById( R.id.update_database_btn );
@@ -526,9 +539,9 @@ public class AddLamb extends Activity {
 		//	Set the lamb name to be empty initially
 		lamb_name = "";
 		//	Get the date and time to add to the lamb record these are strings not numbers
-		mytoday = TodayIs(); 
+		mytoday = Utilities.TodayIs(); 
 //		Log.i("add a lamb ", " today is " + mytoday);	
-		mytime = TimeIs();
+		mytime = Utilities.TimeIs();
 //		Log.i("add a lamb ", " time is " + mytime);
     	
     	//	Get the data for this lamb   	 		
@@ -537,7 +550,20 @@ public class AddLamb extends Activity {
 		rg=(RadioGroup)findViewById(R.id.radioRearType);
  		rear_type = rg.getCheckedRadioButtonId()+1;
 		Log.i("rear_type ", String.valueOf(rear_type));
-		
+		if (rear_type == 0){
+			//	Need to require a value for rearing type here Nothing selected to set default to be single
+			// TODO Tried to get an alert here but can't have 2 in one activity 
+//			title = getResources().getString(R.string.add_lamb_fill_title);
+//			message = getResources().getString(R.string.add_lamb_fill_reartype);;
+//			Utilities.alertDialogShow( context, title, message);
+			// make update database button normal and enabled so we can try again
+       		btn = (Button) findViewById( R.id.update_database_btn );
+       		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+        	btn.setEnabled(true);
+        	//	Defaulted to rear-type of 1 so the later query won't crash
+			rear_type = 1;			
+		}
+			
   		//	Get the radio group selected for the sex
 		Log.i("before radio group", " getting ready to get the sex ");
 		rg=(RadioGroup)findViewById(R.id.radioGroupSex);
@@ -554,7 +580,6 @@ public class AddLamb extends Activity {
 	 		"where sheep_sex_table.sex_sheepid = %s", sex);
 	 		crsr = dbh.exec( cmd );  
 			cursor   = ( Cursor ) crsr;
-//			startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 	  		sex_abbrev = dbh.getStr(0);	
 		}			
@@ -572,13 +597,23 @@ public class AddLamb extends Activity {
 			lamb_name = "Stillborn";
 		}
 		
+		//	Get the value of the checkbox for mark ewe
+		Log.i("before checkbox", " getting ready to get mark ewe or not ");
+		markewebox = (CheckBox) findViewById(R.id.checkBoxMarkEwe);
+		if (markewebox.isChecked()){
+			markewe = true;
+			Log.i("markewe ", String.valueOf(markewe));
+			// When we get to adding tags for the lamb we'll as a paint brand for ewe if there is one
+			//	for the lamb.
+		}
+		
 		//	Get the Birth Weight
 		Log.i("before weight", " getting ready to get birth weight ");
 		TV = (TextView) findViewById(R.id.birth_weight);
 		try {
 			birth_weight = Float.valueOf(TV.getText().toString());
 		} catch (Exception e) {
-			//	set birth_weight to 0
+			//	set birth_weight to 0 because nothing filled in
 			birth_weight = 0.0f;
 		}	
 		Log.i("birth_weight ", String.valueOf(birth_weight));
@@ -593,9 +628,16 @@ public class AddLamb extends Activity {
 		if (lambease == 0){
 			//	Need to require a value for lambease here
 			//  Missing data so  display an alert 	
+			
+			//	testing my utility alert
+//			 context = this;
+//			 title = ("Testing fill lambease");
+//			 message = "testing this is a message";
+//			Utilities.alertDialogShow( context, title, message);
+			
     		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-    		builder.setMessage( R.string.add_lamb_fill_fields )
-    	           .setTitle( R.string.add_lamb_fill_fields );
+    		builder.setMessage( R.string.add_lamb_fill_lambease )
+    	           .setTitle( R.string.add_lamb_fill_lambease );
     		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int idx) {
     	               	// User clicked OK button 
@@ -822,7 +864,9 @@ public class AddLamb extends Activity {
 		lamb_codon154 = 1;
 		lamb_codon136 = 6;
 		//	Fill all the misc variables for the sheep record
+		// TODO
 		//	Set breed based on sire and dam breed
+		// Need to get the default breed form settings or preferences
 		//	Need to fix for the general case of crossbred lambs but for now set to crossbred if dam is Sooner
 		//	Sooner is sheep_id 58
 		//	otherwise the default set to be Black Welsh
@@ -866,7 +910,6 @@ public class AddLamb extends Activity {
 		cmd = String.format("select last_insert_rowid()");
 		crsr = dbh.exec( cmd );  
 		cursor   = ( Cursor ) crsr;
-//		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		lamb_id = dbh.getInt(0);		
 		Log.i("add a lamb ", "the lamb_id is " + String.valueOf(lamb_id));
@@ -875,7 +918,7 @@ public class AddLamb extends Activity {
 		tag_flock = 0;
 		
 		//	Go get all the tag data for this lamb
-		Log.i("before ", "getting the first tag info");
+		Log.i("before ", "getting the lamb tag info");
   		tl = (TableLayout) findViewById(R.id.tag_table);
   		Log.i("in table ", "after get the table view");
   		int i;
@@ -888,47 +931,55 @@ public class AddLamb extends Activity {
 	  		temp_tag_loc = (TextView) tr.getChildAt(2);
 	  		temp_tag_type = (TextView) tr.getChildAt(3);
 	  		Log.i("in table ", "after get the children of that row values");
-	  		
+	  		//	Get what tag number this is
 	  		tag_num = temp_tag_num.getText().toString();
+	  		//	Get the color for the tag
 	  		tag_color_label = temp_tag_color.getText().toString();
 	  		Log.i("before ", "getting tag color looking for " + tag_color_label);
 	  		cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
 	     				"where tag_color_name='%s'", tag_color_label);
 	     	crsr = dbh.exec( cmd );
 	  		cursor   = ( Cursor ) crsr;
-//	  		startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 	  		tag_color = dbh.getInt(0);
 	  		Log.i("after ", "getting tag color");
-	  		
+	  		//	Get the location for the tag
 	  		tag_location_label = temp_tag_loc.getText().toString();
 	  		Log.i("before ", "getting tag location looking for " + tag_location_label);
 	  		cmd = String.format("select id_location_table.id_locationid, id_location_table.id_location_abbrev from id_location_table " +
 				"where id_location_abbrev='%s'", tag_location_label);
 	  		crsr = dbh.exec( cmd );
 	  		cursor   = ( Cursor ) crsr;
-//	  		startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 	  		tag_loc = dbh.getInt(0);
-	  		
+	  		//	Get wht tag type it is
 	  		tag_type_label = temp_tag_type.getText().toString(); 		
 	  		cmd = String.format("select id_type_table.id_typeid from id_type_table " +
 				"where idtype_name='%s'", tag_type_label);
 	  		crsr = dbh.exec( cmd );
 	  		cursor   = ( Cursor ) crsr;
-//	  		startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 	  		tag_type = dbh.getInt(0);
 	  		Log.i("after ", "getting tag type");
+	  		
+	  		// TODO
 	  		//	If the tag is a federal tag then make the flock ID 1 for Desert Weyr 
 	  		//	Should be whatever the default is in settings
 	  		//	Also set the lamb name to be this year plus fed tag until we change it
 	  		// 	once the EID is the federal tag the lamb name has to be the farm tag 
 			//	Names cannot be the EID tag number, that is too long. 
-			//	Still need to handle the case of the EID being the official federal tag
-	  		if (tag_type==1){
-	  			tag_flock = 1;
-	  			lamb_name = year + "-" + tag_num;
+			//	Still need to handle the case of the EID being the official federal tag	  		
+	  		// 	Current plan is to add a field the database that denotes 
+	  		//	whether this tag is an official governmental ID or not 0 for false or not official and 
+	  		//	1 for true or yes is the official ID
+	  		
+	  		// Decided to try a switch statement here since the multiple if's are not working
+	  		
+	  		switch (tag_type){		
+			case 1: //	Tag is a federal tag
+				//	Set the flock to be the flock ID Should be a preference default not a fixed number
+				
+				tag_flock = 1;
 	  			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
 		  				" tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) values " +
 		  				" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", lamb_id, tag_type, tag_color, tag_color, 
@@ -936,16 +987,158 @@ public class AddLamb extends Activity {
 		  		Log.i("add fed tag ", "db cmd is " + cmd);
 				dbh.exec(cmd);
 				Log.i("add fed tag ", "after insert into id_info_table");
-	  		}else{	  		
-	     	// Now go put in a tag record for this tag for this lamb without a flock id
-	  		cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
-	  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
-	  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
-	  				tag_loc, mytoday, tag_num);
-	  		Log.i("add tag to ", "db cmd is " + cmd);
-			dbh.exec(cmd);
-			Log.i("add tag ", "after insert into id_info_table");
+				break;
+			case 2:	//	Tag is an electronic tag 
+				cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+		  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+		  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+		  				tag_loc, mytoday, tag_num);
+		  		Log.i("add tag to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into id_info_table");
+				break;
+			case 3:	// Tag is a paint brand
+		  		if (markewe){
+		  			// We have a paint mark for the lamb and the checkbox for the ewe is true
+		  			// Go see if there is a current active paint mark for the ewe
+		  			try {
+		  				cmd = String.format("select sheep_id from id_info_table where sheep_id = '%s' and " +
+			  					"tag_type = 3 and tag_date_off is null", dam_id);
+		  				// if command works we have a tag already so break out
+		  				Log.i("in try ewe tag ", "db cmd is " + cmd);
+		  				crsr2 = dbh.exec( cmd );  
+		  				Log.i("in try ewe tag ", "after execute db command" + cmd);
+		  				cursor2   = ( Cursor ) crsr2;
+		  		  		dbh.moveToFirstRecord();
+		  		  		temp_id = dbh.getInt(0);
+		  		  		Log.i("in try ewe tag ", "after try to read a record");
+		  			}
+		  				 catch (Exception e) {
+		  					//	No record found so insert one 
+		  					Log.i("in catch ", " need to add a ewe tag");
+		  					cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+		  			  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+		  			  				" (%s, %s, %s,%s,%s, '%s', '%s') ", dam_id, tag_type, tag_color, tag_color, 
+		  			  				tag_loc, mytoday, tag_num);
+		  			  		Log.i("add ewe tag to ", "db cmd is " + cmd);
+		  					dbh.exec(cmd);
+		  					Log.i("add tag ", "after insert into id_info_table");		 
+		  			} 	
+		  		}
+  				//	Add a lamb paint brand record for sure no matter what. 
+  				cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+  		  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+  		  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+  		  				tag_loc, mytoday, tag_num);
+  		  		Log.i("add tag to ", "db cmd is " + cmd);
+  				dbh.exec(cmd);
+  				Log.i("add tag ", "after insert into id_info_table");
+		  		break;
+			case 4:	// Tag is a farm tag
+				//	Set the lamb name to be the farm tag plus the year of birth
+				lamb_name = year + "-" + tag_num;
+				cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+		  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+		  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+		  				tag_loc, mytoday, tag_num);
+		  		Log.i("add tag to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into id_info_table");
+				break;
+			case 5:	// Tag is a tattoo
+				cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+		  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+		  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+		  				tag_loc, mytoday, tag_num);
+		  		Log.i("add tag to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into id_info_table");
+				break;
+			case 6:	// Tag is a split
+				cmd = String.format("insert into id_info_table (sheep_id, tag_type, " +
+		  				"  tag_location, tag_date_on, tag_number) values " +
+		  				" (%s, %s, %s, '%s', '%s') ", lamb_id, tag_type, tag_loc, mytoday, tag_num);
+		  		Log.i("add tag to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into id_info_table");
+				break;
+			case 7:	// Tag is a notch
+				cmd = String.format("insert into id_info_table (sheep_id, tag_type, " +
+		  				"  tag_location, tag_date_on, tag_number) values " +
+		  				" (%s, %s, %s, '%s', '%s') ", lamb_id, tag_type, tag_loc, mytoday, tag_num);
+		  		Log.i("add tag to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after insert into id_info_table");
+				break;
+	  		
 	  		}
+	  		
+//	  		if (tag_type==4){
+//	  			//	Farm tag so make the lamb name the year plus the tag number
+//	  			lamb_name = year + "-" + tag_num;
+//	  		}
+//	  		if ((tag_type==3) && (markewe)){
+//	  			// We have a paint mark for the lamb and the checkbox for the ewe is true
+//	  			// Go see if there is a current active paint mark for the ewe
+//	  			try {
+//	  				cmd = String.format("select sheep_id from id_info_table where sheep_id = '%s' and " +
+//		  					"tag_type = 3 and tag_date_off is null", dam_id);
+//	  				// if command works we have a tag already so break out
+//	  				Log.i("in try ewe tag ", "db cmd is " + cmd);
+//	  				crsr2 = dbh.exec( cmd );  
+//	  				Log.i("in try ewe tag ", "after execute db command" + cmd);
+//	  				cursor2   = ( Cursor ) crsr2;
+//	  		  		dbh.moveToFirstRecord();
+//	  		  		temp_id = dbh.getInt(0);
+//	  		  		Log.i("in try ewe tag ", "after try to read a record");
+//	  				break;
+//	  			}
+//	  				 catch (Exception e) {
+//	  					//	No record found so insert one 
+//	  					Log.i("in catch ", " need to add a ewe tag");
+//	  					cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+//	  			  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+//	  			  				" (%s, %s, %s,%s,%s, '%s', '%s') ", dam_id, tag_type, tag_color, tag_color, 
+//	  			  				tag_loc, mytoday, tag_num);
+//	  			  		Log.i("add ewe tag to ", "db cmd is " + cmd);
+//	  					dbh.exec(cmd);
+//	  					Log.i("add tag ", "after insert into id_info_table");		 
+//	  			} 	
+//	  			finally {
+//	  				//	Add a lamb paint brand record for sure no matter what. 
+//	  				cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+//	  		  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+//	  		  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+//	  		  				tag_loc, mytoday, tag_num);
+//	  		  		Log.i("add tag to ", "db cmd is " + cmd);
+//	  				dbh.exec(cmd);
+//	  				Log.i("add tag ", "after insert into id_info_table");
+//	  				
+//	  			}
+//	  		}
+	  		
+//	  		if (tag_type==1){
+//	  			tag_flock = 1;
+//	  			//	This was for when the alternative ID was federal 
+//	  			//	now commented out because the name ID is the farm tag
+////	  			lamb_name = year + "-" + tag_num;
+//	  			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+//		  				" tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) values " +
+//		  				" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", lamb_id, tag_type, tag_color, tag_color, 
+//		  				tag_loc, mytoday, tag_num, tag_flock);
+//		  		Log.i("add fed tag ", "db cmd is " + cmd);
+//				dbh.exec(cmd);
+//				Log.i("add fed tag ", "after insert into id_info_table");
+//	  		}else{	  		
+//	     	// Now go put in a tag record for this tag for this lamb without a flock id
+//	  		cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+//	  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
+//	  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
+//	  				tag_loc, mytoday, tag_num);
+//	  		Log.i("add tag to ", "db cmd is " + cmd);
+//			dbh.exec(cmd);
+//			Log.i("add tag ", "after insert into id_info_table");
+//	  		}
   		}
 		//	End of what has to loop through all IDs for the lamb being added 
 		
@@ -972,7 +1165,6 @@ public class AddLamb extends Activity {
 //			Log.i("in try block ", "after try the first DB select ");
 			cursor   = ( Cursor ) crsr;
 //			Log.i("in try block ", "after cursor ");
-//			startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 //	  		Log.i("in try block ", "after move to first ");
 	  		lambing_historyid = dbh.getInt(0);
@@ -995,14 +1187,13 @@ public class AddLamb extends Activity {
 	  		}
 	  		Log.i("add a lamb ", "the lambing_notes are " + lambing_notes);	  		
 	  		// Then update the record by adding this lambs' ID in the next slot
-	  		//	presumes we have one lamb in there already so the new on is either lamb02 or lamb03
+	  		//	presumes we have one lamb in there already so the new one is either lamb02 or lamb03
 	  		if (lamb02_id != 0 ){
 	  			//	have 2 lambs already
 	  			Log.i("in if stmt ", "lamb02_id " + String.valueOf(lamb02_id));
 	  			Log.i("in try block ", " have 2 lambs so add a third to record");
-//	  			Update the lambs born and rear_type
+//	  			Update the lambs born
 	  			lambs_born = lambs_born +1;
-//	  			rear_type = rear_type +1;
 	  			cmd = String.format("update lambing_history_table set " +
 		  				"lambing_notes = '%s', lambs_born = %s, " +
 		  				" lamb03_id = %s " +
@@ -1016,16 +1207,16 @@ public class AddLamb extends Activity {
 						"birth_type = %s, rear_type = %s " +
 		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb_id);
 		  		dbh.exec( cmd ); 
-		  		Log.i("in try block ", " after update sheep record  for last lamb to add birth record");
+		  		Log.i("in try block ", " after update sheep record  for third lamb to add birth record");
 		  		cmd = String.format("update sheep_table set sheep_birth_record = %s," +
-						"birth_type = %s, rear_type = %s " +
-		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb02_id);
+						"birth_type = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lamb02_id);
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record for second lamb to add birth record");
 		  		cmd = String.format("update sheep_table set sheep_birth_record = %s," +
-						"birth_type = %s, rear_type = %s " +
-		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb01_id);
+						"birth_type = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lamb01_id);
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record for first lamb to add birth record");
@@ -1054,11 +1245,11 @@ public class AddLamb extends Activity {
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record to add birth record");
 		  		cmd = String.format("update sheep_table set sheep_birth_record = %s," +
-						"birth_type = %s, rear_type = %s " +
-		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type, lamb01_id);
+						"birth_type = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lamb01_id);
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
-		  		Log.i("in try block ", " after update sheep record for first lamb to correct rear type and birth type");
+		  		Log.i("in try block ", " after update sheep record for first lamb to correct birth type");
 	  			
 				//	done with this lamb so force back to the ewe screen
 				backBtn(v);
@@ -1070,7 +1261,6 @@ public class AddLamb extends Activity {
 			lambing_time = mytime;
 //			Update the lambs born and rear type fields
   			lambs_born = lambs_born +1;
-//  			rear_type = rear_type + 1;
 //			Log.i("in catch block ", " after setting date and time");
   			if (stillborn){
 	  			lambing_notes = "S"; 
@@ -1088,7 +1278,6 @@ public class AddLamb extends Activity {
 			cmd = String.format("select last_insert_rowid()");
 			crsr = dbh.exec( cmd );  
 			cursor   = ( Cursor ) crsr;
-//			startManagingCursor(cursor);
 	  		dbh.moveToFirstRecord();
 	  		lambing_historyid = dbh.getInt(0);		
 			Log.i("add a lamb ", "the lambing_historyid is " + String.valueOf(lambing_historyid));
@@ -1151,8 +1340,9 @@ public class AddLamb extends Activity {
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_colors);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_color_spinner.setAdapter (dataAdapter);
+		//	TODO
 		//	Set the tag color to be the default should be from settings but not implemented yet.
-		tag_color_spinner.setSelection(5); // set to orange
+		tag_color_spinner.setSelection(5); // set to orange for non-EID tags
 				
     	// Fill the Tag Location Spinner
 		tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
@@ -1172,18 +1362,11 @@ public class AddLamb extends Activity {
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_locations);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_location_spinner.setAdapter (dataAdapter);
+		//	TODO
 		//	Set the tag location to be the left ear by default should be from settings
 		tag_location_spinner.setSelection(2); // left ear for non EID tags   
     }
 
-	public boolean tableExists (String table){
-		try {
-	        dbh.exec("select * from "+ table);   
-	        return true;
-		} catch (SQLiteException e) {
-			return false;
-	        		}
-	        	}
 	private void addRadioButtons(int numButtons, String[] radioBtnText) {
 	  	  int i;
 
@@ -1230,7 +1413,6 @@ public class AddLamb extends Activity {
 		Log.i("in add lamb", " in back btn after stop EID service");
 		clearBtn( null );
 		// Added this to close the database if we go back to the lambing activity  	
-//    	stopManagingCursor (cursor);
     	cursor.close();
     	Log.i("in add lamb", " in back btn after close cursor");
     	dbh.closeDB();   	
@@ -1267,10 +1449,6 @@ public class AddLamb extends Activity {
 		TV.setText( "" );		
 		TV = (TextView) findViewById( R.id.sheepnameText );
 		TV.setText( "" );
-//		TV = (TextView) findViewById( R.id.sireName );
-//		TV.setText( "" );
-//		TV = (TextView) findViewById( R.id.damName );
-//		TV.setText( "" );
 		//	Clear the radio group checks
 		Log.i("in add lamb", "in clear button ready to clear the radio groups "); 
 		rg=(RadioGroup)findViewById(R.id.radioRearType);
@@ -1297,173 +1475,11 @@ public class AddLamb extends Activity {
       	tl.removeAllViews();
       	Log.i("in add lamb", " in clear btn after removing the table views");
     }  
-    public void takeNote( View v )
-    {	    	
-    	final Context context = this;
-		//	First fill the predefined note spinner with possibilities
-    	predefined_notes = new ArrayList<String>();
-		predefined_notes.add("Select a Predefined Note");
-//		Log.i ("takeNote", " after adding Select a Predefined Note");
-    	// Select All fields from predefined_notes_table to build the spinner
-        cmd = "select * from predefined_notes_table";
-//        Log.i ("takeNote", " cmd is " + cmd);
-        crsr = dbh.exec( cmd );  
-        cursor   = ( Cursor ) crsr;
-    	dbh.moveToFirstRecord();
-         // looping through all rows and adding to list
-    	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-    		predefined_notes.add(cursor.getString(1));
-//    		Log.i ("takeNote", " in for loop predefined note id is " + String.valueOf(cursor.getString(1)));
-    	}
-//    	cursor.close();    
-    	Log.i ("takeNote", " after set the predefined note spinner ");
-    	Log.i ("takeNote", " this sheep is " + String.valueOf(thissheep_id));
-    	//Implement take a note stuff here
-    	if (thissheep_id == 0) {
-    		Log.i ("takeNote", " no sheep selected " + String.valueOf(thissheep_id));
-    	}
-    	else {
-//    		Log.i ("takeNote", " got a sheep, need to get a note to add");
-    		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-//    		Log.i ("takeNote", " after getting new alertdialogbuilder");
-    		
-    		LayoutInflater li = LayoutInflater.from(context);
-			View promptsView = li.inflate(R.layout.note_prompt, null);
-//			Log.i ("takeNote", " after inflating layout");	
-
-			// set view note_prompt to alertdialog builder
-			alertDialogBuilder.setView(promptsView);
-			Log.i ("takeNote", " after setting view");
-		   	// Creating adapter for predefined notes spinners
-	    	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, predefined_notes);
-	    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    	predefined_note_spinner01 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner01);
-	    	predefined_note_spinner01.setAdapter (dataAdapter);
-			predefined_note_spinner01.setSelection(0);
-			
-	    	predefined_note_spinner02 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner02);
-	    	predefined_note_spinner02.setAdapter (dataAdapter);
-			predefined_note_spinner02.setSelection(0);
-
-	    	predefined_note_spinner03 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner03);
-	    	predefined_note_spinner03.setAdapter (dataAdapter);
-			predefined_note_spinner03.setSelection(0);
-
-	    	predefined_note_spinner04 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner04);
-	    	predefined_note_spinner04.setAdapter (dataAdapter);
-			predefined_note_spinner04.setSelection(0);
-
-	    	predefined_note_spinner05 = (Spinner) promptsView.findViewById(R.id.predefined_note_spinner05);
-	    	predefined_note_spinner05.setAdapter (dataAdapter);
-			predefined_note_spinner05.setSelection(0);
-
-			final EditText userInput = (EditText) promptsView
-					.findViewById(R.id.note_text);
-
-			// set dialog message
-			alertDialogBuilder
-				.setCancelable(false)
-				.setPositiveButton("Save Note",
-				  new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog,int id) {
-					// get user input and set it to result
-					// edit text
-					String note_text = String.valueOf(userInput.getText());
-					//	Get id_predefinednotesid from a spinner here 
-					int predefined_note01 = predefined_note_spinner01.getSelectedItemPosition();
-					int predefined_note02 = predefined_note_spinner02.getSelectedItemPosition();
-					int predefined_note03 = predefined_note_spinner03.getSelectedItemPosition();
-					int predefined_note04 = predefined_note_spinner04.getSelectedItemPosition();
-					int predefined_note05 = predefined_note_spinner05.getSelectedItemPosition();
-					// Update the notes table with the data
-					cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, " +
-							"id_predefinednotesid01) " +
-							"values ( %s, '%s', '%s', '%s', %s )",
-	    					thissheep_id, note_text, TodayIs(), TimeIs(), predefined_note01);
-	    			Log.i("update notes ", "before cmd " + cmd);
-	    			dbh.exec( cmd );	
-	    			Log.i("update notes ", "after cmd exec");
-	    			Log.i("take note","first note written");
-	    			if (predefined_note02 > 0) {
-	    	 			Log.i("take note","second note written");
-	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-	 							"id_predefinednotesid01) " +
-	 							"values ( %s, '%s', '%s', %s)",
-	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note02 );
-	 	    			Log.i("update notes ", "before cmd " + cmd);
-	 	    			dbh.exec( cmd );	
-	    	 		}
-	    			if (predefined_note03 > 0) {
-	    	 			Log.i("take note","third note written");
-	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-	 							"id_predefinednotesid01) " +
-	 							"values ( %s, '%s', '%s', %s)",
-	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note03 );
-	 	    			Log.i("update notes ", "before cmd " + cmd);
-	 	    			dbh.exec( cmd );	
-	    	 		}
-	    			if (predefined_note04 > 0) {
-	    	 			Log.i("take note","fourth note written");
-	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-	 							"id_predefinednotesid01) " +
-	 							"values ( %s, '%s', '%s', %s)",
-	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note04 );
-	 	    			Log.i("update notes ", "before cmd " + cmd);
-	 	    			dbh.exec( cmd );	
-	    	 		}
-	    			if (predefined_note05 > 0) {
-	    	 			Log.i("take note","fifth note written");
-	    	 			cmd = String.format("insert into sheep_note_table (sheep_id, note_date, note_time, " +
-	 							"id_predefinednotesid01) " +
-	 							"values ( %s, '%s', '%s', %s)",
-	 	    					thissheep_id, TodayIs(), TimeIs(), predefined_note05 );
-	 	    			Log.i("update notes ", "before cmd " + cmd);
-	 	    			dbh.exec( cmd );	
-	    	 		}
-				    }
-				  })
-				.setNegativeButton("Cancel",
-				  new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog,int id) {
-					dialog.cancel();
-				    }
-				  });
-			// create alert dialog
-			AlertDialog alertDialog = alertDialogBuilder.create();
-			// show it
-			alertDialog.show();
-    	}   	
+    public void doNote( View v )
+    {	 
+    	Utilities.takeNote(v, thissheep_id, this);
     }
-    private String TodayIs() {
- 		Calendar calendar = Calendar.getInstance();
- 		int day = calendar.get(Calendar.DAY_OF_MONTH);
- 		int month = calendar.get(Calendar.MONTH);
- 		int year = calendar.get(Calendar.YEAR);
- 		return year + "-" + Make2Digits(month + 1) + "-" +  Make2Digits(day) ;
- 	}
-    private String YearIs() {
- 		Calendar calendar = Calendar.getInstance();
-  		int year = calendar.get(Calendar.YEAR);
- 		return Integer.toString(year) ;
- 	}
-     private String Make2Digits(int i) {
- 		if (i < 10) {
- 			return "0" + i;
- 		} else {
- 			return Integer.toString(i);
- 		}
- 	}
-	   private String TimeIs() {
-			Calendar calendar = Calendar.getInstance();
-	        //12 hour format
-//			int hour = cal.get(Calendar.HOUR);
-	        //24 hour format
-			int hourofday = calendar.get(Calendar.HOUR_OF_DAY);
-			int minute = calendar.get(Calendar.MINUTE);
-			int second = calendar.get(Calendar.SECOND);
-			  
-			return Make2Digits(hourofday) + ":" + Make2Digits(minute) + ":" + Make2Digits(second) ;
-		}
+
 //   user clicked 'Scan' button    
   public void scanEid( View v){
   	// Here is where I need to get a tag scanned and put the data into the variable LastEID
@@ -1526,7 +1542,6 @@ public class AddLamb extends Activity {
 			"where idtype_name='%s'", tag_type_label);
   		crsr = dbh.exec( cmd );
   		cursor   = ( Cursor ) crsr;
-//  		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_type = dbh.getInt(0);
   		Log.i("after ", "getting tag type" + String.valueOf(new_tag_type));  		
@@ -1536,7 +1551,6 @@ public class AddLamb extends Activity {
      				"where tag_color_name='%s'", tag_color_label);
      	crsr = dbh.exec( cmd );
   		cursor   = ( Cursor ) crsr;
-//  		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_color = dbh.getInt(0);
   		Log.i("after ", "getting tag color" + String.valueOf(new_tag_color));
@@ -1546,7 +1560,6 @@ public class AddLamb extends Activity {
 			"where id_location_abbrev='%s'", tag_location_label);
   		crsr = dbh.exec( cmd );
   		cursor   = ( Cursor ) crsr;
-//  		startManagingCursor(cursor);
   		dbh.moveToFirstRecord();
   		new_tag_location = dbh.getInt(0);
   		Log.i("New Location ID ", String.valueOf(new_tag_location));
@@ -1641,23 +1654,26 @@ public class AddLamb extends Activity {
   	  		Log.i("after tag ", "after creating the tag table layout");
   	  		if ((new_tag_type == 1) || (new_tag_type == 4)){
   	  			//	tag type is either Federal or Farm so set defaults to be paint, white on the side
+  	  			//	TODO should be set via preferences or settings
   	 	      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
   	  	      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
   	  	      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
   	  	      	TV  = (TextView) findViewById( R.id.new_tag_number);
-  	  	      	tag_type_spinner2.setSelection(3);
-  	  	      	tag_color_spinner.setSelection(3);
-  	  	      	tag_location_spinner.setSelection(5);
+  	  	      	tag_type_spinner2.setSelection(3);	// Paint type
+  	  	      	tag_color_spinner.setSelection(3);	//	White
+  	  	      	tag_location_spinner.setSelection(5);	// Side 
   	  	      	TV.setText( "" ); 	  			
   	  		}else{
-  	  			//	tag type is something else like tattoo or pain so set defaults for a federal tag
+  	  			//	tag type is something else like tattoo or paint so set defaults for a farm tag
+  	  			//	TODO
+  	  			//	Needs to be fixed to be defaults or settings. 
 	   	      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
 	  	      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
 	  	      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
 	  	      	TV  = (TextView) findViewById( R.id.new_tag_number);
-	  	      	tag_type_spinner2.setSelection(1);
-	  	      	tag_color_spinner.setSelection(5);
-	  	      	tag_location_spinner.setSelection(2);
+	  	      	tag_type_spinner2.setSelection(4);	// Farm type
+	  	      	tag_color_spinner.setSelection(5);	//	Orange color
+	  	      	tag_location_spinner.setSelection(2);	//	Left ear
 	  	      	TV.setText( "" );
   	  		}
   		}else{
