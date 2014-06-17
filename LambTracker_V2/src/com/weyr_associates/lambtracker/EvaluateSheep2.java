@@ -230,101 +230,101 @@ public class EvaluateSheep2 extends Activity {
 	// use EID reader to look up a sheep
 	public void gotEID( View v )
    {
-		Integer ii;
+//		Integer ii;
 		
 	   	//	make the scan eid button red
 	   	Button btn = (Button) findViewById( R.id.scan_eid_btn );
 	   	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-	   	clearBtn( null );  
+//	   	clearBtn( null );  
 	   	TextView TV = (TextView) findViewById (R.id.eidText);
 	   	TV.setText( LastEID );
 		Log.i("Evaluate", "Got EID " + LastEID);
 		TV = (TextView) findViewById (R.id.inputText);
 		TV.setText( LastEID );
-		//	Only looking for sheep that are here. 
-		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off , sheep_table.alert01 " +
-				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +	
-				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-				"where id_type_table.id_typeid = 2 and id_info_table.tag_date_off is null and " +
-				"sheep_table.remove_date is null and id_info_table.tag_number='%s'", LastEID);
-		Log.i("Got EID", " ready for command " + cmd); 
-		Object crsr = dbh.exec( cmd ); 
-    	cursor   = (Cursor) crsr;
-    	dbh.moveToFirstRecord();
-    	nRecs5 = cursor.getCount();
-    	if( dbh.getSize() == 0 )
-			{ // no sheep with that EID tag in the database so clear out and return
-			clearBtn( null );
-			TV = (TextView) findViewById( R.id.sheepnameText );
-	    	TV.setText( "Cannot find this sheep." );
-	    	return;
-		}
-    	TV = (TextView) findViewById(R.id.sheepnameText);
-    	TV.setText(dbh.getStr(0));
-    	Log.i("Got EID", " got sheep named  " + dbh.getStr(0)); 
-    	sheep_id = dbh.getInt(1);
-//    	Log.i("Got EID", " sheep ID is " + String.valueOf(sheep_id));
-    	thissheep_id = sheep_id;
-    	Log.i("Got EID", " sheep ID is " + String.valueOf(thissheep_id));
-//    	TV = (TextView) findViewById(R.id.eidText)	;
-//    	TV.setText(dbh.getStr(3));
-    	alert_text = dbh.getStr(6);
-    	Log.i("Got EID ", "Alert Text is " + alert_text);
-//    	Now to test of the sheep has an alert and if so then set the alerts button to red
-//    	if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-		if (alert_text != null && !alert_text.isEmpty() ){
-			// make the alert button red and enable it and pop up the alert text
-			btn = (Button) findViewById( R.id.alert_btn );
-	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-	    	btn.setEnabled(true); 
-	    	showAlert(v);
-		}
-//		Now we need to get the farm tag for that sheep and fill the display with data
-    	
-    	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-		"id_info_table.tag_number, " +
-		"id_info_table.id_infoid, id_info_table.tag_date_off " +
-		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-		"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", thissheep_id);
-
-//    	Log.i("Evaluate ", cmd);    	
-    	crsr = dbh.exec( cmd );
-    	dbh.moveToFirstRecord();
-		if( dbh.getSize() == 0 )
-		{ // This sheep does not have a farm tag installed
-			TV = (TextView) findViewById( R.id.farmText );
-			TV.setText( "No tag" );
-    	} else {
-    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
-    		TV5.setText(dbh.getStr(3));
-    		Log.i(" got EID ", "now got a farm tag " + dbh.getStr(3));
-//    		ii = dbh.getInt(1);
-    		farmtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database
-    	}
-//		Now we need to get the federal tag for the sheep
-		
-    	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-		"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off " +
-		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-		"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", thissheep_id);
-    	
-    	crsr = dbh.exec( cmd );
-    	dbh.moveToFirstRecord();
-    	
-		if( dbh.getSize() == 0 )
-		{ // This sheep does not have a federal tag installed
-			TV = (TextView) findViewById( R.id.fedText );
-			TV.setText( "No tag" );
-    	} else {
-        	fedtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database   	
-        	TextView TV5 = (TextView) findViewById(R.id.fedText)	;
-        	Log.i(" got EID ", "now got a fed tag " + TV5);
-        	TV5.setText(dbh.getStr(3));
-        	ii = dbh.getInt(1);
-    	}
+//		//	Only looking for sheep that are here. 
+//		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+//				"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off , sheep_table.alert01 " +
+//				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +	
+//				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+//				"where id_type_table.id_typeid = 2 and id_info_table.tag_date_off is null and " +
+//				"sheep_table.remove_date is null and id_info_table.tag_number='%s'", LastEID);
+//		Log.i("Got EID", " ready for command " + cmd); 
+//		Object crsr = dbh.exec( cmd ); 
+//    	cursor   = (Cursor) crsr;
+//    	dbh.moveToFirstRecord();
+//    	nRecs5 = cursor.getCount();
+//    	if( dbh.getSize() == 0 )
+//			{ // no sheep with that EID tag in the database so clear out and return
+//			clearBtn( null );
+//			TV = (TextView) findViewById( R.id.sheepnameText );
+//	    	TV.setText( "Cannot find this sheep." );
+//	    	return;
+//		}
+//    	TV = (TextView) findViewById(R.id.sheepnameText);
+//    	TV.setText(dbh.getStr(0));
+//    	Log.i("Got EID", " got sheep named  " + dbh.getStr(0)); 
+//    	sheep_id = dbh.getInt(1);
+////    	Log.i("Got EID", " sheep ID is " + String.valueOf(sheep_id));
+//    	thissheep_id = sheep_id;
+//    	Log.i("Got EID", " sheep ID is " + String.valueOf(thissheep_id));
+////    	TV = (TextView) findViewById(R.id.eidText)	;
+////    	TV.setText(dbh.getStr(3));
+//    	alert_text = dbh.getStr(6);
+//    	Log.i("Got EID ", "Alert Text is " + alert_text);
+////    	Now to test of the sheep has an alert and if so then set the alerts button to red
+////    	if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+//		if (alert_text != null && !alert_text.isEmpty() ){
+//			// make the alert button red and enable it and pop up the alert text
+//			btn = (Button) findViewById( R.id.alert_btn );
+//	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+//	    	btn.setEnabled(true); 
+//	    	showAlert(v);
+//		}
+////		Now we need to get the farm tag for that sheep and fill the display with data
+//    	
+//    	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+//		"id_info_table.tag_number, " +
+//		"id_info_table.id_infoid, id_info_table.tag_date_off " +
+//		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+//		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+//		"where id_type_table.id_typeid = 4 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", thissheep_id);
+//
+////    	Log.i("Evaluate ", cmd);    	
+//    	crsr = dbh.exec( cmd );
+//    	dbh.moveToFirstRecord();
+//		if( dbh.getSize() == 0 )
+//		{ // This sheep does not have a farm tag installed
+//			TV = (TextView) findViewById( R.id.farmText );
+//			TV.setText( "No tag" );
+//    	} else {
+//    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
+//    		TV5.setText(dbh.getStr(3));
+//    		Log.i(" got EID ", "now got a farm tag " + dbh.getStr(3));
+////    		ii = dbh.getInt(1);
+//    		farmtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database
+//    	}
+////		Now we need to get the federal tag for the sheep
+//		
+//    	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+//		"id_info_table.tag_number, id_info_table.id_infoid, id_info_table.tag_date_off " +
+//		"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+//		"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+//		"where id_type_table.id_typeid = 1 and id_info_table.tag_date_off is null and id_info_table.sheep_id='%s'", thissheep_id);
+//    	
+//    	crsr = dbh.exec( cmd );
+//    	dbh.moveToFirstRecord();
+//    	
+//		if( dbh.getSize() == 0 )
+//		{ // This sheep does not have a federal tag installed
+//			TV = (TextView) findViewById( R.id.fedText );
+//			TV.setText( "No tag" );
+//    	} else {
+//        	fedtagid = dbh.getInt(4); // Get the id_info_table.id_infoid from the database   	
+//        	TextView TV5 = (TextView) findViewById(R.id.fedText)	;
+//        	Log.i(" got EID ", "now got a fed tag " + TV5);
+//        	TV5.setText(dbh.getStr(3));
+//        	ii = dbh.getInt(1);
+//    	}
    }	
 
 	@Override
