@@ -63,7 +63,7 @@ public class EvaluateSheep2 extends Activity {
 	int 		id;
 	int   		fedtagid, farmtagid, eidtagid;
 	private int			    recNo;
-	public int             nRecs, nRecs1, nRecs2, nRecs3, nRecs4;
+	public int             nRecs, nRecs1, nRecs2, nRecs3, nRecs4, nRecs5;
 	
 //	private String[]        colNames;
 	List<Integer> which_traits, user_scores;
@@ -81,8 +81,8 @@ public class EvaluateSheep2 extends Activity {
 	public int trait16_data, trait17_data, trait18_data, trait19_data, trait20_data;
 	
 	private DatabaseHandler dbh;
-	public Cursor 	cursor;
-	public Object crsr;
+	public Cursor 	cursor, cursor2;
+	public Object crsr, crsr2;
 	public Spinner predefined_note_spinner01, predefined_note_spinner02, predefined_note_spinner03;
 	public Spinner predefined_note_spinner04, predefined_note_spinner05;
 	public List<String> predefined_notes;
@@ -252,6 +252,7 @@ public class EvaluateSheep2 extends Activity {
 		Object crsr = dbh.exec( cmd ); 
     	cursor   = (Cursor) crsr;
     	dbh.moveToFirstRecord();
+    	nRecs5 = cursor.getCount();
     	if( dbh.getSize() == 0 )
 			{ // no sheep with that EID tag in the database so clear out and return
 			clearBtn( null );
@@ -352,6 +353,7 @@ public class EvaluateSheep2 extends Activity {
     	nRecs2 = 0;	// Number of real data items using float data
     	nRecs3 = 0;	// Number of user defined data items using custom data
     	nRecs4 = 0;	// Number of custom data items to fill the radio buttons
+    	nRecs5 = 0; // Number of sheep found by searching
     	
 		CheckIfServiceIsRunning();
 		
@@ -1005,8 +1007,8 @@ public class EvaluateSheep2 extends Activity {
 				        	crsr = dbh.exec( cmd );
 				    		cursor   = ( Cursor ) crsr; 
 				        	recNo    = 1;
-							nRecs    = cursor.getCount();
-							Log.i("searchByNumber", " nRecs = "+ String.valueOf(nRecs));
+							nRecs5    = cursor.getCount();
+							Log.i("searchByNumber", " nRecs5 = "+ String.valueOf(nRecs5));
 				        	dbh.moveToFirstRecord();
 				        	Log.i("searchByNumber", " the cursor is of size " + String.valueOf(dbh.getSize()));
 				        	if( dbh.getSize() == 0 ){ 
@@ -1055,8 +1057,8 @@ public class EvaluateSheep2 extends Activity {
 			        	crsr = dbh.exec( cmd );
 			    		cursor   = ( Cursor ) crsr; 
 			        	recNo    = 1;
-						nRecs    = cursor.getCount();
-						Log.i("searchByName", " nRecs = "+ String.valueOf(nRecs));
+						nRecs5    = cursor.getCount();
+						Log.i("searchByName", " nRecs5 = "+ String.valueOf(nRecs5));
 			        	dbh.moveToFirstRecord();
 			        	Log.i("searchByName", " the cursor is of size " + String.valueOf(dbh.getSize()));
 			        	if( dbh.getSize() == 0 )
@@ -1067,7 +1069,7 @@ public class EvaluateSheep2 extends Activity {
 				        	return;
 				    		}
 			        	thissheep_id = dbh.getInt(0);			        	
-			        	if (nRecs >1){
+			        	if (nRecs5 >1){
 			        		//	Have multiple sheep with this name so enable next button
 			            	btn = (Button) findViewById( R.id.next_rec_btn );
 			            	btn.setEnabled(true);       		
@@ -1080,8 +1082,7 @@ public class EvaluateSheep2 extends Activity {
     			clearBtn( null );
             	TV = (TextView) findViewById( R.id.sheepnameText );
                 TV.setText( "Sheep Database does not exist." ); 
-         	}       
-        
+         	}              
 	}   
 //        if (exists){
 //        	if( tag_num != null && tag_num.length() > 0 ){
@@ -1198,8 +1199,87 @@ public class EvaluateSheep2 extends Activity {
 //	}	
 	
 	public void formatSheepRecord (View v){
-		
-		
+		TextView TV;
+    	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));
+    	Log.i("LookForSheep", " Before finding all tags");
+    	
+		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.id_typeid, " +
+				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01 " +
+				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
+
+		crsr2 = dbh.exec( cmd ); 
+		Log.i("LookForSheep", " after finding tags");
+		cursor2   = ( Cursor ) crsr2; 
+		nRecs1    = cursor.getCount();
+		Log.i("in LookForSheep ", "number of tag records is " + String.valueOf(nRecs1));
+		cursor2.moveToFirst();				
+		TV = (TextView) findViewById( R.id.sheepnameText );
+        TV.setText (dbh.getStr(0));
+        
+    	// Now we need to check and see if there is an alert for this sheep
+       	alert_text = dbh.getStr(8);
+       	Log.i("in LookForSheep ", "Alert Text is " + alert_text);
+
+    	Log.i("lookForSheep", " before formatting results");
+		// Need to fill the federal and farm tag info from the returned cursor here
+        // looping through all rows and adding to list
+    	for (cursor2.moveToFirst(); !cursor2.isAfterLast(); cursor2.moveToNext()){
+    		// get the tag type of the first record
+    		i = dbh.getInt(2);
+    		Log.i("in for loop", " tag type is " + String.valueOf(i));
+    		switch (i){		
+    		case 1:
+				//Got a federal tag
+    			Log.i("in for loop", " got fed tag ");
+		    	TextView TV2 = (TextView) findViewById(R.id.fedText);
+		    	TV2.setText(dbh.getStr(4));
+		    	Log.i("in for loop", " tag number is "+ dbh.getStr(4));
+		        break;
+		    case 2:
+//		    	// Got an electronic tag
+		    	Log.i("in for loop", " got EID tag ");
+		    	TextView TV3 = (TextView) findViewById(R.id.eidText)	;
+		    	TV3.setText(dbh.getStr(4));
+		    	Log.i("in for loop", " tag number is "+ dbh.getStr(4));				    	
+		        break;
+		    case 3:
+				// Got a paint brand
+		    	
+		        break;
+		    case 4:
+		    	// got a farm tag
+		    	Log.i("in for loop", " got farm tag ");
+	    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
+	    		TV5.setText(dbh.getStr(4));
+	    		Log.i("in for loop", " tag number is "+ dbh.getStr(4));
+		        break;
+		    case 5:
+//		    	got a tattoo
+		        break;
+		    case 6:
+//		    	got a split				    	
+		        break;
+		    case 7:
+//		    	got a notch				    	
+		        break;
+    		}
+    	}
+    	Log.i("out of for" , " loop just before show alert text");
+    	Log.i("in LookForSheep ", "Alert Text is " + alert_text);
+//    	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
+		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+	       	// make the alert button red
+	    	Button btn = (Button) findViewById( R.id.alert_btn );
+	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+	    	btn.setEnabled(true); 
+	    	//	testing whether I can put up an alert box here without issues
+	    	showAlert(v);
+		}        	
 	}
 	
     public void doNote( View v )
