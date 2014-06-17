@@ -880,8 +880,7 @@ public class EvaluateSheep2 extends Activity {
 	       });		
 		AlertDialog dialog = builder.create();
 		dialog.show();
-    }
-	
+    }	
 	public void clearBtn( View v )
     {
 		// clear out the display of everything
