@@ -235,7 +235,6 @@ public class EvaluateSheep2 extends Activity {
 	   	//	make the scan eid button red
 	   	Button btn = (Button) findViewById( R.id.scan_eid_btn );
 	   	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-//	   	clearBtn( null );  
 	   	TextView TV = (TextView) findViewById (R.id.eidText);
 	   	TV.setText( LastEID );
 		Log.i("Evaluate", "Got EID " + LastEID);
@@ -368,7 +367,7 @@ public class EvaluateSheep2 extends Activity {
 	    	scored_evaluation_traits.add(cursor.getString(0));
 //	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
     	}
-    	Log.i("evaluate2", "number of records in scored traits cursor is " + String.valueOf(nRecs));
+//    	Log.i("evaluate2", "number of records in scored traits cursor is " + String.valueOf(nRecs));
     	LayoutInflater inflater = getLayoutInflater();	
 //    	Log.i ("evaluate2", scored_evaluation_traits.get(0));
     	for( int ii = 0; ii < nRecs; ii++ ){	
@@ -398,7 +397,7 @@ public class EvaluateSheep2 extends Activity {
 	    	data_evaluation_traits.add(cursor.getString(0));
 //	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
     	}
-    	Log.i("evaluate2", "number of records in data traits cursor is " + String.valueOf(nRecs2));
+//    	Log.i("evaluate2", "number of records in data traits cursor is " + String.valueOf(nRecs2));
     	inflater = getLayoutInflater();	
 //    	Log.i ("evaluate2", scored_evaluation_traits.get(0));
     	for( int ii = 0; ii < nRecs2; ii++ ){	
@@ -459,7 +458,7 @@ public class EvaluateSheep2 extends Activity {
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
 	        nRecs4    = cursor.getCount();
-	        Log.i ("getting button", " text have " + String.valueOf(nRecs4) + " buttons to build");
+//	        Log.i ("getting button", " text have " + String.valueOf(nRecs4) + " buttons to build");
 	        dbh.moveToFirstRecord();		        
 	        ArrayList buttons = new ArrayList();
 	        
@@ -532,14 +531,14 @@ public class EvaluateSheep2 extends Activity {
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	btn.setEnabled(false);    
     	   	
-    	// I got the sheep id from the search by federal or farm or EID tag
-    	// it's in the sheep_id variable
+    	// I got the sheep id from the selook up sheep function
+    	// it's in the thissheep_id variable
     
     	Log.i("in save scores", " thissheep id is " + String.valueOf(thissheep_id)); 
     	    	
 		// 	get the rating bar scores and fill the rating_scores array
 		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
-		Log.i("in save scores", " number rating bars is " + String.valueOf(nRecs)); 
+//		Log.i("in save scores", " number rating bars is " + String.valueOf(nRecs)); 
 		if (nRecs != 0) {
 			for( int ii = 0; ii < nRecs; ii++ ){	
 //				Log.i("in save scores", " in 1st for loop ii is" + String.valueOf(ii)); 
@@ -584,7 +583,7 @@ public class EvaluateSheep2 extends Activity {
 //    		Log.i("trait10_ratingbar ", String.valueOf(trait10_data));    				
     		
     		//	get the real data values  	
-    		Log.i("in save scores", " number real data points is " + String.valueOf(nRecs2));
+//    		Log.i("in save scores", " number real data points is " + String.valueOf(nRecs2));
     		table = (TableLayout) findViewById(R.id.TableLayout02);
 //    		Log.i("in save scores", " after find tablelayout02 ");
     		if (nRecs2 != 0) {
@@ -746,19 +745,19 @@ public class EvaluateSheep2 extends Activity {
 	            cursor2   = ( Cursor ) crsr2;
 	            dbh.moveToFirstRecord();	            
 	            String alert_text = (dbh.getStr(0));
-	            Log.i ("Evaluate Alert", " Alert Text is " + alert_text + " before adding evaluation alert");
+//	            Log.i ("Evaluate Alert", " Alert Text is " + alert_text + " before adding evaluation alert");
 	            if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
 	            	// There is existing alert text so
 	            	// add a newline character and the Evaluation done phrase
 	            	alert_text = alert_text + "\n" + "Evaluation Done";
-		    		Log.i ("Evaluate Alert", " Alert Text is " + alert_text);	
+//		    		Log.i ("Evaluate Alert", " Alert Text is " + alert_text);	
 	            }else{
 	            	//	Alert is empty now so just add the evaluation done phrase
 		    		alert_text = "Evaluation Done";
 	            }
-	    		Log.i ("Evaluate Alert", " Alert Text is " + alert_text);	
+//	    		Log.i ("Evaluate Alert", " Alert Text is " + alert_text);	
 	    		cmd = String.format("update sheep_table set alert01='%s' where sheep_id=%d", alert_text, thissheep_id);
-	    		Log.i("test alert ", cmd);  
+//	    		Log.i("test alert ", cmd);  
 	    		//	Update the alert for this sheep
 	    		dbh.exec( cmd );
     		}
@@ -799,8 +798,7 @@ public class EvaluateSheep2 extends Activity {
 	           .setTitle( R.string.help_warning );
 		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
 	           public void onClick(DialogInterface dialog, int idx) {
-	               // User clicked OK button 
-	        	  
+	               // User clicked OK button 	        	  
 	               }
 	       });		
 		AlertDialog dialog = builder.create();
@@ -811,8 +809,6 @@ public class EvaluateSheep2 extends Activity {
 		// clear out the display of everything
 		TextView TV ;
 		RatingBar ratingBar;
-//		Button btn;
-
 		ScrollView sv;
 
 		TV = (TextView) findViewById( R.id.inputText );
@@ -829,21 +825,21 @@ public class EvaluateSheep2 extends Activity {
 		//	Clear the rating bars
 		try {
 			TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
-			Log.i("in clear button", " number rating bars is " + String.valueOf(nRecs)); 
+//			Log.i("in clear button", " number rating bars is " + String.valueOf(nRecs)); 
 			if (nRecs != 0) {
 				for( int ii = 0; ii < nRecs; ii++ ){	
-					Log.i("in clear button", " in 1st for loop ii is" + String.valueOf(ii)); 
+//					Log.i("in clear button", " in 1st for loop ii is" + String.valueOf(ii)); 
 					TableRow row1= (TableRow)table.getChildAt(ii);
 					ratingBar = (RatingBar) row1.getChildAt(1);
 					ratingBar.setRating(0.0f);			
-					Log.i("RatingBar01 ", String.valueOf(ratingBar.getRating()));  
+//					Log.i("RatingBar01 ", String.valueOf(ratingBar.getRating()));  
 				}
 			}
 			// move the scroll view up to the top of the rating bars
 			sv = (ScrollView)findViewById(R.id.scroll01);
 			sv.scrollTo(0,0);
 			//	Clear the real scored traits
-			Log.i("in clear button", " number scored traits is " + String.valueOf(nRecs2));
+//			Log.i("in clear button", " number scored traits is " + String.valueOf(nRecs2));
 			table = (TableLayout) findViewById(R.id.TableLayout02);
 			if (nRecs2 != 0) {
 				for( int ii = 0; ii < nRecs2; ii++ ){	
@@ -856,7 +852,7 @@ public class EvaluateSheep2 extends Activity {
 			sv = (ScrollView)findViewById(R.id.scroll02);
 			sv.scrollTo(0,0);
 			//	Clear the radio group checks
-			Log.i("in clear button", " number radio group traits is " + String.valueOf(nRecs3));
+//			Log.i("in clear button", " number radio group traits is " + String.valueOf(nRecs3));
 			table = (TableLayout) findViewById(R.id.TableLayout03);
 			if (nRecs3 != 0) {
 				for( int ii = 0; ii < nRecs3; ii++ ){	
@@ -870,20 +866,19 @@ public class EvaluateSheep2 extends Activity {
 			}
 		}catch (Exception e){
 			//	something failed so log it
-			Log.i("in clear button", " in catch of try clearing rating, real and radio groups " );
+//			Log.i("in clear button", " in catch of try clearing rating, real and radio groups " );
 		}
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
     	btn.setEnabled(false); 
-//		make the scan eid button red
+    	//	make the scan eid button red
 		btn = (Button) findViewById( R.id.scan_eid_btn );
 		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000)); 
     	// Enable Save Scores button and make it normal to get set for next sheep
     	btn = (Button) findViewById( R.id.save_evaluation_scores_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));        	
     	btn.setEnabled(true);
-
     }
 
 //  user clicked 'Scan' button    
@@ -920,12 +915,8 @@ public class EvaluateSheep2 extends Activity {
     	   	
         TV = (TextView) findViewById( R.id.inputText );
     	String	tag_num = TV.getText().toString();
-    	
-        Log.i("Evaluate", " got to lookForSheep with Tag Number of " + tag_num);
-        Log.i("Evaluate", " got to lookForSheep with Tag type of " + tag_type_spinner.getSelectedItemPosition());
-        
+         
         exists = tableExists("sheep_table");
-
         if (exists){       	
     			switch (tag_type_spinner.getSelectedItemPosition()){
     				case 1:
@@ -939,12 +930,12 @@ public class EvaluateSheep2 extends Activity {
 				        			"and id_info_table.tag_type='%s' and (id_info_table.tag_date_off is null or" +
 				        			" id_info_table.tag_date_off = '') "
 				        			, tag_num , tag_type_spinner.getSelectedItemPosition());  
-				        	Log.i("searchByNumber", "command is " + cmd);
+//				        	Log.i("searchByNumber", "command is " + cmd);
 				        	crsr = dbh.exec( cmd );
 				    		cursor   = ( Cursor ) crsr; 
 				        	recNo    = 1;
 							nRecs5    = cursor.getCount();
-							Log.i("searchByNumber", " nRecs5 = "+ String.valueOf(nRecs5));
+//							Log.i("searchByNumber", " nRecs5 = "+ String.valueOf(nRecs5));
 				        	dbh.moveToFirstRecord();
 				        	Log.i("searchByNumber", " the sheep cursor is of size " + String.valueOf(dbh.getSize()));
 				        	if( dbh.getSize() == 0 ){ 
@@ -955,7 +946,7 @@ public class EvaluateSheep2 extends Activity {
 					        	return;
 					    	}
 				        	thissheep_id = dbh.getInt(0);
-				        	Log.i("searchByNumber", "This sheep is record " + String.valueOf(thissheep_id));
+//				        	Log.i("searchByNumber", "This sheep is record " + String.valueOf(thissheep_id));
 				        	if (nRecs >1){
 				        		//	Have multiple sheep with this tag so enable next button
 				            	btn = (Button) findViewById( R.id.next_rec_btn );
@@ -984,7 +975,6 @@ public class EvaluateSheep2 extends Activity {
 				        break;
 				    case 8:
 				    	//	got a name				    	
-				    	// TODO
 			        	tag_num = "%" + tag_num + "%";
 			        	cmd = String.format( "select sheep_id, sheep_name from sheep_table where sheep_name like '%s'" +
 			        			" and (remove_date is null or remove_date = '') "
@@ -994,7 +984,7 @@ public class EvaluateSheep2 extends Activity {
 			    		cursor   = ( Cursor ) crsr; 
 			        	recNo    = 1;
 						nRecs5    = cursor.getCount();
-						Log.i("searchByName", " nRecs5 = "+ String.valueOf(nRecs5));
+//						Log.i("searchByName", " nRecs5 = "+ String.valueOf(nRecs5));
 			        	dbh.moveToFirstRecord();
 			        	Log.i("searchByName", " the sheep cursor is of size " + String.valueOf(dbh.getSize()));
 			        	if( dbh.getSize() == 0 )
@@ -1038,7 +1028,7 @@ public class EvaluateSheep2 extends Activity {
 				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
 
 		crsr2 = dbh.exec( cmd ); 
-		Log.i("LookForSheep", " after finding tags");
+//		Log.i("LookForSheep", " after finding tags");
 		cursor2   = ( Cursor ) crsr2; 
 		nRecs1    = cursor2.getCount();
 		Log.i("in LookForSheep ", "number of tag records is " + String.valueOf(nRecs1));
@@ -1051,7 +1041,7 @@ public class EvaluateSheep2 extends Activity {
        	Log.i("in LookForSheep ", "Alert Text is " + alert_text);
        	if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
        		alert_text = unescape (alert_text);
-       		Log.i("in LookForSheep ", "after unescape Alert Text is " + alert_text);
+//       		Log.i("in LookForSheep ", "after unescape Alert Text is " + alert_text);
        	}
 
     	Log.i("lookForSheep", " before formatting results");
@@ -1064,28 +1054,27 @@ public class EvaluateSheep2 extends Activity {
     		switch (i){		
     		case 1:
 				//Got a federal tag
-    			Log.i("in for loop", " got fed tag ");
+//    			Log.i("in for loop", " got fed tag ");
 		    	TextView TV2 = (TextView) findViewById(R.id.fedText);
 		    	TV2.setText(dbh.getStr(4));
-		    	Log.i("in for loop", " tag number is "+ dbh.getStr(4));
+//		    	Log.i("in for loop", " tag number is "+ dbh.getStr(4));
 		        break;
 		    case 2:
 //		    	// Got an electronic tag
-		    	Log.i("in for loop", " got EID tag ");
+//		    	Log.i("in for loop", " got EID tag ");
 		    	TextView TV3 = (TextView) findViewById(R.id.eidText)	;
 		    	TV3.setText(dbh.getStr(4));
-		    	Log.i("in for loop", " tag number is "+ dbh.getStr(4));				    	
+//		    	Log.i("in for loop", " tag number is "+ dbh.getStr(4));				    	
 		        break;
 		    case 3:
-				// Got a paint brand
-		    	
+				// Got a paint brand		    	
 		        break;
 		    case 4:
 		    	// got a farm tag
-		    	Log.i("in for loop", " got farm tag ");
+//		    	Log.i("in for loop", " got farm tag ");
 	    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
 	    		TV5.setText(dbh.getStr(4));
-	    		Log.i("in for loop", " tag number is "+ dbh.getStr(4));
+//	    		Log.i("in for loop", " tag number is "+ dbh.getStr(4));
 		        break;
 		    case 5:
 //		    	got a tattoo
@@ -1172,6 +1161,4 @@ public class EvaluateSheep2 extends Activity {
         	btn3.setEnabled(false);   		
     	}
     }
-
-
 }
