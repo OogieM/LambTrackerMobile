@@ -152,7 +152,6 @@ public class SheepManagement extends ListActivity {
 				Message msg = Message.obtain(null, eidService.MSG_REGISTER_CLIENT);
 				msg.replyTo = mMessenger;
 				mService.send(msg);
-
 				
 			} catch (RemoteException e) {
 				// In this case the service has crashed before we could even do anything with it
