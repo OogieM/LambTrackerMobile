@@ -285,7 +285,8 @@ public class LookUpSheep extends ListActivity
         }
 	public void lookForSheep (View v){
 
-		Object crsr, crsr2, crsr3, crsr4;
+//		Object crsr, crsr2, crsr3, crsr4;
+		Object crsr;
 		Boolean exists;
 		TextView TV;
 		ListView notelist = (ListView) findViewById(R.id.list2);
@@ -398,46 +399,8 @@ public class LookUpSheep extends ListActivity
             	TV = (TextView) findViewById( R.id.sheepnameText );
                 TV.setText( "Sheep Database does not exist." ); 
          	}
-//        if (exists){
-//        	if( tag_num != null && tag_num.length() > 0 ){
-////        		Get the sheep id from the id table for this tag number and selected tag type
-//	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
-//	        			"and id_info_table.tag_type='%s' and id_info_table.tag_date_off is null", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
-//	        	Log.i("LookForSheep", " command is  " + cmd);
-//	        	crsr = dbh.exec( cmd );
-//	        	cursor   = ( Cursor ) crsr; 
-//	        	recNo    = 1;
-//				nRecs    = cursor.getCount();
-//				Log.i("LookUpSheep", " nRecs = "+ String.valueOf(nRecs));
-//	        	dbh.moveToFirstRecord();
-//	        	if( dbh.getSize() == 0 )
-//		    		{ // no sheep with that tag in the database so clear out and return
-//		    		clearBtn( v );
-//		    		TV = (TextView) findViewById( R.id.sheepnameText );
-//		        	TV.setText( "Cannot find this sheep." );
-//		        	return;
-//		    		}
-//	        	// TODO add the next record previous record stuff in here
-//	        	if (nRecs >1){
-//	        		//	Have multiple sheep with this tag so enable next button
-//	            	btn = (Button) findViewById( R.id.next_rec_btn );
-//	            	btn.setEnabled(true);       		
-//	        	}
-////	        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));	        	
-//	        	//	We need to call the format the record method
-//	        	formatSheepRecord(v);
-//				}else{
-//	        	return;
-//	        }
-//	        Log.i("lookForSheep", " out of the if statement");
-//        	}
-//    		else {
-//    			clearBtn( null );
-//            	TV = (TextView) findViewById( R.id.sheepnameText );
-//                TV.setText( "Sheep Database does not exist." );                
-//        	}
+
 	}
-	// TODO
 	
 public void formatSheepRecord (View v){
 	Object crsr, crsr2, crsr3, crsr4;

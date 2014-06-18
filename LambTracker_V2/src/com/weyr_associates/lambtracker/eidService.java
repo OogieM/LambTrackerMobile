@@ -630,7 +630,7 @@ public class eidService extends Service {
 		String[] lines = EID.split("\n"); // works for both
 
 
-//		LogMessage("In Parse1" + " " + lines.length + ", " + new String(newdata) + ", " + EID);
+		LogMessage("In Parse1" + " " + lines.length + ", " + new String(newdata) + ", " + EID);
 		if (lines.length > 0) {
 			for (int i = 0; i < lines.length; i++) {
 				completeline = false; // Reset this
@@ -642,11 +642,16 @@ public class eidService extends Service {
 //								LogMessage("eidService0, Priority1");
 							} else 
 							if (lines[i].substring(3, 4).equals(" ")) {
-									LogMessage("eidService0, Y-Tex Panel");
+//									LogMessage("eidService0, Y-Tex Panel");
 									EID = EID.substring(0, 3) + "_" + EID.substring(4,EID.length()-1);	
 							} else {		
+								if (lines[i].substring(0, 1).equals("0")) {
+								LogMessage("eidService0, ShearWell Wand");
+								EID = EID.substring(1, 4) + "_" + EID.substring(4,EID.length());
+							} else {
 								LogMessage("eidService0, Y-Tex Wand");
-								EID = EID.substring(0, 3) + "_" + EID.substring(3,EID.length()-1);
+								EID = EID.substring(0, 3) + "_" + EID.substring(3,EID.length()-1);								
+							}
 							}																				
 //						LogMessage("eidService1, completeline true");				
 						LastEID = EID.substring(0, EID.length() - 1);  //prune off end of line for the database
