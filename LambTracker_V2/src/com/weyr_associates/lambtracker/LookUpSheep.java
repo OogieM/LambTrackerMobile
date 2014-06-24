@@ -525,6 +525,13 @@ public void formatSheepRecord (View v){
         notelist.setAdapter(myadapter2);
         Log.i("LookForSheep", "after setting list adapter to show notes");			
 	}   
+	else
+	{
+		// No note data - publish an empty list to clear notes
+		Log.i("LookForSheep", "no notes for this sheep");
+		myadapter2 = new SimpleCursorAdapter(this, R.layout.note_entry, null, null, null, 0);
+		notelist.setAdapter(myadapter2);
+	}
 }
 //  user clicked 'Scan' button    
  public void scanEid( View v){
