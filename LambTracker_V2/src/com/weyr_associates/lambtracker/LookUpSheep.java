@@ -524,7 +524,16 @@ public void formatSheepRecord (View v){
         Log.i("LookForSheep", "after setting myadapter to show notes");
         notelist.setAdapter(myadapter2);
         Log.i("LookForSheep", "after setting list adapter to show notes");			
-	}   
+	}  		//	Bugfix: Last sheep's notes remain if sheep with no notes looked up
+	//	Publish an empty notes list if the sheep doesn't have any notes.
+	//	From: Alex Evans <alex.evans@gmail.com>
+	//	Date: Tue, 24 Jun 2014 17:09:01 -0600
+	else {
+				// No note data - publish an empty list to clear notes
+				Log.i("LookForSheep", "no notes for this sheep");
+				myadapter2 = new SimpleCursorAdapter(this, R.layout.note_entry, null, null, null, 0);
+				notelist.setAdapter(myadapter2);
+	} 
 }
 //  user clicked 'Scan' button    
  public void scanEid( View v){
