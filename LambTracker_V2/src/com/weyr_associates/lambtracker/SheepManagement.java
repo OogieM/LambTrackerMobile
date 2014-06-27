@@ -70,7 +70,7 @@ public class SheepManagement extends ListActivity {
 	public int drug_gone; // 0 = false 1 = true
 	public int	drug_type, which_wormer, which_vaccine;
 	public RadioGroup radioGroup;
-	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxweight, boxscrapieblood;
+	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxweight, boxscrapieblood, boxdrug;
 	public String note_text;
 	public int predefined_note01, predefined_note02, predefined_note03, predefined_note04, predefined_note05;
 	public int             nRecs, nRecs1, nRecs2, nRecs3, nRecs4, nRecs5;
@@ -165,7 +165,7 @@ public class SheepManagement extends ListActivity {
 
 	private void CheckIfServiceIsRunning() {
 		//If the service is running when the activity starts, we want to automatically bind to it.
-		Log.i("SheepMgmt", "At isRunning?.");
+//		Log.i("SheepMgmt", "At isRunning?.");
 		if (eidService.isRunning()) {
 //			Log.i("SheepMgmt", "is.");
 			doBindService();
@@ -174,7 +174,7 @@ public class SheepManagement extends ListActivity {
 			startService(new Intent(SheepManagement.this, eidService.class));
 			doBindService();
 		}
-		Log.i("SheepMgmt", "Done isRunning.");
+//		Log.i("SheepMgmt", "Done isRunning.");
 	} 	
 	
 	void doBindService() {
@@ -186,7 +186,6 @@ public class SheepManagement extends ListActivity {
 //		Log.i("SheepMgmt", "At doBind2.");
 
 		mIsBound = true;
-		
 
 		if (mService != null) {
 //			Log.i("SheepMgmt", "At doBind3.");
@@ -245,8 +244,7 @@ public class SheepManagement extends ListActivity {
 		// 	Display the EID number
 		TextView TV = (TextView) findViewById (R.id.inputText);
 		TV.setText( LastEID );
-		Log.i("in gotEID ", "with LastEID of " + LastEID);		
-		
+		Log.i("in gotEID ", "with LastEID of " + LastEID);				
 	}	
 	
 	/////////////////////////////////////////////////////	
@@ -278,8 +276,8 @@ public class SheepManagement extends ListActivity {
 	       cmd = "select * from id_type_table";
 	       crsr = dbh.exec( cmd );  
 	       cursor   = ( Cursor ) crsr;
-	   	dbh.moveToFirstRecord();
-	   	tag_types.add("Select a Type");
+	       dbh.moveToFirstRecord();
+	   		tag_types.add("Select a Type");
 	        // looping through all rows and adding to list
 	   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	   		tag_types.add(cursor.getString(1));
@@ -368,6 +366,8 @@ public class SheepManagement extends ListActivity {
 				// Build the radio buttons here
 				radioGroup = ((RadioGroup) findViewById(R.id.radioShotLoc));
 				addRadioButtons(3, radioBtnText);
+				//	Default to right side SQ location
+				((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
 				radiobtnlist.clear ();
 			
 				// Fill the Drug Spinner
@@ -411,14 +411,13 @@ public class SheepManagement extends ListActivity {
 		//	make the scan eid button red
 		btn = (Button) findViewById( R.id.scan_eid_btn );
 		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-
        }
 	
 	public void lookForSheep (View v){
 		Boolean exists;
 		TextView TV;
         exists = true;
-     // Hide the keyboard when you click the button
+        // Hide the keyboard when you click the button
     	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
     	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
       	//	Disable the Next Record and Prev. Record button until we have multiple records
@@ -450,8 +449,8 @@ public class SheepManagement extends ListActivity {
 				        	crsr = dbh.exec( cmd );
 				    		cursor   = ( Cursor ) crsr; 
 				        	recNo    = 1;
-							nRecs5    = cursor.getCount();
-							Log.i("searchByNumber", " nRecs = "+ String.valueOf(nRecs5));
+							nRecs    = cursor.getCount();
+							Log.i("searchByNumber", " nRecs = "+ String.valueOf(nRecs));
 				        	dbh.moveToFirstRecord();
 				        	Log.i("searchByNumber", " the cursor is of size " + String.valueOf(dbh.getSize()));
 				        	if( dbh.getSize() == 0 ){ 
@@ -463,7 +462,7 @@ public class SheepManagement extends ListActivity {
 					    	}
 				        	thissheep_id = dbh.getInt(0);
 				        	Log.i("searchByNumber", "This sheep is record " + String.valueOf(thissheep_id));
-				        	if (nRecs5 >1){
+				        	if (nRecs >1){
 				        		//	Have multiple sheep with this tag so enable next button
 				            	btn = (Button) findViewById( R.id.next_rec_btn );
 				            	btn.setEnabled(true);       		
@@ -500,7 +499,7 @@ public class SheepManagement extends ListActivity {
 			    		cursor   = ( Cursor ) crsr; 
 			        	recNo    = 1;
 						nRecs5    = cursor.getCount();
-						Log.i("searchByName", " nRecs5 = "+ String.valueOf(nRecs5));
+						Log.i("searchByName", " nRecs5 = "+ String.valueOf(nRecs));
 			        	dbh.moveToFirstRecord();
 			        	Log.i("searchByName", " the cursor is of size " + String.valueOf(dbh.getSize()));
 			        	if( dbh.getSize() == 0 )
@@ -511,7 +510,7 @@ public class SheepManagement extends ListActivity {
 				        	return;
 				    		}
 			        	thissheep_id = dbh.getInt(0);			        	
-			        	if (nRecs5 >1){
+			        	if (nRecs >1){
 			        		//	Have multiple sheep with this name so enable next button
 			            	btn = (Button) findViewById( R.id.next_rec_btn );
 			            	btn.setEnabled(true);       		
@@ -689,9 +688,9 @@ public class SheepManagement extends ListActivity {
 				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
 				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
 
-		crsr5= dbh.exec( cmd ); 	    		
-		cursor5   = ( Cursor ) crsr5; 
-		cursor5.moveToFirst();				
+		crsr= dbh.exec( cmd ); 	    		
+		cursor   = ( Cursor ) crsr; 
+		cursor.moveToFirst();				
 		TV = (TextView) findViewById( R.id.sheepnameText );
 	    TV.setText (dbh.getStr(0));
 	    
@@ -708,14 +707,14 @@ public class SheepManagement extends ListActivity {
 	        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thissire_id);
 	        Log.i("format record", " cmd is " + cmd);		        
 	        crsr2 = dbh.exec( cmd);
-	        Log.i("format record", " after second db lookup");
+//	        Log.i("format record", " after second db lookup");
 	        cursor2   = ( Cursor ) crsr2; 
 			cursor2.moveToFirst();
 			TV = (TextView) findViewById( R.id.sireName );
 			thissire_name = dbh.getStr(0);
 			TV.setText (thissire_name);	 
-			Log.i("format record", " Sire is " + thissire_name);
-	        Log.i("format record", " Sire is " + String.valueOf(thissire_id));
+//			Log.i("format record", " Sire is " + thissire_name);
+//	        Log.i("format record", " Sire is " + String.valueOf(thissire_id));
 	    }
 	    if(thisdam_id != 0){
 	        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thisdam_id);
@@ -725,8 +724,8 @@ public class SheepManagement extends ListActivity {
 			TV = (TextView) findViewById( R.id.damName );
 			thisdam_name = dbh.getStr(0);
 			TV.setText (thisdam_name);	
-			Log.i("format record", " Dam is " + thisdam_name);
-	        Log.i("format record", " Dam is " + String.valueOf(thisdam_id));
+//			Log.i("format record", " Dam is " + thisdam_name);
+//	        Log.i("format record", " Dam is " + String.valueOf(thisdam_id));
 	    }  
     	try {
 		Log.i("try block", " Before finding an electronic tag if it exists");		        		        	
@@ -739,8 +738,8 @@ public class SheepManagement extends ListActivity {
 		crsr4 = dbh.exec( cmd ); 	    		
 		cursor4   = ( Cursor ) crsr4; 		    	
 		cursor4.moveToFirst();	
-		Log.i("getlastEID filled", "This sheep is id " + String.valueOf(dbh.getInt(0)));
-		Log.i("getlastEID filled", "This sheep id type is " + dbh.getStr(1));
+//		Log.i("getlastEID filled", "This sheep is id " + String.valueOf(dbh.getInt(0)));
+//		Log.i("getlastEID filled", "This sheep id type is " + dbh.getStr(1));
 		LastEID = dbh.getStr(2);
 		Log.i("LastEID is ", dbh.getStr(2));
 	}
@@ -757,7 +756,7 @@ public class SheepManagement extends ListActivity {
 		//	Set the views for each column for each line. A tag takes up 1 line on the screen
 	    int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
 	    Log.i("FormatRecord", "after setting string array toViews");
-	    myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor5 ,fromColumns, toViews, 0);
+	    myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
 	    Log.i("FormatRecord", "after setting myadapter");
 	    setListAdapter(myadapter);
 	    Log.i("FormatRecord", "after setting list adapter");
@@ -827,7 +826,27 @@ public class SheepManagement extends ListActivity {
 			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, drug_loc);
 			  		Log.i("add drug to ", "db cmd is " + cmd);
 					dbh.exec(cmd);
-					Log.i("add tag ", "after insert into sheep_drug_table");	
+					Log.i("add tag ", "after insert into sheep_drug_table");
+					// TODO
+					//	Need to update the alert to include the slaughter withdrawal for this vaccine
+					cmd = String.format("Select units_table.units_name, user_meat_withdrawal from drug_table " +
+							"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
+					Log.i("drug withdrawal ", "db cmd is " + cmd);
+					crsr = dbh.exec(cmd);
+					cursor   = ( Cursor ) crsr; 		    	
+					cursor.moveToFirst();
+					//	Initially just set an alert with the number and units from today
+					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday + " " + mytime;
+					Log.i("drug withdrawal ", " new alert is " + temp_string);
+					if (alert_text != null){
+						temp_string = alert_text + temp_string;
+					}
+					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
+					Log.i("update alerts ", "before cmd " + cmd);
+					dbh.exec( cmd );
+					Log.i("update alerts ", "after cmd " + cmd);
+					// TODO
+					// Consider calculating the actual date/time withdrawal and putting that in instead. 
 		 		}
 			}	    	
 	    	
@@ -890,17 +909,20 @@ public class SheepManagement extends ListActivity {
 				dbh.exec(cmd);
 				Log.i("add tag ", "after insert into sheep_drug_table");
 				// TODO
-				//	Need to update the alert to include the slaughter withdrawal for this drug
-				cmd = String.format("Select meat_withdrawal_units, user_meat_withdrawal from drug_table where drug_id = %s", i);
+				//	Need to update the alert to include the slaughter withdrawal for this wormer
+				cmd = String.format("Select units_table.units_name, user_meat_withdrawal from drug_table " +
+						"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
 				Log.i("drug withdrawal ", "db cmd is " + cmd);
-				crsr5 = dbh.exec(cmd);
-				cursor5   = ( Cursor ) crsr5; 		    	
-				cursor5.moveToFirst();
+				crsr = dbh.exec(cmd);
+				cursor   = ( Cursor ) crsr; 		    	
+				cursor.moveToFirst();
 				//	Initially just set an alert with the number and units from today
 				temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday + " " + mytime;
 				Log.i("drug withdrawal ", " new alert is " + temp_string);
-				temp_string = alert_text + "\\n" + temp_string;
-				cmd = String.format("update sheep_table set alert01 = %s where sheep_id =%d ", temp_string, thissheep_id ) ;
+				if (alert_text != null){
+					temp_string = alert_text + temp_string;
+				}
+				cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
 				Log.i("update alerts ", "before cmd " + cmd);
 				dbh.exec( cmd );
 				Log.i("update alerts ", "after cmd " + cmd);
@@ -1069,7 +1091,9 @@ public class SheepManagement extends ListActivity {
 		boxscrapieblood = (CheckBox) findViewById(R.id.checkBoxScrapieBlood);
 		boxscrapieblood.setChecked(false);
 //		Log.i("clear btn", "after scrapie blood checkbox");		
-		
+		boxdrug = (CheckBox) findViewById(R.id.checkBoxGiveDrug);
+		boxdrug.setChecked(false);
+		Log.i("clear btn", "after give drug checkbox");			
 		boxweight = (CheckBox) findViewById(R.id.checkBoxTakeWeight);
 		boxweight.setChecked(false);
 		TV = (TextView) findViewById( R.id.trait11_data );
@@ -1183,14 +1207,14 @@ public class SheepManagement extends ListActivity {
 			    	Log.i("in next record", "this sheep ID is " + String.valueOf(thissheep_id));
 			    	cursor.moveToNext();
 			    	Log.i("in next record", "after moving the cursor ");
-			    	thissheep_id = cursor.getInt(0);
+			    	thissheep_id = cursor5.getInt(0);
 			    	Log.i("in next record", "this sheep ID is " + String.valueOf(thissheep_id));
 			    	recNo         += 1;
 			    	formatSheepRecord(v);
 //		    		// I've moved forward so I need to enable the previous record button
 		    		Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
 		    		btn3.setEnabled(true);	    	
-			    	if (recNo == (nRecs5)) {
+			    	if (recNo == (nRecs)) {
 			    		// at end so disable next record button
 			    		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
 			        	btn2.setEnabled(false);   		
@@ -1203,8 +1227,8 @@ public class SheepManagement extends ListActivity {
 			    	clearBtn( v );
 			    	Log.i("in prev record", "this sheep ID is " + String.valueOf(thissheep_id));
 			    	cursor.moveToPrevious();
-			    	Log.i("in prev record", "after moving the cursor ");
-			    	thissheep_id = cursor.getInt(0);
+			    	Log.i("in prev record", "after moving the cursor5 ");
+			    	thissheep_id = cursor5.getInt(0);
 			    	Log.i("in prev record", "this sheep ID is " + String.valueOf(thissheep_id));
 			    	recNo         -= 1;
 			    	formatSheepRecord(v);
