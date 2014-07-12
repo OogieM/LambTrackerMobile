@@ -4,6 +4,8 @@ package com.weyr_associates.lambtracker;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+
 import android.app.ListActivity;
 import android.widget.ArrayAdapter;
 import android.app.AlertDialog;
@@ -45,7 +47,7 @@ public class LookUpSheep extends ListActivity
 	public String 	tag_type_label, tag_color_label, tag_location_label, eid_tag_color_label ;
 	public String 	eid_tag_location_label, eidText, alert_text;
 	public String 	thissire_name, thisdam_name;
-	public Cursor 	cursor, cursor2, cursor3, cursor4, cursor5;
+	public Cursor 	cursor, cursor2, cursor3, cursor4, cursor5, drugCursor;
 	public Object	crsr;
 	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
 	public List<String> tag_types, tag_locations, tag_colors;
@@ -54,7 +56,7 @@ public class LookUpSheep extends ListActivity
 	public List<String> predefined_notes;
 	public String[] this_sheeps_tags ;
 	
-	public int             nRecs, nRecs4;
+	public int             nRecs, nRecs4, drugRecs;
 	private int			    recNo;
 //	private String[]        colNames;
 	
@@ -65,7 +67,7 @@ public class LookUpSheep extends ListActivity
 	Integer 	i;	
 	public Button btn;
 	
-	public SimpleCursorAdapter myadapter, myadapter2;
+	public SimpleCursorAdapter myadapter, myadapter2, drugAdapter;
 
 	/////////////////////////////////////////////////////
 	Messenger mService = null;
@@ -290,6 +292,7 @@ public class LookUpSheep extends ListActivity
 		Boolean exists;
 		TextView TV;
 		ListView notelist = (ListView) findViewById(R.id.list2);
+		
         exists = true;
      // Hide the keyboard when you click the button
     	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
@@ -403,9 +406,10 @@ public class LookUpSheep extends ListActivity
 	}
 	
 public void formatSheepRecord (View v){
-	Object crsr, crsr2, crsr3, crsr4;
+	Object crsr, crsr2, crsr3, crsr4, drugCrsr;
 	TextView TV;
 	ListView notelist = (ListView) findViewById(R.id.list2);
+	ListView drugList = (ListView) findViewById(R.id.druglist);
 	
 	thissheep_id = cursor.getInt(0);	        	
 	Log.i("format record", "This sheep is record " + String.valueOf(thissheep_id));	        	
@@ -524,7 +528,54 @@ public void formatSheepRecord (View v){
         Log.i("LookForSheep", "after setting myadapter to show notes");
         notelist.setAdapter(myadapter2);
         Log.i("LookForSheep", "after setting list adapter to show notes");			
-	}   
+	}  		//	Bugfix: Last sheep's notes remain if sheep with no notes looked up
+	//	Publish an empty notes list if the sheep doesn't have any notes.
+	//	From: Alex Evans <alex.evans@gmail.com>
+	//	Date: Tue, 24 Jun 2014 17:09:01 -0600
+	else {
+				// No note data - publish an empty list to clear notes
+				Log.i("LookForSheep", "no notes for this sheep");
+				myadapter2 = new SimpleCursorAdapter(this, R.layout.note_entry, null, null, null, 0);
+				notelist.setAdapter(myadapter2);
+	} 
+		
+		// Look up drug data
+		
+		cmd = String.format("SELECT sheep_drug_table.id_sheepdrugid AS _id, sheep_drug_table.drug_date_on, drug_table.drug_lot, drug_table.official_drug_name " +
+					"FROM drug_table, sheep_drug_table " +
+					"WHERE sheep_drug_table.drug_id  = drug_table.id_drugid " +
+					"AND sheep_drug_table.sheep_id = '%s' " +
+					"ORDER BY drug_date_on desc",thissheep_id);
+		
+		drugCrsr = dbh.exec(cmd);
+		drugCursor = (Cursor) drugCrsr;
+		drugRecs = drugCursor.getCount();
+		
+		Log.i("lookForSheep", " drugRecs is " + String.valueOf(drugRecs));
+		
+		drugCursor.moveToFirst();	
+		if (drugRecs > 0) {
+	    	// format the drug records
+			//	Select drug record columns
+	    	String[] fromColumnsDrug = new String[ ]{ "drug_date_on", "drug_lot", "official_drug_name"};
+			Log.i("LookForSheep", "after setting string array fromColumns for drugs");
+			//	Set the views for each column for each line. A tag takes up 1 line on the screen
+			int[] toViewsDrug = new int[] { R.id.drug_date_on, R.id.drug_lot, R.id.official_drug_name};
+	        Log.i("LookForSheep", "after setting string array toViews for drugs");
+	        drugAdapter = new SimpleCursorAdapter(this, R.layout.drug_entry, drugCursor, fromColumnsDrug, toViewsDrug, 0);
+	        Log.i("LookForSheep", "after setting drugadapter to show drugs");
+	        drugList.setAdapter(drugAdapter);
+	        Log.i("LookForSheep", "after setting list to show drugs");			
+		}   
+		else
+		{
+			// No drug data - publish an empty list to clear drugs
+			Log.i("LookForSheep", "no drugs for this sheep");
+			drugAdapter = new SimpleCursorAdapter(this, R.layout.drug_entry, null, null, null, 0);
+			drugList.setAdapter(drugAdapter);
+		}
+		
+
 }
 //  user clicked 'Scan' button    
  public void scanEid( View v){
@@ -653,6 +704,8 @@ public void formatSheepRecord (View v){
 	    TV.setText( "" );
 	    TV = (TextView) findViewById( R.id.sheep_sex );
 	    TV.setText( "" );
+	    TV = (TextView) findViewById( R.id.birth_weight );
+	    TV.setText( "" );
 		//	Need to clear out the rest of the tags here 
 		Log.i("clear btn", "before changing myadapter");
 		try {
@@ -668,7 +721,11 @@ public void formatSheepRecord (View v){
 			// In this case there is no adapter so do nothing
 		}
 //		Log.i("clear btn", "after changing myadapter and myadapter2");
-		
+				try {
+						drugAdapter.changeCursor(null);
+					} catch (Exception e) {
+						// In this case there is no adapter so do nothing
+					}		
     }
     public void doNote( View v )
     {	 

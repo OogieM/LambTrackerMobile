@@ -137,6 +137,7 @@
     <string name="sheep_trimtoes">Trim Toes</string>
     <string name="sheep_givewormer">Give Wormer</string>
     <string name="sheep_givevaccine">Give Vaccine</string>
+    <string name="sheep_givedrug">Give Drug</string>
     <string name="sheep_takeweight">Take Weight</string>
     <string name="sheep_shear">Shear Sheep</string>
     <string name="federal_id_lbl">Federal ID</string>
@@ -178,6 +179,7 @@
     <string name="delete_tag">Remove Tag from this Sheep?</string>
     <string name="delete_warning">Delete Warning</string>
     <string name="action_settings">Settings</string>
+    <string name="sheep_drug_lbl">Drug History</string>
   
    
 
