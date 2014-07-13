@@ -693,7 +693,7 @@ public class SheepManagement extends ListActivity {
 		cursor.moveToFirst();				
 		TV = (TextView) findViewById( R.id.sheepnameText );
 	    TV.setText (dbh.getStr(0));
-	    
+	    SheepName = dbh.getStr(0);
 	    alert_text = dbh.getStr(8);
 		
 	    //	Get the sire and dam id numbers
