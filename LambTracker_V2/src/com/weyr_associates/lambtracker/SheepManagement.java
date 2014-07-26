@@ -367,8 +367,8 @@ public class SheepManagement extends ListActivity {
 				radioGroup = ((RadioGroup) findViewById(R.id.radioShotLoc));
 				addRadioButtons(3, radioBtnText);
 				//	Default to right side SQ location
-				((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
-				radiobtnlist.clear ();
+				((RadioButton)radioGroup.getChildAt(1)).setChecked(true);
+				// radiobtnlist.clear ();
 			
 				// Fill the Drug Spinner
 		    	drug_spinner = (Spinner) findViewById(R.id.drug_spinner);
@@ -1076,8 +1076,9 @@ public class SheepManagement extends ListActivity {
 			// In this case there is no adapter so do nothing
 		}
 //		Log.i("clear btn", "after changing myadapter");
-		radioGroup=(RadioGroup)findViewById(R.id.radioShotLoc);
-		radioGroup.clearCheck();
+		// Don't clear the shot location when I clear stuff out
+//		radioGroup=(RadioGroup)findViewById(R.id.radioShotLoc);
+//		radioGroup.clearCheck();
 //		Log.i("clear btn", "after clear radioGroup");
 		boxvaccine = (CheckBox) findViewById(R.id.checkBoxGiveVaccine);
 		boxvaccine.setChecked(false);
