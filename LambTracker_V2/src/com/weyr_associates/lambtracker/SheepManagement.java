@@ -836,7 +836,8 @@ public class SheepManagement extends ListActivity {
 					cursor   = ( Cursor ) crsr; 		    	
 					cursor.moveToFirst();
 					//	Initially just set an alert with the number and units from today
-					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday + " " + mytime;
+					// 2014-07-27 Removed the time stamp as it's almost impossible to clear the alerts with it in there
+					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 					Log.i("drug withdrawal ", " new alert is " + temp_string);
 					if (alert_text != null){
 						temp_string = alert_text + temp_string;
