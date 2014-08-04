@@ -367,8 +367,8 @@ public class SheepManagement extends ListActivity {
 				radioGroup = ((RadioGroup) findViewById(R.id.radioShotLoc));
 				addRadioButtons(3, radioBtnText);
 				//	Default to right side SQ location
-				((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
-				radiobtnlist.clear ();
+				((RadioButton)radioGroup.getChildAt(1)).setChecked(true);
+				// radiobtnlist.clear ();
 			
 				// Fill the Drug Spinner
 		    	drug_spinner = (Spinner) findViewById(R.id.drug_spinner);
@@ -693,7 +693,7 @@ public class SheepManagement extends ListActivity {
 		cursor.moveToFirst();				
 		TV = (TextView) findViewById( R.id.sheepnameText );
 	    TV.setText (dbh.getStr(0));
-	    
+	    SheepName = dbh.getStr(0);
 	    alert_text = dbh.getStr(8);
 		
 	    //	Get the sire and dam id numbers
@@ -836,7 +836,8 @@ public class SheepManagement extends ListActivity {
 					cursor   = ( Cursor ) crsr; 		    	
 					cursor.moveToFirst();
 					//	Initially just set an alert with the number and units from today
-					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday + " " + mytime;
+					// 2014-07-27 Removed the time stamp as it's almost impossible to clear the alerts with it in there
+					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 					Log.i("drug withdrawal ", " new alert is " + temp_string);
 					if (alert_text != null){
 						temp_string = alert_text + temp_string;
@@ -1076,8 +1077,9 @@ public class SheepManagement extends ListActivity {
 			// In this case there is no adapter so do nothing
 		}
 //		Log.i("clear btn", "after changing myadapter");
-		radioGroup=(RadioGroup)findViewById(R.id.radioShotLoc);
-		radioGroup.clearCheck();
+		// Don't clear the shot location when I clear stuff out
+//		radioGroup=(RadioGroup)findViewById(R.id.radioShotLoc);
+//		radioGroup.clearCheck();
 //		Log.i("clear btn", "after clear radioGroup");
 		boxvaccine = (CheckBox) findViewById(R.id.checkBoxGiveVaccine);
 		boxvaccine.setChecked(false);
