@@ -318,7 +318,8 @@ public class SheepManagement extends ListActivity {
 				wormer_spinner.setAdapter (dataAdapter);
 				//	Set the wormer to be a specific one 
 				//	Should be a preference or default but fixed to be Ivermectin for now
-				wormer_spinner.setSelection(1);	
+				//  However, we need to make sure there is a wormer to do so!
+				if (cursor.getCount() > 0){ wormer_spinner.setSelection(1);	}
 							
 			// Fill the Vaccine Spinner
 	    	vaccine_spinner = (Spinner) findViewById(R.id.vaccine_spinner);
@@ -890,7 +891,6 @@ public class SheepManagement extends ListActivity {
 				dbh.exec( cmd );
 //				Log.i("update alerts ", "after cmd " + cmd);
 			}			
-					
 			//	Need to figure out the id_drugid for what we are giving this sheep for wormer
 			boxwormer = (CheckBox) findViewById(R.id.checkBoxGiveWormer);
 			if (boxwormer.isChecked()){

@@ -402,7 +402,6 @@ public class LookUpSheep extends ListActivity
             	TV = (TextView) findViewById( R.id.sheepnameText );
                 TV.setText( "Sheep Database does not exist." ); 
          	}
-
 	}
 	
 public void formatSheepRecord (View v){
@@ -444,6 +443,8 @@ public void formatSheepRecord (View v){
     
     alert_text = dbh.getStr(8);
 	
+    
+    
     //	Get the sire and dam id numbers
     thissire_id = dbh.getInt(9);
     Log.i("format record", " Sire is " + String.valueOf(thissire_id));
@@ -512,7 +513,6 @@ public void formatSheepRecord (View v){
 	Log.i("format record", " command is  " + cmd);
 	crsr4 = dbh.exec( cmd );
 	cursor4   = ( Cursor ) crsr4; 
-//	startManagingCursor(cursor4);
 	nRecs4    = cursor4.getCount();
 	Log.i("lookForSheep", " nRecs4 is " + String.valueOf(nRecs4));
 	cursor4.moveToFirst();	
@@ -574,9 +574,8 @@ public void formatSheepRecord (View v){
 			drugAdapter = new SimpleCursorAdapter(this, R.layout.drug_entry, null, null, null, 0);
 			drugList.setAdapter(drugAdapter);
 		}
-		
-
 }
+
 //  user clicked 'Scan' button    
  public void scanEid( View v){
  	// Here is where I need to get a tag scanned and put the data into the variable LastEID
@@ -721,6 +720,7 @@ public void formatSheepRecord (View v){
 			// In this case there is no adapter so do nothing
 		}
 //		Log.i("clear btn", "after changing myadapter and myadapter2");
+
 				try {
 						drugAdapter.changeCursor(null);
 					} catch (Exception e) {
