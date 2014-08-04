@@ -867,7 +867,7 @@ public class SheepManagement extends ListActivity {
     			Log.i("update notes ", "after cmd exec");
 				Log.i("toes trimmed ", String.valueOf(boxtrimtoes));					
 			}			
-// TODO
+// TODO  
 //			//	Get the value of the checkbox for take scrapie blood
 //			Log.i("before checkbox", " getting ready to see if we collected scrapie blood or not ");
 			boxscrapieblood = (CheckBox) findViewById(R.id.checkBoxScrapieBlood);
