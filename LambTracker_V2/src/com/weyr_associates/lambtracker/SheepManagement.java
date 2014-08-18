@@ -70,7 +70,7 @@ public class SheepManagement extends ListActivity {
 	public int drug_gone; // 0 = false 1 = true
 	public int	drug_type, which_wormer, which_vaccine;
 	public RadioGroup radioGroup;
-	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxweight, boxscrapieblood, boxdrug;
+	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxweight, boxscrapieblood, boxdrug, boxweaned;
 	public String note_text;
 	public int predefined_note01, predefined_note02, predefined_note03, predefined_note04, predefined_note05;
 	public int             nRecs, nRecs1, nRecs2, nRecs3, nRecs4, nRecs5;
@@ -867,7 +867,25 @@ public class SheepManagement extends ListActivity {
     			dbh.exec( cmd );	
     			Log.i("update notes ", "after cmd exec");
 				Log.i("toes trimmed ", String.valueOf(boxtrimtoes));					
+			}
+			
+			//	Get the value of the checkbox for weaned
+			Log.i("before checkbox", " getting ready to get weaned or not ");
+			boxweaned = (CheckBox) findViewById(R.id.checkBoxWeaned);
+			if (boxweaned.isChecked()){
+				//	go update the database with a weaned date
+				cmd = String.format("update sheep_table set weaned_date = '%s' where sheep_id = %d ", mytoday, thissheep_id);
+    			Log.i("update sheep table ", "before cmd " + cmd);
+    			dbh.exec( cmd );	
+    			Log.i("update sheep table ", "after cmd exec");
+    			// remove the wean alert
+    			cmd = String.format("update sheep_table set alert01 = replace " +
+						"( alert01, 'Wean', '') where sheep_id =%d ", thissheep_id ) ;	
+    			Log.i("update sheep table ", "before cmd " + cmd);
+    			dbh.exec( cmd );	
+    			Log.i("update sheep table ", "after cmd exec");
 			}			
+			
 // TODO  
 //			//	Get the value of the checkbox for take scrapie blood
 //			Log.i("before checkbox", " getting ready to see if we collected scrapie blood or not ");
@@ -1092,10 +1110,13 @@ public class SheepManagement extends ListActivity {
 //		Log.i("clear btn", "after clear trim toes checkbox");
 		boxscrapieblood = (CheckBox) findViewById(R.id.checkBoxScrapieBlood);
 		boxscrapieblood.setChecked(false);
-//		Log.i("clear btn", "after scrapie blood checkbox");		
+//		Log.i("clear btn", "after scrapie blood checkbox");	
+		boxweaned = (CheckBox) findViewById(R.id.checkBoxWeaned);
+		boxweaned.setChecked(false);
+		
 		boxdrug = (CheckBox) findViewById(R.id.checkBoxGiveDrug);
 		boxdrug.setChecked(false);
-		Log.i("clear btn", "after give drug checkbox");			
+//		Log.i("clear btn", "after give drug checkbox");			
 		boxweight = (CheckBox) findViewById(R.id.checkBoxTakeWeight);
 		boxweight.setChecked(false);
 		TV = (TextView) findViewById( R.id.trait11_data );
