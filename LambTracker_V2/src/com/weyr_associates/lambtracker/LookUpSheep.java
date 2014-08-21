@@ -632,7 +632,6 @@ public void formatSheepRecord (View v){
     	//	Close cursors if there are any but fall out if we don't have any in use
 		try {
 //			Log.i("Back Button", " In try stmt cursor");   
-//			stopManagingCursor (cursor);
 			cursor.close();
 		}
 		catch (Exception e) {

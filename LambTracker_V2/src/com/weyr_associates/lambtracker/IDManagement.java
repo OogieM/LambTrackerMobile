@@ -364,7 +364,14 @@ public class IDManagement extends Activity {
 	    {
 		doUnbindService();
 		stopService(new Intent(IDManagement.this, eidService.class));
-		cursor.close();
+		try {
+//			Log.i("Back Button", " In try stmt cursor");   
+			cursor.close();
+		}
+		catch (Exception e) {
+//			Log.i("Back Button", " In catch stmt cursor");  
+			// In this case there is no adapter so do nothing
+		}
        	dbh.closeDB();
     	clearBtn( null );   	
     	finish();
@@ -913,8 +920,9 @@ public class IDManagement extends Activity {
 	    			Log.i("updatefed ", "fed location integer " + String.valueOf(fed_locationid));
 	    			Log.i("updatefed ", "today " + today);
 	    			Log.i("updatefed ", "flock ID " + String.valueOf(flock_id));
-	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) " +
-	    					"values ( %s, 1, %s, %s, %s, '%s', %s, %s )", thissheep_id, fed_colorid, fed_colorid, fed_locationid, today, fedText, flock_id);
+	    			//	 Set the official_id flag to indicate this is the official ID
+	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number, id_flockid, official_id) " +
+	    					"values ( %s, 1, %s, %s, %s, '%s', %s, %s, 1 )", thissheep_id, fed_colorid, fed_colorid, fed_locationid, today, fedText, flock_id);
 	    			Log.i("updatefed ", "before cmd " + cmd);
 	    			dbh.exec( cmd );	
 	    			Log.i("updatefed ", "after cmd exec");
@@ -1012,6 +1020,7 @@ public class IDManagement extends Activity {
 	    		}
 	    	}
 //	    //Update the EID Tag data
+	    int official_id_flag;
 	    if (eidtagid != 0) {
 	    	// update the EID tag data
 	    	Log.i("updateEID ", "tag record id is not zero, needs update here");
@@ -1019,8 +1028,8 @@ public class IDManagement extends Activity {
 	    	else {
 	    		Log.i("updateeid ", "beginning of update eid code");
 	    		//	assume ID is not an official one at this time so 
-	    		int official_id_flag = 0;
-	    		// get the first 3 digits of the EID tag number
+	    		official_id_flag = 0;
+	    		//	get the first 3 digits of the EID tag number
 	    		String str = eidText;
 	    		Log.i("updateeid ", "string of eid " + str);
 	    		str = str.substring(0,3);

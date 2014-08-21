@@ -784,6 +784,8 @@ public class SheepManagement extends ListActivity {
 	    	btn = (Button) findViewById( R.id.update_database_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 	    	btn.setEnabled(false);
+	    	// If there is no sheep ID then drop out completely
+	    	
     		//	Get the date and time to enter into the database.
     		String mytoday = Utilities.TodayIs();
     		String mytime = Utilities.TimeIs();
@@ -896,7 +898,7 @@ public class SheepManagement extends ListActivity {
 				note_text = "Blood for Scrapie Genetics";
 				predefined_note01 = 47; // hard coded the code for blood sample taken
 				// TODO
-				//	This will have to be changed for the general case
+				//	This will have to be changed for the general case of blood for other testing
 				cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid01) " +
     					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, mytoday, mytime, predefined_note01);
     			Log.i("update notes ", "before cmd " + cmd);
@@ -1031,7 +1033,12 @@ public class SheepManagement extends ListActivity {
     	doUnbindService();
 		stopService(new Intent(SheepManagement.this, eidService.class));   	
     	// Added this to close the database if we go back to the main activity  	
-    	cursor.close();
+    	try {
+    		cursor.close();
+    	}catch (Exception r)
+    	{
+    		Log.i("back btn", "cursor RunTimeException: " + r);
+    	}
     	try {
     		cursor2.close();
     	}catch (Exception r)
