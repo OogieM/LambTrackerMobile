@@ -527,147 +527,7 @@ public class SheepManagement extends ListActivity {
          	}
 
 	}
-//	TV = (TextView) findViewById( R.id.inputText );	        
-//    	String	tag_num = TV.getText().toString();
-//   	
-////    	Log.i("SheepMgmt", " got to lookForSheep with Tag Number of " + tag_num);
-//        exists = tableExists("sheep_table");
-//        if (exists){
-//        	if( tag_num != null && tag_num.length() > 0 ){
-////        		Get the sheep id from the id table for this tag number and selected tag type
-//	        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
-//	        			"and id_info_table.tag_type='%s' ", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
-//	        	dbh.exec( cmd );
-//	        	dbh.moveToFirstRecord();
-//	        	if( dbh.getSize() == 0 )
-//		    		{ // no sheep with that tag in the database so clear out and return
-//		    		clearBtn( v );
-//		    		TV = (TextView) findViewById( R.id.sheepnameText );
-//		        	TV.setText( "Cannot find this sheep." );
-//		        	return;
-//		    		}
-//	        	thissheep_id = dbh.getInt(0);
-//	        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));
-//	        	//	Go get the sex of this sheep
-//	        	cmd = String.format( "select sheep_table.sex from sheep_table where sheep_id = %s",thissheep_id);
-//	        	crsr = dbh.exec( cmd ); 	    		
-//	    		cursor   = ( Cursor ) crsr; 
-//				cursor.moveToFirst();				
-//				i =  (dbh.getInt(0));
-//				Log.i("LookForSheep", "This sheep is sex " + String.valueOf(i));	
-//				
-//	        	try {
-//	        		Log.i("try block", " Before finding an electronic tag if it exists");		        		        	
-//		        	cmd = String.format( "select sheep_table.sheep_id, id_type_table.idtype_name, " +
-//		    				"id_info_table.tag_number " +
-//		    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-//		    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-//		    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null and " +
-//		    				"id_info_table.tag_type = 2 order by idtype_name asc", thissheep_id);
-//		    		crsr = dbh.exec( cmd ); 	    		
-//		    		cursor   = ( Cursor ) crsr; 		    	
-//					cursor.moveToFirst();	
-//					Log.i("getlastEID filled", "This sheep is id " + String.valueOf(dbh.getInt(0)));
-//					Log.i("getlastEID filled", "This sheep id type is " + dbh.getStr(1));
-//					LastEID = dbh.getStr(2);
-//					Log.i("LastEID is ", dbh.getStr(2));
-//	        	}
-//	        	catch(Exception r)
-//	    	    {
-//	        		LastEID = "000_000000000000";
-//	        		Log.v("fill LAST EID ", " in sheep management RunTimeException: " + r);
-//	    	    }	 
-//	        	        	
-//	        	
-//	        	Log.i("LookForSheep", " Before finding all tags");		        	
-//	        	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-//	    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-//	    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
-//	    				"sheep_table.sire_id, sheep_table.dam_id " +
-//	    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-//	    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-//	    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-//	    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-//	    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
-//
-//	    		crsr = dbh.exec( cmd ); 	    		
-//	    		cursor   = ( Cursor ) crsr; 
-////	    		startManagingCursor(cursor);
-//	    		recNo    = 1;
-//				nRecs    = cursor.getCount();
-//				colNames = cursor.getColumnNames();
-//				cursor.moveToFirst();				
-//				TV = (TextView) findViewById( R.id.sheepnameText );
-//		        TV.setText (dbh.getStr(0));
-//		        SheepName = dbh.getStr(0);
-//		        alert_text = dbh.getStr(8);
-//		    	
-//		        //	Get the sire and dam id numbers
-//		        thissire_id = dbh.getInt(9);
-////		        Log.i("LookForSheep", " Sire is " + String.valueOf(thissire_id));
-//		        thisdam_id = dbh.getInt(10);
-////		        Log.i("LookForSheep", " Dam is " + String.valueOf(thisdam_id));
-//		        
-//		        //	Go get the sire name
-//		        if (thissire_id != 0){
-//			        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thissire_id);
-////			        Log.i("LookForSheep", " cmd is " + cmd);		        
-//			        crsr2 = dbh.exec( cmd);
-//			        Log.i("LookForSheep", " after second db lookup");
-//			        cursor2   = ( Cursor ) crsr2; 
-////		    		startManagingCursor(cursor2);
-//		    		cursor2.moveToFirst();
-//		    		TV = (TextView) findViewById( R.id.sireName );
-//		    		thissire_name = dbh.getStr(0);
-//		    		TV.setText (thissire_name);	 
-//		    		Log.i("lookForSheep", " Sire is " + thissire_name);
-//			        Log.i("LookForSheep", " Sire is " + String.valueOf(thissire_id));
-//		        }
-//		        if(thisdam_id != 0){
-//			        cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thisdam_id);
-//			        crsr3 = dbh.exec( cmd);
-//			        cursor3   = ( Cursor ) crsr3; 
-////		    		startManagingCursor(cursor3);
-//		    		cursor3.moveToFirst();
-//		    		TV = (TextView) findViewById( R.id.damName );
-//		    		thisdam_name = dbh.getStr(0);
-//		    		TV.setText (thisdam_name);	
-//		    		Log.i("lookForSheep", " Dam is " + thisdam_name);
-//			        Log.i("LookForSheep", " Dam is " + String.valueOf(thisdam_id));
-//		        }    		
-//		        
-//		    	Log.i("lookForSheep", " before formatting results");
-//				
-//				//	Get set up to try to use the CursorAdapter to display all the tag data
-//				//	Select only the columns I need for the tag display section
-//		        String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
-//				//	Set the views for each column for each line. A tag takes up 1 line on the screen
-//		        int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-//				myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor ,fromColumns, toViews, 0);
-//				setListAdapter(myadapter);
-//				
-//				Log.i("lookForSheep", " after filling tag data");
-//
-//				//	Now to test of the sheep has an alert and if so then display the alert
-//				if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-//			       	// make the alert button red
-//			    	Button btn = (Button) findViewById( R.id.alert_btn );
-//			    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-//			    	btn.setEnabled(true); 
-//			    	//	testing whether I can put up an alert box here without issues
-//			    	showAlert(v);
-//				}
-//				}else{
-//					return;
-//				}
-////	        Log.i("lookForSheep", " out of the if statement");
-//        	}
-//    		else {
-//    			clearBtn( null );
-//            	TV = (TextView) findViewById( R.id.sheepnameText );
-//                TV.setText( "Sheep Database does not exist." ); 
-//        	}
-//	}	
+
 	public void formatSheepRecord (View v){
 //		Object crsr, crsr2, crsr3, crsr4;
 		TextView TV;
@@ -785,6 +645,10 @@ public class SheepManagement extends ListActivity {
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 	    	btn.setEnabled(false);
 	    	// If there is no sheep ID then drop out completely
+	    	// thissheep_id is 0 if no sheep has been selected.
+	    	//	need to figure out how to loop around if it's 0 and do this stuff if not 0
+	    	// TODO
+	    	
 	    	
     		//	Get the date and time to enter into the database.
     		String mytoday = Utilities.TodayIs();
