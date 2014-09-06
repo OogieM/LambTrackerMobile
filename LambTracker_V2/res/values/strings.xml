@@ -139,6 +139,7 @@
     <string name="sheep_givewormer">Give Wormer</string>
     <string name="sheep_givevaccine">Give Vaccine</string>
     <string name="sheep_givedrug">Give Drug</string>
+     <string name="drug_reason_lbl">Reason</string>
     <string name="sheep_takeweight">Take Weight</string>
     <string name="sheep_shear">Shear Sheep</string>
     <string name="federal_id_lbl">Federal ID</string>

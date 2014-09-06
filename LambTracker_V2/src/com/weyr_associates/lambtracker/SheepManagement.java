@@ -60,15 +60,15 @@ public class SheepManagement extends ListActivity {
 	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
 	public Spinner predefined_note_spinner01, predefined_note_spinner02, predefined_note_spinner03;
 	public Spinner predefined_note_spinner04, predefined_note_spinner05;
-	public Spinner wormer_spinner, vaccine_spinner, drug_spinner;
+	public Spinner wormer_spinner, vaccine_spinner, drug_spinner, drug_location_spinner;
 	public List<String> predefined_notes;
 	public List<String> tag_types, tag_locations, tag_colors;
-	public List<String> wormers, vaccines, drugs;
+	public List<String> wormers, vaccines, drugs, drug_location;
 	public List<Integer> wormer_id_drugid, vaccine_id_drugid, drug_id_drugid;
-	public int wormer_id, vaccine_id, drug_loc;
+	public int wormer_id, vaccine_id, shot_loc, drug_loc;
 	public String[] this_sheeps_tags ;
 	public int drug_gone; // 0 = false 1 = true
-	public int	drug_type, which_wormer, which_vaccine;
+	public int	drug_type, which_wormer, which_vaccine, which_drug;
 	public RadioGroup radioGroup;
 	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxweight, boxscrapieblood, boxdrug, boxweaned;
 	public String note_text;
@@ -376,7 +376,7 @@ public class SheepManagement extends ListActivity {
 			   	drugs = new ArrayList<String>();  
 			   	drug_id_drugid = new ArrayList<Integer>();
 			   	
-			   	// Select All fields from id types to build the spinner
+			   	// Select All fields from drug types to build the spinner
 			   	cmd = String.format( "select id_drugid, user_task_name, drug_lot from drug_table where " +
 			   			"drug_gone = %s and (drug_type = 3 or drug_type = 4 or " +
 			   			"drug_type = 5 or drug_type = 6) ", drug_gone );
@@ -396,7 +396,28 @@ public class SheepManagement extends ListActivity {
 					dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 					drug_spinner.setAdapter (dataAdapter);
 					//	Set the drug to select a drug
-					drug_spinner.setSelection(0);			
+					drug_spinner.setSelection(0);		
+					
+				// Fill the drug location Spinner
+			    	drug_location_spinner = (Spinner) findViewById(R.id.drug_location_spinner);
+				   	drug_location = new ArrayList<String>();      	
+				   	
+				   	// Select All fields from drug locations to build the spinner
+				       cmd = "select * from drug_location_table";
+				       crsr = dbh.exec( cmd );  
+				       cursor   = ( Cursor ) crsr;
+				       dbh.moveToFirstRecord();
+				       drug_location.add("Select a Location");
+				        // looping through all rows and adding to list
+				   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+				   		drug_location.add(cursor.getString(1));
+				   	}
+				   	
+				   	// Creating adapter for spinner
+				   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, drug_location);
+						dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+						drug_location_spinner.setAdapter (dataAdapter);
+						drug_location_spinner.setSelection(0);
 		
 	      	// make the alert button normal and disabled
 	   	btn = (Button) findViewById( R.id.alert_btn );
@@ -669,8 +690,8 @@ public class SheepManagement extends ListActivity {
 //				Get the radio group selected for the location
 //				Log.i("before radio group", " getting ready to get the shot location ");
 				radioGroup=(RadioGroup)findViewById(R.id.radioShotLoc);
-		 		drug_loc = radioGroup.getCheckedRadioButtonId()+1;	
-		 		if (drug_loc == 0){
+		 		shot_loc = radioGroup.getCheckedRadioButtonId()+1;	
+		 		if (shot_loc == 0){
 		    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
 		    		builder.setMessage( R.string.drug_loc_fill_fields )
 		    	           .setTitle( R.string.drug_loc_fill_fields );
@@ -690,7 +711,7 @@ public class SheepManagement extends ListActivity {
 		 		}else{
 					cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
 			  				" drug_time_on, drug_location) values " +
-			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, drug_loc);
+			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, shot_loc);
 			  		Log.i("add drug to ", "db cmd is " + cmd);
 					dbh.exec(cmd);
 					Log.i("add tag ", "after insert into sheep_drug_table");
@@ -815,6 +836,93 @@ public class SheepManagement extends ListActivity {
 				// TODO
 				// Consider calculating the actual date/time withdrawal and putting that in instead. 
 			}	
+			//	Give a drug if checked
+			boxdrug = (CheckBox) findViewById(R.id.checkBoxGiveDrug);
+			if (boxdrug.isChecked()){
+				//	Go get which drug was selected in the spinner
+				drug_spinner = (Spinner) findViewById(R.id.drug_spinner);
+				which_drug = drug_spinner.getSelectedItemPosition();
+//				Log.i("wormer spinner", " position is" + String.valueOf(which_wormer));
+				//	go update the database with a drug record for this wormer and this sheep
+				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
+				i = drug_id_drugid.get(which_drug);
+				Log.i("drug id", " value is " + String.valueOf(i));
+				//TODO
+				//	Go get a Drug location 
+				
+				drug_location_spinner = (Spinner) findViewById(R.id.drug_location_spinner);
+				drug_loc = drug_location_spinner.getSelectedItemPosition();
+		 		if (drug_loc == 0){
+		    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+		    		builder.setMessage( R.string.drug_loc_fill_fields )
+		    	           .setTitle( R.string.drug_loc_fill_fields );
+		    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+		    	           public void onClick(DialogInterface dialog, int idx) {
+		    	               	// User clicked OK button 
+		    	         		// make update database button normal and enabled so we can try again
+		    	           		btn = (Button) findViewById( R.id.update_database_btn );
+		    	           		btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));
+		    	            	btn.setEnabled(true);
+		     	    		   return;
+		    	               }
+		    	       });		
+		    		AlertDialog dialog = builder.create();
+		    		dialog.show();	
+		    		return;
+		 		}else{
+					cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
+			  				" drug_time_on, drug_location) values " +
+			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, drug_loc);
+			  		Log.i("add drug to ", "db cmd is " + cmd);
+					dbh.exec(cmd);
+					Log.i("add tag ", "after insert into sheep_drug_table");
+					// TODO
+					//	Need to update the alert to include the slaughter withdrawal for this drug
+					cmd = String.format("Select units_table.units_name, user_meat_withdrawal from drug_table " +
+							"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
+					Log.i("drug withdrawal ", "db cmd is " + cmd);
+					crsr = dbh.exec(cmd);
+					cursor   = ( Cursor ) crsr; 		    	
+					cursor.moveToFirst();
+					//	Initially just set an alert with the number and units from today
+					// 2014-07-27 Removed the time stamp as it's almost impossible to clear the alerts with it in there
+					Log.i("today is ", mytoday);
+					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
+					Log.i("drug withdrawal ", " new alert is " + temp_string);
+					if (alert_text != null){
+						temp_string = alert_text + temp_string;
+					}
+					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
+					Log.i("update alerts ", "before cmd " + cmd);
+					dbh.exec( cmd );
+					Log.i("update alerts ", "after cmd " + cmd);
+					// TODO
+					// Consider calculating the actual date/time withdrawal and putting that in instead. 
+					//	get and add Drug Reason
+					// Put this back into the sneep_management.xml file when I add in reasons
+//					<TextView
+//		        	android:layout_width="150dp"
+//		       	 	android:layout_height="wrap_content"
+//		        	android:layout_column="0"
+//		            android:layout_gravity="right"
+//		            android:layout_row="7"
+//		            android:inputType="none"
+//		        	android:text="@string/drug_reason_lbl" />
+//				        
+//				<EditText
+//		            android:id="@+id/DrugReasonText"
+//		            android:layout_width="260dp"
+//		            android:layout_height="wrap_content"
+//		            android:layout_gravity="left|center"
+//		            android:layout_column="1"
+//		            android:layout_row="7"
+//		            android:enabled="true"
+//		            android:textSize="18sp"
+//		            android:inputType="text"
+//		            android:typeface="monospace" >
+//					</EditText>
+		 		}
+			}	
 			
 			//	Take a weight if checked
 					boxweight = (CheckBox) findViewById(R.id.checkBoxTakeWeight);
@@ -857,6 +965,7 @@ public class SheepManagement extends ListActivity {
 						dbh.exec(cmd);
 						Log.i("add evaluation ", "after insert into sheep_evaluation_table");
 					}	
+					
 			clearBtn( null );
 	 }
 	public void printLabel( View v ){ 
