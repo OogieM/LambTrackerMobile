@@ -54,7 +54,6 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.weyr_associates.lambtracker.LookUpSheep"
             android:configChanges="orientation"
@@ -163,6 +162,11 @@
                 <action android:name="com.weyr_associates.lambtracker.eidService" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name="com.weyr_associates.lambtracker.SortSheep"
+            android:label="@string/title_activity_sort_sheep" >
+        </activity>
     </application>
 
 </manifest>
