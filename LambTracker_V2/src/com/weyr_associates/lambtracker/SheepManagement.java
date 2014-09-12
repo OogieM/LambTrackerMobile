@@ -820,6 +820,7 @@ public class SheepManagement extends ListActivity {
 						"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
 				Log.i("drug withdrawal ", "db cmd is " + cmd);
 				crsr = dbh.exec(cmd);
+				try {
 				cursor   = ( Cursor ) crsr; 		    	
 				cursor.moveToFirst();
 				//	Initially just set an alert with the number and units from today
@@ -833,7 +834,10 @@ public class SheepManagement extends ListActivity {
 				Log.i("update alerts ", "before cmd " + cmd);
 				dbh.exec( cmd );
 				Log.i("update alerts ", "after cmd " + cmd);
-
+				}
+				catch (Exception e){
+					Log.w("Withdrawal: Wormer", "No withdrawal data in db");
+				}
 				// TODO
 				// Consider calculating the actual date/time withdrawal and putting that in instead. 
 			}	
@@ -883,6 +887,7 @@ public class SheepManagement extends ListActivity {
 							"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
 					Log.i("drug withdrawal ", "db cmd is " + cmd);
 					crsr = dbh.exec(cmd);
+					try {
 					cursor   = ( Cursor ) crsr; 		    	
 					cursor.moveToFirst();
 					//	Initially just set an alert with the number and units from today
@@ -897,6 +902,10 @@ public class SheepManagement extends ListActivity {
 					Log.i("update alerts ", "before cmd " + cmd);
 					dbh.exec( cmd );
 					Log.i("update alerts ", "after cmd " + cmd);
+					}
+					catch (Exception e){
+						Log.w("Withdrawal: Drug", "No withdrawal data in db");
+					}
 					// TODO
 					// Consider calculating the actual date/time withdrawal and putting that in instead. 
 					//	get and add Drug Reason
