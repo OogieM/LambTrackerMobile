@@ -828,14 +828,12 @@ public class SheepManagement extends ListActivity {
 				if (alert_text != null){
 					temp_string = alert_text + temp_string;
 				}
-//<<<<<<< HEAD
-				// Adding something to see if the merge will work now
-//=======
+
 				cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
 				Log.i("update alerts ", "before cmd " + cmd);
 				dbh.exec( cmd );
 				Log.i("update alerts ", "after cmd " + cmd);
-//>>>>>>> FETCH_HEAD
+
 				// TODO
 				// Consider calculating the actual date/time withdrawal and putting that in instead. 
 			}	
@@ -925,6 +923,8 @@ public class SheepManagement extends ListActivity {
 //		            android:typeface="monospace" >
 //					</EditText>
 		 		}
+				// TODO
+				// Consider calculating the actual date/time withdrawal and putting that in instead. 
 			}	
 			
 			//	Take a weight if checked
