@@ -11,7 +11,7 @@
     <string name="menu_settings">Settings</string>
     <string name="exec_sql_btn">Execute SQL</string>
     <string name="edit_db_btn">Edit DB</string>
-    <string name="copy_db_assets_btn">Copy DB in Assets</string>
+    <string name="copy_db_assets_btn">Load Blank DB in Assets</string>
     <string name="select_db_file_btn">Select DB File</string>
     <string name="show_db_btn">Show DB</string>
     <string name="backup_db_btn">Backup DB</string>
@@ -67,8 +67,7 @@
     <string name="title_activity_sheep_management">Sheep Management</string>
     <string name="title_activity_print_labels">Print Labels</string>
     <string name="title_activity_set_lambtracker_defaults">Set LambTracker Defaults</string>
-     <string name="title_activity_set_defaults">SetDefaults</string>
-    
+    <string name="title_activity_set_defaults">SetDefaults</string>
     <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
     <string name="help_manage_id">Select a sheep based on some form of ID. Currently federal, farm, electronic, paint and name 
@@ -91,7 +90,6 @@
         you can only edit the rearing type, sex and lambease values. </string>
     <string name="help_print">This prints a single label with the EID as a bar code and the name of the sheep on it.  </string>
     <string name="help_management">Select the management tasks you have done for this sheep and then update the database. </string>
-    
     <string name="convert_fill_fields">Please Fill in all four fields.</string>
     <string name="id_management_remove_tag">Remove the existing tag of this type before adding a new one.</string>
     <string name="id_management_remove_tag_header">Tag Remove Problem</string>
@@ -112,6 +110,7 @@
         <item>Lambing</item>
         <item>Fix Lamb Record</item>
         <item>Sheep Management</item>
+        <item>Sort Sheep</item>
         <item>Print Labels</item>
         <item>Edit Database</item>
         <item>Set LambTracker Defaults</item>
@@ -133,11 +132,13 @@
     <string name="sheep_stillborn">Stillborn</string>
     <string name="sheep_stillborn_lbl">Stillborn Status</string>
     <string name="mark_ewe">Mark Ewe</string>
-    <string name="sheep_scrapieblood">Take Scrapie Blood Sample</string>
+    <string name="sheep_scrapieblood">Take Scrapie Blood</string>
     <string name="sheep_trimtoes">Trim Toes</string>
+    <string name="sheep_weaned">Wean</string>
     <string name="sheep_givewormer">Give Wormer</string>
     <string name="sheep_givevaccine">Give Vaccine</string>
     <string name="sheep_givedrug">Give Drug</string>
+    <string name="drug_reason_lbl">Reason</string>
     <string name="sheep_takeweight">Take Weight</string>
     <string name="sheep_shear">Shear Sheep</string>
     <string name="federal_id_lbl">Federal ID</string>
@@ -174,13 +175,12 @@
     <string name="update_eval_lbl">Update Alerts on Save Evaluation?</string>
     <string name="sheep_note_lbl">Notes</string>
     <string name="include_removed_sheep">Include Removed Sheep in Look Up Sheep?</string>
-    
     <string name="delete_sheep">Delete Sheep?</string>
     <string name="delete_tag">Remove Tag from this Sheep?</string>
     <string name="delete_warning">Delete Warning</string>
     <string name="action_settings">Settings</string>
     <string name="sheep_drug_lbl">Drug History</string>
-  
-   
+    <string name="title_activity_sort_sheep">Sor tSheep</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

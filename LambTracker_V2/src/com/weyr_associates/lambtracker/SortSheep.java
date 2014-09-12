@@ -36,7 +36,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
-public class LookUpSheep extends ListActivity
+public class SortSheep extends ListActivity
 	{
 	private DatabaseHandler dbh;
 	int             id;
@@ -55,6 +55,7 @@ public class LookUpSheep extends ListActivity
 	public Spinner predefined_note_spinner04, predefined_note_spinner05;
 	public List<String> predefined_notes;
 	public String[] this_sheeps_tags ;
+	public View v;
 	
 	public int             nRecs, nRecs4, drugRecs;
 	private int			    recNo;
@@ -105,7 +106,7 @@ public class LookUpSheep extends ListActivity
 			case eidService.MSG_THREAD_SUICIDE:
 				Log.i("Convert", "Service informed Activity of Suicide.");
 				doUnbindService();
-				stopService(new Intent(LookUpSheep.this, eidService.class));
+				stopService(new Intent(SortSheep.this, eidService.class));
 
 				break;
 			default:
@@ -150,7 +151,7 @@ public class LookUpSheep extends ListActivity
 			doBindService();
 		} else {
 			//Log.i("Convert", "is not, start it");
-			startService(new Intent(LookUpSheep.this, eidService.class));
+			startService(new Intent(SortSheep.this, eidService.class));
 			doBindService();
 		}
 		//Log.i("Convert", "Done isRunning.");
@@ -220,7 +221,7 @@ public class LookUpSheep extends ListActivity
 		TextView TV = (TextView) findViewById (R.id.inputText);
 		TV.setText( LastEID );
 		Log.i("in gotEID ", "with LastEID of " + LastEID);
-		
+		lookForSheep(v);		
 	}	
 	/////////////////////////////////////////////////////	
 	@Override
@@ -267,7 +268,7 @@ public class LookUpSheep extends ListActivity
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_type_spinner.setAdapter (dataAdapter);
 		//	set initial tag type to look for to be federal tag
-		tag_type_spinner.setSelection(1);	
+		tag_type_spinner.setSelection(2);	
 
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
@@ -394,7 +395,8 @@ public class LookUpSheep extends ListActivity
 			            	btn.setEnabled(true);       		
 			        	}
 			        	//	We need to call the format the record method
-			        	formatSheepRecord(v);   	
+			        	formatSheepRecord(v); 
+			        	scanEid (v);
 				        break;
     				} // end of case switch   			
     		}else {
@@ -579,7 +581,7 @@ public void formatSheepRecord (View v){
 //  user clicked 'Scan' button    
  public void scanEid( View v){
  	// Here is where I need to get a tag scanned and put the data into the variable LastEID
-	 clearBtn( v );
+//	 clearBtn( v );
 	 tag_type_spinner.setSelection(2);
 	 if (mService != null) {
 		try {
@@ -626,7 +628,7 @@ public void formatSheepRecord (View v){
 //    	Log.i("Back Button", " In the lookupsheep back code at beginning");   
     	doUnbindService();
 //    	Log.i("Back Button", " In lookupsheep back after dounbindservice");   
-		stopService(new Intent(LookUpSheep.this, eidService.class));   	
+		stopService(new Intent(SortSheep.this, eidService.class));   	
 //    	Log.i("Back Button", " In lookupsheep back after stop service");   
     	// Added this to close the database if we go back to the main activity  
     	//	Close cursors if there are any but fall out if we don't have any in use
@@ -662,7 +664,7 @@ public void formatSheepRecord (View v){
       	finish();
 	    }
  
-    public void showAlert (View v){
+    public void showAlert (final View v){
 //    		String	alert_text;
             String          cmd;    
             Object 			crsr2;
@@ -674,7 +676,9 @@ public void formatSheepRecord (View v){
     			           .setTitle( R.string.alert_warning );
     				builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
     			           public void onClick(DialogInterface dialog, int idx) {
-    			               // User clicked OK button   	  
+    			               // User clicked OK button  
+    			        	   // Get reset to scan another sheep here
+    			        	   scanEid(v);   			        	   
     			               }
     			       });		
     				AlertDialog dialog = builder.create();
