@@ -834,24 +834,19 @@ public class SheepManagement extends ListActivity {
 							"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
 					Log.i("drug withdrawal ", "db cmd is " + cmd);
 					crsr = dbh.exec(cmd);
-					try {
-						cursor   = ( Cursor ) crsr; 		    	
-						cursor.moveToFirst();
-						//	Initially just set an alert with the number and units from today
-						// 2014-07-27 Removed the time stamp as it's almost impossible to clear the alerts with it in there
-						temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
-						Log.i("drug withdrawal ", " new alert is " + temp_string);
-						if (alert_text != null){
-							temp_string = alert_text + temp_string;
-						}
-						cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
-						Log.i("update alerts ", "before cmd " + cmd);
-						dbh.exec( cmd );
-						Log.i("update alerts ", "after cmd " + cmd);
-					} 
-					catch (Exception e) {
-						Log.w("Withdrawal: Vaccine", "No withdrawal data in db");
+					cursor   = ( Cursor ) crsr; 		    	
+					cursor.moveToFirst();
+					//	Initially just set an alert with the number and units from today
+					// 2014-07-27 Removed the time stamp as it's almost impossible to clear the alerts with it in there
+					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
+					Log.i("drug withdrawal ", " new alert is " + temp_string);
+					if (alert_text != null){
+						temp_string = alert_text + temp_string;
 					}
+					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
+					Log.i("update alerts ", "before cmd " + cmd);
+					dbh.exec( cmd );
+					Log.i("update alerts ", "after cmd " + cmd);
 					// TODO
 					// Consider calculating the actual date/time withdrawal and putting that in instead. 
 		 		}
@@ -920,23 +915,18 @@ public class SheepManagement extends ListActivity {
 						"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
 				Log.i("drug withdrawal ", "db cmd is " + cmd);
 				crsr = dbh.exec(cmd);
-				try {
-					cursor   = ( Cursor ) crsr; 		    	
-					cursor.moveToFirst();
-					//	Initially just set an alert with the number and units from today
-					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday + " " + mytime;
-					Log.i("drug withdrawal ", " new alert is " + temp_string);
-					if (alert_text != null){
-						temp_string = alert_text + temp_string;
-					}
-					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
-					Log.i("update alerts ", "before cmd " + cmd);
-					dbh.exec( cmd );
-					Log.i("update alerts ", "after cmd " + cmd);
+				cursor   = ( Cursor ) crsr; 		    	
+				cursor.moveToFirst();
+				//	Initially just set an alert with the number and units from today
+				temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday + " " + mytime;
+				Log.i("drug withdrawal ", " new alert is " + temp_string);
+				if (alert_text != null){
+					temp_string = alert_text + temp_string;
 				}
-				catch (Exception e) {
-					Log.w("Withdrawal: Wormer", "No withdrawal info in db");
-				}
+				cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
+				Log.i("update alerts ", "before cmd " + cmd);
+				dbh.exec( cmd );
+				Log.i("update alerts ", "after cmd " + cmd);
 				// TODO
 				// Consider calculating the actual date/time withdrawal and putting that in instead. 
 			}	
