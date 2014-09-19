@@ -344,7 +344,7 @@ public class LookUpSheep extends ListActivity
 				            	btn = (Button) findViewById( R.id.next_rec_btn );
 				            	btn.setEnabled(true);       		
 				        	}
-				        	Log.i("searchByNumber", " Before finding all tags");	        	
+				        	Log.i("searchByNumber", " Before formatting the record");	        	
 				        	//	We need to call the format the record method
 				        	formatSheepRecord(v);   	
     					}
@@ -412,8 +412,6 @@ public void formatSheepRecord (View v){
 	
 	thissheep_id = cursor.getInt(0);	        	
 	Log.i("format record", "This sheep is record " + String.valueOf(thissheep_id));	        	
-	
-//	Log.i("format record", " recNo = "+ String.valueOf(recNo));
 	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 			"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
 			"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
@@ -425,26 +423,32 @@ public void formatSheepRecord (View v){
 			"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 			"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 			"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-			"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", thissheep_id);
-
-	crsr = dbh.exec( cmd ); 	    		
+			"where id_info_table.sheep_id ='%s' and (id_info_table.tag_date_off is null or id_info_table.tag_date_off is '')order by idtype_name asc", thissheep_id);
+	Log.i("format record", " comand is " + cmd);	
+	crsr = dbh.exec( cmd ); 
+	Log.i("format record", " after run the command");
 	cursor5   = ( Cursor ) crsr; 
+	Log.i("format record", " the cursor is of size " + String.valueOf(dbh.getSize()));
 	cursor5.moveToFirst();				
 	TV = (TextView) findViewById( R.id.sheepnameText );
     TV.setText (dbh.getStr(0));
+    Log.i("format record", "after get sheep name ");
     TV = (TextView) findViewById( R.id.birth_date );
     TV.setText (dbh.getStr(11));
+    Log.i("format record", "after get birth date ");
     TV = (TextView) findViewById( R.id.birth_type );
     TV.setText (dbh.getStr(12));
+    Log.i("format record", "after get birth type ");
     TV = (TextView) findViewById( R.id.sheep_sex );
     TV.setText (dbh.getStr(13));
+    Log.i("format record", "after get sheep sex ");
     TV = (TextView) findViewById( R.id.birth_weight );
     TV.setText (String.valueOf(dbh.getReal(14)));
+    Log.i("format record", "after get birth weight ");
     
     alert_text = dbh.getStr(8);
-	
-    
-    
+    Log.i("format record", "after get alert ");
+   
     //	Get the sire and dam id numbers
     thissire_id = dbh.getInt(9);
     Log.i("format record", " Sire is " + String.valueOf(thissire_id));
