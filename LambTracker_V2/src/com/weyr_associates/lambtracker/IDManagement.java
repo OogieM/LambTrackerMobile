@@ -42,6 +42,7 @@ public class IDManagement extends Activity {
 	public Button btn;
 	public String tag_type_label, tag_color_label, tag_location_label, new_tag_number, eid_tag_color_label ;
 	public String eid_tag_location_label, eidText, alert_text;
+	public String thissheep_name;
 	public Spinner tag_type_spinner, tag_type_spinner2, tag_location_spinner, tag_color_spinner, eid_tag_color_spinner, eid_tag_location_spinner;
 	public List<String> tag_types, tag_locations, tag_colors;
 	ArrayAdapter<String> dataAdapter;
@@ -526,7 +527,7 @@ public class IDManagement extends Activity {
 				    	//	got a name				    	
 				    	// TODO
 			        	tag_num = "%" + tag_num + "%";
-			        	cmd = String.format( "select sheep_id, sheep_name from sheep_table where sheep_name like '%s'" +
+			        	cmd = String.format( "select sheep_id, sheep_name, alert01 from sheep_table where sheep_name like '%s'" +
 			        			" and (remove_date is null or remove_date = '') "
 			        			, tag_num );  
 			        	Log.i("searchByName", "command is " + cmd);
@@ -544,7 +545,9 @@ public class IDManagement extends Activity {
 				        	TV.setText( "Cannot find this sheep." );
 				        	return;
 				    		}
-			        	thissheep_id = dbh.getInt(0);			        	
+			        	thissheep_id = dbh.getInt(0);
+			        	thissheep_name = dbh.getStr(1);
+			        	alert_text = dbh.getStr(2);
 			        	if (nRecs >1){
 			        		//	Have multiple sheep with this name so enable next button
 			            	btn = (Button) findViewById( R.id.next_rec_btn );
@@ -578,77 +581,87 @@ public class IDManagement extends Activity {
 		cursor2   = ( Cursor ) crsr2; 
 		cursor2.moveToFirst();				
 		TV = (TextView) findViewById( R.id.sheepnameText );
-	    TV.setText (dbh.getStr(0));		        
-		// Now we need to check and see if there is an alert for this sheep
-	   	String alert_text = dbh.getStr(8);
+	    TV.setText (thissheep_name);		        
+		try {
+			// Now we need to check and see if there is an alert for this sheep
+			String alert_text = dbh.getStr(8);
+		}catch (Exception e){
+    		// 	couldn't get a new alert for this sheep
+    	} 
+	   	
 	   	Log.i("lookForSheep ", "Alert Text is " + alert_text);
 		Log.i("lookForSheep", " before formatting results");
 		// Need to fill the federal and farm tag info from the returned cursor here
 	    // looping through all rows and adding to list
-		for (cursor2.moveToFirst(); !cursor2.isAfterLast(); cursor2.moveToNext()){
-			// get the tag type of the first record
-			i = dbh.getInt(2);
-			Log.i("in for loop", " tag type is " + String.valueOf(i));
-			switch (i){		
-		    case 1:
-				//Got a federal tag
-		    	Log.i("in for loop", " got fed tag " + dbh.getStr(4));
-		    	TV = (TextView) findViewById(R.id.fedText)	;
-		    	TV.setText(dbh.getStr(4));
-		    	TV = (TextView) findViewById(R.id.fed_colorText);
-		    	TV.setText(dbh.getStr(3));
-		    	TV = (TextView) findViewById(R.id.fed_locationText);
-		    	TV.setText(dbh.getStr(5));
-		    	fedtagid = dbh.getInt(6);
-		    	Log.i("in for loop", " fed tag id is " + String.valueOf(fedtagid));
-		        break;
-		    case 2:
-		    	// Got an EID tag
-		    	Log.i("in for loop", " got EID tag " + dbh.getStr(4));
-		    	TV = (TextView) findViewById(R.id.eidText)	;
-		    	TV.setText(dbh.getStr(4));
-		    	// TODO
-		    	//	Need to set the EID Tag color and location here by reading the data
-		    	TV = (TextView) findViewById(R.id.eid_colorText);
-		    	TV.setText(dbh.getStr(3));
-		    	TV = (TextView) findViewById(R.id.eid_locationText);
-		    	TV.setText(dbh.getStr(5));
-		    	eidtagid = dbh.getInt(6);
-		    	Log.i("in for loop", " EID tag id is " + String.valueOf(eidtagid));
-		        break;
-		    case 3:
-				// Got a paint brand
-		    	Log.i("in for loop", " got paint mark " + dbh.getStr(4));
-		    	TV = (TextView) findViewById(R.id.paintText)	;
-		    	TV.setText(dbh.getStr(4));
-		    	TV = (TextView) findViewById(R.id.paint_colorText);
-		    	TV.setText(dbh.getStr(3));
-		    	TV = (TextView) findViewById(R.id.paint_locationText);
-		    	TV.setText(dbh.getStr(5));
-		    	paintid = dbh.getInt(6);
-		    	Log.i("in for loop", " paint id is " + String.valueOf(paintid));
-		        break;
-		    case 4:
-		    	// got a farm tag
-		    	Log.i("in for loop", " got Farm tag " + dbh.getStr(4));	
-	    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
-	    		TV5.setText(dbh.getStr(4));
-	    		TextView TV6 = (TextView) findViewById(R.id.farm_colorText);
-	    		TV6.setText(dbh.getStr(3));
-	    		TextView TV7 = (TextView) findViewById(R.id.farm_locationText);
-	    		TV7.setText(dbh.getStr(5));
-	    		farmtagid = dbh.getInt(6);
-	    		Log.i("in for loop", " farm tag id is " + String.valueOf(farmtagid));
-		        break;
-		    case 5:
-		    case 6:
-		    case 7:
-		    	//	got a tattoo, split or notch
-		    	// TODO
-		    	//	Need to set a way to show tattoo, split and notches
-		        break;
-			} // end of case switch
-		} // end of for loop
+		try {
+			for (cursor2.moveToFirst(); !cursor2.isAfterLast(); cursor2.moveToNext()){
+				// get the tag type of the first record
+				i = dbh.getInt(2);
+				Log.i("in for loop", " tag type is " + String.valueOf(i));
+				switch (i){		
+			    case 1:
+					//Got a federal tag
+			    	Log.i("in for loop", " got fed tag " + dbh.getStr(4));
+			    	TV = (TextView) findViewById(R.id.fedText)	;
+			    	TV.setText(dbh.getStr(4));
+			    	TV = (TextView) findViewById(R.id.fed_colorText);
+			    	TV.setText(dbh.getStr(3));
+			    	TV = (TextView) findViewById(R.id.fed_locationText);
+			    	TV.setText(dbh.getStr(5));
+			    	fedtagid = dbh.getInt(6);
+			    	Log.i("in for loop", " fed tag id is " + String.valueOf(fedtagid));
+			        break;
+			    case 2:
+			    	// Got an EID tag
+			    	Log.i("in for loop", " got EID tag " + dbh.getStr(4));
+			    	TV = (TextView) findViewById(R.id.eidText)	;
+			    	TV.setText(dbh.getStr(4));
+			    	// TODO
+			    	//	Need to set the EID Tag color and location here by reading the data
+			    	TV = (TextView) findViewById(R.id.eid_colorText);
+			    	TV.setText(dbh.getStr(3));
+			    	TV = (TextView) findViewById(R.id.eid_locationText);
+			    	TV.setText(dbh.getStr(5));
+			    	eidtagid = dbh.getInt(6);
+			    	Log.i("in for loop", " EID tag id is " + String.valueOf(eidtagid));
+			        break;
+			    case 3:
+					// Got a paint brand
+			    	Log.i("in for loop", " got paint mark " + dbh.getStr(4));
+			    	TV = (TextView) findViewById(R.id.paintText)	;
+			    	TV.setText(dbh.getStr(4));
+			    	TV = (TextView) findViewById(R.id.paint_colorText);
+			    	TV.setText(dbh.getStr(3));
+			    	TV = (TextView) findViewById(R.id.paint_locationText);
+			    	TV.setText(dbh.getStr(5));
+			    	paintid = dbh.getInt(6);
+			    	Log.i("in for loop", " paint id is " + String.valueOf(paintid));
+			        break;
+			    case 4:
+			    	// got a farm tag
+			    	Log.i("in for loop", " got Farm tag " + dbh.getStr(4));	
+		    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
+		    		TV5.setText(dbh.getStr(4));
+		    		TextView TV6 = (TextView) findViewById(R.id.farm_colorText);
+		    		TV6.setText(dbh.getStr(3));
+		    		TextView TV7 = (TextView) findViewById(R.id.farm_locationText);
+		    		TV7.setText(dbh.getStr(5));
+		    		farmtagid = dbh.getInt(6);
+		    		Log.i("in for loop", " farm tag id is " + String.valueOf(farmtagid));
+			        break;
+			    case 5:
+			    case 6:
+			    case 7:
+			    	//	got a tattoo, split or notch
+			    	// TODO
+			    	//	Need to set a way to show tattoo, split and notches
+			        break;
+				} // end of case switch
+			} // end of for loop		
+		} catch (Exception e) {
+			// No tags so dump out
+		}
+			
 	//	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
 		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
 	       	// make the alert button red
