@@ -496,6 +496,7 @@ public class IDManagement extends Activity {
 					        	return;
 					    	}
 				        	thissheep_id = dbh.getInt(0);
+				        
 				        	Log.i("searchByNumber", "This sheep is record " + String.valueOf(thissheep_id));
 				        	if (nRecs >1){
 				        		//	Have multiple sheep with this tag so enable next button
@@ -579,7 +580,8 @@ public class IDManagement extends Activity {
 		crsr2 = dbh.exec( cmd ); 
 		Log.i("lookForSheep", " after second query to get all tags. found  " + String.valueOf(dbh.getSize()));	        	
 		cursor2   = ( Cursor ) crsr2; 
-		cursor2.moveToFirst();				
+		cursor2.moveToFirst();	
+		thissheep_name = dbh.getStr(0);
 		TV = (TextView) findViewById( R.id.sheepnameText );
 	    TV.setText (thissheep_name);		        
 		try {
@@ -1096,6 +1098,9 @@ public class IDManagement extends Activity {
     	Log.i ("in add tag", " start of addNewTag code");
        	btn = (Button) findViewById( R.id.update_display_btn );
     	btn.setEnabled(true); 
+    	//	Enable the scanner so we can add EID tags
+    	scanEid (v);
+    
     	new_tag_number = null;
        	// Fill the Tag Type Spinner
      	// TODO    	    	    	
