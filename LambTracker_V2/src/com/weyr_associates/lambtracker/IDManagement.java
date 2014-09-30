@@ -504,10 +504,10 @@ public class IDManagement extends Activity {
 				            	btn.setEnabled(true);       		
 				        	}
 				        	Log.i("searchByNumber", " Before finding all tags");	        	
+				        	// Now need to go do the get tags and stuff. 
 				        	findTagsShowAlert (v, thissheep_id);
-//				        	return;
+				        	break;
     					}
-    					break;
 				    case 6:
 				    	//	got a split
 				    	//	Assume no split ears at this time. 
@@ -967,7 +967,7 @@ public class IDManagement extends Activity {
 	    	        cursor   = ( Cursor ) crsr;
 	    	        dbh.moveToFirstRecord();
 	    	        farm_locationid = dbh.getInt(0);
-	    	        Log.i("updatefarm ", "farm color integer " + String.valueOf(farm_locationid));
+	    	        Log.i("updatefarm ", "farm location integer " + String.valueOf(farm_locationid));
 	    		    TV = (TextView) findViewById( R.id.farm_colorText );
 	    		    farm_colorText = TV.getText().toString();
 	    		    Log.i("updatefarm ", "farm color " + farm_colorText);
@@ -977,12 +977,14 @@ public class IDManagement extends Activity {
 	    	        cursor   = ( Cursor ) crsr;
 	    	        dbh.moveToFirstRecord();
 	    	        farm_colorid = dbh.getInt(0);
-	    	        Log.i("updatefarm ", "farm location integer " + String.valueOf(farm_locationid));
+	    	        Log.i("updatefarm ", "farm color integer " + String.valueOf(farm_colorid));
 	    			//have a farm tag but no farmtagid so add a new record;
 	    			Log.i("updatefarm ", "tag record id is 0 but have farm tag data need to add a new record to id_info_table here");
 	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
-	    					"values ( %s, 4, %s, %s, %s, '%s', %s )", thissheep_id, farm_colorid, farm_colorid, farm_locationid, today, farmText);
+	    					"values ( %s, 4, %s, %s, %s, '%s', '%s' )", thissheep_id, farm_colorid, farm_colorid, farm_locationid, today, farmText);
+	    			Log.i("updatefarm ", cmd);	
 	    			dbh.exec( cmd );	
+	    			Log.i("updatefarm ", "after cmd exec");
 	    		}
 	    		else{
 	    			// no farm tag to enter so return
