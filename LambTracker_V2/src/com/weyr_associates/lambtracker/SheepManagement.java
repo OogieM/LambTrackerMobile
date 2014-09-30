@@ -728,7 +728,7 @@ public class SheepManagement extends ListActivity {
 					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 					Log.i("drug withdrawal ", " new alert is " + temp_string);
 					if (alert_text != null){
-						temp_string = alert_text + temp_string;
+						temp_string = alert_text + "\n" + temp_string;
 					}
 					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
 					Log.i("update alerts ", "before cmd " + cmd);
@@ -824,10 +824,10 @@ public class SheepManagement extends ListActivity {
 				cursor   = ( Cursor ) crsr; 		    	
 				cursor.moveToFirst();
 				//	Initially just set an alert with the number and units from today
-				temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday + " " + mytime;
+				temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 				Log.i("drug withdrawal ", " new alert is " + temp_string);
 				if (alert_text != null){
-					temp_string = alert_text + temp_string;
+					temp_string = alert_text + "\n" + temp_string;
 				}
 
 				cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
@@ -896,7 +896,7 @@ public class SheepManagement extends ListActivity {
 					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 					Log.i("drug withdrawal ", " new alert is " + temp_string);
 					if (alert_text != null){
-						temp_string = alert_text + temp_string;
+						temp_string = alert_text + "\n" + temp_string;
 					}
 					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
 					Log.i("update alerts ", "before cmd " + cmd);
