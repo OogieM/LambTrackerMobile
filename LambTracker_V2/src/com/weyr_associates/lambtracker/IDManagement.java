@@ -49,7 +49,7 @@ public class IDManagement extends Activity {
 	String     	cmd;
 	Integer 	i;
 	private int			    recNo;
-	public int nRecs;
+	public int nRecs, nRecs2;
 	public SimpleCursorAdapter myadapter;	
 	
 /////////////////////////////////////////////////////
@@ -548,6 +548,7 @@ public class IDManagement extends Activity {
 				    		}
 			        	thissheep_id = dbh.getInt(0);
 			        	thissheep_name = dbh.getStr(1);
+			        	Log.i("searchByName", " the name is " + thissheep_name);
 			        	alert_text = dbh.getStr(2);
 			        	if (nRecs >1){
 			        		//	Have multiple sheep with this name so enable next button
@@ -567,6 +568,7 @@ public class IDManagement extends Activity {
 	
 	public void findTagsShowAlert (View v, Integer thissheep_id){
 		TextView TV;
+		try {
 		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.id_typeid, " +
 				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
 				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01 " +
@@ -581,16 +583,26 @@ public class IDManagement extends Activity {
 		Log.i("lookForSheep", " after second query to get all tags. found  " + String.valueOf(dbh.getSize()));	        	
 		cursor2   = ( Cursor ) crsr2; 
 		cursor2.moveToFirst();	
-		thissheep_name = dbh.getStr(0);
-		TV = (TextView) findViewById( R.id.sheepnameText );
-	    TV.setText (thissheep_name);		        
+		
+		nRecs2    = cursor2.getCount();
+		Log.i("lookForSheep", " nRecs2 is " + String.valueOf(nRecs2));
+		
+		if (nRecs2 > 0) {		
+			thissheep_name = dbh.getStr(0);
+	//		TV = (TextView) findViewById( R.id.sheepnameText );
+	//	    TV.setText (thissheep_name);
+		}
 		try {
 			// Now we need to check and see if there is an alert for this sheep
 			String alert_text = dbh.getStr(8);
 		}catch (Exception e){
     		// 	couldn't get a new alert for this sheep
     	} 
-	   	
+		}catch (Exception s){
+			// No tags for this sheep
+		}
+		TV = (TextView) findViewById( R.id.sheepnameText );
+	    TV.setText (thissheep_name);
 	   	Log.i("lookForSheep ", "Alert Text is " + alert_text);
 		Log.i("lookForSheep", " before formatting results");
 		// Need to fill the federal and farm tag info from the returned cursor here
@@ -1339,7 +1351,9 @@ public class IDManagement extends Activity {
     	cursor.moveToNext();
     	Log.i("in next record", "after moving the cursor ");
     	thissheep_id = cursor.getInt(0);
+    	thissheep_name = cursor.getString(1);
     	Log.i("in next record", "this sheep ID is " + String.valueOf(thissheep_id));
+    	Log.i("in next record", "this sheep name is " + thissheep_name);
     	recNo         += 1;
     	findTagsShowAlert(v, thissheep_id);
 //		// I've moved forward so I need to enable the previous record button
