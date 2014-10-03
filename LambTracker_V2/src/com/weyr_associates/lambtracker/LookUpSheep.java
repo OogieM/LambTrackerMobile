@@ -272,8 +272,7 @@ public class LookUpSheep extends ListActivity
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
-    	btn.setEnabled(false);  
- // TODO   	
+    	btn.setEnabled(false);   	
        	//	Disable the Next Record and Prev. Record button until we have multiple records
     	btn = (Button) findViewById( R.id.next_rec_btn );
     	btn.setEnabled(false); 
@@ -462,7 +461,6 @@ public void formatSheepRecord (View v){
         crsr2 = dbh.exec( cmd);
         Log.i("format record", " after second db lookup");
         cursor2   = ( Cursor ) crsr2; 
-//		startManagingCursor(cursor2);
 		cursor2.moveToFirst();
 		TV = (TextView) findViewById( R.id.sireName );
 		thissire_name = dbh.getStr(0);
@@ -470,11 +468,11 @@ public void formatSheepRecord (View v){
 		Log.i("format record", " Sire is " + thissire_name);
         Log.i("format record", " Sire is " + String.valueOf(thissire_id));
     }
+    //	Go get the dam name
     if(thisdam_id != 0){
         cmd = String.format( "select sheep_table.sheep_name from sheep_table where sheep_table.sheep_id = '%s'", thisdam_id);
         crsr3 = dbh.exec( cmd);
         cursor3   = ( Cursor ) crsr3; 
-//		startManagingCursor(cursor3);
 		cursor3.moveToFirst();
 		TV = (TextView) findViewById( R.id.damName );
 		thisdam_name = dbh.getStr(0);
@@ -532,7 +530,8 @@ public void formatSheepRecord (View v){
         Log.i("LookForSheep", "after setting myadapter to show notes");
         notelist.setAdapter(myadapter2);
         Log.i("LookForSheep", "after setting list adapter to show notes");			
-	}  		//	Bugfix: Last sheep's notes remain if sheep with no notes looked up
+	}  		
+	//	Bugfix: Last sheep's notes remain if sheep with no notes looked up
 	//	Publish an empty notes list if the sheep doesn't have any notes.
 	//	From: Alex Evans <alex.evans@gmail.com>
 	//	Date: Tue, 24 Jun 2014 17:09:01 -0600
@@ -543,8 +542,7 @@ public void formatSheepRecord (View v){
 				notelist.setAdapter(myadapter2);
 	} 
 		
-		// Look up drug data
-		
+		// Look up drug data for this sheep		
 		cmd = String.format("SELECT sheep_drug_table.id_sheepdrugid AS _id, sheep_drug_table.drug_date_on, drug_table.drug_lot, drug_table.official_drug_name " +
 					"FROM drug_table, sheep_drug_table " +
 					"WHERE sheep_drug_table.drug_id  = drug_table.id_drugid " +
@@ -553,21 +551,18 @@ public void formatSheepRecord (View v){
 		
 		drugCrsr = dbh.exec(cmd);
 		drugCursor = (Cursor) drugCrsr;
-		drugRecs = drugCursor.getCount();
-		
-		Log.i("lookForSheep", " drugRecs is " + String.valueOf(drugRecs));
-		
+		drugRecs = drugCursor.getCount();		
+		Log.i("lookForSheep", " drugRecs is " + String.valueOf(drugRecs));		
 		drugCursor.moveToFirst();	
 		if (drugRecs > 0) {
 	    	// format the drug records
 			//	Select drug record columns
 	    	String[] fromColumnsDrug = new String[ ]{ "drug_date_on", "drug_lot", "official_drug_name"};
 			Log.i("LookForSheep", "after setting string array fromColumns for drugs");
-			//	Set the views for each column for each line. A tag takes up 1 line on the screen
 			int[] toViewsDrug = new int[] { R.id.drug_date_on, R.id.drug_lot, R.id.official_drug_name};
 	        Log.i("LookForSheep", "after setting string array toViews for drugs");
 	        drugAdapter = new SimpleCursorAdapter(this, R.layout.drug_entry, drugCursor, fromColumnsDrug, toViewsDrug, 0);
-	        Log.i("LookForSheep", "after setting drugadapter to show drugs");
+	        Log.i("LookForSheep", "after setting drugAdapter to show drugs");
 	        drugList.setAdapter(drugAdapter);
 	        Log.i("LookForSheep", "after setting list to show drugs");			
 		}   
