@@ -132,7 +132,7 @@
     <string name="sheep_stillborn">Stillborn</string>
     <string name="sheep_stillborn_lbl">Stillborn Status</string>
     <string name="mark_ewe">Mark Ewe</string>
-    <string name="sheep_scrapieblood">Take Scrapie Blood</string>
+    <string name="sheep_blood">Take Blood</string>
     <string name="sheep_trimtoes">Trim Toes</string>
     <string name="sheep_weaned">Wean</string>
     <string name="sheep_givewormer">Give Wormer</string>

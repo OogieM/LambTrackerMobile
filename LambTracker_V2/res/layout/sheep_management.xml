@@ -252,13 +252,13 @@
        		android:rowCount="3">
        			 
         <CheckBox
-	        android:id="@+id/checkBoxScrapieBlood"
+	        android:id="@+id/checkBoxShorn"
 	        android:layout_width="150dp"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="left|center"
 	        android:layout_column="0"
             android:layout_row="0"
-	        android:text="@string/sheep_scrapieblood"/>
+	        android:text="@string/sheep_shear"/>
         	    
         <CheckBox
 	        android:id="@+id/checkBoxTrimToes"
@@ -284,7 +284,7 @@
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
         	android:columnCount="2"
-       		android:rowCount="8">
+       		android:rowCount="9">
   
 		  <CheckBox
 		        android:id="@+id/checkBoxGiveWormer"
@@ -350,13 +350,32 @@
         android:textSize="14sp"
         android:typeface="monospace" />
         
+        
+        <CheckBox
+	        android:id="@+id/checkBoxBlood"
+	        android:layout_width="150dp"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="left|center"
+	        android:layout_column="0"
+            android:layout_row="5"
+	        android:text="@string/sheep_blood"/>
+        
+        <Spinner
+		        android:id="@+id/blood_spinner"
+		        android:layout_width="260dp"
+		        android:layout_height="wrap_content"
+		        android:layout_column="1"
+		        android:layout_gravity="left|center"
+		        android:layout_row="5"
+		        android:textSize="18sp" />
+        
         <CheckBox
 		        android:id="@+id/checkBoxGiveDrug"
 		        android:layout_width="150dp"
 		        android:layout_height="wrap_content"
 		        android:layout_column="0"
 		        android:layout_gravity="left|center"
-		        android:layout_row="5"
+		        android:layout_row="6"
 		        android:text="@string/sheep_givedrug"/>
 		<Spinner
 		        android:id="@+id/drug_spinner"
@@ -364,7 +383,7 @@
 		        android:layout_height="wrap_content"
 		        android:layout_column="1"
 		        android:layout_gravity="left|center"
-		        android:layout_row="5"
+		        android:layout_row="6"
 		        android:textSize="18sp" /> 
 		<Spinner
 		        android:id="@+id/drug_location_spinner"
@@ -372,7 +391,7 @@
 		        android:layout_height="wrap_content"
 		        android:layout_column="1"
 		        android:layout_gravity="left|center"
-		        android:layout_row="6"
+		        android:layout_row="7"
 		        android:textSize="18sp" />
     </GridLayout>      
 <RelativeLayout
