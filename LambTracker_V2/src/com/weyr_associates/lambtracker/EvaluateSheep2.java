@@ -531,7 +531,7 @@ public class EvaluateSheep2 extends Activity {
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	btn.setEnabled(false);    
     	   	
-    	// I got the sheep id from the selook up sheep function
+    	// I got the sheep id from the look up sheep function
     	// it's in the thissheep_id variable
     
     	Log.i("in save scores", " thissheep id is " + String.valueOf(thissheep_id)); 
