@@ -367,18 +367,18 @@ public class EvaluateSheep2 extends Activity {
 	    	scored_evaluation_traits.add(cursor.getString(0));
 //	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
     	}
-//    	Log.i("evaluate2", "number of records in scored traits cursor is " + String.valueOf(nRecs));
+    	Log.i("evaluate2", "number of records in scored traits cursor is " + String.valueOf(nRecs));
     	LayoutInflater inflater = getLayoutInflater();	
 //    	Log.i ("evaluate2", scored_evaluation_traits.get(0));
     	for( int ii = 0; ii < nRecs; ii++ ){	
-//    		Log.i ("in for loop", " trait name is " + scored_evaluation_traits.get(ii));
+    		Log.i ("in for loop", " trait name is " + scored_evaluation_traits.get(ii));
 			TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);	
-//			Log.i("in for loop", " after TableLayout");
+			Log.i("in for loop", " after TableLayout");
 	    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_item_entry, table, false);
 	    	tempLabel = scored_evaluation_traits.get(ii);
-//	    	Log.i("in for loop", " tempLabel is " + tempLabel);
+	    	Log.i("in for loop", " tempLabel is " + tempLabel);
 	    	((TextView)row.findViewById(R.id.rb1_lbl)).setText(tempLabel);
-//	    	Log.i("in for loop", " after set text view");
+	    	Log.i("in for loop", " after set text view");
 	    	table.addView(row);
     	}
     	

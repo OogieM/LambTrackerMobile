@@ -165,7 +165,15 @@
 
         <activity
             android:name="com.weyr_associates.lambtracker.SortSheep"
-            android:label="@string/title_activity_sort_sheep" >
+            android:configChanges="orientation"
+            android:label="@string/title_activity_sort_sheep"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.DrawBlood"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_draw_blood" 
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -110,6 +110,7 @@
         <item>Lambing</item>
         <item>Fix Lamb Record</item>
         <item>Sheep Management</item>
+        <item>Draw Blood</item>
         <item>Sort Sheep</item>
         <item>Print Labels</item>
         <item>Edit Database</item>
@@ -132,7 +133,7 @@
     <string name="sheep_stillborn">Stillborn</string>
     <string name="sheep_stillborn_lbl">Stillborn Status</string>
     <string name="mark_ewe">Mark Ewe</string>
-    <string name="sheep_blood">Take Blood</string>
+    <string name="sheep_blood">Take Blood For</string>
     <string name="sheep_trimtoes">Trim Toes</string>
     <string name="sheep_weaned">Wean</string>
     <string name="sheep_givewormer">Give Wormer</string>
@@ -180,7 +181,8 @@
     <string name="delete_warning">Delete Warning</string>
     <string name="action_settings">Settings</string>
     <string name="sheep_drug_lbl">Drug History</string>
-    <string name="title_activity_sort_sheep">Sor tSheep</string>
+    <string name="title_activity_sort_sheep">Sort Sheep</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_draw_blood">Draw Blood</string>
 
 </resources>

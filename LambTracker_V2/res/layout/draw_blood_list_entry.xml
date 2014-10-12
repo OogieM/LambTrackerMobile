@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android">  	
+    
+	<CheckBox
+        android:id="@+id/checkBoxBlood"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="@string/sheep_blood"/>
+     <TextView
+        android:id="@+id/single_space1"
+        android:layout_width="5dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" />   
+    <TextView
+        android:id="@+id/blood_test_label"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" 
+        android:layout_width="150dp"/>  
+        
+</TableRow>
