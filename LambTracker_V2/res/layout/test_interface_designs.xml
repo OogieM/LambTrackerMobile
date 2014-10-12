@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -27,9 +27,9 @@
             android:layout_gravity="left"
             android:layout_column="0"
             android:layout_row="1"
+            android:inputType="text"
             android:enabled="true"
             android:textSize="18sp"
-            android:inputType="number"
             android:typeface="monospace" >
 			</EditText>
             
@@ -44,7 +44,7 @@
         
         <TextView
         	android:id="@+id/sheepnameText"
-        	android:layout_width="150dp"
+        	android:layout_width="180dp"
        	 	android:layout_height="wrap_content"
            	android:layout_column="1"
             android:layout_gravity="left"
@@ -121,20 +121,260 @@
             android:text="@string/next_rec_btn"
             android:textSize="14sp" />
  
-    </GridLayout> 	
-  	  
-	<View
-	    android:id="@+id/dividerbar"
-	    android:layout_width="fill_parent"
-	    android:layout_height="2dp"
-	    android:background="@android:color/black">
-	</View>
-	    
-    <RelativeLayout
-    android:id="@+id/BottomButtonBar"
+    </GridLayout> 		
+		<GridLayout
+	        android:id="@+id/grid2"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:columnCount="5">   	    
+	     	    
+	        <TextView
+	            android:layout_width="176dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="1"
+	            android:layout_gravity="left|top"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_number_lbl" />
+	        
+	        <TextView
+	            android:layout_width="65dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="2"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_color_abbrev_lbl" />
+	        
+	        <TextView
+	            android:layout_width="40dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="3"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_location_abbrev_lbl" />
+	        
+	        <TextView
+	            android:layout_width="80dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="4"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_type_abbrev_lbl" />
+        
+     	</GridLayout>
+    	    
+       <ListView
+           android:id="@+id/android:list"
+           android:layout_width="fill_parent"
+           android:layout_height="80dp" >
+
+		</ListView>
+  <TableLayout 
+        	android:id="@+id/grid3"
+	        android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+        	android:stretchColumns="4"
+        	android:gravity="center">
+
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:gravity="center" >
+      
+           		<TextView
+            	android:layout_width="0dp"
+            	android:layout_height="wrap_content"     
+            	android:layout_gravity="left"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+            	android:text="@string/sheep_sire_lbl" />
+           
+           		<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="center"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_dam_lbl" />
+       
+          		<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="right"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_birth_weight_lbl" />
+  			</TableRow> 
+
+           <TableRow android:gravity="center" >
+
+           		<TextView
+            	android:id="@+id/sireName"
+            	android:layout_width="0dp"
+            	android:layout_height="wrap_content"
+            	android:layout_gravity="left"
+            	android:enabled="true"
+            	android:layout_weight="1"
+            	android:typeface="monospace" />
+              			       
+        		<TextView
+        		android:id="@+id/damName"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="center"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" /> 
+       
+        
+        		<TextView
+        		android:id="@+id/birth_weight"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="right"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" />  
+        	</TableRow>
+
+        	<TableRow android:gravity="center" >
+
+        		<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="left"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_birth_date_lbl" />
+        
+ 				<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="center"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_birth_type_lbl" />      
+        		
+        		<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="right"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_sex_lbl" />
+        		
+        	</TableRow>
+
+        	<TableRow android:gravity="center" >
+        		
+        		<TextView
+        		android:id="@+id/birth_date"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="left"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" />   
+        
+        		<TextView
+        		android:id="@+id/birth_type"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="center"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" /> 
+        	   
+        		<TextView
+        		android:id="@+id/sheep_sex"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="right"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" />  
+        		</TableRow>
+        	
+       </TableLayout> 
+       
+       <RelativeLayout
+           android:id="@+id/lowerlayout"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+       
+       <TableLayout
+           android:id="@+id/grid4"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_above="@+id/bottomButtonBar"
+           android:stretchColumns="2"
+           android:gravity="center">
+
+        <TableRow android:gravity="center">
+
+       <TextView
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:inputType="none"
+           android:layout_weight="1"
+           android:text="@string/sheep_note_lbl"
+           android:textStyle="bold" />
+ 
+         <TextView
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:inputType="none"
+             android:layout_weight="1"
+             android:text="@string/sheep_drug_lbl"
+             android:textStyle="bold" />
+		</TableRow>
+
+		<TableRow 
+		    android:gravity="center">
+
+         <ListView
+             android:id="@+id/list2"
+             android:layout_width="0dp"
+             android:layout_height="match_parent"
+             android:layout_weight="1" 
+             android:layout_gravity="left">
+
+		</ListView>
+        <ListView
+          android:id="@+id/druglist"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" 
+          android:layout_weight="1"
+          android:layout_gravity="right">
+
+		</ListView>
+        </TableRow>
+        </TableLayout>
+<RelativeLayout
+    android:id="@+id/bottomButtonBar"
     android:orientation="horizontal" 
   	android:layout_width="fill_parent"
-  	android:layout_height="wrap_content">
+  	android:layout_height="50dp"
+  	android:layout_gravity="bottom"
+  	android:layout_alignParentBottom="true">
     	
        	<Button
             android:id="@+id/back_to_main_btn"
@@ -175,5 +415,6 @@
            android:onClick="helpBtn"
            android:text="@string/help_btn"
            android:textSize="14sp" />
+</RelativeLayout>
 </RelativeLayout>
 </LinearLayout>

@@ -98,7 +98,7 @@
             android:name="com.weyr_associates.lambtracker.TestInterfaceDesigns"
             android:configChanges="orientation"
             android:label="@string/title_activity_test_interface_designs"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
