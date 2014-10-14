@@ -516,7 +516,6 @@ public class EvaluateSheep2 extends Activity {
         String          cmd;    
         List<Float> 	rating_scores;
     	TextView 		TV;
-    	String 			temp_string;
     	Float 			tempData;
     	int				tempRadioBtn, tempTrait;
 		int 			temp_integer;

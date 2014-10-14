@@ -704,10 +704,10 @@ public class SheepManagement extends ListActivity {
 	}	
 	 public void updateDatabase( View v ){
 	    	
-		 	TextView TV;
-		 	String temp_string;
-	    	Float trait11_data = 0.0f;
-	    	
+		 	TextView 	TV;
+		 	String 		temp_string;
+	    	Float 		trait11_data = 0.0f;
+	    	int 		temp_integer;
 			// Disable Update Database button and make it red to prevent getting 2 records at one time
 	    	btn = (Button) findViewById( R.id.update_database_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -1030,8 +1030,18 @@ public class SheepManagement extends ListActivity {
 			    			trait11_data = Float.valueOf(TV.getText().toString());
 			    			Log.i("save trait11", "float data is " + String.valueOf(trait11_data));
 			    		}
-						//	go update the database with a sheep evaluation record for this weight and this sheep
-			       		
+						
+			    		// Calculate the age in days for this sheep for this evaluation to fill the age_in_days field
+			    		cmd = String.format("Select julianday(birth_date) from sheep_table where sheep_id = '%s'", thissheep_id);
+			    		Log.i("get birthdate eval ", cmd);
+			    		dbh.exec( cmd );
+			    		crsr2 = dbh.exec( cmd );
+			            cursor2   = ( Cursor ) crsr2;
+			            dbh.moveToFirstRecord();	            
+			            temp_integer = (int) Utilities.GetJulianDate()-(dbh.getInt(0));
+			            Log.i("get age in days ", String.valueOf (temp_integer));
+			            
+			            //	go update the database with a sheep evaluation record for this weight and this sheep		       		
 			    		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
 			    		"trait_name01, trait_score01, trait_name02, trait_score02, trait_name03, trait_score03, " +
 			    		"trait_name04, trait_score04, trait_name05, trait_score05, trait_name06, trait_score06," +
@@ -1040,9 +1050,9 @@ public class SheepManagement extends ListActivity {
 			    		"trait_name13, trait_score13, trait_name14, trait_score14, trait_name15, trait_score15, " +
 			    		"trait_name16, trait_score16, trait_name17, trait_score17, trait_name18, trait_score18, " +
 			    		"trait_name19, trait_score19, trait_name20, trait_score20, " +
-			    		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date, eval_time) " +
+			    		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date, eval_time, age_in_days) " +
 			    		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s," +
-			    		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s','%s') ", 
+			    		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s','%s', %s) ", 
 			    		thissheep_id, 0, 0, 0, 0, 0, 0,
 			    				0, 0, 0, 0, 0, 0,
 			    				0, 0, 0, 0, 0, 0, 
@@ -1050,7 +1060,7 @@ public class SheepManagement extends ListActivity {
 			    				0, 0, 0, 0, 0, 0, 
 			    				0, 0, 0, 0, 0, 0,
 			    				0, 0, 0, 0, 
-			    				1, 0, 0, 0, 0, mytoday, mytime );
+			    				1, 0, 0, 0, 0, mytoday, mytime, temp_integer );
 			    		Log.i("add evaluation ", "cmd is "+ cmd);
 						dbh.exec(cmd);
 						Log.i("add evaluation ", "after insert into sheep_evaluation_table");
