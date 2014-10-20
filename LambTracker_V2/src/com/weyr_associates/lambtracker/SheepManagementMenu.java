@@ -11,17 +11,9 @@ public class SheepManagementMenu extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.sheep_management_menu);
-		
-		   
+		setContentView(R.layout.sheep_management_menu);		
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.sheep_management_menu, menu);
-		return true;
-	}
+	
 	public void sheepManagement (View v){
 		Intent i = null;
 		i = new Intent(SheepManagementMenu.this, SheepManagement.class);
