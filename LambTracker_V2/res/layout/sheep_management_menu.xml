@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".SheepManagementMenu" >
+
+    
+   	 	<Button
+            android:id="@+id/sheep_management_btn"
+            android:layout_width="250dp"
+            android:layout_height="50dp"           
+            android:onClick="sheepManagement"
+            android:text="@string/title_activity_sheep_management"
+            android:textSize="18sp" />  
+            
+  		<Button
+            android:id="@+id/draw_blood_btn"
+            android:layout_width="250dp"
+            android:layout_height="50dp"           
+            android:onClick="drawBlood"
+            android:layout_below="@+id/sheep_management_btn"
+            android:text="@string/title_activity_draw_blood"
+            android:textSize="18sp" /> 
+        
+  		<Button
+            android:id="@+id/sort_sheep_btn"
+            android:layout_width="250dp"
+            android:layout_height="50dp"           
+            android:onClick="sortSheep"
+            android:layout_below="@+id/draw_blood_btn"
+            android:text="@string/title_activity_sort_sheep"
+            android:textSize="18sp" />  
+       <Button
+            android:id="@+id/evaluate_sheep_btn"
+            android:layout_width="250dp"
+            android:layout_height="50dp"           
+            android:onClick="evaluateSheep"
+            android:layout_below="@+id/sort_sheep_btn"
+            android:text="@string/title_activity_evaluate_sheep"
+            android:textSize="18sp" />       
+
+</RelativeLayout>

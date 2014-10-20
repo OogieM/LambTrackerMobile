@@ -695,7 +695,7 @@ public class DrawBlood extends ListActivity {
     	dbh.closeDB();
     	clearBtn( null );
     	//Go back to main
-      	finish();
+      	this.finish();
 	    }
 
 	    public void showAlert(View v)

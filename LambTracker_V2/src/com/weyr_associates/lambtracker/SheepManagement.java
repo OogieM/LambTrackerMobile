@@ -762,7 +762,7 @@ public class SheepManagement extends ListActivity {
 			  		Log.i("add drug to ", "db cmd is " + cmd);
 					dbh.exec(cmd);
 					Log.i("add tag ", "after insert into sheep_drug_table");
-					// TODO
+					
 					//	Need to update the alert to include the slaughter withdrawal for this vaccine
 					cmd = String.format("Select units_table.units_name, user_meat_withdrawal from drug_table " +
 							"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
@@ -794,7 +794,7 @@ public class SheepManagement extends ListActivity {
 				note_text = "";
 				predefined_note01 = 14; // hard coded the code for toes trimmed
 				// TODO
-				//	This will have to be changed for the general case
+				//	This will have to be changed for the general case where toes is not item 14 in the list
 				cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid01) " +
     					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, mytoday, mytime, predefined_note01);
     			Log.i("update notes ", "before cmd " + cmd);
@@ -820,7 +820,6 @@ public class SheepManagement extends ListActivity {
     			Log.i("update sheep table ", "after cmd exec");
 			}			
 			
-// TODO  
 //			//	Get the value of the checkbox for take  blood
 //			Log.i("before checkbox", " getting ready to see if we collected blood or not ");
 			boxblood = (CheckBox) findViewById(R.id.checkBoxBlood);
@@ -892,7 +891,6 @@ public class SheepManagement extends ListActivity {
 		  		Log.i("add drug to ", "db cmd is " + cmd);
 				dbh.exec(cmd);
 				Log.i("add tag ", "after insert into sheep_drug_table");
-				// TODO
 				//	Need to update the alert to include the slaughter withdrawal for this wormer
 				cmd = String.format("Select units_table.units_name, user_meat_withdrawal from drug_table " +
 						"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
@@ -959,7 +957,6 @@ public class SheepManagement extends ListActivity {
 			  		Log.i("add drug to ", "db cmd is " + cmd);
 					dbh.exec(cmd);
 					Log.i("add tag ", "after insert into sheep_drug_table");
-					// TODO
 					//	Need to update the alert to include the slaughter withdrawal for this drug
 					cmd = String.format("Select units_table.units_name, user_meat_withdrawal from drug_table " +
 							"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
@@ -1127,7 +1124,7 @@ public class SheepManagement extends ListActivity {
     	dbh.closeDB();
     	clearBtn( null );
     	//Go back to main
-      	finish();
+      	this.finish();
 	    }
 
 	    public void showAlert(View v)

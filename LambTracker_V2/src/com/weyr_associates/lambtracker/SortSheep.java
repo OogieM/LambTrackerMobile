@@ -662,7 +662,7 @@ public void formatSheepRecord (View v){
     	dbh.closeDB();
     	clearBtn( null );
     	//Go back to main
-      	finish();
+      	this.finish();
 	    }
  
     public void showAlert (final View v){

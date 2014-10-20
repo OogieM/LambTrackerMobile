@@ -65,6 +65,7 @@
     <string name="title_activity_add_lamb">Add a Lamb</string>
     <string name="title_activity_fix_lamb">Fix a Lamb Record</string>
     <string name="title_activity_sheep_management">Sheep Management</string>
+    <string name="title_activity_sheep_management_menu">Sheep Management Menu</string>
     <string name="title_activity_print_labels">Print Labels</string>
     <string name="title_activity_set_lambtracker_defaults">Set LambTracker Defaults</string>
     <string name="title_activity_set_defaults">SetDefaults</string>
@@ -103,15 +104,12 @@
     <string-array name="sheep_task_array">
         <item>Choose a Flock Task</item>
         <item>Manage Sheep Database</item>
-        <item>ID Management</item>
-        <item>Create a Sheep Evaluation Task</item>
-        <item>Evaluate Sheep</item>
         <item>Look Up a Sheep</item>
+        <item>Sheep Management Menu</item>
+        <item>ID Management</item>
         <item>Lambing</item>
-        <item>Fix Lamb Record</item>
-        <item>Sheep Management</item>
-        <item>Draw Blood</item>
-        <item>Sort Sheep</item>
+        <item>Create a Sheep Evaluation Task</item>      
+        <item>Fix Lamb Record</item>              
         <item>Print Labels</item>
         <item>Edit Database</item>
         <item>Set LambTracker Defaults</item>
@@ -184,5 +182,6 @@
     <string name="title_activity_sort_sheep">Sort Sheep</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_draw_blood">Draw Blood</string>
+   
 
 </resources>

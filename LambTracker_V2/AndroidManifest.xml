@@ -172,9 +172,16 @@
         <activity
             android:name="com.weyr_associates.lambtracker.DrawBlood"
             android:configChanges="orientation"
-            android:label="@string/title_activity_draw_blood" 
-            android:screenOrientation="portrait">
+            android:label="@string/title_activity_draw_blood"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.SheepManagementMenu"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_sheep_management_menu"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 
 </manifest>
+
