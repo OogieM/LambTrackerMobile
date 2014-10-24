@@ -181,7 +181,10 @@
             android:label="@string/title_activity_sheep_management_menu"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.RemoveSheep"
+            android:label="@string/title_activity_remove_sheep" >
+        </activity>
     </application>
 
 </manifest>
-

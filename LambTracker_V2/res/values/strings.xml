@@ -108,8 +108,8 @@
         <item>Sheep Management Menu</item>
         <item>ID Management</item>
         <item>Lambing</item>
-        <item>Create a Sheep Evaluation Task</item>      
-        <item>Fix Lamb Record</item>              
+        <item>Create a Sheep Evaluation Task</item>
+        <item>Fix Lamb Record</item>
         <item>Print Labels</item>
         <item>Edit Database</item>
         <item>Set LambTracker Defaults</item>
@@ -175,6 +175,7 @@
     <string name="sheep_note_lbl">Notes</string>
     <string name="include_removed_sheep">Include Removed Sheep in Look Up Sheep?</string>
     <string name="delete_sheep">Delete Sheep?</string>
+    <string name="remove_sheep">Remove Sheep?</string>
     <string name="delete_tag">Remove Tag from this Sheep?</string>
     <string name="delete_warning">Delete Warning</string>
     <string name="action_settings">Settings</string>
@@ -182,6 +183,6 @@
     <string name="title_activity_sort_sheep">Sort Sheep</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_draw_blood">Draw Blood</string>
-   
+    <string name="title_activity_remove_sheep">Remove Sheep</string>
 
 </resources>
