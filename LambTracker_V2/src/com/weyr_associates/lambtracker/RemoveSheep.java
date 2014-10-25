@@ -36,6 +36,10 @@ public class RemoveSheep extends Activity {
 		nRecs    = cursor.getCount();
 		Log.i("RemoveSheep", " nRecs is " + String.valueOf(nRecs));
 		cursor.moveToFirst();	
+//		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+//			Log.i("RemoveSheep", (cursor.getString(1)+ " " + cursor.getString(2) ));
+//    	}
+		cursor.moveToFirst();	
 		if (nRecs > 0) {
 	    	// format the sheep name records
 	    	String[] fromColumns = new String[ ]{ "flock_name", "sheep_name"};
@@ -49,7 +53,7 @@ public class RemoveSheep extends Activity {
 	        Log.i("RemoveSheep", "after setting list adapter to show names");			
 		}  		
 		else {
-			// No sheep data - publish an empty list to clear notes
+			// No sheep data - publish an empty list to clear sheep names
 			Log.i("LookForSheep", "no current sheep");
 			myadapter = new SimpleCursorAdapter(this, R.layout.list_entry_names, null, null, null, 0);
 			sheep_name_list.setAdapter(myadapter);

@@ -6,18 +6,19 @@
    	
     <TextView
         android:id="@+id/flock_names"
-        android:layout_width="fill_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:textSize="18sp" />
+
     <TextView
         android:id="@+id/single_space"
-        android:layout_width="5dp"
+       android:layout_width="5dp"
         android:layout_height="wrap_content"
         android:textSize="14sp" />
+
     <TextView
         android:id="@+id/sheep_names"
-        android:layout_width="fill_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
-   
+        android:textSize="18sp" />   
 </LinearLayout>
