@@ -46,4 +46,9 @@
 		</ListView>       
         </TableRow>
         </TableLayout>
+        <Spinner
+        android:id="@+id/remove_reason_spinner"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"      
+        android:textSize="18sp" /> 
 </LinearLayout>

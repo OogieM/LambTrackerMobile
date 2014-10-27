@@ -16,9 +16,11 @@
         android:layout_height="wrap_content"
         android:textSize="14sp" />
 
-    <TextView
+    <CheckedTextView 
         android:id="@+id/sheep_names"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />   
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:textSize="18sp" /> 
+          
 </LinearLayout>
