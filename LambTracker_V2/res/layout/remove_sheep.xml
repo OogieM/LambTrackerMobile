@@ -40,7 +40,7 @@
 
 		<TableRow>
          <ListView
-             android:id="@+id/sheepnamelist"          
+             android:id="@+id/android:list"          
              android:layout_height="wrap_content"
 	  		 android:layout_width="fill_parent">	  		
 		</ListView>       
