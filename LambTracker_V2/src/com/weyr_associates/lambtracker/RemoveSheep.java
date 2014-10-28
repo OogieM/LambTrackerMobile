@@ -115,13 +115,6 @@ public class RemoveSheep extends ListActivity {
 		remove_reason_spinner.setSelection(0);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.remove_sheep, menu);
-		return true;
-	}
-
 //	@Override
 //	public void onClick(DialogInterface arg0, int arg1) {
 //		// TODO Auto-generated method stub
