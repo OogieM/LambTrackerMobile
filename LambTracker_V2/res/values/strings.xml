@@ -112,6 +112,7 @@
         <item>Fix Lamb Record</item>
         <item>Print Labels</item>
         <item>Edit Database</item>
+        <item>Desktop Functions</item>
         <item>Set LambTracker Defaults</item>
         <item>Test Interface Designs</item>
     </string-array>
@@ -185,5 +186,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_draw_blood">Draw Blood</string>
     <string name="title_activity_remove_sheep">Remove Sheep</string>
+    <string name="title_activity_desktop_functions">Desktop Functions</string>
+    <string name="title_activity_set_alert">Set or Remove Alerts</string>
 
 </resources>

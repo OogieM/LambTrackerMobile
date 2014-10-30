@@ -218,10 +218,14 @@ public class MainActivity extends Activity {
 					MainActivity.this.startActivity(i);
 			        break;
 				case 10:		
-					i = new Intent(MainActivity.this, SetDefaults.class);
+					i = new Intent(MainActivity.this, DesktopFunctionsMenu.class);
 					MainActivity.this.startActivity(i);
 			        break;
 				case 11:		
+					i = new Intent(MainActivity.this, SetDefaults.class);
+					MainActivity.this.startActivity(i);
+			        break;
+				case 12:		
 					i = new Intent(MainActivity.this, TestInterfaceDesigns.class);
 					MainActivity.this.startActivity(i);
 			        break;

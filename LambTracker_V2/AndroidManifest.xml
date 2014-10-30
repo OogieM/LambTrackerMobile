@@ -185,6 +185,18 @@
             android:name="com.weyr_associates.lambtracker.RemoveSheep"
             android:label="@string/title_activity_remove_sheep" >
         </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.DesktopFunctionsMenu"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_desktop_functions"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.SetAlerts"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_set_alert"
+            android:screenOrientation="landscape" >
+        </activity>
     </application>
 
 </manifest>
