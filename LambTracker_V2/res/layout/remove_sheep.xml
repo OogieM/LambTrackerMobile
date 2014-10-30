@@ -46,26 +46,48 @@
 		</ListView>       
         </TableRow>
         </TableLayout>
+        
+ 		<GridLayout
+	        android:id="@+id/grid2"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:columnCount="3">   
+	           
         <Spinner
         android:id="@+id/remove_reason_spinner"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"      
+        android:layout_column="0"
+        android:layout_gravity="left|bottom"
+        android:layout_row="0"    
         android:textSize="18sp" /> 
         
         <Button
        android:id="@+id/changeDate"
        android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="Click To Change Date" />
+       android:layout_column="1"
+       android:layout_gravity="left|top"
+       android:layout_row="0"
+       android:layout_height="50dp"
+       android:text="@string/sheep_change_date_lbl" 
+       android:onClick="changeDatePicker"/>
  
    <TextView
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:text="Current/Selected Date (YYYY-MM-DD):" />
+       android:layout_column="0"
+            android:layout_gravity="center"
+            android:layout_row="1"
+       android:text="@string/sheep_remove_date_lbl" 
+       android:textSize="18sp"/>
   
    <TextView
        android:id="@+id/Output"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:text="" />
+       android:layout_column="1"
+            android:layout_gravity="left"
+            android:layout_row="1"
+       android:text="" 
+       android:textSize="18sp"/>
+   </GridLayout>
 </LinearLayout>

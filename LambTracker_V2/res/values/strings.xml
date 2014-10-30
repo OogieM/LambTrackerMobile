@@ -125,6 +125,7 @@
     <string name="sheep_rear_type_lbl">Rear Type</string>
     <string name="sheep_death_date_lbl">Death Date</string>
     <string name="sheep_remove_date_lbl">Remove Date</string>
+    <string name="sheep_change_date_lbl">Change Date</string>
     <string name="sheep_lambease_lbl">Lambease Score</string>
     <string name="sheep_sire_lbl">Sire</string>
     <string name="sheep_dam_lbl">Dam</string>

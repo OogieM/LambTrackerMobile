@@ -34,12 +34,23 @@ public class RemoveSheep extends ListActivity {
 	public Cursor 	cursor;
 	public Object	crsr;
 	public int 		nRecs;
+	public String mytoday;
 	public Spinner remove_reason_spinner;
+	public int which_remove_reason;
 	public List<String> remove_reasons;
+	public int 		thissheep_id;
 	String     	cmd;
 	Button button;
 	public SimpleCursorAdapter myadapter;
 	ArrayAdapter<String> dataAdapter;
+	
+	private TextView Output;
+    private Button changeDate;
+    static final int DATE_PICKER_ID = 1111;
+    private int year;
+    private int month;
+    private int day;
+    public String removedate, deathdate;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,6 +58,8 @@ public class RemoveSheep extends ListActivity {
 		String 	dbfile = getString(R.string.real_database_file) ;
         Log.i("RemoveSheep", " after get database file");
     	dbh = new DatabaseHandler( this, dbfile );
+//    	Get the date and time to add to the sheep record these are strings not numbers
+    	mytoday = Utilities.TodayIs(); 
     	
 //		ListView sheep_name_list = (ListView) findViewById(R.id.list);
 //		sheep_name_list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);   
@@ -109,11 +122,7 @@ public class RemoveSheep extends ListActivity {
 //	        	}
 //	        }
 	     
-
-	        
 	        SparseBooleanArray sp=getListView().getCheckedItemPositions();
-	        
-
 		}  		
 		else {
 			// No sheep data - publish an empty list to clear sheep names
@@ -142,79 +151,114 @@ public class RemoveSheep extends ListActivity {
 		remove_reason_spinner.setAdapter (dataAdapter);
 		remove_reason_spinner.setSelection(0);
 		
-//		//	Set the date picker stuff here
-//		
-//		Output = (TextView) findViewById(R.id.Output);
+		//	Set the date picker stuff here	
+		Output = (TextView) findViewById(R.id.Output);
 //        changeDate = (Button) findViewById(R.id.changeDate);
-// 
-//        // Get current date by calender
-//         
-//        final Calendar c = Calendar.getInstance();
-//        year  = c.get(Calendar.YEAR);
-//        month = c.get(Calendar.MONTH);
-//        day   = c.get(Calendar.DAY_OF_MONTH);
-// 
-//        // Show current date
-//         
-//        Output.setText(new StringBuilder()
-//                // Month is 0 based, just add 1
-//                .append(month + 1).append("-").append(day).append("-")
-//                .append(year).append(" "));
-//  
-        // Button listener to show date picker dialog
-         
-//        changeDate.setOnClickListener(new OnClickListener() {
-// 
-////            @Override
-//            public void onClick(View v) {
-//                 
-//                // On button click show datepicker dialog 
-//                showDialog(DATE_PICKER_ID);
-// 
-//            }
-// 
-//	    @Override
-//	    protected Dialog onCreateDialog(int id) {
-//	        switch (id) {
-//	        case DATE_PICKER_ID:
-//	             
-//	            // open datepicker dialog. 
-//	            // set date picker for current date 
-//	            // add pickerListener listner to date picker
-//	            return new DatePickerDialog(this, pickerListener, year, month,day);
-//	        }
-//	        return null;
-//	    }
-	 
-//	    private DatePickerDialog.OnDateSetListener pickerListener = new DatePickerDialog.OnDateSetListener() {
-//	 
-//	        // when dialog box is closed, below method will be called.
-//	        @Override
-//	        public void onDateSet(DatePicker view, int selectedYear,
-//	                int selectedMonth, int selectedDay) {
-//	             
-//	            year  = selectedYear;
-//	            month = selectedMonth;
-//	            day   = selectedDay;
-//	 
-//	            // Show selected date 
-//	            Output.setText(new StringBuilder().append(month + 1)
-//	                    .append("-").append(day).append("-").append(year)
-//	                    .append(" "));
-//	     
-//	           };
-//	           
+        
+     // Get current date by calender       
+        final Calendar c = Calendar.getInstance();
+        year  = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day   = c.get(Calendar.DAY_OF_MONTH);
+ 
+        // Show current date        
+        Output.setText(new StringBuilder()
+                // Month is 0 based, just add 1
+        		.append(year).append("-").append(Utilities.Make2Digits(month + 1)).append("-").append(Utilities.Make2Digits(day)));
+        removedate = String.valueOf(Output.getText());
+   }
+	public void changeDatePicker (View v) {                
+        // On button click show datepicker dialog 
+        showDialog(DATE_PICKER_ID);
 
-	    	}
+    }
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+        case DATE_PICKER_ID:
+             
+            // open datepicker dialog. 
+            // set date picker for current date 
+            // add pickerListener listener to date picker
+            return new DatePickerDialog(this, pickerListener, year, month, day);
+        }
+        return null;
+    }
+ 
+    private DatePickerDialog.OnDateSetListener pickerListener = new DatePickerDialog.OnDateSetListener() {
+ 
+        // when dialog box is closed, below method will be called.
+        @Override
+        public void onDateSet(DatePicker view, int selectedYear,
+               int selectedMonth, int selectedDay) {
+            
+            year  = selectedYear;
+            month = selectedMonth;
+            day   = selectedDay;
+ 
+            // Show selected date 
+            Output.setText(new StringBuilder()
+            // Month is 0 based, just add 1
+    		.append(year).append("-").append(Utilities.Make2Digits(month + 1)).append("-").append(Utilities.Make2Digits(day)));
+            removedate = String.valueOf(Output.getText());
+        	}
+        };
 		public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id){
-           Log.d(getLocalClassName(), "onItemClick(" + arg1 + ","
-                    + position + "," + id + ")");
-            ListView lv = (ListView) arg0;
-            if (lv.isItemChecked(position)){
-            	Log.i("RemoveSheep", "Got a checked item");}
-            else{
-            	Log.i("RemoveSheep", "removed a check");
-            }  
-	}
+	           Log.d(getLocalClassName(), "onItemClick(" + arg1 + ","
+	                    + position + "," + id + ")");
+	            ListView lv = (ListView) arg0;
+	            if (lv.isItemChecked(position)){
+	            	Log.i("RemoveSheep", "Got a checked item");}
+	            else{
+	            	Log.i("RemoveSheep", "removed a check");
+	            }  
+		}
+		public void updateDatabase( View v ){
+			//	Get the selected remove reason from the spinner
+			remove_reason_spinner = (Spinner) findViewById(R.id.remove_reason_spinner);
+	    	which_remove_reason = remove_reason_spinner.getSelectedItemPosition();
+//	    	removedate has the string of the remove date I want to use
+	    	//	Set the death date to be an empty string until we know whether the sheep died
+	    	deathdate = "";
+	    	//	Check for the remove reason being died
+	    	//  TODO
+	    	//	This needs to be fixed in case people set up their remove reasons differently
+	    	//	Maybe search for died in the string of the reason first?
+	    	//	Currently hard coded from the remove_reason_table from us
+	    	
+	    	switch (remove_reason_spinner.getSelectedItemPosition()){
+				case 1:
+				case 2:
+				case 3:
+				case 4:
+				case 5:
+				case 6:
+					// 	Sheep Died so need to update with a death date as well as remove date. 
+					//	Fill the deathdate with the same date as remove date.
+					deathdate = removedate;
+					break;
+				case 7:
+					// Sheep sold for breeding so only need to update remove date					
+					break;
+				case 8:
+				case 9:
+				case 10:
+//				 	Sheep Died so need to update with a death date as well as remove date. 
+					//	Fill the deathdate with the same date as remove date.
+					deathdate = removedate;
+					break;
+	    	} // end of case switch   	
+			
+	    	//	Now need to loop through all the sheep and update the sheep_table
+	    	//	Set the death date and remove dates and clear all alerts for this sheep
+	    	
+	    	// This needs to be in a loop for all sheep_id s that we found. Setting each one to be thissheep_id
+	    	cmd = String.format("update sheep_table set alert01 = '', death_date = '%s', remove_date = '%s' where sheep_id =%d ", deathdate, removedate, thissheep_id ) ;
+			Log.i("remove sheep ", "before cmd " + cmd);
+			dbh.exec( cmd );
+			Log.i("remove sheep ", "after cmd " + cmd);
+			
+		}
 }
+
 
