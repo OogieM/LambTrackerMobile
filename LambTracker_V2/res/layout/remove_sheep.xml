@@ -25,7 +25,7 @@
     <TableLayout
            android:id="@+id/sheeplist"
            android:layout_width="fill_parent"
-           android:layout_height="450dp"
+           android:layout_height="400dp"
            android:gravity="center">
 
         <TableRow android:gravity="center">
@@ -40,7 +40,7 @@
 
 		<TableRow>
          <ListView
-             android:id="@+id/android:list"          
+             android:id="@android:id/android:list"          
              android:layout_height="wrap_content"
 	  		 android:layout_width="fill_parent">	  		
 		</ListView>       
@@ -51,4 +51,21 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"      
         android:textSize="18sp" /> 
+        
+        <Button
+       android:id="@+id/changeDate"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Click To Change Date" />
+ 
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Current/Selected Date (YYYY-MM-DD):" />
+  
+   <TextView
+       android:id="@+id/Output"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="" />
 </LinearLayout>
