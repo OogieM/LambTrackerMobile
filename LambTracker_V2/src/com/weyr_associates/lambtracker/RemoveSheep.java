@@ -28,7 +28,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class RemoveSheep extends ListActivity {
+public class RemoveSheep extends ListActivity  {
 
 	private DatabaseHandler dbh;
 	public Cursor 	cursor;
@@ -43,7 +43,7 @@ public class RemoveSheep extends ListActivity {
 	Button button;
 	public SimpleCursorAdapter myadapter;
 	ArrayAdapter<String> dataAdapter;
-	
+//	ListViewAdapter listviewadapter;
 	private TextView Output;
     private Button changeDate;
     static final int DATE_PICKER_ID = 1111;
@@ -51,6 +51,7 @@ public class RemoveSheep extends ListActivity {
     private int month;
     private int day;
     public String removedate, deathdate;
+    public List<String> test_names;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,9 +80,13 @@ public class RemoveSheep extends ListActivity {
 		nRecs    = cursor.getCount();
 		Log.i("RemoveSheep", " nRecs is " + String.valueOf(nRecs));
 		cursor.moveToFirst();	
-//		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-//			Log.i("RemoveSheep", (cursor.getString(1)+ " " + cursor.getString(2) ));
-//    	}
+		test_names = new ArrayList<String>(); 
+		test_names.add("Sheep Names");
+       	
+		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+			Log.i("RemoveSheep",cursor.getString(2) );
+			test_names.add (cursor.getString(2));
+    	}
 		cursor.moveToFirst();	
 //		final ListView sheep_name_list = (ListView) findViewById(R.id.list);
 		if (nRecs > 0) {
@@ -92,6 +97,8 @@ public class RemoveSheep extends ListActivity {
 			int[] toViews = new int[] { R.id.flock_names, R.id.sheep_names};
 	        Log.i("RemoveSheep", "after setting string array toViews for sheep names");
 	        myadapter = new SimpleCursorAdapter(this, R.layout.list_entry_names, cursor ,fromColumns, toViews, 0);
+//	        myadapter = new ListViewAdapter(this, R.layout.list_entry_names, testnames);
+//	        ListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice,testnames));
 	        Log.i("RemoveSheep", "after setting myadapter to show names");
 	        final ListView sheep_name_list=getListView();
 	        setListAdapter(myadapter);
