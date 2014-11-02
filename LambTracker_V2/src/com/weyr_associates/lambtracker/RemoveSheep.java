@@ -265,8 +265,15 @@ public class RemoveSheep extends ListActivity  {
 	    		}   		
 	    	}// for loop
 	    	// Now need to go back and then redo the start
-
-			
+			try { 
+				cursor.close();
+			}
+			catch (Exception e) {
+//				Log.i("Back Button", " In catch stmt cursor");  
+				// In this case there is no adapter so do nothing
+			}
+	       	dbh.closeDB();  	
+	    	finish();		
 		}
 }
 
