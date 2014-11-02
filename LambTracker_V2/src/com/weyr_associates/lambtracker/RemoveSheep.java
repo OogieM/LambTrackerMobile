@@ -85,7 +85,9 @@ public class RemoveSheep extends ListActivity  {
        	
 		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 			Log.i("RemoveSheep",cursor.getString(2) );
-			test_names.add (String.valueOf(cursor.getInt(0)) + " "+ cursor.getString(1) + " " + cursor.getString(2));
+			// This was in for debugging to see the sheep_id's to verify I had them correct
+//			test_names.add (String.valueOf(cursor.getInt(0)) + " "+ cursor.getString(1) + " " + cursor.getString(2));
+			test_names.add (cursor.getString(1) + " " + cursor.getString(2));
 			test_sheep_id.add(cursor.getInt(0));
 			}
 		cursor.moveToFirst();	
@@ -179,7 +181,6 @@ public class RemoveSheep extends ListActivity  {
     }
  
     private DatePickerDialog.OnDateSetListener pickerListener = new DatePickerDialog.OnDateSetListener() {
- 
         // when dialog box is closed, below method will be called.
         @Override
         public void onDateSet(DatePicker view, int selectedYear,
@@ -250,7 +251,6 @@ public class RemoveSheep extends ListActivity  {
 	        int temp_location, temp_size;
 	        temp_size = sp.size();
 	        Log.i ("before loop", "the sp size is " + String.valueOf(temp_size));
-//	    	for (int i=0; i<=temp_size; i++){
 	    	for (int i=0; i<temp_size; i++){
 	    		temp_value = sp.valueAt(i);
 	    		temp_location = sp.keyAt(i);
@@ -264,7 +264,7 @@ public class RemoveSheep extends ListActivity  {
 	    			Log.i("remove sheep ", "after cmd " + cmd);	    			
 	    		}   		
 	    	}// for loop
-	    	// Now need to go back and then redo the start
+	    	// Now need to go back 
 			try { 
 				cursor.close();
 			}
