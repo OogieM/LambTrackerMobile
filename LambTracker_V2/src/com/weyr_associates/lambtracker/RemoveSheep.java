@@ -43,7 +43,6 @@ public class RemoveSheep extends ListActivity  {
 	Button button;
 	public SimpleCursorAdapter myadapter;
 	ArrayAdapter<String> dataAdapter;
-//	ListViewAdapter listviewadapter;
 	private TextView Output;
     private Button changeDate;
     static final int DATE_PICKER_ID = 1111;
@@ -52,6 +51,10 @@ public class RemoveSheep extends ListActivity  {
     private int day;
     public String removedate, deathdate;
     public List<String> test_names;
+    public List<Integer> test_sheep_id;
+    public SparseBooleanArray sp;
+    ListView sheep_name_list;
+    ListView test_name_list;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,12 +65,9 @@ public class RemoveSheep extends ListActivity  {
 //    	Get the date and time to add to the sheep record these are strings not numbers
     	mytoday = Utilities.TodayIs(); 
     	
-//		ListView sheep_name_list = (ListView) findViewById(R.id.list);
-//		sheep_name_list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);   
-//		sheep_name_list.setItemsCanFocus(false);		
-//		sheep_name_list.setItemChecked(2, true);
-//		sheep_name_list.getOnItemClickListener();
-//		
+		sheep_name_list = (ListView) findViewById(R.id.sheep_names);
+		test_name_list = (ListView) findViewById(android.R.id.list);
+		
 //		Now go get all the current sheep names and format them
 		cmd = String.format( "select sheep_table.sheep_id as _id, flock_prefix_table.flock_name, sheep_table.sheep_name " +
 				" from sheep_table inner join flock_prefix_table " +
@@ -81,55 +81,41 @@ public class RemoveSheep extends ListActivity  {
 		Log.i("RemoveSheep", " nRecs is " + String.valueOf(nRecs));
 		cursor.moveToFirst();	
 		test_names = new ArrayList<String>(); 
-		test_names.add("Sheep Names");
+       	test_sheep_id = new ArrayList<Integer>();
        	
 		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 			Log.i("RemoveSheep",cursor.getString(2) );
-			test_names.add (cursor.getString(2));
-    	}
+			test_names.add (String.valueOf(cursor.getInt(0)) + " "+ cursor.getString(1) + " " + cursor.getString(2));
+			test_sheep_id.add(cursor.getInt(0));
+			}
 		cursor.moveToFirst();	
-//		final ListView sheep_name_list = (ListView) findViewById(R.id.list);
+		final ListView sheep_name_list = (ListView) findViewById(android.R.id.list);
 		if (nRecs > 0) {
 	    	// format the sheep name records
-	    	String[] fromColumns = new String[ ]{ "flock_name", "sheep_name"};
-			Log.i("RemoveSheep", "after setting string array fromColumns for sheep names");
-			//	Set the views for each column for each line. A sheep takes up 1 line on the screen
-			int[] toViews = new int[] { R.id.flock_names, R.id.sheep_names};
-	        Log.i("RemoveSheep", "after setting string array toViews for sheep names");
-	        myadapter = new SimpleCursorAdapter(this, R.layout.list_entry_names, cursor ,fromColumns, toViews, 0);
-//	        myadapter = new ListViewAdapter(this, R.layout.list_entry_names, testnames);
-//	        ListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice,testnames));
-	        Log.i("RemoveSheep", "after setting myadapter to show names");
-	        final ListView sheep_name_list=getListView();
-	        setListAdapter(myadapter);
-	        Log.i("RemoveSheep", "after setting list adapter to show names");
+//	    	String[] fromColumns = new String[ ]{ "flock_name", "sheep_name"};
+//			Log.i("RemoveSheep", "after setting string array fromColumns for sheep names");
+//			//	Set the views for each column for each line. A sheep takes up 1 line on the screen
+//			int[] toViews = new int[] { R.id.flock_names, R.id.sheep_names};
+//	        Log.i("RemoveSheep", "after setting string array toViews for sheep names");
+//	        myadapter = new SimpleCursorAdapter(this, R.layout.list_entry_names, cursor ,fromColumns, toViews, 0);
+////	        Log.i("RemoveSheep", "after setting myadapter to show names");
+////	        setListAdapter(myadapter);
+//	        Log.i("RemoveSheep", "after setting list adapter to show names");
+	        
+	        ArrayAdapter<String> adapter = (new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice,test_names));
+	        test_name_list.setAdapter(adapter);
+	        test_name_list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 	        
 	        sheep_name_list.setOnItemClickListener(new OnItemClickListener(){
 	            public void onItemClick(AdapterView<?> parent, View view,int position,long id) {
 	                View v = sheep_name_list.getChildAt(position);
-	                CheckedTextView ctv = (CheckedTextView) v.findViewById(R.id.sheep_names);
 	                Log.i("in click","I am inside onItemClick and position is:"+String.valueOf(position));
-//	                CheckedTextView ctv = (CheckedTextView)view;
 	            }
 	        });
 	        
-//	        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-//	        OnItemClickListener itemClickListener = new OnItemClickListener();
-//	        {
-//	        OnClickListener itemClickListener = new OnClickListener(){
-	        
-//	        public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id){
-//	        	@Override
-//	        	public void onClick(AdapterView<?> arg0, View arg1, int position, long id){
-//	        	ListView lv = (ListView) arg0;
-//	        	if (lv.isItemChecked(position)){
-//	        		Log.i("RemoveSheep", "Got a checked item");}
-//	        	else{
-//	        		Log.i("RemoveSheep", "removed a check");
-//	        	}
-//	        }
+	        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 	     
-	        SparseBooleanArray sp=getListView().getCheckedItemPositions();
+	        sp=getListView().getCheckedItemPositions();
 		}  		
 		else {
 			// No sheep data - publish an empty list to clear sheep names
@@ -255,15 +241,31 @@ public class RemoveSheep extends ListActivity  {
 					deathdate = removedate;
 					break;
 	    	} // end of case switch   	
-			
+	    	Log.i ("before loop", "remove date  " + removedate);
+	    	Log.i ("before loop", "death date  " + deathdate);
+	    	
 	    	//	Now need to loop through all the sheep and update the sheep_table
 	    	//	Set the death date and remove dates and clear all alerts for this sheep
-	    	
-	    	// This needs to be in a loop for all sheep_id s that we found. Setting each one to be thissheep_id
-	    	cmd = String.format("update sheep_table set alert01 = '', death_date = '%s', remove_date = '%s' where sheep_id =%d ", deathdate, removedate, thissheep_id ) ;
-			Log.i("remove sheep ", "before cmd " + cmd);
-			dbh.exec( cmd );
-			Log.i("remove sheep ", "after cmd " + cmd);
+	        boolean temp_value;
+	        int temp_location, temp_size;
+	        temp_size = sp.size();
+	        Log.i ("before loop", "the sp size is " + String.valueOf(temp_size));
+//	    	for (int i=0; i<=temp_size; i++){
+	    	for (int i=0; i<temp_size; i++){
+	    		temp_value = sp.valueAt(i);
+	    		temp_location = sp.keyAt(i);
+	    		if (temp_value){
+	    			Log.i ("for loop", "the sheep " + " " + test_names.get(temp_location)+ " is checked");
+	    			Log.i ("for loop", "the sheep id is " + String.valueOf(test_sheep_id.get(temp_location)));
+	    	    	// This needs to be in a loop for all sheep_id s that we found. Setting each one to be thissheep_id
+	    	    	cmd = String.format("update sheep_table set alert01 = '', death_date = '%s', remove_date = '%s' where sheep_id =%d ", deathdate, removedate, test_sheep_id.get(temp_location) ) ;
+	    			Log.i("remove sheep ", "before cmd " + cmd);
+	    			dbh.exec( cmd );
+	    			Log.i("remove sheep ", "after cmd " + cmd);	    			
+	    		}   		
+	    	}// for loop
+	    	// Now need to go back and then redo the start
+
 			
 		}
 }
