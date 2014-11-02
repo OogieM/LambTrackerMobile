@@ -15,11 +15,6 @@
         android:layout_height="wrap_content"
         android:textSize="14sp" />
   	<TextView
-        android:id="@+id/note_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp" />
-  	<TextView
         android:id="@+id/single_space2"
         android:layout_width="5dp"
         android:layout_height="wrap_content"

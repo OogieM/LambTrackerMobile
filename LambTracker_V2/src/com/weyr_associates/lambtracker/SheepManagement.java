@@ -39,6 +39,7 @@ import android.widget.RadioGroup;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
 import com.google.zxing.client.android.Intents;
@@ -60,17 +61,17 @@ public class SheepManagement extends ListActivity {
 	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
 	public Spinner predefined_note_spinner01, predefined_note_spinner02, predefined_note_spinner03;
 	public Spinner predefined_note_spinner04, predefined_note_spinner05;
-	public Spinner wormer_spinner, vaccine_spinner, drug_spinner, drug_location_spinner;
+	public Spinner wormer_spinner, vaccine_spinner, drug_spinner, drug_location_spinner, blood_spinner;
 	public List<String> predefined_notes;
 	public List<String> tag_types, tag_locations, tag_colors;
-	public List<String> wormers, vaccines, drugs, drug_location;
-	public List<Integer> wormer_id_drugid, vaccine_id_drugid, drug_id_drugid;
+	public List<String> wormers, vaccines, drugs, drug_location, blood_tests;
+	public List<Integer> wormer_id_drugid, vaccine_id_drugid, drug_id_drugid, blood_test_id;
 	public int wormer_id, vaccine_id, shot_loc, drug_loc;
 	public String[] this_sheeps_tags ;
 	public int drug_gone; // 0 = false 1 = true
-	public int	drug_type, which_wormer, which_vaccine, which_drug;
+	public int	drug_type, which_wormer, which_vaccine, which_drug, which_blood;
 	public RadioGroup radioGroup;
-	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxweight, boxscrapieblood, boxdrug, boxweaned;
+	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxweight, boxblood, boxdrug, boxweaned, boxshear;
 	public String note_text;
 	public int predefined_note01, predefined_note02, predefined_note03, predefined_note04, predefined_note05;
 	public int             nRecs, nRecs1, nRecs2, nRecs3, nRecs4, nRecs5;
@@ -300,7 +301,7 @@ public class SheepManagement extends ListActivity {
 		   	drug_type = 1;
 		   	// Select All fields from id types to build the spinner
 		   	cmd = String.format( "select id_drugid, user_task_name, drug_lot from drug_table where " +
-		   			"drug_gone = %s and drug_type = %s", drug_gone , drug_type);
+		   			"drug_gone = %s and (drug_type = 1 or drug_type = 5) ", drug_gone);
 		   	crsr = dbh.exec( cmd );  
 		   	cursor   = ( Cursor ) crsr;
 	   	  	dbh.moveToFirstRecord();
@@ -311,7 +312,7 @@ public class SheepManagement extends ListActivity {
 		   		wormer_id_drugid.add(cursor.getInt(0));
 		   		wormers.add(cursor.getString(1) + " lot " + cursor.getString(2));
 		   	}
-//		   	Log.i("SheepMgmt", " after filling wormer spinner"); 
+		   	Log.i("SheepMgmt", " after filling wormer spinner"); 
 		   	// Creating adapter for spinner
 		   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, wormers);
 				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -320,7 +321,53 @@ public class SheepManagement extends ListActivity {
 				//	Should be a preference or default but fixed to be Ivermectin for now
 				//  However, we need to make sure there is a wormer to do so!
 				if (cursor.getCount() > 0){ wormer_spinner.setSelection(1);	}
-							
+
+				// Fill the Blood Sample Spinner
+		    	blood_spinner = (Spinner) findViewById(R.id.blood_spinner);
+			   	blood_tests = new ArrayList<String>();  
+			   	blood_test_id = new ArrayList<Integer>();			   	
+			   	// Select All fields from blood test types to build the spinner			   	
+			   	Log.i("SheepMgmt", " before filling blood test spinner"); 
+		    	cmd = String.format("select evaluation_trait_table.trait_name, evaluation_trait_table.id_traitid, " +
+			        	"custom_evaluation_name_table.custom_eval_number " +
+		    			"from evaluation_trait_table " +
+			        	" inner join custom_evaluation_name_table on evaluation_trait_table.id_traitid = " +
+		        		" custom_evaluation_name_table.id_traitid where evaluation_trait_table.id_traitid = 26 ") ;
+//		    	Log.i("evaluate2", " cmd is " + cmd);
+		    	crsr = dbh.exec( cmd );
+		        cursor   = ( Cursor ) crsr;		       
+		    	dbh.moveToFirstRecord();
+//		    	Integer num_blood_tests = (cursor.getInt(2));
+		    	Log.i("SheepMgmt", " after filling blood tests spinner"); 
+		    	//	Get the text for the spinner
+			    cmd = String.format("select custom_evaluation_traits_table.id_traitid, " +
+			    		"custom_evaluation_traits_table.custom_evaluation_item " +
+			    		" from custom_evaluation_traits_table " +
+			    			" where custom_evaluation_traits_table.id_traitid = 26 "+
+			    			" order by custom_evaluation_traits_table.custom_evaluation_order ASC ");
+			    	Log.i("fill blood", " ready to get spinner text cmd is " + cmd);	    	
+			    	crsr = dbh.exec( cmd );
+			        cursor   = ( Cursor ) crsr;
+			        nRecs4    = cursor.getCount();
+			        Log.i ("getting tests", " we have " + String.valueOf(nRecs4) + " tests");
+			        dbh.moveToFirstRecord();
+			        blood_tests.add("Select a Blood Test");
+			        blood_test_id.add(0);
+			        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+			        	blood_test_id.add(cursor.getInt(0));
+			        	blood_tests.add (cursor.getString(1));
+			    	}
+					   	
+//			   	Log.i("SheepMgmt", " after filling wormer spinner"); 
+			   	// Creating adapter for spinner
+			   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, blood_tests);
+					dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					blood_spinner.setAdapter (dataAdapter);
+					//	Set the blood test to be a specific one 
+					//	Should be a preference or default but set to Scrapie DNA Sample for now
+					//  However, we need to make sure there is a wormer to do so!
+					if (cursor.getCount() > 0){ blood_spinner.setSelection(1);	}
+					
 			// Fill the Vaccine Spinner
 	    	vaccine_spinner = (Spinner) findViewById(R.id.vaccine_spinner);
 		   	vaccines = new ArrayList<String>(); 
@@ -657,10 +704,10 @@ public class SheepManagement extends ListActivity {
 	}	
 	 public void updateDatabase( View v ){
 	    	
-		 	TextView TV;
-		 	String temp_string;
-	    	Float trait11_data = 0.0f;
-	    	
+		 	TextView 	TV;
+		 	String 		temp_string;
+	    	Float 		trait11_data = 0.0f;
+	    	int 		temp_integer;
 			// Disable Update Database button and make it red to prevent getting 2 records at one time
 	    	btn = (Button) findViewById( R.id.update_database_btn );
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
@@ -715,7 +762,7 @@ public class SheepManagement extends ListActivity {
 			  		Log.i("add drug to ", "db cmd is " + cmd);
 					dbh.exec(cmd);
 					Log.i("add tag ", "after insert into sheep_drug_table");
-					// TODO
+					
 					//	Need to update the alert to include the slaughter withdrawal for this vaccine
 					cmd = String.format("Select units_table.units_name, user_meat_withdrawal from drug_table " +
 							"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
@@ -728,7 +775,7 @@ public class SheepManagement extends ListActivity {
 					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 					Log.i("drug withdrawal ", " new alert is " + temp_string);
 					if (alert_text != null){
-						temp_string = alert_text + temp_string;
+						temp_string = alert_text + "\n" + temp_string;
 					}
 					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
 					Log.i("update alerts ", "before cmd " + cmd);
@@ -747,7 +794,7 @@ public class SheepManagement extends ListActivity {
 				note_text = "";
 				predefined_note01 = 14; // hard coded the code for toes trimmed
 				// TODO
-				//	This will have to be changed for the general case
+				//	This will have to be changed for the general case where toes is not item 14 in the list
 				cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid01) " +
     					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, mytoday, mytime, predefined_note01);
     			Log.i("update notes ", "before cmd " + cmd);
@@ -773,28 +820,58 @@ public class SheepManagement extends ListActivity {
     			Log.i("update sheep table ", "after cmd exec");
 			}			
 			
-// TODO  
-//			//	Get the value of the checkbox for take scrapie blood
-//			Log.i("before checkbox", " getting ready to see if we collected scrapie blood or not ");
-			boxscrapieblood = (CheckBox) findViewById(R.id.checkBoxScrapieBlood);
-			if (boxscrapieblood.isChecked()){
+//			//	Get the value of the checkbox for take  blood
+//			Log.i("before checkbox", " getting ready to see if we collected blood or not ");
+			boxblood = (CheckBox) findViewById(R.id.checkBoxBlood);
+			if (boxblood.isChecked()){
+				blood_spinner = (Spinner) findViewById(R.id.blood_spinner);
+				which_blood = blood_spinner.getSelectedItemPosition();
 				//	go update the database with blood pull date and time as a note 
-				note_text = "Blood for Scrapie Genetics";
-				predefined_note01 = 47; // hard coded the code for blood sample taken
-				// TODO
-				//	This will have to be changed for the general case of blood for other testing
+				note_text = "Blood for ";
+				// Go get the reason for the blood test	
+				String temp_text = blood_tests.get(which_blood);
+				Log.i("blood test", " value is " + temp_text);			
+				note_text = note_text + temp_text;
+				predefined_note01 = 47; // hard coded the code for blood sample taken				
 				cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid01) " +
     					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, mytoday, mytime, predefined_note01);
     			Log.i("update notes ", "before cmd " + cmd);
     			dbh.exec( cmd );	
-//    			Log.i("update notes ", "after cmd exec");
-//				Log.i("blood taken ", String.valueOf(boxscrapieblood));	
+    			Log.i("update notes ", "after cmd exec");
+				Log.i("blood taken ", String.valueOf(boxblood));
+				try {
 				//	Update the sheep record to remove the scrapie blood in alert
 				cmd = String.format("update sheep_table set alert01 = replace " +
 						"( alert01, 'Scrapie Blood', '') where sheep_id =%d ", thissheep_id ) ;
 //				Log.i("update alerts ", "before cmd " + cmd);
 				dbh.exec( cmd );
 //				Log.i("update alerts ", "after cmd " + cmd);
+				}
+				catch (Exception e){
+					Log.w("scrapie", "No scrapie alert");
+				}
+				try {
+					//	Update the sheep record to remove the Brucellosis blood in alert
+					cmd = String.format("update sheep_table set alert01 = replace " +
+							"( alert01, 'Brucellosis Blood', '') where sheep_id =%d ", thissheep_id ) ;
+//					Log.i("update alerts ", "before cmd " + cmd);
+					dbh.exec( cmd );
+//					Log.i("update alerts ", "after cmd " + cmd);
+					}
+					catch (Exception e){
+						Log.w("scrapie", "No Brucellosis alert");
+					}
+				try {
+					//	Update the sheep record to remove the OPP blood in alert
+					cmd = String.format("update sheep_table set alert01 = replace " +
+							"( alert01, 'OPP Blood', '') where sheep_id =%d ", thissheep_id ) ;
+//					Log.i("update alerts ", "before cmd " + cmd);
+					dbh.exec( cmd );
+//					Log.i("update alerts ", "after cmd " + cmd);
+					}
+					catch (Exception e){
+						Log.w("scrapie", "No OPP alert");
+					}
 			}			
 			//	Need to figure out the id_drugid for what we are giving this sheep for wormer
 			boxwormer = (CheckBox) findViewById(R.id.checkBoxGiveWormer);
@@ -814,7 +891,6 @@ public class SheepManagement extends ListActivity {
 		  		Log.i("add drug to ", "db cmd is " + cmd);
 				dbh.exec(cmd);
 				Log.i("add tag ", "after insert into sheep_drug_table");
-				// TODO
 				//	Need to update the alert to include the slaughter withdrawal for this wormer
 				cmd = String.format("Select units_table.units_name, user_meat_withdrawal from drug_table " +
 						"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
@@ -824,10 +900,10 @@ public class SheepManagement extends ListActivity {
 				cursor   = ( Cursor ) crsr; 		    	
 				cursor.moveToFirst();
 				//	Initially just set an alert with the number and units from today
-				temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday + " " + mytime;
+				temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 				Log.i("drug withdrawal ", " new alert is " + temp_string);
 				if (alert_text != null){
-					temp_string = alert_text + temp_string;
+					temp_string = alert_text + "\n" + temp_string;
 				}
 
 				cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
@@ -881,7 +957,6 @@ public class SheepManagement extends ListActivity {
 			  		Log.i("add drug to ", "db cmd is " + cmd);
 					dbh.exec(cmd);
 					Log.i("add tag ", "after insert into sheep_drug_table");
-					// TODO
 					//	Need to update the alert to include the slaughter withdrawal for this drug
 					cmd = String.format("Select units_table.units_name, user_meat_withdrawal from drug_table " +
 							"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
@@ -896,7 +971,7 @@ public class SheepManagement extends ListActivity {
 					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 					Log.i("drug withdrawal ", " new alert is " + temp_string);
 					if (alert_text != null){
-						temp_string = alert_text + temp_string;
+						temp_string = alert_text + "\n" + temp_string;
 					}
 					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
 					Log.i("update alerts ", "before cmd " + cmd);
@@ -952,8 +1027,18 @@ public class SheepManagement extends ListActivity {
 			    			trait11_data = Float.valueOf(TV.getText().toString());
 			    			Log.i("save trait11", "float data is " + String.valueOf(trait11_data));
 			    		}
-						//	go update the database with a sheep evaluation record for this weight and this sheep
-			       		
+						
+			    		// Calculate the age in days for this sheep for this evaluation to fill the age_in_days field
+			    		cmd = String.format("Select julianday(birth_date) from sheep_table where sheep_id = '%s'", thissheep_id);
+			    		Log.i("get birthdate eval ", cmd);
+			    		dbh.exec( cmd );
+			    		crsr2 = dbh.exec( cmd );
+			            cursor2   = ( Cursor ) crsr2;
+			            dbh.moveToFirstRecord();	            
+			            temp_integer = (int) Utilities.GetJulianDate()-(dbh.getInt(0));
+			            Log.i("get age in days ", String.valueOf (temp_integer));
+			            
+			            //	go update the database with a sheep evaluation record for this weight and this sheep		       		
 			    		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
 			    		"trait_name01, trait_score01, trait_name02, trait_score02, trait_name03, trait_score03, " +
 			    		"trait_name04, trait_score04, trait_name05, trait_score05, trait_name06, trait_score06," +
@@ -962,9 +1047,9 @@ public class SheepManagement extends ListActivity {
 			    		"trait_name13, trait_score13, trait_name14, trait_score14, trait_name15, trait_score15, " +
 			    		"trait_name16, trait_score16, trait_name17, trait_score17, trait_name18, trait_score18, " +
 			    		"trait_name19, trait_score19, trait_name20, trait_score20, " +
-			    		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date, eval_time) " +
+			    		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date, eval_time, age_in_days) " +
 			    		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s," +
-			    		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s','%s') ", 
+			    		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s','%s', %s) ", 
 			    		thissheep_id, 0, 0, 0, 0, 0, 0,
 			    				0, 0, 0, 0, 0, 0,
 			    				0, 0, 0, 0, 0, 0, 
@@ -972,7 +1057,7 @@ public class SheepManagement extends ListActivity {
 			    				0, 0, 0, 0, 0, 0, 
 			    				0, 0, 0, 0, 0, 0,
 			    				0, 0, 0, 0, 
-			    				1, 0, 0, 0, 0, mytoday, mytime );
+			    				1, 0, 0, 0, 0, mytoday, mytime, temp_integer );
 			    		Log.i("add evaluation ", "cmd is "+ cmd);
 						dbh.exec(cmd);
 						Log.i("add evaluation ", "after insert into sheep_evaluation_table");
@@ -1039,7 +1124,7 @@ public class SheepManagement extends ListActivity {
     	dbh.closeDB();
     	clearBtn( null );
     	//Go back to main
-      	finish();
+      	this.finish();
 	    }
 
 	    public void showAlert(View v)
@@ -1097,13 +1182,15 @@ public class SheepManagement extends ListActivity {
 //		Log.i("clear btn", "after clear vaccine checkbox");
 		boxwormer = (CheckBox) findViewById(R.id.checkBoxGiveWormer);
 		boxwormer.setChecked(false);
+		boxshear = (CheckBox) findViewById(R.id.checkBoxShorn);
+		boxshear.setChecked(false);
 //		Log.i("clear btn", "after clear wormer checkbox");
 		boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
 		boxtrimtoes.setChecked(false);
 //		Log.i("clear btn", "after clear trim toes checkbox");
-		boxscrapieblood = (CheckBox) findViewById(R.id.checkBoxScrapieBlood);
-		boxscrapieblood.setChecked(false);
-//		Log.i("clear btn", "after scrapie blood checkbox");	
+		boxblood = (CheckBox) findViewById(R.id.checkBoxBlood);
+		boxblood.setChecked(false);
+//		Log.i("clear btn", "after blood checkbox");	
 		boxweaned = (CheckBox) findViewById(R.id.checkBoxWeaned);
 		boxweaned.setChecked(false);
 		

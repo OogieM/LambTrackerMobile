@@ -186,57 +186,46 @@ public class MainActivity extends Activity {
 					MainActivity.this.startActivity(i);
 			        break;
 			    case 2:
-//			    	Log.i ("Main case", " In main case statement selected 2");
-			    	i = new Intent(MainActivity.this, IDManagement.class);
-					MainActivity.this.startActivity(i);
-			        break;
-			    case 3:
-					i = new Intent(MainActivity.this, CreateSheepEvaluation.class);
-					MainActivity.this.startActivity(i);
-			        break;
-			    case 4:
-//			    	Log.i ("Main case", " In main case statement selected 4");
-//			    	i = new Intent(MainActivity.this, EvaluateSheep.class);
-//			        MainActivity.this.startActivity(i);
-//			        break;
-//			    case 5:
-//			    	Log.i ("Main case", " In main case statement selected 5");
-			    	i = new Intent(MainActivity.this, EvaluateSheep2.class);
-			        MainActivity.this.startActivity(i);
-			        break;
-			    case 5:
 					i = new Intent(MainActivity.this, LookUpSheep.class);
 					MainActivity.this.startActivity(i);
 					break;
-			    case 6:
+			    case 3:
+					i = new Intent(MainActivity.this, SheepManagementMenu.class);
+					MainActivity.this.startActivity(i);
+			        break;
+			    case 4:
+			    	i = new Intent(MainActivity.this, IDManagement.class);
+					MainActivity.this.startActivity(i);
+			        break;
+			    case 5:
 					i = new Intent(MainActivity.this, LambingSheep.class);
+					MainActivity.this.startActivity(i);
+			        break;
+			    case 6:
+					i = new Intent(MainActivity.this, CreateSheepEvaluation.class);
 					MainActivity.this.startActivity(i);
 			        break;
 			    case 7:
 					i = new Intent(MainActivity.this, FixLamb.class);
 					MainActivity.this.startActivity(i);
-			        break;
+			        break;			   			    
 			    case 8:
-					i = new Intent(MainActivity.this, SheepManagement.class);
-					MainActivity.this.startActivity(i);
-			        break;
-			    case 9:
-					i = new Intent(MainActivity.this, SortSheep.class);
-					MainActivity.this.startActivity(i);
-			        break;
-			    case 10:
 					i = new Intent(MainActivity.this, PrintLabels.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 11:
+				case 9:
 					i = new Intent(MainActivity.this, EditDB.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 12:		
+				case 10:		
+					i = new Intent(MainActivity.this, DesktopFunctionsMenu.class);
+					MainActivity.this.startActivity(i);
+			        break;
+				case 11:		
 					i = new Intent(MainActivity.this, SetDefaults.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 13:		
+				case 12:		
 					i = new Intent(MainActivity.this, TestInterfaceDesigns.class);
 					MainActivity.this.startActivity(i);
 			        break;

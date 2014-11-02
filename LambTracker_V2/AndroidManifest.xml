@@ -98,7 +98,7 @@
             android:name="com.weyr_associates.lambtracker.TestInterfaceDesigns"
             android:configChanges="orientation"
             android:label="@string/title_activity_test_interface_designs"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
@@ -165,7 +165,37 @@
 
         <activity
             android:name="com.weyr_associates.lambtracker.SortSheep"
-            android:label="@string/title_activity_sort_sheep" >
+            android:configChanges="orientation"
+            android:label="@string/title_activity_sort_sheep"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.DrawBlood"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_draw_blood"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.SheepManagementMenu"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_sheep_management_menu"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.RemoveSheep"
+            android:label="@string/title_activity_remove_sheep" >
+        </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.DesktopFunctionsMenu"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_desktop_functions"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.SetAlerts"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_set_alert"
+            android:screenOrientation="landscape" >
         </activity>
     </application>
 

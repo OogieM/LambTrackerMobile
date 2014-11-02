@@ -350,6 +350,51 @@ public static String TodayIs() {
 		AlertDialog dialog = builder.create();
 		dialog.show();		 
  }
+ 
+ public static double GetJulianDate(){
+	 Calendar calendarDate = Calendar.getInstance();
+	   int year = calendarDate.get(Calendar.YEAR);
+	   int month = calendarDate.get(Calendar.MONTH) + 1;
+	   int day = calendarDate.get(Calendar.DAY_OF_MONTH);
+	   double hour = calendarDate.get(Calendar.HOUR_OF_DAY);
+	   double minute = calendarDate.get(Calendar.MINUTE);
+	   double second = calendarDate.get(Calendar.SECOND);
+	   int isGregorianCal = 1;
+	   int A;
+	   int B;
+	   int C;
+	   int D;
+	   double fraction = day + ((hour + (minute / 60) + (second / 60 / 60)) / 24);
+	        
+	   if (year < 1582)
+	   {
+	      isGregorianCal = 0;
+	   }
+	        
+	   if (month < 3)
+	   {
+	      year = year - 1;
+	      month = month + 12;
+	   }
+
+	   A = year / 100;
+	   B = (2 - A + (A / 4)) * isGregorianCal;
+	        
+	   if (year < 0)
+	   {
+	      C = (int)((365.25 * year) - 0.75);
+	   }
+	   else
+	   {
+	      C = (int)(365.25 * year);
+	   }
+	        
+	   D = (int)(30.6001 * (month + 1));
+	   double JD = B + C + D + 1720994.5 + fraction;
+
+	   return JD;
+	}
+ 
 }
  
  

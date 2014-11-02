@@ -65,6 +65,7 @@
     <string name="title_activity_add_lamb">Add a Lamb</string>
     <string name="title_activity_fix_lamb">Fix a Lamb Record</string>
     <string name="title_activity_sheep_management">Sheep Management</string>
+    <string name="title_activity_sheep_management_menu">Sheep Management Menu</string>
     <string name="title_activity_print_labels">Print Labels</string>
     <string name="title_activity_set_lambtracker_defaults">Set LambTracker Defaults</string>
     <string name="title_activity_set_defaults">SetDefaults</string>
@@ -103,16 +104,15 @@
     <string-array name="sheep_task_array">
         <item>Choose a Flock Task</item>
         <item>Manage Sheep Database</item>
-        <item>ID Management</item>
-        <item>Create a Sheep Evaluation Task</item>
-        <item>Evaluate Sheep</item>
         <item>Look Up a Sheep</item>
+        <item>Sheep Management Menu</item>
+        <item>ID Management</item>
         <item>Lambing</item>
+        <item>Create a Sheep Evaluation Task</item>
         <item>Fix Lamb Record</item>
-        <item>Sheep Management</item>
-        <item>Sort Sheep</item>
         <item>Print Labels</item>
         <item>Edit Database</item>
+        <item>Desktop Functions</item>
         <item>Set LambTracker Defaults</item>
         <item>Test Interface Designs</item>
     </string-array>
@@ -126,13 +126,14 @@
     <string name="sheep_rear_type_lbl">Rear Type</string>
     <string name="sheep_death_date_lbl">Death Date</string>
     <string name="sheep_remove_date_lbl">Remove Date</string>
+    <string name="sheep_change_date_lbl">Change Date</string>
     <string name="sheep_lambease_lbl">Lambease Score</string>
     <string name="sheep_sire_lbl">Sire</string>
     <string name="sheep_dam_lbl">Dam</string>
     <string name="sheep_stillborn">Stillborn</string>
     <string name="sheep_stillborn_lbl">Stillborn Status</string>
     <string name="mark_ewe">Mark Ewe</string>
-    <string name="sheep_scrapieblood">Take Scrapie Blood</string>
+    <string name="sheep_blood">Take Blood For</string>
     <string name="sheep_trimtoes">Trim Toes</string>
     <string name="sheep_weaned">Wean</string>
     <string name="sheep_givewormer">Give Wormer</string>
@@ -176,11 +177,16 @@
     <string name="sheep_note_lbl">Notes</string>
     <string name="include_removed_sheep">Include Removed Sheep in Look Up Sheep?</string>
     <string name="delete_sheep">Delete Sheep?</string>
+    <string name="remove_sheep">Remove Sheep?</string>
     <string name="delete_tag">Remove Tag from this Sheep?</string>
     <string name="delete_warning">Delete Warning</string>
     <string name="action_settings">Settings</string>
     <string name="sheep_drug_lbl">Drug History</string>
-    <string name="title_activity_sort_sheep">Sor tSheep</string>
+    <string name="title_activity_sort_sheep">Sort Sheep</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_draw_blood">Draw Blood</string>
+    <string name="title_activity_remove_sheep">Remove Sheep</string>
+    <string name="title_activity_desktop_functions">Desktop Functions</string>
+    <string name="title_activity_set_alert">Set or Remove Alerts</string>
 
 </resources>

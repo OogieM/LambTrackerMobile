@@ -490,7 +490,7 @@ public class FixLamb extends ListActivity
 			    	showAlert(v);
 				}
 				//	Now go get all the notes for this sheep and format them
-				cmd = String.format( "select sheep_note_table.id_noteid as _id, sheep_note_table.note_date, sheep_note_table.note_time, " +
+				cmd = String.format( "select sheep_note_table.id_noteid as _id, sheep_note_table.note_date, " +
 						"sheep_note_table.note_text, predefined_notes_table.predefined_note_text " +
 						" from sheep_note_table inner join predefined_notes_table " +
 						"on predefined_notes_table.id_predefinednotesid = sheep_note_table.id_predefinednotesid01" +
@@ -506,10 +506,11 @@ public class FixLamb extends ListActivity
 	    		if (nRecs > 0) {
 		        	// format the note records
 					//	Select only the columns I need for the note display section
-		        	String[] fromColumns2 = new String[ ]{ "note_date", "note_time", "note_text", "predefined_note_text"};
+		        	String[] fromColumns2 = new String[ ]{ "note_date", "note_text", "predefined_note_text"};
 					Log.i("LookForSheep", "after setting string array fromColumns for notes");
+					// removed the time from a note R.id.note_time,
 					//	Set the views for each column for each line. A tag takes up 1 line on the screen
-					int[] toViews2 = new int[] { R.id.note_date, R.id.note_time, R.id.note_text, R.id.predefined_note_text};
+					int[] toViews2 = new int[] { R.id.note_date,  R.id.note_text, R.id.predefined_note_text};
 			        Log.i("LookForSheep", "after setting string array toViews for notes");
 			        myadapter2 = new SimpleCursorAdapter(this, R.layout.note_entry, cursor4 ,fromColumns2, toViews2, 0);
 			        Log.i("LookForSheep", "after setting myadapter to show notes");

@@ -367,18 +367,18 @@ public class EvaluateSheep2 extends Activity {
 	    	scored_evaluation_traits.add(cursor.getString(0));
 //	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
     	}
-//    	Log.i("evaluate2", "number of records in scored traits cursor is " + String.valueOf(nRecs));
+    	Log.i("evaluate2", "number of records in scored traits cursor is " + String.valueOf(nRecs));
     	LayoutInflater inflater = getLayoutInflater();	
 //    	Log.i ("evaluate2", scored_evaluation_traits.get(0));
     	for( int ii = 0; ii < nRecs; ii++ ){	
-//    		Log.i ("in for loop", " trait name is " + scored_evaluation_traits.get(ii));
+    		Log.i ("in for loop", " trait name is " + scored_evaluation_traits.get(ii));
 			TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);	
-//			Log.i("in for loop", " after TableLayout");
+			Log.i("in for loop", " after TableLayout");
 	    	TableRow row = (TableRow)inflater.inflate(R.layout.eval_item_entry, table, false);
 	    	tempLabel = scored_evaluation_traits.get(ii);
-//	    	Log.i("in for loop", " tempLabel is " + tempLabel);
+	    	Log.i("in for loop", " tempLabel is " + tempLabel);
 	    	((TextView)row.findViewById(R.id.rb1_lbl)).setText(tempLabel);
-//	    	Log.i("in for loop", " after set text view");
+	    	Log.i("in for loop", " after set text view");
 	    	table.addView(row);
     	}
     	
@@ -516,9 +516,9 @@ public class EvaluateSheep2 extends Activity {
         String          cmd;    
         List<Float> 	rating_scores;
     	TextView 		TV;
-    	String 			temp_string;
     	Float 			tempData;
     	int				tempRadioBtn, tempTrait;
+		int 			temp_integer;
 // TODO    	
     	rating_scores = new ArrayList<Float>();
     	real_scores = new ArrayList<Float>();
@@ -531,7 +531,7 @@ public class EvaluateSheep2 extends Activity {
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	btn.setEnabled(false);    
     	   	
-    	// I got the sheep id from the selook up sheep function
+    	// I got the sheep id from the look up sheep function
     	// it's in the thissheep_id variable
     
     	Log.i("in save scores", " thissheep id is " + String.valueOf(thissheep_id)); 
@@ -714,6 +714,16 @@ public class EvaluateSheep2 extends Activity {
     		String mytoday = Utilities.TodayIs();
     		String mytime = Utilities.TimeIs();
        		
+    		// Calculate the age in days for this sheep for this evaluation to fill the age_in_days field
+    		cmd = String.format("Select julianday(birth_date) from sheep_table where sheep_id = '%s'", thissheep_id);
+    		Log.i("get birthdate eval ", cmd);
+    		dbh.exec( cmd );
+    		crsr2 = dbh.exec( cmd );
+            cursor2   = ( Cursor ) crsr2;
+            dbh.moveToFirstRecord();	            
+            temp_integer = (int) Utilities.GetJulianDate()-(dbh.getInt(0));
+            Log.i("get age in days ", String.valueOf (temp_integer));
+    		
     		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
     		"trait_name01, trait_score01, trait_name02, trait_score02, trait_name03, trait_score03, " +
     		"trait_name04, trait_score04, trait_name05, trait_score05, trait_name06, trait_score06," +
@@ -722,9 +732,9 @@ public class EvaluateSheep2 extends Activity {
     		"trait_name13, trait_score13, trait_name14, trait_score14, trait_name15, trait_score15, " +
     		"trait_name16, trait_score16, trait_name17, trait_score17, trait_name18, trait_score18, " +
     		"trait_name19, trait_score19, trait_name20, trait_score20, " +
-    		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date, eval_time) " +
+    		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date, eval_time, age_in_days) " +
     		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s," +
-    		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s','%s') ", 
+    		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'%s','%s',%s) ", 
     		thissheep_id, trait01, trait01_data, trait02, trait02_data, trait03, trait03_data,
     				trait04, trait04_data, trait05, trait05_data, trait06, trait06_data,
     				trait07, trait07_data, trait08, trait08_data, trait09, trait09_data, 
@@ -732,7 +742,7 @@ public class EvaluateSheep2 extends Activity {
     				trait13, trait13_data, trait14, trait14_data, trait15, trait15_data, 
     				trait16, trait16_data, trait17, trait17_data, trait18, trait18_data,
     				trait19, trait19_data, trait20, trait20_data, 
-    				trait11_unitid, trait12_unitid, trait13_unitid, trait14_unitid, trait15_unitid, mytoday, mytime );
+    				trait11_unitid, trait12_unitid, trait13_unitid, trait14_unitid, trait15_unitid, mytoday, mytime, temp_integer);
     		
 //    		Log.i("save eval ", cmd);
     		dbh.exec( cmd );
