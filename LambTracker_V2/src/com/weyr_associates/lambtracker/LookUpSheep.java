@@ -317,9 +317,12 @@ public class LookUpSheep extends ListActivity
     				case 5:
     					if( tag_num != null && tag_num.length() > 0 ){       		
     						// Get the sheep id from the id table for this tag number and selected tag type
-			        		cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
-				        			"and id_info_table.tag_type='%s' and (id_info_table.tag_date_off is null or" +
-				        			" id_info_table.tag_date_off = '') "
+//    						cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
+//				        			"and id_info_table.tag_type='%s' and (id_info_table.tag_date_off is null or" +
+//				        			" id_info_table.tag_date_off = '') "
+//				        			, tag_num , tag_type_spinner.getSelectedItemPosition());  
+    						cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
+				        			"and id_info_table.tag_type='%s' "
 				        			, tag_num , tag_type_spinner.getSelectedItemPosition());  
 				        	Log.i("searchByNumber", "command is " + cmd);
 				        	crsr = dbh.exec( cmd );
@@ -368,8 +371,11 @@ public class LookUpSheep extends ListActivity
 				    	//	got a name				    	
 				    	// TODO
 			        	tag_num = "%" + tag_num + "%";
-			        	cmd = String.format( "select sheep_id, sheep_name from sheep_table where sheep_name like '%s'" +
-			        			" and (remove_date is null or remove_date = '') "
+			        	// Modified this so I can look up removed sheep as well 
+//			        	cmd = String.format( "select sheep_id, sheep_name from sheep_table where sheep_name like '%s'" +
+//			        			" and (remove_date is null or remove_date = '') "
+//			        			, tag_num );  
+			        	cmd = String.format( "select sheep_id, sheep_name from sheep_table where sheep_name like '%s'"
 			        			, tag_num );  
 			        	Log.i("searchByName", "command is " + cmd);
 			        	crsr = dbh.exec( cmd );
@@ -411,18 +417,38 @@ public void formatSheepRecord (View v){
 	
 	thissheep_id = cursor.getInt(0);	        	
 	Log.i("format record", "This sheep is record " + String.valueOf(thissheep_id));	        	
+//	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+//			"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+//			"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
+//			"sheep_table.sire_id, sheep_table.dam_id, sheep_table.birth_date, birth_type_table.birth_type," +
+//			"sheep_sex_table.sex_name, sheep_table.birth_weight, sheep_table.remove_date, sheep_table.death_date," +
+//			"remove_reason_table.remove_reason " +
+//			"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+//			"inner join birth_type_table on id_birthtypeid = sheep_table.birth_type " +
+//			"inner join sheep_sex_table on sheep_sex_table.sex_sheepid = sheep_table.sex " +
+//			"inner join remove_reason_table on sheep_table.remove_reason = remove_reason_table.remove_reasonid " +
+//			"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+//			"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+//			"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+//			"where id_info_table.sheep_id ='%s' and (id_info_table.tag_date_off is null or " +
+//			"id_info_table.tag_date_off is '')order by idtype_name asc", thissheep_id);
 	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 			"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
 			"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
 			"sheep_table.sire_id, sheep_table.dam_id, sheep_table.birth_date, birth_type_table.birth_type," +
-			"sheep_sex_table.sex_name, sheep_table.birth_weight " +
+			"sheep_sex_table.sex_name, sheep_table.birth_weight, sheep_table.remove_date, sheep_table.death_date  " +
+//			"remove_reason_table.remove_reason " +
 			"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
 			"inner join birth_type_table on id_birthtypeid = sheep_table.birth_type " +
 			"inner join sheep_sex_table on sheep_sex_table.sex_sheepid = sheep_table.sex " +
+//			"inner join remove_reason_table on sheep_table.remove_reason = remove_reason_table.remove_reasonid " +
 			"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 			"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 			"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-			"where id_info_table.sheep_id ='%s' and (id_info_table.tag_date_off is null or id_info_table.tag_date_off is '')order by idtype_name asc", thissheep_id);
+			"where id_info_table.sheep_id ='%s' and (id_info_table.tag_date_off is null or " +
+			"id_info_table.tag_date_off is '')order by idtype_name asc", thissheep_id);
+	
+	
 	Log.i("format record", " comand is " + cmd);	
 	crsr = dbh.exec( cmd ); 
 	Log.i("format record", " after run the command");
@@ -444,6 +470,15 @@ public void formatSheepRecord (View v){
     TV = (TextView) findViewById( R.id.birth_weight );
     TV.setText (String.valueOf(dbh.getReal(14)));
     Log.i("format record", "after get birth weight ");
+    TV = (TextView) findViewById( R.id.remove_date );
+    TV.setText (dbh.getStr(15));
+    Log.i("format record", "after get remove date ");
+//    TV = (TextView) findViewById( R.id.remove_reason );
+//    TV.setText (dbh.getStr(16));
+//    Log.i("format record", "after get remove reason ");
+    TV = (TextView) findViewById( R.id.death_date );
+    TV.setText (dbh.getStr(16));
+    Log.i("format record", "after get death date ");
     
     alert_text = dbh.getStr(8);
     Log.i("format record", "after get alert ");

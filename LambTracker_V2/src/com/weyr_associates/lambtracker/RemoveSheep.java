@@ -65,7 +65,7 @@ public class RemoveSheep extends ListActivity  {
 //    	Get the date and time to add to the sheep record these are strings not numbers
     	mytoday = Utilities.TodayIs(); 
     	
-		sheep_name_list = (ListView) findViewById(R.id.sheep_names);
+//		sheep_name_list = (ListView) findViewById(R.id.sheep_names);
 		test_name_list = (ListView) findViewById(android.R.id.list);
 		
 //		Now go get all the current sheep names and format them
@@ -122,8 +122,8 @@ public class RemoveSheep extends ListActivity  {
 		else {
 			// No sheep data - publish an empty list to clear sheep names
 			Log.i("LookForSheep", "no current sheep");
-			myadapter = new SimpleCursorAdapter(this, R.layout.list_entry_names, null, null, null, 0);
-			setListAdapter(myadapter);
+//			myadapter = new SimpleCursorAdapter(this, R.layout.list_entry_names, null, null, null, 0);
+//			setListAdapter(myadapter);
 		} 	
 		// Fill the Remove Reason Spinner
 		remove_reason_spinner = (Spinner) findViewById(R.id.remove_reason_spinner);

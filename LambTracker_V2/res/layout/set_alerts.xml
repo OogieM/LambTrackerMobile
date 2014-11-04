@@ -25,7 +25,7 @@
     <TableLayout
            android:id="@+id/sheeplist"
            android:layout_width="fill_parent"
-           android:layout_height="200dp"
+           android:layout_height="fill_parent"
            android:gravity="center">
 
         <TableRow android:gravity="center">
@@ -39,6 +39,7 @@
 		</TableRow>
 
 		<TableRow>
+
          <ListView
              android:id="@android:id/android:list"          
              android:layout_height="wrap_content"
