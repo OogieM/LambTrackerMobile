@@ -60,6 +60,7 @@ public class AddLamb extends Activity {
 	public int	rear_type, birth_type, sex, lambease, codon171, codon136, codon154;
 	public String dam_name, sire_name, lamb_name;
 	public String lamb_alert_text, death_date, remove_date;
+	public int remove_reason;
 	public int dam_id, dam_codon171, dam_codon154, dam_codon136;
 	public int sire_id, sire_codon171, sire_codon154, sire_codon136;
 	public int lamb_id, lamb_codon171, lamb_codon154, lamb_codon136;
@@ -536,6 +537,7 @@ public class AddLamb extends Activity {
     	lamb_alert_text = "";
     	death_date = "";
 		remove_date = "";
+		remove_reason = (Integer) null;
 		//	Set the lamb name to be empty initially
 		lamb_name = "";
 		//	Get the date and time to add to the lamb record these are strings not numbers
@@ -590,7 +592,9 @@ public class AddLamb extends Activity {
 		stillbornbox = (CheckBox) findViewById(R.id.checkBoxStillborn);
 		if (stillbornbox.isChecked()){
 			//	Set the values for death dates for stillborn lambs.
+			//	Set the remove reason to be the value for Died Stillborn
 			stillborn = true;
+			remove_reason = 6;
 			Log.i("stillborn ", String.valueOf(stillborn));
 			death_date = mytoday;
 			remove_date = mytoday;
@@ -892,12 +896,12 @@ public class AddLamb extends Activity {
 		//	Ready to build the insert statement for this lamb.
 		cmd = String.format("insert into sheep_table (sheep_name, flock_prefix, sex, " +
 			"birth_date, birth_time, birth_type, birth_weight, rear_type, death_date, remove_date, " +
-			"lambease, sire_id, dam_id, alert01, acquire_date, sheep_birth_record, " +
+			"remove_reason, lambease, sire_id, dam_id, alert01, acquire_date, sheep_birth_record, " +
 			"codon171, codon154, codon136, id_sheepbreedid, id_locationid, " +
 			"id_ownerid, birth_weight_units) values " +
-			"('%s', %s, %s,'%s','%s',%s,%s,%s,'%s','%s',%s,%s,%s,'%s','%s',%s,%s,%s,%s,%s,%s,%s,%s) ",
+			"('%s', %s, %s,'%s','%s',%s,%s,%s,'%s','%s',%s,%s,%s,%s,'%s','%s',%s,%s,%s,%s,%s,%s,%s,%s) ",
 			lamb_name, flock_prefix, sex, mytoday, mytime, birth_type, birth_weight, 
-			rear_type, death_date, remove_date, lambease, sire_id, dam_id, 
+			rear_type, death_date, remove_date, remove_reason, lambease, sire_id, dam_id, 
 			lamb_alert_text, mytoday, lamb_birth_record,
 			lamb_codon171, lamb_codon154, lamb_codon136, id_sheepbreedid, id_locationid,
 			id_ownerid,birth_weight_units);

@@ -258,7 +258,9 @@ public class RemoveSheep extends ListActivity  {
 	    			Log.i ("for loop", "the sheep " + " " + test_names.get(temp_location)+ " is checked");
 	    			Log.i ("for loop", "the sheep id is " + String.valueOf(test_sheep_id.get(temp_location)));
 	    	    	// This needs to be in a loop for all sheep_id s that we found. Setting each one to be thissheep_id
-	    	    	cmd = String.format("update sheep_table set alert01 = '', death_date = '%s', remove_date = '%s' where sheep_id =%d ", deathdate, removedate, test_sheep_id.get(temp_location) ) ;
+	    	    	cmd = String.format("update sheep_table set alert01 = '', death_date = '%s', remove_date = '%s', " +
+	    	    			"remove_reason = '%s' where sheep_id =%d ", deathdate, removedate, which_remove_reason, 
+	    	    			test_sheep_id.get(temp_location) ) ;
 	    			Log.i("remove sheep ", "before cmd " + cmd);
 	    			dbh.exec( cmd );
 	    			Log.i("remove sheep ", "after cmd " + cmd);	    			
