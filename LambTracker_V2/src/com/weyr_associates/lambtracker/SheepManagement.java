@@ -728,8 +728,8 @@ public class SheepManagement extends ListActivity {
 		    	which_vaccine = vaccine_spinner.getSelectedItemPosition();
 				//	go update the database with a drug record for this vaccine and this sheep
 //		    	Log.i("vaccine spinner", " position is" + String.valueOf(which_vaccine));
-				//	go update the database with a drug record for this wormer and this sheep
-				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
+				//	go update the database with a drug record for this vaccine and this sheep
+				// The drug_id is at the same position in the vaccine_id_drugid list as the spinner position			
 				i = vaccine_id_drugid.get(which_vaccine);
 //				Log.i("vaccine id", " value is " + String.valueOf(i));
 				// Go get drug location for the shot
@@ -775,8 +775,10 @@ public class SheepManagement extends ListActivity {
 					// 2014-07-27 Removed the time stamp as it's almost impossible to clear the alerts with it in there
 					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 					Log.i("drug withdrawal ", " new alert is " + temp_string);
-					if (alert_text != null){
-						temp_string = alert_text + "\n" + temp_string;
+					if (alert_text != null){						
+//						temp_string = alert_text + "\n" + temp_string;
+						// modified to put the new alert on top and add a newline character. 
+						temp_string = temp_string + "\n" + alert_text;
 					}
 					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
 					Log.i("update alerts ", "before cmd " + cmd);
@@ -922,7 +924,8 @@ public class SheepManagement extends ListActivity {
 				temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 				Log.i("drug withdrawal ", " new alert is " + temp_string);
 				if (alert_text != null){
-					temp_string = alert_text + "\n" + temp_string;
+					temp_string = temp_string + "\n" + alert_text;
+//					temp_string = alert_text + "\n" + temp_string;
 				}
 
 				cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
@@ -990,7 +993,8 @@ public class SheepManagement extends ListActivity {
 					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 					Log.i("drug withdrawal ", " new alert is " + temp_string);
 					if (alert_text != null){
-						temp_string = alert_text + "\n" + temp_string;
+						temp_string = temp_string + "\n" + alert_text;
+//						temp_string = alert_text + "\n" + temp_string;
 					}
 					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
 					Log.i("update alerts ", "before cmd " + cmd);

@@ -30,7 +30,23 @@
             android:text="@string/remove_alert_btn"
             android:textSize="14sp" />      
      </GridLayout>  
-
+	<TextView
+           android:layout_width="0dp"
+           android:layout_height="0dp"
+           android:inputType="none"
+           android:layout_weight="1"
+           android:text="@string/alert_btn"
+           android:textStyle="bold" />
+	<EditText
+            android:id="@+id/inputText"
+            android:layout_width="600dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:enabled="true"
+            android:textSize="18sp"
+            android:inputType="text"
+            android:typeface="monospace" >
+			</EditText>
     <TableLayout
            android:id="@+id/sheeplist"
            android:layout_width="fill_parent"
@@ -52,18 +68,10 @@
          <ListView
              android:id="@android:id/android:list"          
              android:layout_height="wrap_content"
-	  		 android:layout_width="600dp">	  		
+	  		 android:layout_width="600dp"
+	  		 android:textSize="12sp">	  		
 		</ListView>       
         </TableRow>
         </TableLayout>
-	<EditText
-            android:id="@+id/inputText"
-            android:layout_width="600dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:enabled="true"
-            android:textSize="18sp"
-            android:inputType="text"
-            android:typeface="monospace" >
-			</EditText>
+	
 </LinearLayout>

@@ -103,7 +103,7 @@ public class SetAlerts extends ListActivity {
        	test_sheep_id = new ArrayList<Integer>();
 		cursor.moveToFirst();	
 		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-			Log.i("setalerts", (cursor.getString(1)+ " " + cursor.getString(2) + " " + cursor.getString(3)));
+//			Log.i("setalerts", (cursor.getString(1)+ " " + cursor.getString(2) + " " + cursor.getString(3)));
 			test_names.add (cursor.getString(1) + " " + cursor.getString(2)+ " " + cursor.getString(3));
 			test_sheep_id.add(cursor.getInt(0));
     	}
@@ -124,7 +124,8 @@ public class SetAlerts extends ListActivity {
 //	        Log.i("setalerts", "after setting list adapter to show names");
 	        
 	        ArrayAdapter<String> adapter = (new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice,test_names));
-	        test_name_list.setAdapter(adapter);
+//	        ArrayAdapter<String> adapter = (new ArrayAdapter<String>(this, R.layout.list_entry_alerts,test_names));
+		    test_name_list.setAdapter(adapter);
 	        test_name_list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 	        
 	        sheep_name_list.setOnItemClickListener(new OnItemClickListener(){
@@ -168,9 +169,9 @@ public class SetAlerts extends ListActivity {
     			cursor   = ( Cursor ) crsr; 
     			cursor.moveToFirst();
     			alert_text = dbh.getStr(0);
-    			Log.i("add alert ", alert_text);
+    			Log.i("old alert ", alert_text);
     			alert_text = temp_text + "\n" + alert_text;
-    			Log.i("add alert ", alert_text);
+    			Log.i("new alert is ", alert_text);
     			//	default to adding the alert to the beginning of the current one
     	    	cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ",
     	    			alert_text, test_sheep_id.get(temp_location) ) ;
@@ -204,29 +205,31 @@ public class SetAlerts extends ListActivity {
     	for (int i=0; i<temp_size; i++){
     		temp_value = sp.valueAt(i);
     		temp_location = sp.keyAt(i);
+    		Log.i("temp_value ", String.valueOf(temp_value));
+    		Log.i("for loop i ", String.valueOf(i));
+			Log.i ("for loop", "the sheep " + " " + test_names.get(temp_location)+ " is checked");
+			Log.i ("for loop", "the sheep id is " + String.valueOf(test_sheep_id.get(temp_location)));
     		if (temp_value){
-    			Log.i ("for loop", "the sheep " + " " + test_names.get(temp_location)+ " is checked");
-    			Log.i ("for loop", "the sheep id is " + String.valueOf(test_sheep_id.get(temp_location)));
-    	    	// 	This needs to be in a loop for all sheep_id s that we found. 
-    			//	Setting each one to be thissheep_id
+    			Log.i("in if i is ", String.valueOf(i));
+    			Log.i ("in if ", "the sheep " + test_names.get(temp_location) + " is checked");
+    			Log.i ("in if ", "the sheep id is " + String.valueOf(test_sheep_id.get(temp_location)));
     			cmd = String.format("select alert01 from sheep_table where sheep_id = %s", test_sheep_id.get(temp_location));
-    			Log.i("get alert ", "before cmd " + cmd);
+    			Log.i("in if ", "before cmd " + cmd);
     			crsr = dbh.exec( cmd);
     			cursor   = ( Cursor ) crsr; 
     			cursor.moveToFirst();
     			alert_text = dbh.getStr(0);
-    			Log.i("remove alert ", alert_text);
-//    			temp_text = "%"+ temp_text + "%";
-    			Log.i("remove alert ", temp_text);
-    			//	TODO
-    			//	Figure out how to remove an alert
-    	    	cmd = String.format("update sheep_table set alert01 = replace(alert01, '%s','') where alert01 like ('%'+'%s'+'%') and sheep_id =%d ",
-    	    			temp_text, temp_text,test_sheep_id.get(temp_location) ) ;
-    			Log.i("remove alert ", "before cmd " + cmd);
-//    			dbh.exec( cmd );
-    			Log.i("remove alert ", "after cmd " + cmd);	    			
-    		}   		
-    	}// for loop
+    			Log.i("alert text ", alert_text);
+    			Log.i("remove alert ", "temp_text is " + temp_text);
+    			temp_text = temp_text + "\n" ;
+    	    	cmd = String.format("update sheep_table set alert01 = replace(alert01, '%s','') where sheep_id = %d ",temp_text, test_sheep_id.get(temp_location) ) ;
+    			Log.i("remove alert ", "in if before cmd " + cmd);
+    			dbh.exec( cmd );
+    			Log.i("remove alert ", "in if after cmd " + cmd);	    			
+    		}   // end if statement
+    		Log.i("after if ", "statement i " + String.valueOf(i));
+    	} // for loop
+    	Log.i("after ", "for loop code");
     	// Now need to go back 
 		try { 
 			cursor.close();
