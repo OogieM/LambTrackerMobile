@@ -1026,8 +1026,7 @@ public class SheepManagement extends ListActivity {
 //		            android:typeface="monospace" >
 //					</EditText>
 		 		}
-			}	
-			
+			}				
 			
 			//	Remove a drug if checked
 			//	Only valid for things like CIDRs and Sponges
@@ -1040,7 +1039,7 @@ public class SheepManagement extends ListActivity {
 				i = drug_id_drugid.get(which_drug);
 				Log.i("drug id", " value is " + String.valueOf(i));
 				
-//				Go find the instance of this drug with no remove date
+				//	Go find the instance of this drug with no remove date for this sheep
 				cmd = String.format("select id_sheepdrugid from sheep_drug_table where " +
 				" sheep_id = %s and drug_id = %s and drug_date_off = '' ",thissheep_id, i);
 				Log.i("remove drug to ", "db cmd is " + cmd);
@@ -1051,34 +1050,11 @@ public class SheepManagement extends ListActivity {
 				Log.i("drug record is ", String.valueOf(id_sheepdrugid));
 				Log.i("today is ", mytoday);
 				Log.i("remove drug ", "before update the sheep_drug_table");
-				//TODO
-//				//	Go get a Drug location 				
-//				drug_location_spinner = (Spinner) findViewById(R.id.drug_location_spinner);
-//				drug_loc = drug_location_spinner.getSelectedItemPosition();
-//		 		if (drug_loc == 0){
-//		    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-//		    		builder.setMessage( R.string.drug_loc_fill_fields )
-//		    	           .setTitle( R.string.drug_loc_fill_fields );
-//		    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
-//		    	           public void onClick(DialogInterface dialog, int idx) {
-//		    	               	// User clicked OK button 
-//		    	         		// make update database button normal and enabled so we can try again
-//		    	           		btn = (Button) findViewById( R.id.update_database_btn );
-//		    	           		btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));
-//		    	            	btn.setEnabled(true);
-//		     	    		   return;
-//		    	               }
-//		    	       });		
-//		    		AlertDialog dialog = builder.create();
-//		    		dialog.show();	
-//		    		return;
-//		 		}else{
-								
-		cmd = String.format("update sheep_drug_table set drug_date_off = '%s', drug_time_off = '%s' where id_sheepdrugid = %s", mytoday, mytime, id_sheepdrugid);
-			  		Log.i("remove drug to ", "db cmd is " + cmd);
-					dbh.exec(cmd);
-					Log.i("add tag ", "after update sheep_drug_table with remove date");					
-//		 		}
+				cmd = String.format("update sheep_drug_table set drug_date_off = '%s', " +
+					"drug_time_off = '%s' where id_sheepdrugid = %s", mytoday, mytime, id_sheepdrugid);
+			  	Log.i("remove drug to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after update sheep_drug_table with remove date");					
 			}	
 			
 			//	Take a weight if checked

@@ -71,7 +71,7 @@ public class SetAlerts extends ListActivity {
 	public Cursor 	cursor;
 	public Object	crsr;
 	public int 		nRecs;
-	public String mytoday;
+	public String mytoday, alert_text ;
 	public int 		thissheep_id;
 	public SimpleCursorAdapter myadapter;
 	ArrayAdapter<String> dataAdapter;
@@ -144,23 +144,87 @@ public class SetAlerts extends ListActivity {
 //			setListAdapter(myadapter);
 		} 	
 	}
-	public void updateDatabase( View v ){
+	public void addAlert( View v ){
 
 		boolean temp_value;
+		TextView TV;
         int temp_location, temp_size;
+        String temp_text;
         temp_size = sp.size();
         Log.i ("before loop", "the sp size is " + String.valueOf(temp_size));
+        TV = (TextView) findViewById( R.id.inputText );
+        temp_text = TV.getText().toString();
     	for (int i=0; i<temp_size; i++){
     		temp_value = sp.valueAt(i);
     		temp_location = sp.keyAt(i);
     		if (temp_value){
     			Log.i ("for loop", "the sheep " + " " + test_names.get(temp_location)+ " is checked");
     			Log.i ("for loop", "the sheep id is " + String.valueOf(test_sheep_id.get(temp_location)));
-    	    	// This needs to be in a loop for all sheep_id s that we found. Setting each one to be thissheep_id
-//    	    	cmd = String.format("update sheep_table set alert01 = '', where sheep_id =%d ", test_sheep_id.get(temp_location) ) ;
-    			Log.i("remove sheep ", "before cmd " + cmd);
+    	    	// 	This needs to be in a loop for all sheep_id s that we found. 
+    			//	Setting each one to be thissheep_id
+    			cmd = String.format("select alert01 from sheep_table where sheep_id = %s", test_sheep_id.get(temp_location));
+    			Log.i("get alert ", "before cmd " + cmd);
+    			crsr = dbh.exec( cmd);
+    			cursor   = ( Cursor ) crsr; 
+    			cursor.moveToFirst();
+    			alert_text = dbh.getStr(0);
+    			Log.i("add alert ", alert_text);
+    			alert_text = temp_text + "\n" + alert_text;
+    			Log.i("add alert ", alert_text);
+    			//	default to adding the alert to the beginning of the current one
+    	    	cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ",
+    	    			alert_text, test_sheep_id.get(temp_location) ) ;
+    			Log.i("add alert ", "before cmd " + cmd);
+    			dbh.exec( cmd );
+    			Log.i("add alert ", "after cmd " + cmd);	    			
+    		}   		
+    	}// for loop
+    	// Now need to go back 
+		try { 
+			cursor.close();
+		}
+		catch (Exception e) {
+//			Log.i("Back Button", " In catch stmt cursor");  
+			// In this case there is no adapter so do nothing
+		}
+       	dbh.closeDB();  	
+    	finish();		
+    	
+}
+	public void removeAlert( View v ){
+
+		boolean temp_value;
+		TextView TV;
+        int temp_location, temp_size;
+        String temp_text;
+        temp_size = sp.size();
+        Log.i ("before loop", "the sp size is " + String.valueOf(temp_size));
+        TV = (TextView) findViewById( R.id.inputText );
+        temp_text = TV.getText().toString();
+    	for (int i=0; i<temp_size; i++){
+    		temp_value = sp.valueAt(i);
+    		temp_location = sp.keyAt(i);
+    		if (temp_value){
+    			Log.i ("for loop", "the sheep " + " " + test_names.get(temp_location)+ " is checked");
+    			Log.i ("for loop", "the sheep id is " + String.valueOf(test_sheep_id.get(temp_location)));
+    	    	// 	This needs to be in a loop for all sheep_id s that we found. 
+    			//	Setting each one to be thissheep_id
+    			cmd = String.format("select alert01 from sheep_table where sheep_id = %s", test_sheep_id.get(temp_location));
+    			Log.i("get alert ", "before cmd " + cmd);
+    			crsr = dbh.exec( cmd);
+    			cursor   = ( Cursor ) crsr; 
+    			cursor.moveToFirst();
+    			alert_text = dbh.getStr(0);
+    			Log.i("remove alert ", alert_text);
+//    			temp_text = "%"+ temp_text + "%";
+    			Log.i("remove alert ", temp_text);
+    			//	TODO
+    			//	Figure out how to remove an alert
+    	    	cmd = String.format("update sheep_table set alert01 = replace(alert01, '%s','') where alert01 like ('%'+'%s'+'%') and sheep_id =%d ",
+    	    			temp_text, temp_text,test_sheep_id.get(temp_location) ) ;
+    			Log.i("remove alert ", "before cmd " + cmd);
 //    			dbh.exec( cmd );
-    			Log.i("remove sheep ", "after cmd " + cmd);	    			
+    			Log.i("remove alert ", "after cmd " + cmd);	    			
     		}   		
     	}// for loop
     	// Now need to go back 

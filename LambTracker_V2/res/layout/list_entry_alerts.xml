@@ -8,30 +8,30 @@
         android:id="@+id/flock_names"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/single_space"
        android:layout_width="5dp"
         android:layout_height="wrap_content"
-        android:textSize="14sp" />
+        android:textSize="12sp" />
 
      <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="12sp"
         /> 
         
     <TextView
         android:id="@+id/single_space2"
        android:layout_width="5dp"
         android:layout_height="wrap_content"
-        android:textSize="14sp" />  
+        android:textSize="12sp" />  
     <TextView
         android:id="@+id/sheep_alerts"
-        android:layout_width="250dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />    
+        android:textSize="12sp" />    
            
 </LinearLayout>
