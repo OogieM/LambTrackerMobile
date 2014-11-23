@@ -77,8 +77,8 @@ public class SetAlerts extends ListActivity {
 	ArrayAdapter<String> dataAdapter;
 	public List<String> test_names;
     public List<Integer> test_sheep_id;
-    public SparseBooleanArray sp;
-    ListView sheep_name_list;
+    public SparseBooleanArray sparse_array;
+//    ListView sheep_name_list;
     ListView test_name_list;
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -108,7 +108,7 @@ public class SetAlerts extends ListActivity {
 			test_sheep_id.add(cursor.getInt(0));
     	}
 		cursor.moveToFirst();	
-		final ListView sheep_name_list = (ListView) findViewById(android.R.id.list);
+//		final ListView sheep_name_list = (ListView) findViewById(android.R.id.list);
 		
 		if (nRecs > 0) {
 	    	// format the sheep name records
@@ -127,16 +127,21 @@ public class SetAlerts extends ListActivity {
 //	        ArrayAdapter<String> adapter = (new ArrayAdapter<String>(this, R.layout.list_entry_alerts,test_names));
 		    test_name_list.setAdapter(adapter);
 	        test_name_list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-	        
-	        sheep_name_list.setOnItemClickListener(new OnItemClickListener(){
+	        test_name_list.setOnItemClickListener(new OnItemClickListener(){
 	            public void onItemClick(AdapterView<?> parent, View view,int position,long id) {
-	                View v = sheep_name_list.getChildAt(position);
+//	            	View v = sheep_name_list.getChildAt(position);
+	                View v = test_name_list.getChildAt(position);
 	                Log.i("in click","I am inside onItemClick and position is:"+String.valueOf(position));
 	            }
+	        
+//	        sheep_name_list.setOnItemClickListener(new OnItemClickListener(){
+//	            public void onItemClick(AdapterView<?> parent, View view,int position,long id) {
+//	                View v = sheep_name_list.getChildAt(position);
+//	                Log.i("in click","I am inside onItemClick and position is:"+String.valueOf(position));
+//	            }
 	        });
 	        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		     
-	       sp=getListView().getCheckedItemPositions();
+	        sparse_array=getListView().getCheckedItemPositions();
 		}  		
 		else {
 			// No sheep data - publish an empty list to clear sheep names
@@ -146,24 +151,21 @@ public class SetAlerts extends ListActivity {
 		} 	
 	}
 	public void addAlert( View v ){
-
 		boolean temp_value;
 		TextView TV;
         int temp_location, temp_size;
         String temp_text;
-        temp_size = sp.size();
+        temp_size = sparse_array.size();
         Log.i ("before loop", "the sp size is " + String.valueOf(temp_size));
         TV = (TextView) findViewById( R.id.inputText );
         temp_text = TV.getText().toString();
     	for (int i=0; i<temp_size; i++){
-    		temp_value = sp.valueAt(i);
-    		temp_location = sp.keyAt(i);
+    		temp_value = sparse_array.valueAt(i);
+    		temp_location = sparse_array.keyAt(i);
     		if (temp_value){
     			Log.i ("for loop", "the sheep " + " " + test_names.get(temp_location)+ " is checked");
     			Log.i ("for loop", "the sheep id is " + String.valueOf(test_sheep_id.get(temp_location)));
-    	    	// 	This needs to be in a loop for all sheep_id s that we found. 
-    			//	Setting each one to be thissheep_id
-    			cmd = String.format("select alert01 from sheep_table where sheep_id = %s", test_sheep_id.get(temp_location));
+     			cmd = String.format("select alert01 from sheep_table where sheep_id = %s", test_sheep_id.get(temp_location));
     			Log.i("get alert ", "before cmd " + cmd);
     			crsr = dbh.exec( cmd);
     			cursor   = ( Cursor ) crsr; 
@@ -180,31 +182,30 @@ public class SetAlerts extends ListActivity {
     			Log.i("add alert ", "after cmd " + cmd);	    			
     		}   		
     	}// for loop
+    	Log.i("after for ", "loop in add alert.");  
     	// Now need to go back 
 		try { 
 			cursor.close();
 		}
 		catch (Exception e) {
-//			Log.i("Back Button", " In catch stmt cursor");  
-			// In this case there is no adapter so do nothing
-		}
+			Log.i("end of ", "add alert. In catch stmt cursor");  
+					}
        	dbh.closeDB();  	
-    	finish();		
-    	
-}
+    	finish();		   	
+	}
 	public void removeAlert( View v ){
 
 		boolean temp_value;
 		TextView TV;
         int temp_location, temp_size;
         String temp_text;
-        temp_size = sp.size();
-        Log.i ("before loop", "the sp size is " + String.valueOf(temp_size));
+        temp_size = sparse_array.size();
+        Log.i ("before loop", "the sparseboolean size is " + String.valueOf(temp_size));
         TV = (TextView) findViewById( R.id.inputText );
         temp_text = TV.getText().toString();
     	for (int i=0; i<temp_size; i++){
-    		temp_value = sp.valueAt(i);
-    		temp_location = sp.keyAt(i);
+    		temp_value = sparse_array.valueAt(i);
+    		temp_location = sparse_array.keyAt(i);
     		Log.i("temp_value ", String.valueOf(temp_value));
     		Log.i("for loop i ", String.valueOf(i));
 			Log.i ("for loop", "the sheep " + " " + test_names.get(temp_location)+ " is checked");
@@ -229,17 +230,15 @@ public class SetAlerts extends ListActivity {
     		}   // end if statement
     		Log.i("after if ", "statement i " + String.valueOf(i));
     	} // for loop
-    	Log.i("after ", "for loop code");
+    	Log.i("after for ", "loop in remove alert.");  
     	// Now need to go back 
 		try { 
 			cursor.close();
 		}
 		catch (Exception e) {
-//			Log.i("Back Button", " In catch stmt cursor");  
-			// In this case there is no adapter so do nothing
+			Log.i("end of ", "remove alert. In catch stmt cursor");  
 		}
        	dbh.closeDB();  	
-    	finish();		
-    	
-}
+    	finish();		    	
+	}
 }
