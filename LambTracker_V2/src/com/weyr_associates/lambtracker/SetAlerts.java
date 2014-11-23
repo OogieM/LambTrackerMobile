@@ -203,6 +203,7 @@ public class SetAlerts extends ListActivity {
         Log.i ("before loop", "the sparseboolean size is " + String.valueOf(temp_size));
         TV = (TextView) findViewById( R.id.inputText );
         temp_text = TV.getText().toString();
+        temp_text = temp_text + "\n" ;
     	for (int i=0; i<temp_size; i++){
     		temp_value = sparse_array.valueAt(i);
     		temp_location = sparse_array.keyAt(i);
@@ -222,7 +223,6 @@ public class SetAlerts extends ListActivity {
     			alert_text = dbh.getStr(0);
     			Log.i("alert text ", alert_text);
     			Log.i("remove alert ", "temp_text is " + temp_text);
-    			temp_text = temp_text + "\n" ;
     	    	cmd = String.format("update sheep_table set alert01 = replace(alert01, '%s','') where sheep_id = %d ",temp_text, test_sheep_id.get(temp_location) ) ;
     			Log.i("remove alert ", "in if before cmd " + cmd);
     			dbh.exec( cmd );
