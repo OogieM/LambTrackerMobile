@@ -78,7 +78,6 @@ public class SetAlerts extends ListActivity {
 	public List<String> test_names;
     public List<Integer> test_sheep_id;
     public SparseBooleanArray sparse_array;
-//    ListView sheep_name_list;
     ListView test_name_list;
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

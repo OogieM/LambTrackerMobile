@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+<GridLayout 
+        	android:id="@+id/grid1"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+        	android:columnCount="4"
+       		android:rowCount="3">
+       		
+     <Button
+            android:id="@+id/update_database_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_column="3"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
+            android:onClick="updateDatabase"
+            android:text="@string/update_database_btn"
+            android:textSize="14sp" /> 
+            
+     </GridLayout> 
+     <Spinner
+		        android:id="@+id/service_type_spinner"
+		        android:layout_width="260dp"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left|center"
+		        android:textSize="18sp" />   
+    <TableLayout
+           android:id="@+id/sheeplist"
+           android:layout_width="fill_parent"
+           android:layout_height="fill_parent"
+           android:gravity="center">
+
+        <TableRow android:gravity="center">
+       <TextView
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:inputType="none"
+           android:layout_weight="1"
+           android:text="@string/sheep_name_lbl"
+           android:textStyle="bold" />
+		</TableRow>
+
+		<TableRow>
+
+         <ListView
+             android:id="@android:id/android:list"          
+             android:layout_height="wrap_content"
+	  		 android:layout_width="600dp"
+	  		 android:textSize="12sp">	  		
+		</ListView>       
+        </TableRow>
+        </TableLayout>
+	
+</LinearLayout>

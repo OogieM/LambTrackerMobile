@@ -71,6 +71,7 @@
     <string name="title_activity_print_labels">Print Labels</string>
     <string name="title_activity_set_lambtracker_defaults">Set LambTracker Defaults</string>
     <string name="title_activity_set_defaults">SetDefaults</string>
+    <string name="title_activity_ram_breeding_record">Create Ram Breeding Record</string>
     <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
     <string name="help_manage_id">Select a sheep based on some form of ID. Currently federal, farm, electronic, paint and name 
@@ -192,5 +193,6 @@
     <string name="title_activity_remove_sheep">Remove Sheep</string>
     <string name="title_activity_desktop_functions">Desktop Functions</string>
     <string name="title_activity_set_alert">Set or Remove Alerts</string>
+    <string name="title_activity_create_ram_breeding_record">CreateRamBreedingRecord</string>
 
 </resources>
