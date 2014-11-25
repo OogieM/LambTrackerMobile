@@ -278,5 +278,3 @@ public class RemoveSheep extends ListActivity  {
 	    	finish();		
 		}
 }
-
-
