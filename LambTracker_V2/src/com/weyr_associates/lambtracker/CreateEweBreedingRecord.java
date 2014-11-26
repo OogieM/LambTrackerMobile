@@ -105,10 +105,10 @@ public class CreateEweBreedingRecord extends ListActivity {
 		which_breeding_spinner.setSelection(0);
 
     	test_name_list = (ListView) findViewById(android.R.id.list);
-//			Now go get all the current sheep names and format them
-    	// Hard coded for not this year's lambs. Need to edit to handle not this current year lambs or remove the restriction
-		cmd = String.format( "select sheep_table.sheep_id as _id, flock_prefix_table.flock_name, sheep_table.sheep_name " +
-				"from sheep_table inner join flock_prefix_table " +
+    	//	Now go get all the current sheep names and format them
+    	// 	Hard coded for not this year's lambs. Need to edit to handle not this current year lambs or remove the restriction
+		cmd = String.format( "select sheep_table.sheep_id as _id, flock_prefix_table.flock_name, sheep_table.sheep_name, " +
+				"sheep_table.alert01 from sheep_table inner join flock_prefix_table " +
 				"on flock_prefix_table.flock_prefixid = sheep_table.flock_prefix " +
 				"where (sheep_table.remove_date IS NULL or sheep_table.remove_date is '') and sheep_table.sex = 2 " +
 				"and sheep_table.birth_date not like '%s' "+
@@ -122,9 +122,9 @@ public class CreateEweBreedingRecord extends ListActivity {
        	test_sheep_id = new ArrayList<Integer>();
 		cursor.moveToFirst();	
 		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-			test_names.add (cursor.getString(1) + " " + cursor.getString(2));
+			test_names.add (cursor.getString(1) + " " + cursor.getString(2)+ " " + cursor.getString(3));
 			test_sheep_id.add(cursor.getInt(0));
-			Log.i("EweBreeeding", " the current sheep is " + cursor.getString(1)+ " " + cursor.getString(2) );
+			Log.i("EweBreeeding", " the current sheep is " + cursor.getString(1)+ " " + cursor.getString(2) + " " + cursor.getString(3));
     	}
 		cursor.moveToFirst();				
 		if (nRecs > 0) {
