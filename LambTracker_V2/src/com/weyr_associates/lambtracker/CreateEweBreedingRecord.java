@@ -124,12 +124,11 @@ public class CreateEweBreedingRecord extends ListActivity {
 		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 			test_names.add (cursor.getString(1) + " " + cursor.getString(2)+ " " + cursor.getString(3));
 			test_sheep_id.add(cursor.getInt(0));
-			Log.i("EweBreeeding", " the current sheep is " + cursor.getString(1)+ " " + cursor.getString(2) + " " + cursor.getString(3));
+//			Log.i("EweBreeeding", " the current sheep is " + cursor.getString(1)+ " " + cursor.getString(2) + " " + cursor.getString(3));
     	}
 		cursor.moveToFirst();				
 		if (nRecs > 0) {
-	    	// format the sheep name records
-	        ArrayAdapter<String> adapter = (new ArrayAdapter<String>(this, R.layout.list_entry_rams,test_names));
+	    	ArrayAdapter<String> adapter = (new ArrayAdapter<String>(this, R.layout.list_entry_rams,test_names));
 		    test_name_list.setAdapter(adapter);
 	        test_name_list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 	        test_name_list.setOnItemClickListener(new OnItemClickListener(){
@@ -152,9 +151,9 @@ public class CreateEweBreedingRecord extends ListActivity {
 		int temp_location, temp_size;
 		which_breeding_spinner = (Spinner) findViewById(R.id.which_breeding_spinner);
 		this_service = which_breeding_spinner.getSelectedItemPosition();
-		this_service = which_service.get (this_service);
-		
-        temp_size = sparse_array.size();
+		this_service = which_service.get (this_service-1);
+		temp_size = sparse_array.size();
+		Log.i("in Update ", "sparse array size is " + String.valueOf(temp_size));
         Log.i ("before loop", " the service record id is  " + String.valueOf(this_service));
     	for (int i=0; i<temp_size; i++){
     		temp_value = sparse_array.valueAt(i);
