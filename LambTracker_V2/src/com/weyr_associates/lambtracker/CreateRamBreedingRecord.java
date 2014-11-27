@@ -162,7 +162,7 @@ public class CreateRamBreedingRecord extends ListActivity {
 			Log.i("end of ", "add record. In catch stmt cursor");  
 					}
        	dbh.closeDB();  	
-    	finish();		   	
+       	this.finish();			   	
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
