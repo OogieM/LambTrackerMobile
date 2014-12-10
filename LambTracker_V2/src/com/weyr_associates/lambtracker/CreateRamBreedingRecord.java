@@ -22,6 +22,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.TimePickerDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -51,18 +52,20 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TimePicker;
+
 import com.google.zxing.client.android.Intents;
 
 public class CreateRamBreedingRecord extends ListActivity {
 	private DatabaseHandler dbh;
-	private int year;
-    private int month;
-    private int day;
+	private int year, month, day;
+    private int hour, minute, second;
     static final int DATE_PICKER_ID = 1111;
+    static final int TIME_PICKER_ID = 999;
 	public Spinner service_type_spinner;
-	private TextView Output;
+	private TextView dateoutput, timeoutput;
     private Button setDate;
-    public String removedate;
+    public String currentsetdate, currentsettime;
 	public int 		thissheep_id, nRecs, this_service;
 	public Cursor 	cursor;
 	public Object 	crsr;
@@ -143,25 +146,32 @@ public class CreateRamBreedingRecord extends ListActivity {
 			Log.i("LookForSheep", "no current sheep");
 		} 	
 		//	Set the date picker stuff here	
-		Output = (TextView) findViewById(R.id.Output);
-        
-     // Get current date by calender       
+		dateoutput = (TextView) findViewById(R.id.dateoutput);
+        timeoutput = (TextView) findViewById(R.id.timeoutput);
+     // Get current date and time by calender       
         final Calendar c = Calendar.getInstance();
         year  = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day   = c.get(Calendar.DAY_OF_MONTH);
- 
+        hour = c.get(Calendar.HOUR_OF_DAY);
+        minute = c.get(Calendar.MINUTE);
         // Show current date        
-        Output.setText(new StringBuilder()
+        dateoutput.setText(new StringBuilder()
                 // Month is 0 based, just add 1
         		.append(year).append("-").append(Utilities.Make2Digits(month + 1)).append("-").append(Utilities.Make2Digits(day)));
-        removedate = String.valueOf(Output.getText());
+        currentsetdate = String.valueOf(dateoutput.getText());
+        Log.i("onCreate"," "+ currentsetdate);
+        timeoutput.setText(new StringBuilder()
+        .append(Utilities.Make2Digits(hour)).append(":").append(Utilities.Make2Digits(minute)).append(":00"));
+        currentsettime = String.valueOf(timeoutput.getText());
+        Log.i("onCreate"," "+ currentsettime);
 	}
 	public void updateDatabase( View v ){
 		boolean temp_value;
 		int temp_location, temp_size;
 		service_type_spinner = (Spinner) findViewById(R.id.service_type_spinner);
 		this_service = service_type_spinner.getSelectedItemPosition();
+		currentsetdate = String.valueOf(dateoutput.getText());
         temp_size = sparse_array.size();
 //        Log.i ("before loop", "the sp size is " + String.valueOf(temp_size));
     	for (int i=0; i<temp_size; i++){
@@ -171,7 +181,7 @@ public class CreateRamBreedingRecord extends ListActivity {
     			thissheep_id = test_sheep_id.get(temp_location);
     			Log.i ("for loop", "the sheep " + " " + test_names.get(temp_location)+ " is checked");
     			Log.i ("for loop", "the sheep id is " + String.valueOf(test_sheep_id.get(temp_location)));
-     			cmd = String.format("insert into breeding_record_table (ram_id, service_type) values (%s,%s)" , thissheep_id, this_service );
+     			cmd = String.format("insert into breeding_record_table (ram_id, date_ram_in, time_ram_in,service_type) values (%s,'%s','%s',%s)" , thissheep_id, currentsetdate, currentsettime, this_service );
     			Log.i("add record ", "before cmd " + cmd);
     			dbh.exec( cmd);
     			Log.i("add record ", "after cmd " + cmd);	    			
@@ -199,6 +209,11 @@ public class CreateRamBreedingRecord extends ListActivity {
         showDialog(DATE_PICKER_ID);
 
     }
+	public void setTimePicker (View v) {                
+        // On button click show timepicker dialog 
+        showDialog(TIME_PICKER_ID);
+
+    }
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
@@ -208,6 +223,8 @@ public class CreateRamBreedingRecord extends ListActivity {
             // set date picker for current date 
             // add pickerListener listener to date picker
             return new DatePickerDialog(this, pickerListener, year, month, day);
+        case TIME_PICKER_ID:
+        	return new TimePickerDialog(this, timePickerListener, hour, minute, false);
         }
         return null;
     }
@@ -223,10 +240,27 @@ public class CreateRamBreedingRecord extends ListActivity {
             day   = selectedDay;
  
             // Show selected date 
-            Output.setText(new StringBuilder()
+            dateoutput.setText(new StringBuilder()
             // Month is 0 based, just add 1
     		.append(year).append("-").append(Utilities.Make2Digits(month + 1)).append("-").append(Utilities.Make2Digits(day)));
-            removedate = String.valueOf(Output.getText());
+            currentsetdate = String.valueOf(dateoutput.getText());
+            Log.i("set date"," "+ currentsetdate);
+        	}
+        };
+    private TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
+        // when dialog box is closed, below method will be called.
+        @Override
+        public void onTimeSet(TimePicker view, int selectedHour,
+               int selectedMinute) {
+            
+            hour  = selectedHour;
+            minute = selectedMinute;
+            second = 00;
+            // Show selected time 
+            timeoutput.setText(new StringBuilder()
+            .append(Utilities.Make2Digits(hour)).append(":").append(Utilities.Make2Digits(minute)).append(":00"));
+            currentsettime = String.valueOf(timeoutput.getText());
+            Log.i("set time"," "+ currentsettime);
         	}
         };
 }

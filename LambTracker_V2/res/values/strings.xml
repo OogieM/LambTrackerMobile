@@ -33,6 +33,7 @@
     <string name="cancel_btn">Cancel</string>
     <string name="sheep_change_date_btn">Change Date</string>
     <string name="sheep_set_date_btn">Set Date</string>
+    <string name="sheep_set_time_btn">Set Time</string>
     <string name="alert_btn">Alert</string>
     <string name="add_alert_btn">Add Alert</string>
     <string name="remove_alert_btn">Remove Alert</string>

@@ -6,7 +6,7 @@
        	android:id="@+id/grid1"
         android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-       	android:columnCount="4"
+       	android:columnCount="6"
      	android:rowCount="3">
        		
      <Button
@@ -38,10 +38,28 @@
        android:text="@string/sheep_set_date_btn" 
        android:onClick="setDatePicker"/>
 	<TextView
-       android:id="@+id/Output"
+       android:id="@+id/dateoutput"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_column="3"
+       android:layout_gravity="left|center"
+       android:layout_row="0"
+       android:text="" 
+       android:textSize="18sp"/>
+	<Button
+       android:id="@+id/setTime"
+       android:layout_width="100dp"
+       android:layout_height="50dp"
+       android:layout_gravity="left|top"
+       android:layout_column="4"
+       android:layout_row="0"
+       android:text="@string/sheep_set_time_btn" 
+       android:onClick="setTimePicker"/>
+	<TextView
+       android:id="@+id/timeoutput"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_column="5"
        android:layout_gravity="left|center"
        android:layout_row="0"
        android:text="" 
