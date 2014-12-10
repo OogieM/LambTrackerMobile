@@ -31,6 +31,8 @@
     <string name="delete_btn">Delete</string>
     <string name="close_btn">Close</string>
     <string name="cancel_btn">Cancel</string>
+    <string name="sheep_change_date_btn">Change Date</string>
+    <string name="sheep_set_date_btn">Set Date</string>
     <string name="alert_btn">Alert</string>
     <string name="add_alert_btn">Add Alert</string>
     <string name="remove_alert_btn">Remove Alert</string>
@@ -131,7 +133,6 @@
     <string name="sheep_death_date_lbl">Death Date</string>
     <string name="sheep_remove_date_lbl">Remove Date</string>
     <string name="sheep_remove_reason_lbl">Remove Reason</string>
-    <string name="sheep_change_date_lbl">Change Date</string>
     <string name="sheep_lambease_lbl">Lambease Score</string>
     <string name="sheep_sire_lbl">Sire</string>
     <string name="sheep_dam_lbl">Dam</string>

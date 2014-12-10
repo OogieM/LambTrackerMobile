@@ -68,7 +68,7 @@
        android:layout_gravity="left|top"
        android:layout_row="0"
        android:layout_height="50dp"
-       android:text="@string/sheep_change_date_lbl" 
+       android:text="@string/sheep_change_date_btn" 
        android:onClick="changeDatePicker"/>
  
    <TextView

@@ -19,6 +19,8 @@ import java.util.Calendar;
 import com.weyr_associates.lambtracker.LambingSheep.IncomingHandler;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -40,6 +42,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -52,7 +55,14 @@ import com.google.zxing.client.android.Intents;
 
 public class CreateRamBreedingRecord extends ListActivity {
 	private DatabaseHandler dbh;
+	private int year;
+    private int month;
+    private int day;
+    static final int DATE_PICKER_ID = 1111;
 	public Spinner service_type_spinner;
+	private TextView Output;
+    private Button setDate;
+    public String removedate;
 	public int 		thissheep_id, nRecs, this_service;
 	public Cursor 	cursor;
 	public Object 	crsr;
@@ -132,6 +142,20 @@ public class CreateRamBreedingRecord extends ListActivity {
 			// No sheep data - publish an empty list to clear sheep names
 			Log.i("LookForSheep", "no current sheep");
 		} 	
+		//	Set the date picker stuff here	
+		Output = (TextView) findViewById(R.id.Output);
+        
+     // Get current date by calender       
+        final Calendar c = Calendar.getInstance();
+        year  = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day   = c.get(Calendar.DAY_OF_MONTH);
+ 
+        // Show current date        
+        Output.setText(new StringBuilder()
+                // Month is 0 based, just add 1
+        		.append(year).append("-").append(Utilities.Make2Digits(month + 1)).append("-").append(Utilities.Make2Digits(day)));
+        removedate = String.valueOf(Output.getText());
 	}
 	public void updateDatabase( View v ){
 		boolean temp_value;
@@ -170,5 +194,39 @@ public class CreateRamBreedingRecord extends ListActivity {
 		getMenuInflater().inflate(R.menu.create_ram_breeding_record, menu);
 		return true;
 	}
+	public void setDatePicker (View v) {                
+        // On button click show datepicker dialog 
+        showDialog(DATE_PICKER_ID);
 
+    }
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+        case DATE_PICKER_ID:
+             
+            // open datepicker dialog. 
+            // set date picker for current date 
+            // add pickerListener listener to date picker
+            return new DatePickerDialog(this, pickerListener, year, month, day);
+        }
+        return null;
+    }
+ 
+    private DatePickerDialog.OnDateSetListener pickerListener = new DatePickerDialog.OnDateSetListener() {
+        // when dialog box is closed, below method will be called.
+        @Override
+        public void onDateSet(DatePicker view, int selectedYear,
+               int selectedMonth, int selectedDay) {
+            
+            year  = selectedYear;
+            month = selectedMonth;
+            day   = selectedDay;
+ 
+            // Show selected date 
+            Output.setText(new StringBuilder()
+            // Month is 0 based, just add 1
+    		.append(year).append("-").append(Utilities.Make2Digits(month + 1)).append("-").append(Utilities.Make2Digits(day)));
+            removedate = String.valueOf(Output.getText());
+        	}
+        };
 }

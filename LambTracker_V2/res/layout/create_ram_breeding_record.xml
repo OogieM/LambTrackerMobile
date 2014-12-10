@@ -3,30 +3,50 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 <GridLayout 
-        	android:id="@+id/grid1"
-	        android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-        	android:columnCount="4"
-       		android:rowCount="3">
+       	android:id="@+id/grid1"
+        android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+       	android:columnCount="4"
+     	android:rowCount="3">
        		
      <Button
             android:id="@+id/update_database_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_column="3"
+            android:layout_column="0"
             android:layout_gravity="left|top"
             android:layout_row="0"
             android:onClick="updateDatabase"
             android:text="@string/update_database_btn"
             android:textSize="14sp" /> 
-            
-     </GridLayout> 
+     
      <Spinner
-		        android:id="@+id/service_type_spinner"
-		        android:layout_width="260dp"
-		        android:layout_height="wrap_content"
-		        android:layout_gravity="left|center"
-		        android:textSize="18sp" />   
+        android:id="@+id/service_type_spinner"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center"
+        android:layout_column="1"
+        android:layout_row="0"
+        android:textSize="18sp" />   
+	<Button
+       android:id="@+id/setDate"
+       android:layout_width="100dp"
+       android:layout_height="50dp"
+       android:layout_gravity="left|top"
+       android:layout_column="2"
+       android:layout_row="0"
+       android:text="@string/sheep_set_date_btn" 
+       android:onClick="setDatePicker"/>
+	<TextView
+       android:id="@+id/Output"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_column="3"
+       android:layout_gravity="left|center"
+       android:layout_row="0"
+       android:text="" 
+       android:textSize="18sp"/>
+	</GridLayout> 
     <TableLayout
            android:id="@+id/sheeplist"
            android:layout_width="fill_parent"

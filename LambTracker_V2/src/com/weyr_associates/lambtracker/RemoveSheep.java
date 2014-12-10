@@ -148,7 +148,6 @@ public class RemoveSheep extends ListActivity  {
 		
 		//	Set the date picker stuff here	
 		Output = (TextView) findViewById(R.id.Output);
-//        changeDate = (Button) findViewById(R.id.changeDate);
         
      // Get current date by calender       
         final Calendar c = Calendar.getInstance();
