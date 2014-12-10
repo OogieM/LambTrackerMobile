@@ -82,8 +82,8 @@ public class EvaluateSheep2 extends Activity {
 	public int trait16_data, trait17_data, trait18_data, trait19_data, trait20_data;
 	
 	private DatabaseHandler dbh;
-	public Cursor 	cursor, cursor2;
-	public Object crsr, crsr2;
+	public Cursor 	cursor, cursor2, cursor3, cursor4;
+	public Object crsr, crsr2, crsr3, crsr4;
 	public Spinner predefined_note_spinner01, predefined_note_spinner02, predefined_note_spinner03;
 	public Spinner predefined_note_spinner04, predefined_note_spinner05;
 	public List<String> predefined_notes;
@@ -638,7 +638,7 @@ public class EvaluateSheep2 extends Activity {
 	    			try {
 //	    				Log.i("in save scores", " in try block ");
 	    				tempRadioBtn = rg.getCheckedRadioButtonId();
-//	    				Log.i("try radioBtn ", String.valueOf(tempRadioBtn));
+	    				Log.i("try radioBtn ", String.valueOf(tempRadioBtn));
 	    				cmd = String.format("select custom_evaluation_traits_table.id_custom_traitid " +
 	    		    			" from custom_evaluation_traits_table " +
 	    		    			" where custom_evaluation_traits_table.id_traitid = %s "+
@@ -647,16 +647,16 @@ public class EvaluateSheep2 extends Activity {
 	    		        cursor2   = ( Cursor ) crsr2;
 	    		        dbh.moveToFirstRecord();		        
 	    		        tempRadioBtn = cursor.getInt(0);
-//	    		        Log.i("try ", String.valueOf(tempRadioBtn));
+	    		        Log.i("try ", String.valueOf(tempRadioBtn));
 					} catch (Exception ex) {
 						tempRadioBtn = 0;
-//						Log.i("catch ", String.valueOf(tempRadioBtn));
+						Log.i("catch ", String.valueOf(tempRadioBtn));
 					}
-//	    			Log.i("out of try ", "before adding score to user.scores");
-//	    			Log.i("index ii ", String.valueOf(ii));
+	    			Log.i("out of try ", "before adding score to user.scores");
+	    			Log.i("index ii ", String.valueOf(ii));
 	     			user_scores.add(tempRadioBtn);
-//	    			Log.i("user_score ", String.valueOf(user_scores.get(ii)));
-//	    			Log.i("user_score ", String.valueOf(tempRadioBtn)); 
+	    			Log.i("user_score ", String.valueOf(user_scores.get(ii)));
+	    			Log.i("user_score ", String.valueOf(tempRadioBtn)); 
 	    		}
     	    	for( int ii = nRecs3; ii < 5; ii++ ){	
 //    	    		Log.i("in save scores ", "Filling remainder of user data array with zeros");
@@ -704,7 +704,7 @@ public class EvaluateSheep2 extends Activity {
 //	    	Log.i("number ","eval trait15 "+String.valueOf(trait15));
 //	    	Log.i("number ","eval trait15 units "+String.valueOf(trait15_unitid));
     		
-//    		Log.i("number ","eval trait16 "+String.valueOf(trait16_data));
+    		Log.i("number ","eval trait16 "+String.valueOf(trait16_data));
 //    		Log.i("number ","eval trait17 "+String.valueOf(trait17_data));
 //    		Log.i("number ","eval trait18 "+String.valueOf(trait18_data));
 //    		Log.i("number ","eval trait19 "+String.valueOf(trait19_data));
@@ -718,8 +718,8 @@ public class EvaluateSheep2 extends Activity {
     		cmd = String.format("Select julianday(birth_date) from sheep_table where sheep_id = '%s'", thissheep_id);
     		Log.i("get birthdate eval ", cmd);
     		dbh.exec( cmd );
-    		crsr2 = dbh.exec( cmd );
-            cursor2   = ( Cursor ) crsr2;
+    		crsr3 = dbh.exec( cmd );
+            cursor3   = ( Cursor ) crsr3;
             dbh.moveToFirstRecord();	            
             temp_integer = (int) Utilities.GetJulianDate()-(dbh.getInt(0));
             Log.i("get age in days ", String.valueOf (temp_integer));
@@ -730,7 +730,7 @@ public class EvaluateSheep2 extends Activity {
     		"trait_name07, trait_score07, trait_name08, trait_score08, trait_name09, trait_score09, " +
     		"trait_name10, trait_score10, trait_name11, trait_score11, trait_name12, trait_score12, " +
     		"trait_name13, trait_score13, trait_name14, trait_score14, trait_name15, trait_score15, " +
-    		"trait_name16, trait_score16, trait_name17, trait_score17, trait_name18, trait_score18, " +
+//    		"trait_name16, trait_score16, trait_name17, trait_score17, trait_name18, trait_score18, " +
     		"trait_name19, trait_score19, trait_name20, trait_score20, " +
     		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date, eval_time, age_in_days) " +
     		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s," +
@@ -751,8 +751,8 @@ public class EvaluateSheep2 extends Activity {
     		if (evaluation_update_alert==1){
     			//	Go get the current alert text
 	    		cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_table.sheep_id=%d", thissheep_id);    		
-	    		crsr2 = dbh.exec( cmd );
-	            cursor2   = ( Cursor ) crsr2;
+	    		crsr4 = dbh.exec( cmd );
+	            cursor4   = ( Cursor ) crsr4;
 	            dbh.moveToFirstRecord();	            
 	            String alert_text = (dbh.getStr(0));
 //	            Log.i ("Evaluate Alert", " Alert Text is " + alert_text + " before adding evaluation alert");
