@@ -78,7 +78,7 @@ public class CreateEweBreedingRecord extends ListActivity {
 	   	which_service = new ArrayList<Integer>();
 	   	// Select All active breeding records to build the spinner
        cmd = String.format( "select breeding_record_table.id_breedingid as _id, flock_prefix_table.flock_name," +
-       		"sheep_table.sheep_name, " +
+       		"sheep_table.sheep_name, breeding_record_table.date_ram_in, breeding_record_table.time_ram_in, " +
        		"service_type_table.service_type " +
        		"from breeding_record_table " +
        		"inner join flock_prefix_table on flock_prefix_table.flock_prefixid = sheep_table.flock_prefix " +
@@ -93,7 +93,7 @@ public class CreateEweBreedingRecord extends ListActivity {
        service_type.add("Select a Breeding Record");
         // looping through all rows and adding to list
 	   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-	   		service_type.add(cursor.getString(1)+ " " + cursor.getString(2) + " " + cursor.getString(3));
+	   		service_type.add(cursor.getString(1)+ " " + cursor.getString(2) + " " + cursor.getString(5) + " " + cursor.getString(3)+ " " + cursor.getString(4));
 			Log.i("EweBreeding", " the service type is " + cursor.getString(1) + " " + cursor.getString(2) + " " + cursor.getString(3)); 
 			which_service.add (cursor.getInt(0));
 			Log.i("EweBreeding", " The breeding record id is " + String.valueOf(cursor.getInt(0)) );
