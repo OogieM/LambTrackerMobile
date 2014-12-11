@@ -427,11 +427,11 @@ public class EvaluateSheep2 extends Activity {
     	dbh.moveToFirstRecord();
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
         	user_evaluation_traits.add(cursor.getString(0));
-//	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
+	    	Log.i("evaluate2", " trait name is " + cursor.getString(0));
 	    	user_trait_numbers.add(cursor.getInt(1));
-//	    	Log.i("evaluate2", " trait id number is " + String.valueOf(cursor.getInt(1)));
+	    	Log.i("evaluate2", " trait id number is " + String.valueOf(cursor.getInt(1)));
 	    	user_trait_number_items.add(cursor.getInt(2));
-//	    	Log.i("evaluate2", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
+	    	Log.i("evaluate2", " number of items for this trait is " + String.valueOf(cursor.getInt(2)));		    	
     	}
 //     	Log.i("evaluate2", "number of records in user traits cursor is " + String.valueOf(nRecs3));
     	inflater = getLayoutInflater();	
@@ -632,9 +632,9 @@ public class EvaluateSheep2 extends Activity {
     				TableRow row1= (TableRow)table.getChildAt(ii);
 //    				Log.i("in save scores", " after get child row ");
     				tempTrait = user_trait_numbers.get (ii);
-//    				Log.i("in save scores", " trait number is " + String.valueOf(tempTrait));
+    				Log.i("in save scores", " trait number is " + String.valueOf(tempTrait));
     				RadioGroup rg = ((RadioGroup) row1.findViewById(R.id.radioGroup1));
-//    				Log.i("in save scores", " after get radiogroup view ");
+    				Log.i("in save scores", " after get radiogroup view ");
 	    			try {
 //	    				Log.i("in save scores", " in try block ");
 	    				tempRadioBtn = rg.getCheckedRadioButtonId();
@@ -646,7 +646,7 @@ public class EvaluateSheep2 extends Activity {
 	    				crsr2 = dbh.exec( cmd );
 	    		        cursor2   = ( Cursor ) crsr2;
 	    		        dbh.moveToFirstRecord();		        
-	    		        tempRadioBtn = cursor.getInt(0);
+	    		        tempRadioBtn = cursor2.getInt(0);
 	    		        Log.i("try ", String.valueOf(tempRadioBtn));
 					} catch (Exception ex) {
 						tempRadioBtn = 0;
@@ -730,7 +730,7 @@ public class EvaluateSheep2 extends Activity {
     		"trait_name07, trait_score07, trait_name08, trait_score08, trait_name09, trait_score09, " +
     		"trait_name10, trait_score10, trait_name11, trait_score11, trait_name12, trait_score12, " +
     		"trait_name13, trait_score13, trait_name14, trait_score14, trait_name15, trait_score15, " +
-//    		"trait_name16, trait_score16, trait_name17, trait_score17, trait_name18, trait_score18, " +
+    		"trait_name16, trait_score16, trait_name17, trait_score17, trait_name18, trait_score18, " +
     		"trait_name19, trait_score19, trait_name20, trait_score20, " +
     		"trait_units11, trait_units12, trait_units13, trait_units14, trait_units15, eval_date, eval_time, age_in_days) " +
     		"values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s," +

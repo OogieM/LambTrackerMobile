@@ -22,7 +22,7 @@
         
      <Spinner
         android:id="@+id/which_breeding_spinner"
-        android:layout_width="260dp"
+        android:layout_width="600dp"
         android:layout_height="wrap_content"
         android:layout_gravity="left|center"
          android:layout_column="1"

@@ -58,6 +58,8 @@ public class CreateEweBreedingRecord extends ListActivity {
 	public Cursor 	cursor;
 	public Object 	crsr;
 	String     	cmd;
+	private int year;
+	public String currentyear;
 	public List<String> service_type;
 	public List<Integer> which_service;
 	ArrayAdapter<String> dataAdapter;
@@ -76,6 +78,10 @@ public class CreateEweBreedingRecord extends ListActivity {
 	    which_breeding_spinner = (Spinner) findViewById(R.id.which_breeding_spinner);
 	   	service_type = new ArrayList<String>();      	
 	   	which_service = new ArrayList<Integer>();
+	   	final Calendar c = Calendar.getInstance();
+        year  = c.get(Calendar.YEAR);
+        currentyear = String.valueOf(year) + "%";
+        Log.i ("current year ",currentyear );
 	   	// Select All active breeding records to build the spinner
        cmd = String.format( "select breeding_record_table.id_breedingid as _id, flock_prefix_table.flock_name," +
        		"sheep_table.sheep_name, breeding_record_table.date_ram_in, breeding_record_table.time_ram_in, " +
@@ -84,8 +90,8 @@ public class CreateEweBreedingRecord extends ListActivity {
        		"inner join flock_prefix_table on flock_prefix_table.flock_prefixid = sheep_table.flock_prefix " +
     		"inner join sheep_table on breeding_record_table.ram_id = sheep_table.sheep_id " +
        		"inner join service_type_table on service_type_table.id_servicetypeid  = breeding_record_table.service_type " +
-       		"where breeding_record_table.date_ram_in is Null or breeding_record_table.date_ram_in = '' " +
-       		"order by sheep_table.sheep_name asc ");
+       		"where breeding_record_table.date_ram_in like '%s' " +
+       		"order by sheep_table.sheep_name asc ", currentyear);
        Log.i("set spinner ", "before cmd " + cmd); 
        crsr = dbh.exec( cmd );  
        cursor   = ( Cursor ) crsr;
@@ -112,7 +118,7 @@ public class CreateEweBreedingRecord extends ListActivity {
 				"on flock_prefix_table.flock_prefixid = sheep_table.flock_prefix " +
 				"where (sheep_table.remove_date IS NULL or sheep_table.remove_date is '') and sheep_table.sex = 2 " +
 				"and sheep_table.birth_date not like '%s' "+
-				"order by sheep_table.sheep_name asc ", "2014%" );  	        	
+				"order by sheep_table.sheep_name asc ", currentyear );  	        	
 		Log.i("format record", " command is  " + cmd);
 		crsr = dbh.exec( cmd );
 		cursor   = ( Cursor ) crsr; 
