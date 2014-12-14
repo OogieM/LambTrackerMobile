@@ -10,18 +10,43 @@
        		android:rowCount="3">
        		
     <Button
-            android:id="@+id/update_database_btn"
+            android:id="@+id/add_alert_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_column="3"
+            android:layout_column="1"
             android:layout_gravity="left|top"
             android:layout_row="0"
-            android:onClick="updateDatabase"
-            android:text="@string/update_database_btn"
+            android:onClick="addAlert"
+            android:text="@string/add_alert_btn"
             android:textSize="14sp" /> 
-            
+      <Button
+            android:id="@+id/remove_alert_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_column="2"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
+            android:onClick="removeAlert"
+            android:text="@string/remove_alert_btn"
+            android:textSize="14sp" />      
      </GridLayout>  
-
+	<TextView
+          android:layout_width="50dp"
+           android:layout_height="0dp"
+           android:inputType="none"
+           android:layout_weight="1"
+           android:text="@string/alert_btn"
+           android:textStyle="bold" />
+	<EditText
+            android:id="@+id/inputText"
+            android:layout_width="600dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:enabled="true"
+            android:textSize="18sp"
+            android:inputType="text"
+            android:typeface="monospace" >
+			</EditText>
     <TableLayout
            android:id="@+id/sheeplist"
            android:layout_width="fill_parent"
@@ -39,12 +64,14 @@
 		</TableRow>
 
 		<TableRow>
+
          <ListView
              android:id="@android:id/android:list"          
              android:layout_height="wrap_content"
-	  		 android:layout_width="fill_parent">	  		
+	  		 android:layout_width="600dp"
+	  		 android:textSize="12sp">	  		
 		</ListView>       
         </TableRow>
         </TableLayout>
-
+	
 </LinearLayout>

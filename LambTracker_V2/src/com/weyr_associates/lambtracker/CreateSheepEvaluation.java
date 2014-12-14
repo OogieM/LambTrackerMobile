@@ -231,7 +231,7 @@ public class CreateSheepEvaluation extends Activity {
     	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
     		custom_evaluation_traits.add(cursor.getString(1));
     	}
-//        Log.i("createEval ", "below got custom traits");
+        Log.i("createEval ", "below got custom traits");
     	dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, custom_evaluation_traits);
     	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
@@ -262,7 +262,7 @@ public class CreateSheepEvaluation extends Activity {
     	crsr = dbh.exec( cmd );
         cursor   = ( Cursor ) crsr;
         dbh.moveToFirstRecord();
-        
+        Log.i("create eval", "after select from last eval table");   
     	trait01 = dbh.getInt(1);
     	cursor.moveToNext();	
     	trait02 = dbh.getInt(1);
@@ -308,6 +308,7 @@ public class CreateSheepEvaluation extends Activity {
     	cursor.moveToNext();
     	trait20 = dbh.getInt(1);
      	
+    	Log.i("after fill", "After fill of the past trait evaluation");
 //    	cursor.close();
       	
 //    	Log.i("results last ","eval trait01 "+String.valueOf(trait01));
@@ -330,6 +331,7 @@ public class CreateSheepEvaluation extends Activity {
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        trait01_label = dbh.getStr(0);
+	        Log.i("set spinner ","eval trait01 "+ trait01_label);
 	        i = scored_evaluation_traits.indexOf(trait01_label);
 	        trait01_spinner.setSelection(i);
     	}
@@ -340,6 +342,7 @@ public class CreateSheepEvaluation extends Activity {
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        trait02_label = dbh.getStr(0);
+	        Log.i("set spinner ","eval trait02 "+ trait02_label);
 	        i = scored_evaluation_traits.indexOf(trait02_label);
 	        trait02_spinner.setSelection(i);
     	}
@@ -350,6 +353,7 @@ public class CreateSheepEvaluation extends Activity {
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        trait03_label = dbh.getStr(0);
+	        Log.i("set spinner ","eval trait03 "+ trait03_label);
 	        i = scored_evaluation_traits.indexOf(trait03_label);
 	        trait03_spinner.setSelection(i);
     	}
@@ -360,6 +364,7 @@ public class CreateSheepEvaluation extends Activity {
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        trait04_label = dbh.getStr(0);
+	        Log.i("set spinner ","eval trait04 "+ trait04_label);
 	        i = scored_evaluation_traits.indexOf(trait04_label);
 	        trait04_spinner.setSelection(i);
     	}
@@ -371,15 +376,17 @@ public class CreateSheepEvaluation extends Activity {
 	        dbh.moveToFirstRecord();
 	        trait05_label = dbh.getStr(0);
 	        i = scored_evaluation_traits.indexOf(trait05_label);
+	        Log.i("set spinner ","eval trait05 "+ trait05_label);
 	        trait05_spinner.setSelection(i);
     	}
     	if (trait06!=0){
         	cmd = String.format("select evaluation_trait_table.trait_name from evaluation_trait_table " +
-	    			"where id_traitid='%s'", trait01);
+	    			"where id_traitid='%s'", trait06);
 	    	crsr = dbh.exec( cmd );
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        trait06_label = dbh.getStr(0);
+	        Log.i("set spinner ","eval trait06 "+ trait06_label);
 	        i = scored_evaluation_traits.indexOf(trait06_label);
 	        trait06_spinner.setSelection(i);
     	}
@@ -390,6 +397,7 @@ public class CreateSheepEvaluation extends Activity {
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        trait07_label = dbh.getStr(0);
+	        Log.i("set spinner ","eval trait07 "+ trait07_label);
 	        i = scored_evaluation_traits.indexOf(trait07_label);
 	        trait07_spinner.setSelection(i);
     	}
@@ -400,6 +408,7 @@ public class CreateSheepEvaluation extends Activity {
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        trait08_label = dbh.getStr(0);
+	        Log.i("set spinner ","eval trait08 "+ trait08_label);
 	        i = scored_evaluation_traits.indexOf(trait08_label);
 	        trait08_spinner.setSelection(i);
     	}
@@ -410,6 +419,7 @@ public class CreateSheepEvaluation extends Activity {
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        trait09_label = dbh.getStr(0);
+	        Log.i("set spinner ","eval trait09 "+ trait09_label);
 	        i = scored_evaluation_traits.indexOf(trait09_label);
 	        trait09_spinner.setSelection(i);
    	}

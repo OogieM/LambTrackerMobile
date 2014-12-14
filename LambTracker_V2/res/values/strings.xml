@@ -31,7 +31,12 @@
     <string name="delete_btn">Delete</string>
     <string name="close_btn">Close</string>
     <string name="cancel_btn">Cancel</string>
+    <string name="sheep_change_date_btn">Change Date</string>
+    <string name="sheep_set_date_btn">Set Date</string>
+    <string name="sheep_set_time_btn">Set Time</string>
     <string name="alert_btn">Alert</string>
+    <string name="add_alert_btn">Add Alert</string>
+    <string name="remove_alert_btn">Remove Alert</string>
     <string name="take_note_btn">Take Note</string>
     <string name="ok">OK</string>
     <string name="scan_eid_btn">Scan EID Tag</string>
@@ -69,6 +74,8 @@
     <string name="title_activity_print_labels">Print Labels</string>
     <string name="title_activity_set_lambtracker_defaults">Set LambTracker Defaults</string>
     <string name="title_activity_set_defaults">SetDefaults</string>
+    <string name="title_activity_ram_breeding_record">Create Ram Breeding Record</string>
+     <string name="title_activity_ewe_breeding_record">Create Ewe Breeding Record</string>
     <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
     <string name="help_manage_id">Select a sheep based on some form of ID. Currently federal, farm, electronic, paint and name 
@@ -126,7 +133,7 @@
     <string name="sheep_rear_type_lbl">Rear Type</string>
     <string name="sheep_death_date_lbl">Death Date</string>
     <string name="sheep_remove_date_lbl">Remove Date</string>
-    <string name="sheep_change_date_lbl">Change Date</string>
+    <string name="sheep_remove_reason_lbl">Remove Reason</string>
     <string name="sheep_lambease_lbl">Lambease Score</string>
     <string name="sheep_sire_lbl">Sire</string>
     <string name="sheep_dam_lbl">Dam</string>
@@ -139,6 +146,7 @@
     <string name="sheep_givewormer">Give Wormer</string>
     <string name="sheep_givevaccine">Give Vaccine</string>
     <string name="sheep_givedrug">Give Drug</string>
+    <string name="sheep_removedrug">Remove Drug</string>
     <string name="drug_reason_lbl">Reason</string>
     <string name="sheep_takeweight">Take Weight</string>
     <string name="sheep_shear">Shear Sheep</string>
@@ -188,5 +196,7 @@
     <string name="title_activity_remove_sheep">Remove Sheep</string>
     <string name="title_activity_desktop_functions">Desktop Functions</string>
     <string name="title_activity_set_alert">Set or Remove Alerts</string>
+    <string name="title_activity_create_ram_breeding_record">CreateRamBreedingRecord</string>
+    <string name="title_activity_create_ewe_breeding_record">Create Ewe Breeding Record</string>
 
 </resources>

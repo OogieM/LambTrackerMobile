@@ -69,10 +69,10 @@ public class SheepManagement extends ListActivity {
 	public int wormer_id, vaccine_id, shot_loc, drug_loc;
 	public String[] this_sheeps_tags ;
 	public int drug_gone; // 0 = false 1 = true
-	public int	drug_type, which_wormer, which_vaccine, which_drug, which_blood;
+	public int	drug_type, which_wormer, which_vaccine, which_drug, which_blood, id_sheepdrugid;
 	public RadioGroup radioGroup;
-	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxweight, boxblood, boxdrug, boxweaned, boxshear;
-	public String note_text;
+	public CheckBox 	boxtrimtoes, boxwormer, boxvaccine, boxweight, boxblood, boxdrug, boxweaned, boxshear, boxremovedrug;
+	public String note_text, empty_string_field;
 	public int predefined_note01, predefined_note02, predefined_note03, predefined_note04, predefined_note05;
 	public int             nRecs, nRecs1, nRecs2, nRecs3, nRecs4, nRecs5;
 	private int			    recNo;
@@ -269,6 +269,7 @@ public class SheepManagement extends ListActivity {
 //		Log.i("SheepMgmt", "back from isRunning");  	
 		////////////////////////////////////    	
 		thissheep_id = 0;
+		empty_string_field = "";
     	// Fill the Tag Type Spinner
     	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
 	   	tag_types = new ArrayList<String>();      	
@@ -320,7 +321,7 @@ public class SheepManagement extends ListActivity {
 				//	Set the wormer to be a specific one 
 				//	Should be a preference or default but fixed to be Ivermectin for now
 				//  However, we need to make sure there is a wormer to do so!
-				if (cursor.getCount() > 0){ wormer_spinner.setSelection(1);	}
+				if (cursor.getCount() > 0){ wormer_spinner.setSelection(0);	}
 
 				// Fill the Blood Sample Spinner
 		    	blood_spinner = (Spinner) findViewById(R.id.blood_spinner);
@@ -358,7 +359,6 @@ public class SheepManagement extends ListActivity {
 			        	blood_tests.add (cursor.getString(1));
 			    	}
 					   	
-//			   	Log.i("SheepMgmt", " after filling wormer spinner"); 
 			   	// Creating adapter for spinner
 			   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, blood_tests);
 					dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -366,7 +366,7 @@ public class SheepManagement extends ListActivity {
 					//	Set the blood test to be a specific one 
 					//	Should be a preference or default but set to Scrapie DNA Sample for now
 					//  However, we need to make sure there is a wormer to do so!
-					if (cursor.getCount() > 0){ blood_spinner.setSelection(1);	}
+					if (cursor.getCount() > 0){ blood_spinner.setSelection(0);	}
 					
 			// Fill the Vaccine Spinner
 	    	vaccine_spinner = (Spinner) findViewById(R.id.vaccine_spinner);
@@ -394,7 +394,7 @@ public class SheepManagement extends ListActivity {
 				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				vaccine_spinner.setAdapter (dataAdapter);
 				//	Set the vaccine to use to be the first one  Should come from the defaults
-				vaccine_spinner.setSelection(1);	
+				vaccine_spinner.setSelection(0);	
 			// 	Create the radio buttons for the shot locations here	
 				radiobtnlist = new ArrayList();
 //				radiobtnlist.add ("Select Vaccine Location");
@@ -415,7 +415,7 @@ public class SheepManagement extends ListActivity {
 				radioGroup = ((RadioGroup) findViewById(R.id.radioShotLoc));
 				addRadioButtons(3, radioBtnText);
 				//	Default to right side SQ location
-				((RadioButton)radioGroup.getChildAt(1)).setChecked(true);
+				((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
 				// radiobtnlist.clear ();
 			
 				// Fill the Drug Spinner
@@ -728,8 +728,8 @@ public class SheepManagement extends ListActivity {
 		    	which_vaccine = vaccine_spinner.getSelectedItemPosition();
 				//	go update the database with a drug record for this vaccine and this sheep
 //		    	Log.i("vaccine spinner", " position is" + String.valueOf(which_vaccine));
-				//	go update the database with a drug record for this wormer and this sheep
-				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
+				//	go update the database with a drug record for this vaccine and this sheep
+				// The drug_id is at the same position in the vaccine_id_drugid list as the spinner position			
 				i = vaccine_id_drugid.get(which_vaccine);
 //				Log.i("vaccine id", " value is " + String.valueOf(i));
 				// Go get drug location for the shot
@@ -757,8 +757,9 @@ public class SheepManagement extends ListActivity {
 		    		return;
 		 		}else{
 					cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
-			  				" drug_time_on, drug_location) values " +
-			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, shot_loc);
+			  				" drug_time_on, drug_date_off, drug_time_off, drug_dosage, drug_location) values " +
+			  				" (%s, '%s', '%s', '%s', '%s', '%s', '%s', %s) ", thissheep_id, i, mytoday, mytime, 
+			  				empty_string_field, empty_string_field, empty_string_field, shot_loc);
 			  		Log.i("add drug to ", "db cmd is " + cmd);
 					dbh.exec(cmd);
 					Log.i("add tag ", "after insert into sheep_drug_table");
@@ -774,8 +775,10 @@ public class SheepManagement extends ListActivity {
 					// 2014-07-27 Removed the time stamp as it's almost impossible to clear the alerts with it in there
 					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 					Log.i("drug withdrawal ", " new alert is " + temp_string);
-					if (alert_text != null){
-						temp_string = alert_text + "\n" + temp_string;
+					if (alert_text != null){						
+//						temp_string = alert_text + "\n" + temp_string;
+						// modified to put the new alert on top and add a newline character. 
+						temp_string = temp_string + "\n" + alert_text;
 					}
 					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
 					Log.i("update alerts ", "before cmd " + cmd);
@@ -785,7 +788,25 @@ public class SheepManagement extends ListActivity {
 					// Consider calculating the actual date/time withdrawal and putting that in instead. 
 		 		}
 			}	    	
-	    	
+//			Get the value of the checkbox for shearing 
+					Log.i("before checkbox", " getting ready to get shorn or not ");
+					boxshear = (CheckBox) findViewById(R.id.checkBoxShorn);
+					// TODO 
+					if (boxshear.isChecked()){
+						//	go update the database with a shearing date and time add that as a note 
+						note_text = "";
+						predefined_note01 = 23; // hard coded the code for shorn
+						// TODO
+						//	This will have to be changed for the general case where shearing is not item 23 in the list
+						cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid01) " +
+		    					"values ( %s, '%s', '%s', '%s', %s )", thissheep_id, note_text, mytoday, mytime, predefined_note01);
+		    			Log.i("update notes ", "before cmd " + cmd);
+		    			dbh.exec( cmd );	
+		    			Log.i("update notes ", "after cmd exec");
+						Log.i("shorn ", String.valueOf(boxshear));					
+					}
+					
+					
 			//	Get the value of the checkbox for trim toes
 			Log.i("before checkbox", " getting ready to get trim toes or not ");
 			boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
@@ -903,7 +924,8 @@ public class SheepManagement extends ListActivity {
 				temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 				Log.i("drug withdrawal ", " new alert is " + temp_string);
 				if (alert_text != null){
-					temp_string = alert_text + "\n" + temp_string;
+					temp_string = temp_string + "\n" + alert_text;
+//					temp_string = alert_text + "\n" + temp_string;
 				}
 
 				cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
@@ -971,7 +993,8 @@ public class SheepManagement extends ListActivity {
 					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 					Log.i("drug withdrawal ", " new alert is " + temp_string);
 					if (alert_text != null){
-						temp_string = alert_text + "\n" + temp_string;
+						temp_string = temp_string + "\n" + alert_text;
+//						temp_string = alert_text + "\n" + temp_string;
 					}
 					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
 					Log.i("update alerts ", "before cmd " + cmd);
@@ -1007,8 +1030,35 @@ public class SheepManagement extends ListActivity {
 //		            android:typeface="monospace" >
 //					</EditText>
 		 		}
-				// TODO
-				// Consider calculating the actual date/time withdrawal and putting that in instead. 
+			}				
+			
+			//	Remove a drug if checked
+			//	Only valid for things like CIDRs and Sponges
+			boxremovedrug = (CheckBox) findViewById(R.id.checkBoxRemoveDrug);
+			if (boxremovedrug.isChecked()){
+				//	Go get which drug was selected in the spinner
+				drug_spinner = (Spinner) findViewById(R.id.drug_spinner);
+				which_drug = drug_spinner.getSelectedItemPosition();	
+				// The drug_id is at the same position in the drug_id_drugid list as the spinner position			
+				i = drug_id_drugid.get(which_drug);
+				Log.i("drug id", " value is " + String.valueOf(i));
+				
+				//	Go find the instance of this drug with no remove date for this sheep
+				cmd = String.format("select id_sheepdrugid from sheep_drug_table where " +
+				" sheep_id = %s and drug_id = %s and drug_date_off = '' ",thissheep_id, i);
+				Log.i("remove drug to ", "db cmd is " + cmd);
+				crsr = dbh.exec(cmd);
+				cursor   = ( Cursor ) crsr; 		    	
+				cursor.moveToFirst();
+				id_sheepdrugid = dbh.getInt(0);
+				Log.i("drug record is ", String.valueOf(id_sheepdrugid));
+				Log.i("today is ", mytoday);
+				Log.i("remove drug ", "before update the sheep_drug_table");
+				cmd = String.format("update sheep_drug_table set drug_date_off = '%s', " +
+					"drug_time_off = '%s' where id_sheepdrugid = %s", mytoday, mytime, id_sheepdrugid);
+			  	Log.i("remove drug to ", "db cmd is " + cmd);
+				dbh.exec(cmd);
+				Log.i("add tag ", "after update sheep_drug_table with remove date");					
 			}	
 			
 			//	Take a weight if checked
@@ -1193,7 +1243,8 @@ public class SheepManagement extends ListActivity {
 //		Log.i("clear btn", "after blood checkbox");	
 		boxweaned = (CheckBox) findViewById(R.id.checkBoxWeaned);
 		boxweaned.setChecked(false);
-		
+		boxremovedrug = (CheckBox) findViewById(R.id.checkBoxRemoveDrug);
+		boxremovedrug.setChecked(false);
 		boxdrug = (CheckBox) findViewById(R.id.checkBoxGiveDrug);
 		boxdrug.setChecked(false);
 //		Log.i("clear btn", "after give drug checkbox");			

@@ -172,7 +172,7 @@
        <ListView
            android:id="@+id/android:list"
            android:layout_width="fill_parent"
-           android:layout_height="80dp" >
+           android:layout_height="65dp" >
 
 		</ListView>
   <TableLayout 
@@ -311,7 +311,50 @@
         		android:layout_weight="1"
         		android:typeface="monospace" />  
         		</TableRow>
-        	
+        		
+        	<TableRow android:gravity="center" >
+
+        		<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="left"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_remove_date_lbl" />  
+        		
+        		<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="right"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_death_date_lbl" />
+        		
+        	</TableRow>
+        	<TableRow android:gravity="center" >
+        		
+        		<TextView
+        		android:id="@+id/remove_date"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="left"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" />   
+ 
+        		<TextView
+        		android:id="@+id/death_date"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="right"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" />  
+        		</TableRow>
        </TableLayout> 
        
        <RelativeLayout

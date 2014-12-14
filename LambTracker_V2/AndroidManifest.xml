@@ -197,6 +197,16 @@
             android:label="@string/title_activity_set_alert"
             android:screenOrientation="landscape" >
         </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.CreateRamBreedingRecord"
+            android:label="@string/title_activity_create_ram_breeding_record" 
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.CreateEweBreedingRecord"
+            android:label="@string/title_activity_create_ewe_breeding_record" 
+            android:screenOrientation="landscape" >
+        </activity>
     </application>
 
 </manifest>

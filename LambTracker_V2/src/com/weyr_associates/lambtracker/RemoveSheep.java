@@ -65,7 +65,7 @@ public class RemoveSheep extends ListActivity  {
 //    	Get the date and time to add to the sheep record these are strings not numbers
     	mytoday = Utilities.TodayIs(); 
     	
-		sheep_name_list = (ListView) findViewById(R.id.sheep_names);
+//		sheep_name_list = (ListView) findViewById(R.id.sheep_names);
 		test_name_list = (ListView) findViewById(android.R.id.list);
 		
 //		Now go get all the current sheep names and format them
@@ -122,8 +122,8 @@ public class RemoveSheep extends ListActivity  {
 		else {
 			// No sheep data - publish an empty list to clear sheep names
 			Log.i("LookForSheep", "no current sheep");
-			myadapter = new SimpleCursorAdapter(this, R.layout.list_entry_names, null, null, null, 0);
-			setListAdapter(myadapter);
+//			myadapter = new SimpleCursorAdapter(this, R.layout.list_entry_names, null, null, null, 0);
+//			setListAdapter(myadapter);
 		} 	
 		// Fill the Remove Reason Spinner
 		remove_reason_spinner = (Spinner) findViewById(R.id.remove_reason_spinner);
@@ -148,7 +148,6 @@ public class RemoveSheep extends ListActivity  {
 		
 		//	Set the date picker stuff here	
 		Output = (TextView) findViewById(R.id.Output);
-//        changeDate = (Button) findViewById(R.id.changeDate);
         
      // Get current date by calender       
         final Calendar c = Calendar.getInstance();
@@ -258,7 +257,9 @@ public class RemoveSheep extends ListActivity  {
 	    			Log.i ("for loop", "the sheep " + " " + test_names.get(temp_location)+ " is checked");
 	    			Log.i ("for loop", "the sheep id is " + String.valueOf(test_sheep_id.get(temp_location)));
 	    	    	// This needs to be in a loop for all sheep_id s that we found. Setting each one to be thissheep_id
-	    	    	cmd = String.format("update sheep_table set alert01 = '', death_date = '%s', remove_date = '%s' where sheep_id =%d ", deathdate, removedate, test_sheep_id.get(temp_location) ) ;
+	    	    	cmd = String.format("update sheep_table set alert01 = '', death_date = '%s', remove_date = '%s', " +
+	    	    			"remove_reason = '%s' where sheep_id =%d ", deathdate, removedate, which_remove_reason, 
+	    	    			test_sheep_id.get(temp_location) ) ;
 	    			Log.i("remove sheep ", "before cmd " + cmd);
 	    			dbh.exec( cmd );
 	    			Log.i("remove sheep ", "after cmd " + cmd);	    			
@@ -276,5 +277,3 @@ public class RemoveSheep extends ListActivity  {
 	    	finish();		
 		}
 }
-
-
