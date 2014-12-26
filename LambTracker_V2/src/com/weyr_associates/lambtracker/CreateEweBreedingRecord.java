@@ -59,7 +59,7 @@ public class CreateEweBreedingRecord extends ListActivity {
 	public Object 	crsr;
 	String     	cmd;
 	private int year;
-	public String currentyear;
+	public String currentyear,nextyear;
 	public List<String> service_type;
 	public List<Integer> which_service;
 	ArrayAdapter<String> dataAdapter;
@@ -97,6 +97,31 @@ public class CreateEweBreedingRecord extends ListActivity {
        cursor   = ( Cursor ) crsr;
        dbh.moveToFirstRecord();
        service_type.add("Select a Breeding Record");
+        // looping through all rows and adding to list
+	   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+	   		service_type.add(cursor.getString(1)+ " " + cursor.getString(2) + " " + cursor.getString(5) + " " + cursor.getString(3)+ " " + cursor.getString(4));
+			Log.i("EweBreeding", " the service type is " + cursor.getString(1) + " " + cursor.getString(2) + " " + cursor.getString(3)); 
+			which_service.add (cursor.getInt(0));
+			Log.i("EweBreeding", " The breeding record id is " + String.valueOf(cursor.getInt(0)) );
+	   	}	
+	   	
+	   	year  = year+1;
+        nextyear = String.valueOf(year) + "%";
+        Log.i ("next year ",nextyear );
+	   	// Select All active breeding records to build the spinner
+       cmd = String.format( "select breeding_record_table.id_breedingid as _id, flock_prefix_table.flock_name," +
+       		"sheep_table.sheep_name, breeding_record_table.date_ram_in, breeding_record_table.time_ram_in, " +
+       		"service_type_table.service_type " +
+       		"from breeding_record_table " +
+       		"inner join flock_prefix_table on flock_prefix_table.flock_prefixid = sheep_table.flock_prefix " +
+    		"inner join sheep_table on breeding_record_table.ram_id = sheep_table.sheep_id " +
+       		"inner join service_type_table on service_type_table.id_servicetypeid  = breeding_record_table.service_type " +
+       		"where breeding_record_table.date_ram_in like '%s' " +
+       		"order by sheep_table.sheep_name asc ", nextyear);
+       Log.i("set spinner ", "before cmd " + cmd); 
+       crsr = dbh.exec( cmd );  
+       cursor   = ( Cursor ) crsr;
+       dbh.moveToFirstRecord();
         // looping through all rows and adding to list
 	   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 	   		service_type.add(cursor.getString(1)+ " " + cursor.getString(2) + " " + cursor.getString(5) + " " + cursor.getString(3)+ " " + cursor.getString(4));
