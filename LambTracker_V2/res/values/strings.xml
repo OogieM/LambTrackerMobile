@@ -52,6 +52,9 @@
     <string name="look_up_sheep_btn">Look Up Sheep</string>
     <string name="add_lamb_btn">Add a Lamb</string>
     <string name="print_label_btn">Print Label</string>
+    <string name="dispose_btn">Dispose</string>
+    <string name="new_lot_btn">New Lot</string>
+    <string name="drug_details_btn">Show Details</string>
     <string name="load_sheeplist">Load Sheep Database</string>
     <string name="look_up_sheep">Look up a Sheep by EID</string>
     <string name="copy_real_db_action">copyRealDB</string>
@@ -75,7 +78,8 @@
     <string name="title_activity_set_lambtracker_defaults">Set LambTracker Defaults</string>
     <string name="title_activity_set_defaults">SetDefaults</string>
     <string name="title_activity_ram_breeding_record">Create Ram Breeding Record</string>
-     <string name="title_activity_ewe_breeding_record">Create Ewe Breeding Record</string>
+    <string name="title_activity_ewe_breeding_record">Create Ewe Breeding Record</string>
+    <string name="title_activity_drug_management">Manage Drug Inventory</string>
     <string name="alert_warning">Alert Screen</string>
     <string name="help_warning">Help Screen</string>
     <string name="help_manage_id">Select a sheep based on some form of ID. Currently federal, farm, electronic, paint and name 
@@ -122,6 +126,7 @@
         <item>Desktop Functions</item>
         <item>Set LambTracker Defaults</item>
         <item>Test Interface Designs</item>
+        <item>Manage Drug Inventory</item>
     </string-array>
 
     <string name="sheep_name_lbl">Sheep Name</string>
@@ -198,5 +203,11 @@
     <string name="title_activity_set_alert">Set or Remove Alerts</string>
     <string name="title_activity_create_ram_breeding_record">CreateRamBreedingRecord</string>
     <string name="title_activity_create_ewe_breeding_record">Create Ewe Breeding Record</string>
-
-</resources>
+	<string name="managedrugs_lbl">Drugs: Current Inventory</string>
+	<string name="managedrugs_nostock_lbl">Drugs: Current Inventory - NO STOCK</string>
+	<string name="newlot_lbl">New Lot Number</string>
+	<string name="purchase_date_lbl">Purchase Date</string>
+	<string name="expiry_date_lbl">Expiry Date</string>
+	<string name="newlot_qty_lbl">Quantity</string>
+	<string name="newlot_price_lbl">Price</string>
+	</resources>

@@ -207,6 +207,11 @@
             android:label="@string/title_activity_create_ewe_breeding_record" 
             android:screenOrientation="landscape" >
         </activity>
+        <activity
+            android:name="com.weyr_associates.lambtracker.DrugManagement"
+            android:label="@string/title_activity_drug_management" 
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
