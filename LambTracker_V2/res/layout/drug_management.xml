@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" > 
+          
+       <TableLayout
+           android:id="@+id/grid4"
+           android:layout_width="match_parent"
+           android:layout_height="fill_parent"
+           android:layout_above="@+id/bottomButtonBar"
+           android:gravity="top" >
+
+           <TableRow>
+               
+               <TextView
+           		android:id="@+id/managedrugs_lbl"
+           		android:layout_width="0dp"
+         		android:layout_height="wrap_content"
+         		android:inputType="none"
+          		android:layout_weight="1"
+           		android:text="@string/managedrugs_lbl"
+           		android:textStyle="bold" />
+               
+               </TableRow>
+           
+        <TableRow 
+		    android:gravity="center">
+        <ListView
+          android:id="@+id/android:list"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" 
+          android:layout_weight="1"
+          android:layout_gravity="left"
+          android:choiceMode="singleChoice">
+
+		</ListView>
+        </TableRow>
+        </TableLayout>
+<RelativeLayout
+    android:id="@+id/bottomButtonBar"
+    android:orientation="horizontal" 
+  	android:layout_width="fill_parent"
+  	android:layout_height="50dp"
+  	android:layout_gravity="bottom"
+  	android:layout_alignParentBottom="true">
+    	
+       	<Button
+            android:id="@+id/back_to_main_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_alignParentLeft="true"
+           	android:layout_alignParentBottom="true"
+            android:onClick="backBtn"
+            android:text="@string/back_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+            android:id="@+id/dispose_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/back_to_main_btn"
+            android:layout_alignParentBottom="true"
+            android:onClick="disposeBtn"
+            android:text="@string/dispose_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+            android:id="@+id/new_lot_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_toRightOf="@+id/dispose_btn"
+           	android:layout_alignParentBottom="true"
+            android:onClick="newLotBtn"
+            android:text="@string/new_lot_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+           android:id="@+id/drug_detail_btn"
+           android:layout_width="100dp"
+           android:layout_height="50dp"
+           android:layout_toRightOf="@+id/new_lot_btn"
+           android:layout_alignParentBottom="true"
+           android:onClick="showDetails"
+           android:text="@string/drug_details_btn"
+           android:textSize="14sp" />
+</RelativeLayout>
+</RelativeLayout>

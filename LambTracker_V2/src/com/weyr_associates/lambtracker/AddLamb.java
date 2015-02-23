@@ -537,7 +537,7 @@ public class AddLamb extends Activity {
     	lamb_alert_text = "";
     	death_date = "";
 		remove_date = "";
-		remove_reason = (Integer) null;
+		remove_reason = -1;
 		//	Set the lamb name to be empty initially
 		lamb_name = "";
 		//	Get the date and time to add to the lamb record these are strings not numbers
@@ -893,6 +893,10 @@ public class AddLamb extends Activity {
 		//	Set the flock_prefix to be Desert Weyr 
 		flock_prefix = 1;
 		
+		// Safer than relying on a null->int->string cast to work properly
+		String remove_reasonString = "null";
+		if (remove_reason != -1) { remove_reasonString = String.format("%d", remove_reason);}
+		
 		//	Ready to build the insert statement for this lamb.
 		cmd = String.format("insert into sheep_table (sheep_name, flock_prefix, sex, " +
 			"birth_date, birth_time, birth_type, birth_weight, rear_type, death_date, remove_date, " +
@@ -901,7 +905,7 @@ public class AddLamb extends Activity {
 			"id_ownerid, birth_weight_units) values " +
 			"('%s', %s, %s,'%s','%s',%s,%s,%s,'%s','%s',%s,%s,%s,%s,'%s','%s',%s,%s,%s,%s,%s,%s,%s,%s) ",
 			lamb_name, flock_prefix, sex, mytoday, mytime, birth_type, birth_weight, 
-			rear_type, death_date, remove_date, remove_reason, lambease, sire_id, dam_id, 
+			rear_type, death_date, remove_date, remove_reasonString, lambease, sire_id, dam_id, 
 			lamb_alert_text, mytoday, lamb_birth_record,
 			lamb_codon171, lamb_codon154, lamb_codon136, id_sheepbreedid, id_locationid,
 			id_ownerid,birth_weight_units);
