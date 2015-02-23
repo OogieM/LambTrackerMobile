@@ -394,7 +394,7 @@ public class SheepManagement extends ListActivity {
 				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				vaccine_spinner.setAdapter (dataAdapter);
 				//	Set the vaccine to use to be the first one  Should come from the defaults
-				vaccine_spinner.setSelection(0);	
+				if (cursor.getCount() > 0){ vaccine_spinner.setSelection(0);	}
 			// 	Create the radio buttons for the shot locations here	
 				radiobtnlist = new ArrayList();
 //				radiobtnlist.add ("Select Vaccine Location");
