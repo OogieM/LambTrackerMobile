@@ -592,6 +592,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
 			    out = new FileOutputStream(dst);
 			} catch (FileNotFoundException e) {
 				Log.i("DBH", "Output database file not found " + dst);
+				in.close();
 				return;
 			}
 
