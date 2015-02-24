@@ -41,7 +41,9 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
+
 import com.google.zxing.client.android.Intents;
 
 public class SheepManagement extends ListActivity {
@@ -769,21 +771,29 @@ public class SheepManagement extends ListActivity {
 							"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
 					Log.i("drug withdrawal ", "db cmd is " + cmd);
 					crsr = dbh.exec(cmd);
-					cursor   = ( Cursor ) crsr; 		    	
-					cursor.moveToFirst();
-					//	Initially just set an alert with the number and units from today
-					// 2014-07-27 Removed the time stamp as it's almost impossible to clear the alerts with it in there
-					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
-					Log.i("drug withdrawal ", " new alert is " + temp_string);
-					if (alert_text != null){						
-//						temp_string = alert_text + "\n" + temp_string;
-						// modified to put the new alert on top and add a newline character. 
-						temp_string = temp_string + "\n" + alert_text;
+					cursor   = ( Cursor ) crsr;
+					// If withdrawal data query fails, we can't do this
+					if (cursor.getCount() > 0)
+					{
+						cursor.moveToFirst();
+						//	Initially just set an alert with the number and units from today
+						// 2014-07-27 Removed the time stamp as it's almost impossible to clear the alerts with it in there
+						temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
+						Log.i("drug withdrawal ", " new alert is " + temp_string);
+						if (alert_text != null){						
+							//	temp_string = alert_text + "\n" + temp_string;
+							// modified to put the new alert on top and add a newline character. 
+							temp_string = temp_string + "\n" + alert_text;
+						}
+						cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
+						Log.i("update alerts ", "before cmd " + cmd);
+						dbh.exec( cmd );
+						Log.i("update alerts ", "after cmd " + cmd);
 					}
-					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
-					Log.i("update alerts ", "before cmd " + cmd);
-					dbh.exec( cmd );
-					Log.i("update alerts ", "after cmd " + cmd);
+					else
+					{
+						Toast.makeText(getBaseContext(), "Vaccine withdrawal data not set", Toast.LENGTH_SHORT).show();
+					}
 					// TODO
 					// Consider calculating the actual date/time withdrawal and putting that in instead. 
 		 		}
@@ -934,6 +944,7 @@ public class SheepManagement extends ListActivity {
 				Log.i("update alerts ", "after cmd " + cmd);
 				}
 				catch (Exception e){
+					Toast.makeText(getBaseContext(), "Wormer withdrawal data not set", Toast.LENGTH_SHORT).show();
 					Log.w("Withdrawal: Wormer", "No withdrawal data in db");
 				}
 				// TODO
@@ -984,24 +995,25 @@ public class SheepManagement extends ListActivity {
 							"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
 					Log.i("drug withdrawal ", "db cmd is " + cmd);
 					crsr = dbh.exec(cmd);
-					try {
-					cursor   = ( Cursor ) crsr; 		    	
-					cursor.moveToFirst();
-					//	Initially just set an alert with the number and units from today
-					// 2014-07-27 Removed the time stamp as it's almost impossible to clear the alerts with it in there
-					Log.i("today is ", mytoday);
-					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
-					Log.i("drug withdrawal ", " new alert is " + temp_string);
-					if (alert_text != null){
-						temp_string = temp_string + "\n" + alert_text;
-//						temp_string = alert_text + "\n" + temp_string;
+					if (cursor.getCount() > 0) {
+						cursor   = ( Cursor ) crsr; 		    	
+						cursor.moveToFirst();
+						//	Initially just set an alert with the number and units from today
+						// 2014-07-27 Removed the time stamp as it's almost impossible to clear the alerts with it in there
+						Log.i("today is ", mytoday);
+						temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
+						Log.i("drug withdrawal ", " new alert is " + temp_string);
+						if (alert_text != null){
+							temp_string = temp_string + "\n" + alert_text;
+	//						temp_string = alert_text + "\n" + temp_string;
+						}
+						cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
+						Log.i("update alerts ", "before cmd " + cmd);
+						dbh.exec( cmd );
+						Log.i("update alerts ", "after cmd " + cmd);
 					}
-					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
-					Log.i("update alerts ", "before cmd " + cmd);
-					dbh.exec( cmd );
-					Log.i("update alerts ", "after cmd " + cmd);
-					}
-					catch (Exception e){
+					else
+					{
 						Log.w("Withdrawal: Drug", "No withdrawal data in db");
 					}
 					// TODO
