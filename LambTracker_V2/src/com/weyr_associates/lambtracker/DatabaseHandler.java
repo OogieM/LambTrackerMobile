@@ -259,12 +259,19 @@ public class DatabaseHandler extends SQLiteOpenHelper
      * @return
      */
     public String getStr( int colIndex )
-    	{
-    	if( currentCursor != null )
-    		return currentCursor.getString(colIndex);
-    	
+    {
+    	if( currentCursor != null ) {
+    		String workingString = currentCursor.getString(colIndex);
+    		
+    		// Don't return null string pointers, return empty strings instead.
+    		if (workingString == null)
+    			workingString = "";
+    		
+    		return workingString;
+    	}
     	throw new NullPointerException( "getStr: No cursor from last exec()" );
     	}
+    	
     
     /**
      *
@@ -273,9 +280,15 @@ public class DatabaseHandler extends SQLiteOpenHelper
      */
     public String getStr( String colName  )
     	{
-    	if( currentCursor != null )
-    		return currentCursor.getString( colIndexFromName(colName) );
-    	
+    	if( currentCursor != null ) {
+    		String workingString = currentCursor.getString( colIndexFromName(colName) );
+    		
+    		// Don't return null string pointers, return empty strings instead.
+    		if (workingString == null)
+    			workingString = "";
+    		
+    		return workingString;
+    	}
     	throw new NullPointerException( "getStr: No cursor from last exec()" );
     	}
     
@@ -592,6 +605,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
 			    out = new FileOutputStream(dst);
 			} catch (FileNotFoundException e) {
 				Log.i("DBH", "Output database file not found " + dst);
+				in.close();
 				return;
 			}
 
