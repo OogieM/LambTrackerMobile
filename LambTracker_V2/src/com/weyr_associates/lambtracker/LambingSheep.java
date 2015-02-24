@@ -335,10 +335,8 @@ public class LambingSheep extends ListActivity
 			        	TV.setText( "This is not a ewe." );
 			        	return;
 					}
-//					if (tempString != "") {		
-////					if (tempString == null || tempString.trim().equals("")) {	
-////					if (tempString.trim().equals("")) {		
-					if (tempString.length() == 0) {		
+
+					if (!tempString.trim().equals("")) {				
 						// This is a removed sheep so set the name to removed, clear out and return
 						clearBtn( v );
 			    		TV = (TextView) findViewById( R.id.sheepnameText );
