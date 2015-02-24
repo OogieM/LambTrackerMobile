@@ -28,7 +28,7 @@
             android:layout_row="1"
             android:enabled="true"
             android:textSize="18sp"
-            android:inputType="number"
+            android:inputType="text"
             android:typeface="monospace" >
 			</EditText>
             

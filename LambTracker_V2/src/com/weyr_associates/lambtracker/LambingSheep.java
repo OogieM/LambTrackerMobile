@@ -326,7 +326,8 @@ public class LambingSheep extends ListActivity
 					i =  (dbh.getInt(0));
 					tempString = (dbh.getStr(1));
 					Log.i("LookForSheep", "This sheep is sex " + String.valueOf(i));
-					Log.i("LookForSheep", "This sheep was removed " + tempString);
+					Log.i("LookForSheep", "This sheep was removed on " + tempString);
+					Log.i("LookForSheep", "Remove string length is " + String.valueOf(tempString.length()));
 					if (i != 2) {
 						// This is not a ewe so set the name to not a ewe, clear out and return
 						clearBtn( v );
@@ -334,13 +335,17 @@ public class LambingSheep extends ListActivity
 			        	TV.setText( "This is not a ewe." );
 			        	return;
 					}
-					if (tempString != null) {
+//					if (tempString != "") {		
+////					if (tempString == null || tempString.trim().equals("")) {	
+////					if (tempString.trim().equals("")) {		
+					if (tempString.length() == 0) {		
 						// This is a removed sheep so set the name to removed, clear out and return
 						clearBtn( v );
 			    		TV = (TextView) findViewById( R.id.sheepnameText );
 			        	TV.setText( "This sheep was Removed on " + tempString);
 			        	return;
 					}
+//					
 		        	Log.i("LookForSheep", " Before finding all tags");		        	
 		    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 		    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
