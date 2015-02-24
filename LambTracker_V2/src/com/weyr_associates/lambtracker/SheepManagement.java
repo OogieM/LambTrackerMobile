@@ -927,23 +927,24 @@ public class SheepManagement extends ListActivity {
 						"inner join units_table on drug_table.meat_withdrawal_units = units_table.id_unitsid where id_drugid = %s", i);
 				Log.i("drug withdrawal ", "db cmd is " + cmd);
 				crsr = dbh.exec(cmd);
-				try {
-				cursor   = ( Cursor ) crsr; 		    	
-				cursor.moveToFirst();
-				//	Initially just set an alert with the number and units from today
-				temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
-				Log.i("drug withdrawal ", " new alert is " + temp_string);
-				if (alert_text != null){
-					temp_string = temp_string + "\n" + alert_text;
-//					temp_string = alert_text + "\n" + temp_string;
+				cursor   = ( Cursor ) crsr; 
+				if (cursor.getCount() > 0)
+				{
+					cursor.moveToFirst();
+					//	Initially just set an alert with the number and units from today
+					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
+					Log.i("drug withdrawal ", " new alert is " + temp_string);
+					if (alert_text != null){
+						temp_string = temp_string + "\n" + alert_text;
+	//					temp_string = alert_text + "\n" + temp_string;
+					}
+	
+					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
+					Log.i("update alerts ", "before cmd " + cmd);
+					dbh.exec( cmd );
+					Log.i("update alerts ", "after cmd " + cmd);
 				}
-
-				cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
-				Log.i("update alerts ", "before cmd " + cmd);
-				dbh.exec( cmd );
-				Log.i("update alerts ", "after cmd " + cmd);
-				}
-				catch (Exception e){
+				else{
 					Toast.makeText(getBaseContext(), "Wormer withdrawal data not set", Toast.LENGTH_SHORT).show();
 					Log.w("Withdrawal: Wormer", "No withdrawal data in db");
 				}
@@ -1060,16 +1061,21 @@ public class SheepManagement extends ListActivity {
 				" sheep_id = %s and drug_id = %s and drug_date_off = '' ",thissheep_id, i);
 				Log.i("remove drug to ", "db cmd is " + cmd);
 				crsr = dbh.exec(cmd);
-				cursor   = ( Cursor ) crsr; 		    	
-				cursor.moveToFirst();
-				id_sheepdrugid = dbh.getInt(0);
-				Log.i("drug record is ", String.valueOf(id_sheepdrugid));
-				Log.i("today is ", mytoday);
-				Log.i("remove drug ", "before update the sheep_drug_table");
-				cmd = String.format("update sheep_drug_table set drug_date_off = '%s', " +
-					"drug_time_off = '%s' where id_sheepdrugid = %s", mytoday, mytime, id_sheepdrugid);
-			  	Log.i("remove drug to ", "db cmd is " + cmd);
-				dbh.exec(cmd);
+				cursor   = ( Cursor ) crsr; 	
+				if (cursor.getCount() > 0) {
+					cursor.moveToFirst();
+					id_sheepdrugid = dbh.getInt(0);
+					Log.i("drug record is ", String.valueOf(id_sheepdrugid));
+					Log.i("today is ", mytoday);
+					Log.i("remove drug ", "before update the sheep_drug_table");
+					cmd = String.format("update sheep_drug_table set drug_date_off = '%s', " +
+						"drug_time_off = '%s' where id_sheepdrugid = %s", mytoday, mytime, id_sheepdrugid);
+				  	Log.i("remove drug to ", "db cmd is " + cmd);
+					dbh.exec(cmd);
+				}else{
+					Toast.makeText(getBaseContext(), "This drug is not eligible for removal", Toast.LENGTH_SHORT).show();
+					Log.w("Removal: Drug", "No removable instance of drug found");
+				}
 				Log.i("add tag ", "after update sheep_drug_table with remove date");					
 			}	
 			
