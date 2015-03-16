@@ -198,8 +198,9 @@ public class DrugManagement extends ListActivity {
 				TextView lotPrice = (TextView) newLotDialog.findViewById(R.id.newlot_price);
 
 				// Format dates
-				newPurchase = String.format("%d-%d-%d", purchasePicker.getYear(), purchasePicker.getMonth(), purchasePicker.getDayOfMonth());
-				newExpiry = String.format("%d-%d-%d", expiryPicker.getYear(), expiryPicker.getMonth(),expiryPicker.getDayOfMonth());
+				// Android pickers use zero index month
+				newPurchase = String.format("%d-%d-%d", purchasePicker.getYear(), purchasePicker.getMonth()+1, purchasePicker.getDayOfMonth());
+				newExpiry = String.format("%d-%d-%d", expiryPicker.getYear(), expiryPicker.getMonth()+1,expiryPicker.getDayOfMonth());
 				newLot = lotText.getText().toString();
 
 				newLotDialog.dismiss();
