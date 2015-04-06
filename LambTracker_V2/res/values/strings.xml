@@ -109,6 +109,10 @@
     <string name="add_lamb_fill_reartype">Please Fill in a Rearing Type value.</string>
     <string name="add_lamb_fill_lambease">Please Fill in a Lambease value.</string>
     <string name="drug_loc_fill_fields">Please Fill in a Shot Location.</string>
+    <string name="vaccine_fill_fields">Please Fill in a Vaccine.</string>
+    <string name="wormer_fill_fields">Please Fill in a Wormer.</string>
+    <string name="drug_fill_fields">Please Fill in a Drug.</string>
+    <string name="blood_fill_fields">Please Fill in a Blood Test.</string>
     <string name="enter_tag_data">Enter Tag Data</string>
     <string name="wrong_id_location">Invalid ID Location</string>
 

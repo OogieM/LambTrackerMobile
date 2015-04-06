@@ -728,6 +728,30 @@ public class SheepManagement extends ListActivity {
 				//	Go get which vaccine was selected in the spinner
 				vaccine_spinner = (Spinner) findViewById(R.id.vaccine_spinner);
 		    	which_vaccine = vaccine_spinner.getSelectedItemPosition();
+				if (which_vaccine == 0){
+					//	Need to require a value for vaccine here
+					//  Missing data so  display an alert 					
+		    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+		    		builder.setMessage( R.string.vaccine_fill_fields )
+		    	           .setTitle( R.string.vaccine_fill_fields );
+		    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+		    	           public void onClick(DialogInterface dialog, int idx) {
+		    	               	// User clicked OK button 
+		    	         		// make update database button normal and enabled so we can try again
+		    	           		btn = (Button) findViewById( R.id.update_database_btn );
+		    	           		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+		    	            	btn.setEnabled(true);
+		     	    		   return;
+		    	               }
+		    	       });		
+		    		AlertDialog dialog = builder.create();
+		    		dialog.show();	
+		    		return;
+				}
+				else{
+				Log.i("vaccine ", String.valueOf(which_vaccine));
+				}
+		    			    	
 				//	go update the database with a drug record for this vaccine and this sheep
 //		    	Log.i("vaccine spinner", " position is" + String.valueOf(which_vaccine));
 				//	go update the database with a drug record for this vaccine and this sheep
@@ -857,6 +881,29 @@ public class SheepManagement extends ListActivity {
 			if (boxblood.isChecked()){
 				blood_spinner = (Spinner) findViewById(R.id.blood_spinner);
 				which_blood = blood_spinner.getSelectedItemPosition();
+				if (which_blood == 0){
+					//	Need to require a value for blood here
+					//  Missing data so  display an alert 					
+		    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+		    		builder.setMessage( R.string.blood_fill_fields )
+		    	           .setTitle( R.string.blood_fill_fields );
+		    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+		    	           public void onClick(DialogInterface dialog, int idx) {
+		    	               	// User clicked OK button 
+		    	         		// make update database button normal and enabled so we can try again
+		    	           		btn = (Button) findViewById( R.id.update_database_btn );
+		    	           		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+		    	            	btn.setEnabled(true);
+		     	    		   return;
+		    	               }
+		    	       });		
+		    		AlertDialog dialog = builder.create();
+		    		dialog.show();	
+		    		return;
+				}
+				else{
+				Log.i("blood ", String.valueOf(which_blood));
+				}				
 				//	go update the database with blood pull date and time as a note 
 				note_text = "Blood for ";
 				// Go get the reason for the blood test	
@@ -910,6 +957,30 @@ public class SheepManagement extends ListActivity {
 				//	Go get which wormer was selected in the spinner
 				wormer_spinner = (Spinner) findViewById(R.id.wormer_spinner);
 				which_wormer = wormer_spinner.getSelectedItemPosition();
+				
+				if (which_wormer == 0){
+					//	Need to require a value for vaccine here
+					//  Missing data so  display an alert 					
+		    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+		    		builder.setMessage( R.string.wormer_fill_fields )
+		    	           .setTitle( R.string.wormer_fill_fields );
+		    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+		    	           public void onClick(DialogInterface dialog, int idx) {
+		    	               	// User clicked OK button 
+		    	         		// make update database button normal and enabled so we can try again
+		    	           		btn = (Button) findViewById( R.id.update_database_btn );
+		    	           		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+		    	            	btn.setEnabled(true);
+		     	    		   return;
+		    	               }
+		    	       });		
+		    		AlertDialog dialog = builder.create();
+		    		dialog.show();	
+		    		return;
+				}
+				else{
+				Log.i("wormer ", String.valueOf(which_wormer));
+				}							
 //				Log.i("wormer spinner", " position is" + String.valueOf(which_wormer));
 				//	go update the database with a drug record for this wormer and this sheep
 				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
@@ -957,7 +1028,31 @@ public class SheepManagement extends ListActivity {
 				//	Go get which drug was selected in the spinner
 				drug_spinner = (Spinner) findViewById(R.id.drug_spinner);
 				which_drug = drug_spinner.getSelectedItemPosition();
-//				Log.i("wormer spinner", " position is" + String.valueOf(which_wormer));
+
+				if (which_drug == 0){
+					//	Need to require a value for drug here
+					//  Missing data so  display an alert 					
+		    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+		    		builder.setMessage( R.string.drug_fill_fields )
+		    	           .setTitle( R.string.drug_fill_fields );
+		    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+		    	           public void onClick(DialogInterface dialog, int idx) {
+		    	               	// User clicked OK button 
+		    	         		// make update database button normal and enabled so we can try again
+		    	           		btn = (Button) findViewById( R.id.update_database_btn );
+		    	           		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
+		    	            	btn.setEnabled(true);
+		     	    		   return;
+		    	               }
+		    	       });		
+		    		AlertDialog dialog = builder.create();
+		    		dialog.show();	
+		    		return;
+				}
+				else{
+				Log.i("drug ", String.valueOf(which_drug));
+				}	
+								
 				//	go update the database with a drug record for this wormer and this sheep
 				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
 				i = drug_id_drugid.get(which_drug);
@@ -1051,7 +1146,13 @@ public class SheepManagement extends ListActivity {
 			if (boxremovedrug.isChecked()){
 				//	Go get which drug was selected in the spinner
 				drug_spinner = (Spinner) findViewById(R.id.drug_spinner);
-				which_drug = drug_spinner.getSelectedItemPosition();	
+				which_drug = drug_spinner.getSelectedItemPosition();
+				
+				
+				
+				
+				
+				
 				// The drug_id is at the same position in the drug_id_drugid list as the spinner position			
 				i = drug_id_drugid.get(which_drug);
 				Log.i("drug id", " value is " + String.valueOf(i));

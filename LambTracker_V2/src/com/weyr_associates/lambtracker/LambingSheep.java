@@ -58,7 +58,7 @@ public class LambingSheep extends ListActivity
 		
 		public String[] this_sheeps_tags ;
 		
-		private int             nRecs;
+		private int             nRecs, nRecs5;
 		private int			    recNo;
 		private String[]        colNames;
 		
@@ -233,7 +233,7 @@ public class LambingSheep extends ListActivity
 	    {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.lambing_sheep);
-	        Log.i("LookUpSheep", " after set content view");
+	        Log.i("LambingSheep", " after set content view");
 	        View v = null;
 
 //			Added the variable definitions here    	
@@ -300,28 +300,120 @@ public class LambingSheep extends ListActivity
 	    	ListView lambtags03 = (ListView) findViewById(R.id.list5);
 	    	
 	    	Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
+	    	Log.i("LookForSheep", " got to lookForSheep with Tag type of " + tag_type_spinner.getSelectedItemPosition());
 	        exists = tableExists("sheep_table");
-	        if (exists){
-	        	if( tag_num != null && tag_num.length() > 0 ){
-//	        		Get the sheep id from the id table for this tag number and selected tag type
-		        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
-		        			"and id_info_table.tag_type='%s' ", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
-		        	
-		        	crsr = dbh.exec( cmd ); 	    		
-		    		cursor   = ( Cursor ) crsr; 
-//		    		startManagingCursor(cursor);
-					cursor.moveToFirst();	
-					nRecs    = cursor.getCount();
-//					dbh.exec( cmd );
-//		        	dbh.moveToFirstRecord();
-		        	if( nRecs == 0 )
-			    		{ // no sheep with that tag in the database so clear out and return
-			    		clearBtn( v );
-			    		TV = (TextView) findViewById( R.id.sheepnameText );
-			        	TV.setText( "Cannot find this sheep." );
-			        	return;
-			    		}
-		        	thissheep_id = dbh.getInt(0);
+	        if (exists){       	
+	    			switch (tag_type_spinner.getSelectedItemPosition()){
+	    				case 1:
+	    				case 2:
+	    				case 3:
+	    				case 4:
+	    				case 5:
+	    					if( tag_num != null && tag_num.length() > 0 ){       		
+	    						// Get the sheep id from the id table for this tag number and selected tag type
+				        		cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
+					        			"and id_info_table.tag_type='%s' and (id_info_table.tag_date_off is null or" +
+					        			" id_info_table.tag_date_off = '') "
+					        			, tag_num , tag_type_spinner.getSelectedItemPosition());  
+					        	Log.i("searchByNumber", "command is " + cmd);
+					        	crsr = dbh.exec( cmd );
+					    		cursor   = ( Cursor ) crsr; 
+					        	recNo    = 1;
+								nRecs    = cursor.getCount();
+								Log.i("searchByNumber", " nRecs = "+ String.valueOf(nRecs));
+					        	dbh.moveToFirstRecord();
+					        	Log.i("searchByNumber", " the cursor is of size " + String.valueOf(dbh.getSize()));
+					        	if( dbh.getSize() == 0 ){ 
+					        		// no sheep with that  tag in the database so clear out and return
+						    		clearBtn( v );
+						    		TV = (TextView) findViewById( R.id.sheepnameText );
+						        	TV.setText( "Cannot find this sheep." );
+						        	return;
+						    	}
+					        	thissheep_id = dbh.getInt(0);
+					        	Log.i("searchByNumber", "This sheep is record " + String.valueOf(thissheep_id));
+					        	if (nRecs >1){
+					        		//	Have multiple sheep with this tag so enable next button
+					            	btn = (Button) findViewById( R.id.next_rec_btn );
+					            	btn.setEnabled(true);       		
+					        	}				        		        	
+					        	//	We need to call the format the record method
+//					        	formatSheepRecord(v);   	
+	    					}
+	    					break;
+					    case 6:
+					    	//	got a split
+					    	//	Assume no split ears at this time. 
+					    	//	Needs modification for future use
+					    	TV = (TextView) findViewById( R.id.sheepnameText );
+				        	TV.setText( "Cannot search on splits yet." );
+					    	// TODO
+					        break;
+					    case 7:
+					    	//	got a notch
+					    	//	Assume no notches at this time. 
+					    	//	Needs modification for future use
+					    	TV = (TextView) findViewById( R.id.sheepnameText );
+				        	TV.setText( "Cannot search on notches yet." );
+					    	// TODO
+					        break;
+					    case 8:
+					    	//	got a name				    	
+					    	// TODO
+				        	tag_num = "%" + tag_num + "%";
+				        	cmd = String.format( "select sheep_id, sheep_name from sheep_table where sheep_name like '%s'" +
+				        			" and (remove_date is null or remove_date = '') "
+				        			, tag_num );  
+				        	Log.i("searchByName", "command is " + cmd);
+				        	crsr = dbh.exec( cmd );
+				    		cursor   = ( Cursor ) crsr; 
+				        	recNo    = 1;
+							nRecs5    = cursor.getCount();
+							Log.i("searchByName", " nRecs5 = "+ String.valueOf(nRecs));
+				        	dbh.moveToFirstRecord();
+				        	Log.i("searchByName", " the cursor is of size " + String.valueOf(dbh.getSize()));
+				        	if( dbh.getSize() == 0 )
+					    		{ // no sheep with that name in the database so clear out and return
+					    		clearBtn( v );
+					    		TV = (TextView) findViewById( R.id.sheepnameText );
+					        	TV.setText( "Cannot find this sheep." );
+					        	return;
+					    		}
+				        	thissheep_id = dbh.getInt(0);			        	
+				        	if (nRecs >1){
+				        		//	Have multiple sheep with this name so enable next button
+				            	btn = (Button) findViewById( R.id.next_rec_btn );
+				            	btn.setEnabled(true);       		
+				        	}
+				        	//	We need to call the format the record method
+//				        	formatSheepRecord(v);   	
+					        break;
+	    				} // end of case switch 
+	    	
+    	
+	    	
+//	        exists = tableExists("sheep_table");
+//	        if (exists){
+//	        	if( tag_num != null && tag_num.length() > 0 ){
+////	        		Get the sheep id from the id table for this tag number and selected tag type
+//		        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
+//		        			"and id_info_table.tag_type='%s' ", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
+//		        	
+//		        	crsr = dbh.exec( cmd ); 	    		
+//		    		cursor   = ( Cursor ) crsr; 
+////		    		startManagingCursor(cursor);
+//					cursor.moveToFirst();	
+//					nRecs    = cursor.getCount();
+////					dbh.exec( cmd );
+////		        	dbh.moveToFirstRecord();
+//		        	if( nRecs == 0 )
+//			    		{ // no sheep with that tag in the database so clear out and return
+//			    		clearBtn( v );
+//			    		TV = (TextView) findViewById( R.id.sheepnameText );
+//			        	TV.setText( "Cannot find this sheep." );
+//			        	return;
+//			    		}
+//		        	thissheep_id = dbh.getInt(0);
 		        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));
 		        	//	Go get the sex of this sheep
 		        	cmd = String.format( "select sheep_table.sex, sheep_table.remove_date from sheep_table where sheep_id = %s",thissheep_id);
@@ -572,12 +664,12 @@ public class LambingSheep extends ListActivity
 		        	return;
 		        }
 //		        Log.i("lookForSheep", " out of the if statement");
-	        	}
-	    		else {
-	    			clearBtn( null );
-	            	TV = (TextView) findViewById( R.id.sheepnameText );
-	                TV.setText( "Sheep Database does not exist." ); 
-	        	}
+//	        	}
+//	    		else {
+//	    			clearBtn( null );
+//	            	TV = (TextView) findViewById( R.id.sheepnameText );
+//	                TV.setText( "Sheep Database does not exist." ); 
+//	        	}
 		}
 	
 		@Override
