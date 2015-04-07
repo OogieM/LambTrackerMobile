@@ -72,7 +72,8 @@
     <string name="title_activity_lambing_sheep">Lambing Sheep</string>
     <string name="title_activity_add_lamb">Add a Lamb</string>
     <string name="title_activity_fix_lamb">Fix a Lamb Record</string>
-    <string name="title_activity_sheep_management">Sheep Management</string>
+    <string name="title_activity_sheep_management">Individual Sheep Management</string>
+    <string name="title_activity_group_sheep_management">Group Sheep Management</string>
     <string name="title_activity_sheep_management_menu">Sheep Management Menu</string>
     <string name="title_activity_print_labels">Print Labels</string>
     <string name="title_activity_set_lambtracker_defaults">Set LambTracker Defaults</string>
@@ -214,4 +215,5 @@
 	<string name="expiry_date_lbl">Expiry Date</string>
 	<string name="newlot_qty_lbl">Quantity</string>
 	<string name="newlot_price_lbl">Price</string>
+	<string name="number_in_group_lbl">Number in Group</string>
 	</resources>
