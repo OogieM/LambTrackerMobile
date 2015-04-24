@@ -64,7 +64,7 @@ public class AddLamb extends Activity {
 	public int dam_id, dam_codon171, dam_codon154, dam_codon136;
 	public int sire_id, sire_codon171, sire_codon154, sire_codon136;
 	public int lamb_id, lamb_codon171, lamb_codon154, lamb_codon136;
-	public int flock_prefix, id_sheepbreedid, id_locationid, id_ownerid;
+	public int flock_prefix, id_sheepbreedid, id_locationid, id_ownerid, acquire_reason, management_group;
 	public int	service_type, birth_weight_units, lamb_birth_record;
 	public CheckBox 	stillbornbox, markewebox;
 	public boolean stillborn, markewe;
@@ -459,14 +459,14 @@ public class AddLamb extends Activity {
 	        	Log.i("addlamb", " julian ram in " + String.valueOf(temp_ram_in));
 	        	temp_ram_out = dbh.getReal(5);
 	        	Log.i("addlamb", " julian ram out " + String.valueOf(temp_ram_out));
-	        	// need to figure out if the date is within early date 142 from ram in
-	        	// and end date 155 from ram out
+	        	// need to figure out if the date is within early date 141 from ram in
+	        	// and end date 159 from ram out
 	        	//	Calculate the first possible and last possible for this breeding record
 	        	//	Should make these dates a preference or settings in LambTracker
 	        	// TODO
-	        	first_gestation_possible = temp_ram_in + 142.0;
+	        	first_gestation_possible = temp_ram_in + 140.0;
 	        	Log.i("addlamb", " julian first gestation is " + String.valueOf(first_gestation_possible));
-	        	last_gestation_possible = temp_ram_out + 155.0;
+	        	last_gestation_possible = temp_ram_out + 159.0;
 	        	Log.i("addlamb", " julian last gestation is " + String.valueOf(last_gestation_possible));        	
 	        	// First calculate how many days gestation this is from date ram in
 	        	gestation_length = temp_julian_today - temp_ram_in;
@@ -598,7 +598,7 @@ public class AddLamb extends Activity {
 			Log.i("stillborn ", String.valueOf(stillborn));
 			death_date = mytoday;
 			remove_date = mytoday;
-			lamb_name = "Stillborn";
+			lamb_name = Utilities.YearIs()+ "-" + "Stillborn";
 		}
 		
 		//	Get the value of the checkbox for mark ewe
@@ -607,7 +607,7 @@ public class AddLamb extends Activity {
 		if (markewebox.isChecked()){
 			markewe = true;
 			Log.i("markewe ", String.valueOf(markewe));
-			// When we get to adding tags for the lamb we'll as a paint brand for ewe if there is one
+			// When we get to adding tags for the lamb we'll add a paint brand for ewe if there is one
 			//	for the lamb.
 		}
 		
@@ -870,7 +870,7 @@ public class AddLamb extends Activity {
 		//	Fill all the misc variables for the sheep record
 		// TODO
 		//	Set breed based on sire and dam breed
-		// Need to get the default breed form settings or preferences
+		// Need to get the default breed from settings or preferences
 		//	Need to fix for the general case of crossbred lambs but for now set to crossbred if dam is Sooner
 		//	Sooner is sheep_id 58
 		//	otherwise the default set to be Black Welsh
@@ -892,6 +892,14 @@ public class AddLamb extends Activity {
 		id_ownerid = 1;	
 		//	Set the flock_prefix to be Desert Weyr 
 		flock_prefix = 1;
+		// Set the acquire reason to be Natural Addition
+		acquire_reason = 1;
+		if (!stillborn) {
+		// Set the management group based on sex of lamb
+			if (sex == 1){management_group = 2;}
+			if (sex == 2){management_group = 1;}
+			if (sex == 4){management_group = 0;}
+		} else {management_group = 0;}
 		
 		// Safer than relying on a null->int->string cast to work properly
 		String remove_reasonString = "null";
@@ -902,13 +910,13 @@ public class AddLamb extends Activity {
 			"birth_date, birth_time, birth_type, birth_weight, rear_type, death_date, remove_date, " +
 			"remove_reason, lambease, sire_id, dam_id, alert01, acquire_date, sheep_birth_record, " +
 			"codon171, codon154, codon136, id_sheepbreedid, id_locationid, " +
-			"id_ownerid, birth_weight_units) values " +
-			"('%s', %s, %s,'%s','%s',%s,%s,%s,'%s','%s',%s,%s,%s,%s,'%s','%s',%s,%s,%s,%s,%s,%s,%s,%s) ",
+			"id_ownerid, birth_weight_units, acquire_reason, management_group) values " +
+			"('%s', %s, %s,'%s','%s',%s,%s,%s,'%s','%s',%s,%s,%s,%s,'%s','%s',%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ",
 			lamb_name, flock_prefix, sex, mytoday, mytime, birth_type, birth_weight, 
 			rear_type, death_date, remove_date, remove_reasonString, lambease, sire_id, dam_id, 
 			lamb_alert_text, mytoday, lamb_birth_record,
 			lamb_codon171, lamb_codon154, lamb_codon136, id_sheepbreedid, id_locationid,
-			id_ownerid,birth_weight_units);
+			id_ownerid,birth_weight_units, acquire_reason, management_group);
 		
 		Log.i("add a lamb ", "cmd is " + cmd);
 		dbh.exec(cmd);
@@ -960,7 +968,7 @@ public class AddLamb extends Activity {
 	  		cursor   = ( Cursor ) crsr;
 	  		dbh.moveToFirstRecord();
 	  		tag_loc = dbh.getInt(0);
-	  		//	Get wht tag type it is
+	  		//	Get what tag type it is
 	  		tag_type_label = temp_tag_type.getText().toString(); 		
 	  		cmd = String.format("select id_type_table.id_typeid from id_type_table " +
 				"where idtype_name='%s'", tag_type_label);
@@ -1328,7 +1336,7 @@ public class AddLamb extends Activity {
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_type_spinner2.setAdapter (dataAdapter);
-		tag_type_spinner2.setSelection(1);	
+		tag_type_spinner2.setSelection(4);	
     	
     	// Fill the Tag Color Spinner
     	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
@@ -1661,14 +1669,14 @@ public class AddLamb extends Activity {
   	  		tl.addView(tr);
   	  		Log.i("after tag ", "after creating the tag table layout");
   	  		if ((new_tag_type == 1) || (new_tag_type == 4)){
-  	  			//	tag type is either Federal or Farm so set defaults to be paint, white on the side
+  	  			//	tag type is either Federal or Farm so set defaults to be paint, yellow on the side
   	  			//	TODO should be set via preferences or settings
   	 	      	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
   	  	      	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
   	  	      	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
   	  	      	TV  = (TextView) findViewById( R.id.new_tag_number);
   	  	      	tag_type_spinner2.setSelection(3);	// Paint type
-  	  	      	tag_color_spinner.setSelection(3);	//	White
+  	  	      	tag_color_spinner.setSelection(1);	//	Yellow
   	  	      	tag_location_spinner.setSelection(5);	// Side 
   	  	      	TV.setText( "" ); 	  			
   	  		}else{
