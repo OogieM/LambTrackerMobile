@@ -60,7 +60,8 @@ public class AddLamb extends Activity {
 	public int	rear_type, birth_type, sex, lambease, codon171, codon136, codon154;
 	public String dam_name, sire_name, lamb_name;
 	public String lamb_alert_text, death_date, remove_date;
-	public int remove_reason;
+	public String tag_country_code;
+	public int remove_reason, official_id;
 	public int dam_id, dam_codon171, dam_codon154, dam_codon136;
 	public int sire_id, sire_codon171, sire_codon154, sire_codon136;
 	public int lamb_id, lamb_codon171, lamb_codon154, lamb_codon136;
@@ -1005,10 +1006,18 @@ public class AddLamb extends Activity {
 				Log.i("add fed tag ", "after insert into id_info_table");
 				break;
 			case 2:	//	Tag is an electronic tag 
+					// test for USA official tag	
+				tag_country_code = tag_num.substring(0, 3);
+				Log.i("tag_country_code ", "is " + tag_country_code);
+				if (tag_country_code.equals("840")){
+					Log.i("official_id ", " supposed to be USA" );
+					official_id = 1;
+					}else 
+					{official_id = 0;}
 				cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
-		  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
-		  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
-		  				tag_loc, mytoday, tag_num);
+		  				" tag_color_female, tag_location, tag_date_on, tag_number, official_id) values " +
+		  				" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", lamb_id, tag_type, tag_color, tag_color, 
+		  				tag_loc, mytoday, tag_num, official_id);
 		  		Log.i("add tag to ", "db cmd is " + cmd);
 				dbh.exec(cmd);
 				Log.i("add tag ", "after insert into id_info_table");
