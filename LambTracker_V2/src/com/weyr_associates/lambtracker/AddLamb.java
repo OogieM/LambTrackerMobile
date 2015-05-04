@@ -401,7 +401,7 @@ public class AddLamb extends Activity {
 		
 		//	Fill the mark ewe box default to checked 
 		markewebox = (CheckBox) findViewById(R.id.checkBoxMarkEwe);
-		markewebox.setChecked (true);
+		markewebox.setChecked (false);
 		
 		Bundle extras = getIntent().getExtras();
 		// get extras here from the lambing screen. Mostly ewe's data for scrapie genetics	
@@ -539,8 +539,8 @@ public class AddLamb extends Activity {
     	death_date = "";
 		remove_date = "";
 		remove_reason = -1;
-		//	Set the lamb name to be empty initially
-		lamb_name = "";
+		//	Set the lamb name to be year plus dam name until we change it
+		lamb_name = Utilities.YearIs()+ "-" + dam_name + "-" + "lamb";
 		//	Get the date and time to add to the lamb record these are strings not numbers
 		mytoday = Utilities.TodayIs(); 
 //		Log.i("add a lamb ", " today is " + mytoday);	
@@ -564,7 +564,8 @@ public class AddLamb extends Activity {
        		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
         	btn.setEnabled(true);
         	//	Defaulted to rear-type of 1 so the later query won't crash
-			rear_type = 1;			
+			rear_type = 1;	
+        	
 		}
 			
   		//	Get the radio group selected for the sex
@@ -875,13 +876,13 @@ public class AddLamb extends Activity {
 		//	Need to fix for the general case of crossbred lambs but for now set to crossbred if dam is Sooner
 		//	Sooner is sheep_id 58
 		//	otherwise the default set to be Black Welsh
-		if (dam_id == 58) {
-			id_sheepbreedid = 2;
-		}else {
+//		if (dam_id == 58) {
+//			id_sheepbreedid = 2;
+//		}else {
 			//	need to test here if sire and dam are the same breed id and if so set lamb to that
 			//	For now set to be Black Welsh if not a child of Sooner
 			id_sheepbreedid = 1;
-		}		
+//		}		
 		//	Set the location to be East Orchard Pasture but will need to modify to be real one based on location of dam
 		id_locationid = 1;
 		//	The following things should be modified to be the value from default settings 
@@ -897,6 +898,7 @@ public class AddLamb extends Activity {
 		acquire_reason = 1;
 		if (!stillborn) {
 		// Set the management group based on sex of lamb
+			// needs to change based on how the groups are set up hard coded for us
 			if (sex == 1){management_group = 2;}
 			if (sex == 2){management_group = 1;}
 			if (sex == 4){management_group = 0;}
@@ -995,7 +997,7 @@ public class AddLamb extends Activity {
 	  		switch (tag_type){		
 			case 1: //	Tag is a federal tag
 				//	Set the flock to be the flock ID Should be a preference default not a fixed number
-				
+				lamb_name = year + "-" + tag_num;
 				tag_flock = 1;
 	  			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
 		  				" tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) values " +
@@ -1097,73 +1099,6 @@ public class AddLamb extends Activity {
 				break;
 	  		
 	  		}
-	  		
-//	  		if (tag_type==4){
-//	  			//	Farm tag so make the lamb name the year plus the tag number
-//	  			lamb_name = year + "-" + tag_num;
-//	  		}
-//	  		if ((tag_type==3) && (markewe)){
-//	  			// We have a paint mark for the lamb and the checkbox for the ewe is true
-//	  			// Go see if there is a current active paint mark for the ewe
-//	  			try {
-//	  				cmd = String.format("select sheep_id from id_info_table where sheep_id = '%s' and " +
-//		  					"tag_type = 3 and tag_date_off is null", dam_id);
-//	  				// if command works we have a tag already so break out
-//	  				Log.i("in try ewe tag ", "db cmd is " + cmd);
-//	  				crsr2 = dbh.exec( cmd );  
-//	  				Log.i("in try ewe tag ", "after execute db command" + cmd);
-//	  				cursor2   = ( Cursor ) crsr2;
-//	  		  		dbh.moveToFirstRecord();
-//	  		  		temp_id = dbh.getInt(0);
-//	  		  		Log.i("in try ewe tag ", "after try to read a record");
-//	  				break;
-//	  			}
-//	  				 catch (Exception e) {
-//	  					//	No record found so insert one 
-//	  					Log.i("in catch ", " need to add a ewe tag");
-//	  					cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
-//	  			  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
-//	  			  				" (%s, %s, %s,%s,%s, '%s', '%s') ", dam_id, tag_type, tag_color, tag_color, 
-//	  			  				tag_loc, mytoday, tag_num);
-//	  			  		Log.i("add ewe tag to ", "db cmd is " + cmd);
-//	  					dbh.exec(cmd);
-//	  					Log.i("add tag ", "after insert into id_info_table");		 
-//	  			} 	
-//	  			finally {
-//	  				//	Add a lamb paint brand record for sure no matter what. 
-//	  				cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
-//	  		  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
-//	  		  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
-//	  		  				tag_loc, mytoday, tag_num);
-//	  		  		Log.i("add tag to ", "db cmd is " + cmd);
-//	  				dbh.exec(cmd);
-//	  				Log.i("add tag ", "after insert into id_info_table");
-//	  				
-//	  			}
-//	  		}
-	  		
-//	  		if (tag_type==1){
-//	  			tag_flock = 1;
-//	  			//	This was for when the alternative ID was federal 
-//	  			//	now commented out because the name ID is the farm tag
-////	  			lamb_name = year + "-" + tag_num;
-//	  			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
-//		  				" tag_color_female, tag_location, tag_date_on, tag_number, id_flockid) values " +
-//		  				" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", lamb_id, tag_type, tag_color, tag_color, 
-//		  				tag_loc, mytoday, tag_num, tag_flock);
-//		  		Log.i("add fed tag ", "db cmd is " + cmd);
-//				dbh.exec(cmd);
-//				Log.i("add fed tag ", "after insert into id_info_table");
-//	  		}else{	  		
-//	     	// Now go put in a tag record for this tag for this lamb without a flock id
-//	  		cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
-//	  				" tag_color_female, tag_location, tag_date_on, tag_number) values " +
-//	  				" (%s, %s, %s,%s,%s, '%s', '%s') ", lamb_id, tag_type, tag_color, tag_color, 
-//	  				tag_loc, mytoday, tag_num);
-//	  		Log.i("add tag to ", "db cmd is " + cmd);
-//			dbh.exec(cmd);
-//			Log.i("add tag ", "after insert into id_info_table");
-//	  		}
   		}
 		//	End of what has to loop through all IDs for the lamb being added 
 		
@@ -1209,6 +1144,8 @@ public class AddLamb extends Activity {
 	  			lambing_notes = lambing_notes + "S"; 
 	  		}else{
 	  			lambing_notes = lambing_notes + sex_abbrev;
+	  		
+	  			Log.i("update ", "rear_type " + String.valueOf(rear_type));
 	  		}
 	  		Log.i("add a lamb ", "the lambing_notes are " + lambing_notes);	  		
 	  		// Then update the record by adding this lambs' ID in the next slot
@@ -1253,7 +1190,6 @@ public class AddLamb extends Activity {
 	  			Log.i("in try block ", " have only 1 lamb so add a second to record");
 	  			//	Update the lambs born and lambs weaned fields
 	  			lambs_born = lambs_born +1;
-//	  			rear_type = rear_type +1;	  			
 	  			cmd = String.format("update lambing_history_table set " +
 		  				"lambing_notes = '%s', lambs_born = %s, " +
 		  				" lamb02_id = %s " +
@@ -1270,8 +1206,8 @@ public class AddLamb extends Activity {
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record to add birth record");
 		  		cmd = String.format("update sheep_table set sheep_birth_record = %s," +
-						"birth_type = %s " +
-		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, lamb01_id);
+						"birth_type = %s, rear_type = %s " +
+		  		  		" where sheep_id = %s ", lambing_historyid, lambs_born, rear_type,lamb01_id);
 		  		Log.i("in try block ", " cmd is " + cmd);
 		  		dbh.exec( cmd ); 
 		  		Log.i("in try block ", " after update sheep record for first lamb to correct birth type");
