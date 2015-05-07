@@ -845,6 +845,8 @@ public class IDManagement extends Activity {
     }
 //     user clicked 'Scan' button    
     public void scanEid( View v){
+   
+   	 	tag_type_spinner.setSelection(2);
     	// Here is where I need to get a tag scanned and put the data into the variable LastEID
 		if (mService != null) {
 			try {
