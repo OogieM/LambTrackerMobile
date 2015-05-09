@@ -60,8 +60,10 @@ public class AddLamb extends Activity {
 	public int	rear_type, birth_type, sex, lambease, codon171, codon136, codon154;
 	public String dam_name, sire_name, lamb_name;
 	public String lamb_alert_text, death_date, remove_date;
+	public String nsip_id, sale_price, sell_price_units, purchase_price, purchase_price_units;
+	public String weaned_date, inbreeding;
 	public String tag_country_code;
-	public int remove_reason, official_id;
+	public int remove_reason, official_id, id_breederid;
 	public int dam_id, dam_codon171, dam_codon154, dam_codon136;
 	public int sire_id, sire_codon171, sire_codon154, sire_codon136;
 	public int lamb_id, lamb_codon171, lamb_codon154, lamb_codon136;
@@ -508,11 +510,11 @@ public class AddLamb extends Activity {
 	        cursor   = ( Cursor ) crsr;
 	        dbh.moveToFirstRecord();
 	        sire_codon171 = dbh.getInt(0);
-	//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon171));
+	        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon171));
 	        sire_codon154 = dbh.getInt(1);
-	//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon154));
+	//        Log.i("addlamb", " codon154 " + String.valueOf(sire_codon154));
 	        sire_codon136 = dbh.getInt(2);  
-	//        Log.i("addlamb", " codon171 " + String.valueOf(sire_codon136));        
+	//        Log.i("addlamb", " codon154 " + String.valueOf(sire_codon136));        
         }
         }
     }
@@ -881,8 +883,10 @@ public class AddLamb extends Activity {
 //		}else {
 			//	need to test here if sire and dam are the same breed id and if so set lamb to that
 			//	For now set to be Black Welsh if not a child of Sooner
-			id_sheepbreedid = 1;
+//			id_sheepbreedid = 1;
 //		}		
+		Log.i("after ", "Case statement Codon 171");
+		id_sheepbreedid = 1;
 		//	Set the location to be East Orchard Pasture but will need to modify to be real one based on location of dam
 		id_locationid = 1;
 		//	The following things should be modified to be the value from default settings 
@@ -905,21 +909,36 @@ public class AddLamb extends Activity {
 		} else {management_group = 0;}
 		
 		// Safer than relying on a null->int->string cast to work properly
-		String remove_reasonString = "null";
+		String remove_reasonString = "";
 		if (remove_reason != -1) { remove_reasonString = String.format("%d", remove_reason);}
-		
+		// set breeder to Desert Weyr
+		id_breederid = 1;
+		// Fill empty data
+		nsip_id = "";
+		sale_price= "";
+		sell_price_units= "";
+		purchase_price= "";
+		purchase_price_units= "";
+		weaned_date= ""; 
+		inbreeding= "";
+		Log.i("add a lamb ", "before insert cmd ");
 		//	Ready to build the insert statement for this lamb.
 		cmd = String.format("insert into sheep_table (sheep_name, flock_prefix, sex, " +
 			"birth_date, birth_time, birth_type, birth_weight, rear_type, death_date, remove_date, " +
 			"remove_reason, lambease, sire_id, dam_id, alert01, acquire_date, sheep_birth_record, " +
 			"codon171, codon154, codon136, id_sheepbreedid, id_locationid, " +
-			"id_ownerid, birth_weight_units, acquire_reason, management_group) values " +
-			"('%s', %s, %s,'%s','%s',%s,%s,%s,'%s','%s',%s,%s,%s,%s,'%s','%s',%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ",
+			"id_ownerid, birth_weight_units, acquire_reason, management_group," +
+			"nsip_id, sale_price, sell_price_units, purchase_price, purchase_price_units, weaned_date, " +
+			"inbreeding, id_breederid) values " +
+			"('%s', %s, %s,'%s','%s',%s,%s,%s,'%s','%s','%s', %s, %s, %s,'%s','%s',%s,%s,%s,%s,%s,%s,%s,%s,%s,%s," +
+			"'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s') ",
 			lamb_name, flock_prefix, sex, mytoday, mytime, birth_type, birth_weight, 
 			rear_type, death_date, remove_date, remove_reasonString, lambease, sire_id, dam_id, 
 			lamb_alert_text, mytoday, lamb_birth_record,
 			lamb_codon171, lamb_codon154, lamb_codon136, id_sheepbreedid, id_locationid,
-			id_ownerid,birth_weight_units, acquire_reason, management_group);
+			id_ownerid,birth_weight_units, acquire_reason, management_group, 
+			nsip_id, sale_price, sell_price_units, purchase_price, purchase_price_units, weaned_date, 
+			inbreeding, id_breederid );
 		
 		Log.i("add a lamb ", "cmd is " + cmd);
 		dbh.exec(cmd);
