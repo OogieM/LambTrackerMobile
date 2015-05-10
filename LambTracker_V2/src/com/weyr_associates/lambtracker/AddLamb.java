@@ -469,7 +469,7 @@ public class AddLamb extends Activity {
 	        	// TODO
 	        	first_gestation_possible = temp_ram_in + 140.0;
 	        	Log.i("addlamb", " julian first gestation is " + String.valueOf(first_gestation_possible));
-	        	last_gestation_possible = temp_ram_out + 159.0;
+	        	last_gestation_possible = temp_ram_out + 153.0;
 	        	Log.i("addlamb", " julian last gestation is " + String.valueOf(last_gestation_possible));        	
 	        	// First calculate how many days gestation this is from date ram in
 	        	gestation_length = temp_julian_today - temp_ram_in;
