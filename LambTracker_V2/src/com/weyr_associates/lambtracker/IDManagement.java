@@ -1041,7 +1041,7 @@ public class IDManagement extends Activity {
 	    			//have a paint tag but no paintid so add a new record;
 	    			Log.i("updatepaint ", "tag record id is 0 but have paint tag data need to add a new record to id_info_table here");
 	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
-	    					"values ( %s, 4, %s, %s, %s, '%s', %s )", thissheep_id, paint_colorid, paint_colorid, paint_locationid, today, paintText);
+	    					"values ( %s, 3, %s, %s, %s, '%s', %s )", thissheep_id, paint_colorid, paint_colorid, paint_locationid, today, paintText);
 	    			dbh.exec( cmd );	
 	    		}
 	    		else{
