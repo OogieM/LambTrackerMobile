@@ -63,7 +63,7 @@ public class AddLamb extends Activity {
 	public String nsip_id, sale_price, sell_price_units, purchase_price, purchase_price_units;
 	public String weaned_date, inbreeding;
 	public String tag_country_code;
-	public int remove_reason, official_id, id_breederid;
+	public int remove_reason, official_id, id_breederid, lambing_contact;
 	public int dam_id, dam_codon171, dam_codon154, dam_codon136;
 	public int sire_id, sire_codon171, sire_codon154, sire_codon136;
 	public int lamb_id, lamb_codon171, lamb_codon154, lamb_codon136;
@@ -900,6 +900,9 @@ public class AddLamb extends Activity {
 		flock_prefix = 1;
 		// Set the acquire reason to be Natural Addition
 		acquire_reason = 1;
+		// Set the lambing contact to be Garvin Mesa Address
+		lambing_contact = 1;
+		
 		if (!stillborn) {
 		// Set the management group based on sex of lamb
 			// needs to change based on how the groups are set up hard coded for us
@@ -1249,9 +1252,9 @@ public class AddLamb extends Activity {
 	  		}
   			Log.i("in catch block ", " after setting lambing_notes " + lambing_notes);
 			cmd = String.format("insert into lambing_history_table (lambing_date, dam_id, sire_id, " +
-			"lambing_notes, lambs_born, lamb01_id, lambing_time, gestation_length) " +
-			"values ('%s', %s, %s,'%s', %s, %s, '%s', %s) ", 
-			mytoday, dam_id, sire_id, lambing_notes, lambs_born, lamb_id, mytime, real_gestation_length);
+			"lambing_notes, lambs_born, lamb01_id, lambing_time, gestation_length, lambing_contact) " +
+			"values ('%s', %s, %s,'%s', %s, %s, '%s', %s, %s) ", 
+			mytoday, dam_id, sire_id, lambing_notes, lambs_born, lamb_id, mytime, real_gestation_length,lambing_contact);
 			Log.i("in catch block ", " cmd is " + cmd);
 			dbh.exec( cmd );
 			Log.i("in catch block ", "after cmd to create a new record");
