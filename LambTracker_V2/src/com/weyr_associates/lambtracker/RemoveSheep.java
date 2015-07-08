@@ -37,6 +37,7 @@ public class RemoveSheep extends ListActivity  {
 	public String mytoday;
 	public Spinner remove_reason_spinner;
 	public int which_remove_reason;
+	public String management_group;
 	public List<String> remove_reasons;
 	public int 		thissheep_id;
 	String     	cmd;
@@ -257,7 +258,7 @@ public class RemoveSheep extends ListActivity  {
 	    			Log.i ("for loop", "the sheep " + " " + test_names.get(temp_location)+ " is checked");
 	    			Log.i ("for loop", "the sheep id is " + String.valueOf(test_sheep_id.get(temp_location)));
 	    	    	// This needs to be in a loop for all sheep_id s that we found. Setting each one to be thissheep_id
-	    	    	cmd = String.format("update sheep_table set alert01 = '', death_date = '%s', remove_date = '%s', " +
+	    			cmd = String.format("update sheep_table set alert01 = '', management_group = '', death_date = '%s', remove_date = '%s', " +
 	    	    			"remove_reason = '%s' where sheep_id =%d ", deathdate, removedate, which_remove_reason, 
 	    	    			test_sheep_id.get(temp_location) ) ;
 	    			Log.i("remove sheep ", "before cmd " + cmd);

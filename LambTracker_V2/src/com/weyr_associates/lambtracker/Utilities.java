@@ -248,8 +248,8 @@ public static String takeNote( View v, final Integer thissheep_id, final Context
 	    			Log.i("take note","first note written with predefined note");
 			    }else{
 			    	//	no predefined note so write one without it
-			    	cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time) " +
- 							"values ( %s, '%s', '%s', '%s')",
+			    	cmd = String.format("insert into sheep_note_table (sheep_id, note_text, note_date, note_time, id_predefinednotesid01) " +
+ 							"values ( %s, '%s', '%s', '%s', '')",
  	    					thissheep_id, note_text, TodayIs(), TimeIs());
 	    			Log.i("update notes ", "before cmd " + cmd);
 	    			dbh.exec( cmd );	

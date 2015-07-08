@@ -121,6 +121,15 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
         </activity>
+        
+        <activity
+            android:name="com.weyr_associates.lambtracker.GroupSheepManagement"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_group_sheep_management"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        
         <activity
             android:name="com.weyr_associates.lambtracker.AddLamb"
             android:configChanges="orientation"
@@ -215,3 +224,4 @@
     </application>
 
 </manifest>
+

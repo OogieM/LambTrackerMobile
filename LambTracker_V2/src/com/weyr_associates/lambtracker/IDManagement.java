@@ -34,7 +34,7 @@ import android.database.sqlite.SQLiteException;
 
 public class IDManagement extends Activity {
 	private DatabaseHandler dbh;
-	int             fedtagid, farmtagid, eidtagid, paintid; // These are record IDs not sheep IDs
+	int             fedtagid, farmtagid, eidtagid, paintid, tattooid, splitid, notchid; // These are record IDs not sheep IDs
 	public Cursor 	cursor, cursor2;
 	public Object 	crsr, crsr2;
 	public int 		thissheep_id, new_tag_type, new_tag_color, new_tag_location;
@@ -308,6 +308,9 @@ public class IDManagement extends Activity {
     	farmtagid = 0;
     	eidtagid = 0;
     	paintid = 0;
+    	tattooid = 0;
+    	splitid = 0;
+    	notchid = 0;
     	new_tag_number = null;
     	
     	// Fill the Tag Type Spinner
@@ -845,6 +848,8 @@ public class IDManagement extends Activity {
     }
 //     user clicked 'Scan' button    
     public void scanEid( View v){
+   
+   	 	tag_type_spinner.setSelection(2);
     	// Here is where I need to get a tag scanned and put the data into the variable LastEID
 		if (mService != null) {
 			try {
@@ -959,6 +964,41 @@ public class IDManagement extends Activity {
 	    			Log.i("updatefed ", "no federal tag so nothing to do");	
 	    		}
 	    	}
+//	    Update the split mark data
+	    if (splitid != 0) {
+	    	// update the split ear data
+	    	//	not implemented at this time. Assumed we either are adding new tags or taking off tags first
+	    	//	no update of an existing tag record is done.
+	    	Log.i("updatesplit ", " tag record id is not zero");
+		    }
+	    	else {
+	    		// splitid is zero so need to test whether there is a location and add a record if there is one
+	    		if (paintText != null && !paintText.isEmpty()){	    			
+//	    		    paint_number = Integer.valueOf(paintText);
+	    		    TV = (TextView) findViewById( R.id.paint_locationText);
+	    		    paint_locationText = TV.getText().toString();
+	    		    Log.i("updatesplit ", "paint location " + paint_locationText);
+	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
+	    	    			"where id_location_abbrev='%s'", paint_locationText);
+	    	    	crsr = dbh.exec( cmd );
+	    	        cursor   = ( Cursor ) crsr;
+	    	        dbh.moveToFirstRecord();
+	    	        paint_colorid = 19; // no color for a split
+	    	        paint_locationid = dbh.getInt(0);
+	    	        Log.i("updatesplit ", "split location integer " + String.valueOf(paint_locationid));
+	    			//have a paint tag but no paintid so add a new record;
+	    	        paintText = ""; // make the tag number empty
+	    			Log.i("updatesplit ", "tag record id is 0 but have paint tag data need to add a new record to id_info_table here");
+	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
+	    					"values ( %s, 6, %s, %s, %s, '%s', %s )", thissheep_id, paint_colorid, paint_colorid, paint_locationid, today, paintText);
+	    			dbh.exec( cmd );	
+	    		}
+	    		else{
+	    			// no split to enter so return
+	    			Log.i("updatesplit ", "no split so nothing to do");
+	    			
+	    		}
+	    	}
 	    
 	    // Update the Farm Tag data
 	    if (farmtagid != 0) {
@@ -1006,13 +1046,13 @@ public class IDManagement extends Activity {
 	    
 //	    Update the Paint mark data
 	    if (paintid != 0) {
-	    	// update the Farm tag data
+	    	// update the Paint tag data
 	    	//	not implemented at this time. Assumed we either are adding new tags or taking off tags first
 	    	//	no update of an existing tag record is done.
 	    	Log.i("updatepaint ", " tag record id is not zero");
 		    }
 	    	else {
-	    		// paintid is zero so need to test whether there is a farm tag and add a record if there is one
+	    		// paintid is zero so need to test whether there is a paint tag and add a record if there is one
 	    		if (paintText != null && !paintText.isEmpty()){
 	    			
 //	    		    paint_number = Integer.valueOf(paintText);
@@ -1039,7 +1079,7 @@ public class IDManagement extends Activity {
 	    			//have a paint tag but no paintid so add a new record;
 	    			Log.i("updatepaint ", "tag record id is 0 but have paint tag data need to add a new record to id_info_table here");
 	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
-	    					"values ( %s, 4, %s, %s, %s, '%s', %s )", thissheep_id, paint_colorid, paint_colorid, paint_locationid, today, paintText);
+	    					"values ( %s, 3, %s, %s, %s, '%s', %s )", thissheep_id, paint_colorid, paint_colorid, paint_locationid, today, paintText);
 	    			dbh.exec( cmd );	
 	    		}
 	    		else{
@@ -1048,6 +1088,51 @@ public class IDManagement extends Activity {
 	    			
 	    		}
 	    	}
+//	    Update the tattoo mark data
+	    if (tattooid != 0) {
+	    	// update the tattoo tag data
+	    	//	not implemented at this time. Assumed we either are adding new tags or taking off tags first
+	    	//	no update of an existing tag record is done.
+	    	Log.i("updatetattoot ", " tag record id is not zero");
+		    }
+	    	else {
+	    		// tattooid is zero so need to test whether there is a paint tag and add a record if there is one
+	    		if (paintText != null && !paintText.isEmpty()){
+	    			
+//	    		    paint_number = Integer.valueOf(paintText);
+	    		    TV = (TextView) findViewById( R.id.paint_locationText);
+	    		    paint_locationText = TV.getText().toString();
+	    		    Log.i("updatetattoo ", "paint location " + paint_locationText);
+	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
+	    	    			"where id_location_abbrev='%s'", paint_locationText);
+	    	    	crsr = dbh.exec( cmd );
+	    	        cursor   = ( Cursor ) crsr;
+	    	        dbh.moveToFirstRecord();
+	    	        paint_locationid = dbh.getInt(0);
+	    	        Log.i("updatetattoo ", "tattoo color integer " + String.valueOf(paint_locationid));
+	    		    TV = (TextView) findViewById( R.id.paint_colorText );
+	    		    paint_colorText = TV.getText().toString();
+	    		    Log.i("updatetattoo ", "paint color " + paint_colorText);
+	    		    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
+	    	    			"where tag_color_name='%s'", paint_colorText);
+	    	    	crsr = dbh.exec( cmd );
+	    	        cursor   = ( Cursor ) crsr;
+	    	        dbh.moveToFirstRecord();
+	    	        paint_colorid = dbh.getInt(0);
+	    	        Log.i("updatetattoo ", "paint location integer " + String.valueOf(paint_locationid));
+	    			//have a paint tag but no paintid so add a new record;
+	    			Log.i("updatetattoo ", "tag record id is 0 but have paint tag data need to add a new record to id_info_table here");
+	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
+	    					"values ( %s, 5, %s, %s, %s, '%s', %s )", thissheep_id, paint_colorid, paint_colorid, paint_locationid, today, paintText);
+	    			dbh.exec( cmd );	
+	    		}
+	    		else{
+	    			// no tattoo to enter so return
+	    			Log.i("updatetattoo ", "no tattoo so nothing to do");
+	    			
+	    		}
+	    	}
+
 //	    //Update the EID Tag data
 	    int official_id_flag;
 	    if (eidtagid != 0) {
@@ -1184,7 +1269,7 @@ public class IDManagement extends Activity {
     	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
     	
     	tag_type_label = tag_type_spinner2.getSelectedItem().toString();
-    	Log.i("updateTag", "Tag type is " + tag_type_label);
+    	Log.i("updateTag", "Tag type label is " + tag_type_label);
     	tag_color_label = tag_color_spinner.getSelectedItem().toString();
     	Log.i("updateTag", "Tag color is " + tag_color_label);
     	tag_location_label = tag_location_spinner.getSelectedItem().toString();
@@ -1192,9 +1277,18 @@ public class IDManagement extends Activity {
     	
     	TV  = (TextView) findViewById( R.id.new_tag_number);
     	new_tag_number = TV.getText().toString();
-    	Log.i("before if", " new tag number " + new_tag_number);    	
+    	 
+    	if (tag_type_label.contains("Split")){
+    		new_tag_number = "Split";
+    		tag_color_label = "Not Applicable";
+    		tag_color_spinner.setSelection(19);
+    	}
+    	Log.i("before if", " new tag number " + new_tag_number); 
+    	Log.i("before if", "Tag color is " + tag_color_label);
+    	Log.i("before if", "Tag location is " + tag_location_label);
+
      	if (tag_type_label == "Select a Type" || tag_location_label == "Select a Location" || tag_color_label == "Select a Color"
-    			|| TV.getText().toString().isEmpty()) {
+    			|| new_tag_number.isEmpty()) {
     		new_tag_type = 0;
     		// Missing data so  display an alert 	
     		AlertDialog.Builder builder = new AlertDialog.Builder( this );
@@ -1317,6 +1411,38 @@ public class IDManagement extends Activity {
         	    TV.setText(tag_location_label);
         	    farmtagid = 0;
     			break;
+//    		case 5:
+////    			Tattoo so update farm section and set needs database update
+//        		//	by setting id of 0 meaning either no tag or needs update       		
+//        		Log.i("in if", "Got a new tattoo tag type");
+//        	    TV  = (TextView) findViewById( R.id.farmText );
+//        	    TV.setText(new_tag_number);
+//        	    TV = (TextView) findViewById( R.id.farm_colorText );
+//        	    TV.setText(tag_color_label);
+//        	    TV = (TextView) findViewById( R.id.farm_locationText );
+//        	    TV.setText(tag_location_label);
+//        	   	tattooid = 0;
+//    			break;
+    		case 6:
+        		//	Split so update farm section and set needs database update
+        		//	by setting id of 0 meaning either no tag or needs update       		
+        		Log.i("in if", "Got a new split ear type");
+        	    TV  = (TextView) findViewById( R.id.farmText );
+        	    TV.setText("Split");
+        	    TV = (TextView) findViewById( R.id.farm_locationText );
+        	    TV.setText(tag_location_label);
+        	    splitid = 0;
+    			break;
+//    		case 6:
+//        		//	Notch so update farm section and set needs database update
+//        		//	by setting id of 0 meaning either no tag or needs update       		
+//        		Log.i("in if", "Got a new farm tag type");
+//        	    TV  = (TextView) findViewById( R.id.farmText );
+//        	    TV.setText(new_tag_number);
+//        	    TV = (TextView) findViewById( R.id.farm_locationText );
+//        	    TV.setText(tag_location_label);
+//        	    notchid = 0;
+//    			break;
     		default:
     			break;
     		}
@@ -1325,7 +1451,7 @@ public class IDManagement extends Activity {
         	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);
         	tag_location_spinner = (Spinner) findViewById(R.id.tag_location_spinner);
         	TV  = (TextView) findViewById( R.id.new_tag_number);
-        	//	Should reset these to the defaults per user preferences btu for now just set to need data
+        	//	Should reset these to the defaults per user preferences but for now just set to need data
         	tag_type_spinner2.setSelection(0);
         	tag_color_spinner.setSelection(0);
         	tag_location_spinner.setSelection(0);

@@ -72,7 +72,8 @@
     <string name="title_activity_lambing_sheep">Lambing Sheep</string>
     <string name="title_activity_add_lamb">Add a Lamb</string>
     <string name="title_activity_fix_lamb">Fix a Lamb Record</string>
-    <string name="title_activity_sheep_management">Sheep Management</string>
+    <string name="title_activity_sheep_management">Individual Sheep Management</string>
+    <string name="title_activity_group_sheep_management">Group Sheep Management</string>
     <string name="title_activity_sheep_management_menu">Sheep Management Menu</string>
     <string name="title_activity_print_labels">Print Labels</string>
     <string name="title_activity_set_lambtracker_defaults">Set LambTracker Defaults</string>
@@ -109,6 +110,10 @@
     <string name="add_lamb_fill_reartype">Please Fill in a Rearing Type value.</string>
     <string name="add_lamb_fill_lambease">Please Fill in a Lambease value.</string>
     <string name="drug_loc_fill_fields">Please Fill in a Shot Location.</string>
+    <string name="vaccine_fill_fields">Please Fill in a Vaccine.</string>
+    <string name="wormer_fill_fields">Please Fill in a Wormer.</string>
+    <string name="drug_fill_fields">Please Fill in a Drug.</string>
+    <string name="blood_fill_fields">Please Fill in a Blood Test.</string>
     <string name="enter_tag_data">Enter Tag Data</string>
     <string name="wrong_id_location">Invalid ID Location</string>
 
@@ -210,4 +215,5 @@
 	<string name="expiry_date_lbl">Expiry Date</string>
 	<string name="newlot_qty_lbl">Quantity</string>
 	<string name="newlot_price_lbl">Price</string>
+	<string name="number_in_group_lbl">Number in Group</string>
 	</resources>
