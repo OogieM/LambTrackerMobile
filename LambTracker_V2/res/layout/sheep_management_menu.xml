@@ -16,13 +16,21 @@
             android:onClick="sheepManagement"
             android:text="@string/title_activity_sheep_management"
             android:textSize="18sp" />  
-            
+        <Button
+            android:id="@+id/lambing_btn"
+            android:layout_width="250dp"
+            android:layout_height="75dp"           
+            android:onClick="lambingSheep"
+            android:layout_below="@+id/sheep_management_btn"
+            android:text="@string/title_activity_lambing_sheep"
+            android:textSize="18sp" /> 
+                
         <Button
             android:id="@+id/group_sheep_management_btn"
             android:layout_width="250dp"
             android:layout_height="50dp"           
             android:onClick="groupSheepManagement"
-            android:layout_below="@+id/sheep_management_btn"
+            android:layout_below="@+id/lambing_btn"
             android:text="@string/title_activity_group_sheep_management"
             android:textSize="18sp" />
            

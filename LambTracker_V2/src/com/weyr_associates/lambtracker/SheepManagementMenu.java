@@ -19,6 +19,11 @@ public class SheepManagementMenu extends Activity {
 		i = new Intent(SheepManagementMenu.this, SheepManagement.class);
 		SheepManagementMenu.this.startActivity(i);
 	}
+	public void lambingSheep (View v){
+		Intent i = null;
+		i = new Intent(SheepManagementMenu.this, LambingSheep.class);
+		SheepManagementMenu.this.startActivity(i);
+	} 
 	public void groupSheepManagement (View v){
 		Intent i = null;
 		i = new Intent(SheepManagementMenu.this, GroupSheepManagement.class);

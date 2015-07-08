@@ -229,10 +229,10 @@ public class MainActivity extends Activity {
 					i = new Intent(MainActivity.this, TestInterfaceDesigns.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 13:
-					i = new Intent(MainActivity.this, DrugManagement.class);
-					MainActivity.this.startActivity(i);
-					break;
+//				case 13:
+//					i = new Intent(MainActivity.this, DrugManagement.class);
+//					MainActivity.this.startActivity(i);
+//					break;
 				
 			}
 			

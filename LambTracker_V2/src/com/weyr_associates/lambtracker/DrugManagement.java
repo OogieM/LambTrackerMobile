@@ -250,8 +250,8 @@ public class DrugManagement extends ListActivity {
 		}
 
 		dbh.closeDB();
-		//Go back to main
-		finish();
+		//Go back to main		  	
+       	this.finish();	
 	}
 
 	// User clicked Show Details

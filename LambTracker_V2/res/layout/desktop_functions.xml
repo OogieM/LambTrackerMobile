@@ -33,4 +33,13 @@
             android:layout_below="@+id/create_ram_breeding_record_btn"
             android:text="@string/title_activity_ewe_breeding_record"
             android:textSize="18sp" /> 
+            
+    <Button
+            android:id="@+id/drug_management_btn"
+            android:layout_width="250dp"
+            android:layout_height="75dp"           
+            android:onClick="drugManagement"
+            android:layout_below="@+id/create_ewe_breeding_record_btn"
+            android:text="@string/title_activity_drug_management"
+            android:textSize="18sp" /> 
 </RelativeLayout>
