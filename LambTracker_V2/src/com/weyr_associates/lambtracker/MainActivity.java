@@ -542,9 +542,4 @@ public class MainActivity extends Activity {
 		this.moveTaskToBack( true );
 	}
 	
-}
-
-
-
-
-	 
+} 

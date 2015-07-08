@@ -1070,6 +1070,3 @@ public class LambingSheep extends ListActivity
 	     	Utilities.takeNote(v, thissheep_id, this);
 	     }
 }
-
-	
-
