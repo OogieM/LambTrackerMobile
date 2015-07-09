@@ -219,7 +219,7 @@
         <activity
             android:name="com.weyr_associates.lambtracker.DrugManagement"
             android:label="@string/title_activity_drug_management" 
-            android:screenOrientation="portrait" >
+            android:screenOrientation="landscape" >
         </activity>
     </application>
 

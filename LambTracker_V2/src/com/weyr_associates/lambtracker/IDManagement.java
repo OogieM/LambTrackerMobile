@@ -132,11 +132,11 @@ public class IDManagement extends Activity {
 //			Log.i("Convert", "is.");
 			doBindService();
 		} else {
-//			Log.i("Convert", "is not, start it");
+			Log.i("Convert", "is not, start it");
 			startService(new Intent(IDManagement.this, eidService.class));
 			doBindService();
 		}
-//		Log.i("Convert", "Done isRunning.");
+		Log.i("Convert", "Done isRunning.");
 	} 	
  	
 	void doBindService() {
@@ -148,8 +148,7 @@ public class IDManagement extends Activity {
 //		Log.i("Convert", "At doBind2.");
 
 		mIsBound = true;
-		
-
+	
 		if (mService != null) {
 //			Log.i("Convert", "At doBind3.");
 			try {
@@ -276,8 +275,10 @@ public class IDManagement extends Activity {
     	Log.i("onCreate", " remove fed tag button is red");
     	btn = (Button) findViewById( R.id.remove_farmtag_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+    	Log.i("onCreate", " remove farm tag button is red");
     	btn = (Button) findViewById( R.id.remove_paint_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+    	Log.i("onCreate", " remove paint tag button is red");
     	btn = (Button) findViewById( R.id.remove_eidtag_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	Log.i("onCreate", " after setting remove tag buttons red");
@@ -436,6 +437,10 @@ public class IDManagement extends Activity {
     	farmtagid = 0;
     	eidtagid = 0;
     	paintid = 0;
+    	tattooid = 0;
+    	splitid = 0;
+    	notchid = 0;
+    	new_tag_number = null;
     	//	clear out the add tag spinners
     	try {
 	    	tag_type_spinner2.setSelection(0);
@@ -512,13 +517,47 @@ public class IDManagement extends Activity {
 				        	break;
     					}
 				    case 6:
-				    	//	got a split
-				    	//	Assume no split ears at this time. 
-				    	//	Needs modification for future use
+//				    		got a split
+//				    		Assume no split ears at this time. 
+//				    		Needs modification for future use
 				    	TV = (TextView) findViewById( R.id.sheepnameText );
 			        	TV.setText( "Cannot search on splits yet." );
-				    	// TODO
-				        break;
+//				    	// TODO
+//				        break;
+//    					if( tag_num != null && tag_num.length() > 0 ){       		
+    						// Get the sheep id from the id table with split ears
+//			        		cmd = String.format( "select sheep_id from id_info_table where "+
+//				        			" id_info_table.tag_type='%s' and (id_info_table.tag_date_off is null or" +
+//				        			" id_info_table.tag_date_off = '') "
+//				        			, tag_type_spinner.getSelectedItemPosition());  
+//				        	Log.i("searchByNumber", "command is " + cmd);
+//				        	crsr = dbh.exec( cmd );
+//				    		cursor   = ( Cursor ) crsr; 
+//				        	recNo    = 1;
+//							nRecs    = cursor.getCount();
+//							Log.i("searchByNumber", " nRecs = "+ String.valueOf(nRecs));
+//				        	dbh.moveToFirstRecord();
+//				        	Log.i("searchByNumber", " the cursor is of size " + String.valueOf(dbh.getSize()));
+//				        	if( dbh.getSize() == 0 ){ 
+//				        		// no sheep with that  tag in the database so clear out and return
+//					    		clearBtn( v );
+//					    		TV = (TextView) findViewById( R.id.sheepnameText );
+//					        	TV.setText( "Cannot find this sheep." );
+//					        	return;
+//					    	}
+//				        	thissheep_id = dbh.getInt(0);
+//				        
+//				        	Log.i("searchByNumber", "This sheep is record " + String.valueOf(thissheep_id));
+//				        	if (nRecs >1){
+//				        		//	Have multiple sheep with this tag so enable next button
+//				            	btn = (Button) findViewById( R.id.next_rec_btn );
+//				            	btn.setEnabled(true);       		
+//				        	}
+//				        	Log.i("searchByNumber", " Before finding all tags");	        	
+//				        	// Now need to go do the get tags and stuff. 
+//				        	findTagsShowAlert (v, thissheep_id);
+				        	break;
+//    					}
 				    case 7:
 				    	//	got a notch
 				    	//	Assume no notches at this time. 
@@ -543,7 +582,7 @@ public class IDManagement extends Activity {
 			        	dbh.moveToFirstRecord();
 			        	Log.i("searchByName", " the cursor is of size " + String.valueOf(dbh.getSize()));
 			        	if( dbh.getSize() == 0 )
-				    		{ // no sheep with that name in the database so clear out and return
+				    		{ // no current sheep with that name in the database so clear out and return
 				    		clearBtn( v );
 				    		TV = (TextView) findViewById( R.id.sheepnameText );
 				        	TV.setText( "Cannot find this sheep." );
@@ -579,7 +618,7 @@ public class IDManagement extends Activity {
 				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-				"where id_info_table.sheep_id ='%s' and (id_info_table.tag_date_off is null or" +
+				"where id_info_table.sheep_id ='%s' and sheep_table.remove_date = '' and (id_info_table.tag_date_off is null or" +
 				        			" id_info_table.tag_date_off = '') order by idtype_name asc", thissheep_id);
 		Log.i("lookForSheep", "command is " + cmd);
 		crsr2 = dbh.exec( cmd ); 
@@ -621,19 +660,21 @@ public class IDManagement extends Activity {
 			    	Log.i("in for loop", " got fed tag " + dbh.getStr(4));
 			    	TV = (TextView) findViewById(R.id.fedText)	;
 			    	TV.setText(dbh.getStr(4));
+			    	Log.i("in for loop", " fed tag number is " + dbh.getStr(4));
 			    	TV = (TextView) findViewById(R.id.fed_colorText);
 			    	TV.setText(dbh.getStr(3));
+			    	Log.i("in for loop", " fed tag color is " + dbh.getStr(3));
 			    	TV = (TextView) findViewById(R.id.fed_locationText);
 			    	TV.setText(dbh.getStr(5));
+			    	Log.i("in for loop", " fed tag location is " + dbh.getStr(5));
 			    	fedtagid = dbh.getInt(6);
-			    	Log.i("in for loop", " fed tag id is " + String.valueOf(fedtagid));
+			    	Log.i("in for loop", " fed tag rec id is " + String.valueOf(fedtagid));
 			        break;
 			    case 2:
 			    	// Got an EID tag
 			    	Log.i("in for loop", " got EID tag " + dbh.getStr(4));
 			    	TV = (TextView) findViewById(R.id.eidText)	;
 			    	TV.setText(dbh.getStr(4));
-			    	// TODO
 			    	//	Need to set the EID Tag color and location here by reading the data
 			    	TV = (TextView) findViewById(R.id.eid_colorText);
 			    	TV.setText(dbh.getStr(3));
@@ -674,7 +715,9 @@ public class IDManagement extends Activity {
 			    	//	Need to set a way to show tattoo, split and notches
 			        break;
 				} // end of case switch
-			} // end of for loop		
+				Log.i("out of case", " switch " );
+			} // end of for loop
+			Log.i("out of for", " loop " );
 		} catch (Exception e) {
 			// No tags so dump out
 		}
@@ -965,40 +1008,40 @@ public class IDManagement extends Activity {
 	    		}
 	    	}
 //	    Update the split mark data
-	    if (splitid != 0) {
-	    	// update the split ear data
-	    	//	not implemented at this time. Assumed we either are adding new tags or taking off tags first
-	    	//	no update of an existing tag record is done.
-	    	Log.i("updatesplit ", " tag record id is not zero");
-		    }
-	    	else {
-	    		// splitid is zero so need to test whether there is a location and add a record if there is one
-	    		if (paintText != null && !paintText.isEmpty()){	    			
+//	    if (splitid != 0) {
+//	    	// update the split ear data
+//	    	//	not implemented at this time. Assumed we either are adding new tags or taking off tags first
+//	    	//	no update of an existing tag record is done.
+//	    	Log.i("updatesplit ", " tag record id is not zero");
+//		    }
+//	    	else {
+//	    		// splitid is zero so need to test whether there is a location and add a record if there is one
+//	    		if (paintText != null && !paintText.isEmpty()){	    			
 //	    		    paint_number = Integer.valueOf(paintText);
-	    		    TV = (TextView) findViewById( R.id.paint_locationText);
-	    		    paint_locationText = TV.getText().toString();
-	    		    Log.i("updatesplit ", "paint location " + paint_locationText);
-	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
-	    	    			"where id_location_abbrev='%s'", paint_locationText);
-	    	    	crsr = dbh.exec( cmd );
-	    	        cursor   = ( Cursor ) crsr;
-	    	        dbh.moveToFirstRecord();
-	    	        paint_colorid = 19; // no color for a split
-	    	        paint_locationid = dbh.getInt(0);
-	    	        Log.i("updatesplit ", "split location integer " + String.valueOf(paint_locationid));
-	    			//have a paint tag but no paintid so add a new record;
-	    	        paintText = ""; // make the tag number empty
-	    			Log.i("updatesplit ", "tag record id is 0 but have paint tag data need to add a new record to id_info_table here");
-	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
-	    					"values ( %s, 6, %s, %s, %s, '%s', %s )", thissheep_id, paint_colorid, paint_colorid, paint_locationid, today, paintText);
-	    			dbh.exec( cmd );	
-	    		}
-	    		else{
-	    			// no split to enter so return
-	    			Log.i("updatesplit ", "no split so nothing to do");
-	    			
-	    		}
-	    	}
+//	    		    TV = (TextView) findViewById( R.id.paint_locationText);
+//	    		    paint_locationText = TV.getText().toString();
+//	    		    Log.i("updatesplit ", "paint location " + paint_locationText);
+//	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
+//	    	    			"where id_location_abbrev='%s'", paint_locationText);
+//	    	    	crsr = dbh.exec( cmd );
+//	    	        cursor   = ( Cursor ) crsr;
+//	    	        dbh.moveToFirstRecord();
+//	    	        paint_colorid = 19; // no color for a split
+//	    	        paint_locationid = dbh.getInt(0);
+//	    	        Log.i("updatesplit ", "split location integer " + String.valueOf(paint_locationid));
+//	    			//have a paint tag but no paintid so add a new record;
+//	    	        paintText = ""; // make the tag number empty
+//	    			Log.i("updatesplit ", "tag record id is 0 but have paint tag data need to add a new record to id_info_table here");
+//	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
+//	    					"values ( %s, 6, %s, %s, %s, '%s', %s )", thissheep_id, paint_colorid, paint_colorid, paint_locationid, today, paintText);
+//	    			dbh.exec( cmd );	
+//	    		}
+//	    		else{
+//	    			// no split to enter so return
+//	    			Log.i("updatesplit ", "no split so nothing to do");
+//	    			
+//	    		}
+//	    	}
 	    
 	    // Update the Farm Tag data
 	    if (farmtagid != 0) {
@@ -1423,16 +1466,16 @@ public class IDManagement extends Activity {
 //        	    TV.setText(tag_location_label);
 //        	   	tattooid = 0;
 //    			break;
-    		case 6:
-        		//	Split so update farm section and set needs database update
-        		//	by setting id of 0 meaning either no tag or needs update       		
-        		Log.i("in if", "Got a new split ear type");
-        	    TV  = (TextView) findViewById( R.id.farmText );
-        	    TV.setText("Split");
-        	    TV = (TextView) findViewById( R.id.farm_locationText );
-        	    TV.setText(tag_location_label);
-        	    splitid = 0;
-    			break;
+//    		case 6:
+//        		//	Split so update farm section and set needs database update
+//        		//	by setting id of 0 meaning either no tag or needs update       		
+//        		Log.i("in if", "Got a new split ear type");
+//        	    TV  = (TextView) findViewById( R.id.farmText );
+//        	    TV.setText("Split");
+//        	    TV = (TextView) findViewById( R.id.farm_locationText );
+//        	    TV.setText(tag_location_label);
+//        	    splitid = 0;
+//    			break;
 //    		case 6:
 //        		//	Notch so update farm section and set needs database update
 //        		//	by setting id of 0 meaning either no tag or needs update       		

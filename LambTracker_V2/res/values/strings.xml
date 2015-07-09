@@ -123,7 +123,6 @@
         <item>Look Up a Sheep</item>
         <item>Sheep Management Menu</item>
         <item>ID Management</item>
-        <item>Lambing</item>
         <item>Create a Sheep Evaluation Task</item>
         <item>Fix Lamb Record</item>
         <item>Print Labels</item>
@@ -131,7 +130,6 @@
         <item>Desktop Functions</item>
         <item>Set LambTracker Defaults</item>
         <item>Test Interface Designs</item>
-        <item>Manage Drug Inventory</item>
     </string-array>
 
     <string name="sheep_name_lbl">Sheep Name</string>

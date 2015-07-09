@@ -242,7 +242,6 @@ public class DrugManagement extends ListActivity {
 		try {
 			//			Log.i("Back Button", " In try stmt cursor");
 			drugCursor.close();
-
 		}
 		catch (Exception e) {
 			Log.i("Back Button", "Failed to close cursors");
@@ -250,8 +249,8 @@ public class DrugManagement extends ListActivity {
 		}
 
 		dbh.closeDB();
-		//Go back to main		  	
-       	this.finish();	
+		//Go back to menu		  	
+       finish();	
 	}
 
 	// User clicked Show Details

@@ -970,11 +970,16 @@ public class LambingSheep extends ListActivity
 			stopService(new Intent(LambingSheep.this, eidService.class));   	
 	    	// Added this to close the database if we go back to the main activity  	
 //	    	stopManagingCursor (cursor);
-	    	cursor.close();
+			try {
+	    		cursor.close();
+	    	}catch (Exception r)
+	    	{
+	    		Log.i("back btn", "cursor RunTimeException: " + r);
+	    	}
 	    	dbh.closeDB();
 	    	clearBtn( null );
-	    	//Go back to main
-	      	finish();
+	    	//Go back to menu
+	    	this.finish();
 		    }
 	 
 	    public void showAlert (View v){    		
