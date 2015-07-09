@@ -476,6 +476,7 @@ public class MainActivity extends Activity {
 		btnService.setText("Connect");
 	}
 
+	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

@@ -266,7 +266,8 @@ public class IDManagement extends Activity {
 		CheckIfServiceIsRunning();
 		Log.i("Convert", "back from isRunning");  	
 ////////////////////////////////////    	
-    	 
+    	  
+		
 		thissheep_id = 0;
     	//	make the remove tag buttons red
 		Log.i("onCreate", " before setting remove tag buttons red");
