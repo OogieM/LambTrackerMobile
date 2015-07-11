@@ -190,7 +190,60 @@
          android:textSize="14sp" />
 
  </GridLayout>
-    	
+  		<GridLayout
+	        android:id="@+id/grid2"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:columnCount="5">   	    
+	     	    
+	        <TextView
+	            android:layout_width="176dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="1"
+	            android:layout_gravity="left|top"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_number_lbl" />
+	        
+	        <TextView
+	            android:layout_width="65dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="2"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_color_abbrev_lbl" />
+	        
+	        <TextView
+	            android:layout_width="40dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="3"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_location_abbrev_lbl" />
+	        
+	        <TextView
+	            android:layout_width="80dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="4"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_type_abbrev_lbl" />
+        
+     	</GridLayout>
+    	    
+       <ListView
+           android:id="@+id/android:list"
+           android:layout_width="fill_parent"
+           android:layout_height="65dp" >
+
+		</ListView>  	
         <GridLayout
             android:id="@+id/grid3"
             android:layout_width="wrap_content"

@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,7 +33,7 @@ import android.widget.TextView;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
-public class IDManagement extends Activity {
+public class IDManagement extends ListActivity {
 	private DatabaseHandler dbh;
 	int             fedtagid, farmtagid, eidtagid, paintid, tattooid, splitid, notchid; // These are record IDs not sheep IDs
 	public Cursor 	cursor, cursor2;
