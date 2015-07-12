@@ -1,15 +1,14 @@
 package com.weyr_associates.lambtracker;
 
 import java.util.ArrayList;
-import android.widget.ArrayAdapter;
-
 import java.util.Calendar;
 import java.util.List;
-import android.app.Activity;
-import android.app.AlertDialog;
+import java.util.Locale;
+
 import android.app.ListActivity;
+import android.widget.ArrayAdapter;
+import android.app.AlertDialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -20,16 +19,19 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
@@ -408,30 +410,30 @@ public class IDManagement extends ListActivity {
     	TV.setText( "" );		
     	TV = (TextView) findViewById( R.id.sheepnameText );
 	    TV.setText( "" );
-	    TV  = (TextView) findViewById( R.id.eidText );
-	    TV.setText( "" );
-	    TV  = (TextView) findViewById( R.id.fedText );
-	    TV.setText( "" );
-	    TV  = (TextView) findViewById( R.id.farmText );
-	    TV.setText( "" );
-	    TV  = (TextView) findViewById( R.id.paintText );
-	    TV.setText( "" );
-	    TV = (TextView) findViewById( R.id.fed_colorText );
-	    TV.setText( "" );
-	    TV = (TextView) findViewById( R.id.fed_locationText );
-	    TV.setText( "" );
-	    TV = (TextView) findViewById( R.id.farm_colorText );
-	    TV.setText( "" );
-	    TV = (TextView) findViewById( R.id.farm_locationText);
-	    TV.setText( "" );
-	    TV = (TextView) findViewById( R.id.paint_colorText );
-	    TV.setText( "" );
-	    TV = (TextView) findViewById( R.id.paint_locationText);
-	    TV.setText( "" );
-	    TV = (TextView) findViewById( R.id.eid_colorText );
-	    TV.setText( "" );
-	    TV = (TextView) findViewById( R.id.eid_locationText);
-	    TV.setText( "" );
+//	    TV  = (TextView) findViewById( R.id.eidText );
+//	    TV.setText( "" );
+//	    TV  = (TextView) findViewById( R.id.fedText );
+//	    TV.setText( "" );
+//	    TV  = (TextView) findViewById( R.id.farmText );
+//	    TV.setText( "" );
+//	    TV  = (TextView) findViewById( R.id.paintText );
+//	    TV.setText( "" );
+//	    TV = (TextView) findViewById( R.id.fed_colorText );
+//	    TV.setText( "" );
+//	    TV = (TextView) findViewById( R.id.fed_locationText );
+//	    TV.setText( "" );
+//	    TV = (TextView) findViewById( R.id.farm_colorText );
+//	    TV.setText( "" );
+//	    TV = (TextView) findViewById( R.id.farm_locationText);
+//	    TV.setText( "" );
+//	    TV = (TextView) findViewById( R.id.paint_colorText );
+//	    TV.setText( "" );
+//	    TV = (TextView) findViewById( R.id.paint_locationText);
+//	    TV.setText( "" );
+//	    TV = (TextView) findViewById( R.id.eid_colorText );
+//	    TV.setText( "" );
+//	    TV = (TextView) findViewById( R.id.eid_locationText);
+//	    TV.setText( "" );
 	    TV = (TextView) findViewById( R.id.new_tag_number);
 	    TV.setText( "" );
 	    //	Clear out the tag ids
@@ -457,26 +459,44 @@ public class IDManagement extends ListActivity {
     	btn.setEnabled(false); 
 	   	//	make the scan eid button red
     	btn = (Button) findViewById( R.id.scan_eid_btn );
-    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));    	
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));   
+    	// Clear out the list of tags
+		Log.i("clear btn", "before changing myadapter");
+		try {
+			myadapter.changeCursor(null);
+		}
+		catch (Exception e) {
+			// In this case there is no adapter so do nothing
+		}
     }
     
 	public void lookForSheep (View v){		
+		Object crsr;
 		Boolean exists;
 		TextView TV;
         exists = true;
         // Hide the keyboard when you click the button
     	InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
     	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-    	crsr = null;
-    	fedtagid = 0;
-    	farmtagid = 0;
-    	eidtagid = 0;
-    	paintid = 0;
+      	//	Disable the Next Record and Prev. Record button until we have multiple records
+    	btn = (Button) findViewById( R.id.next_rec_btn );
+    	btn.setEnabled(false); 
+    	btn = (Button) findViewById( R.id.prev_rec_btn );
+    	btn.setEnabled(false);
     	
-        TV = (TextView) findViewById( R.id.inputText );
-    	String	tag_num = TV.getText().toString();
-    	Log.i("LookForSheep", " got to lookForSheep with Input of " + tag_num);
-        exists = tableExists("sheep_table");
+//    	crsr = null;
+//    	fedtagid = 0;
+//    	farmtagid = 0;
+//    	eidtagid = 0;
+//    	paintid = 0;
+    	
+    	 TV = (EditText) findViewById( R.id.inputText );
+         String	tag_num = TV.getText().toString();
+     	
+         Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
+         Log.i("LookForSheep", " got to lookForSheep with Tag type of " + tag_type_spinner.getSelectedItemPosition());
+         exists = tableExists("sheep_table");
+         
         if (exists){       	
     			switch (tag_type_spinner.getSelectedItemPosition()){
     				case 1:
@@ -513,7 +533,7 @@ public class IDManagement extends ListActivity {
 				            	btn = (Button) findViewById( R.id.next_rec_btn );
 				            	btn.setEnabled(true);       		
 				        	}
-				        	Log.i("searchByNumber", " Before finding all tags");	        	
+				        	Log.i("searchByNumber", " Before finding all tags and formatting the screen");	        	
 				        	// Now need to go do the get tags and stuff. 
 				        	findTagsShowAlert (v, thissheep_id);
 				        	break;
@@ -570,9 +590,9 @@ public class IDManagement extends ListActivity {
 				        break;
 				    case 8:
 				    	//	got a name				    	
-				    	// TODO
+				    	
 			        	tag_num = "%" + tag_num + "%";
-			        	cmd = String.format( "select sheep_id, sheep_name, alert01 from sheep_table where sheep_name like '%s'" +
+			        	cmd = String.format( "select sheep_id, sheep_name from sheep_table where sheep_name like '%s'" +
 			        			" and (remove_date is null or remove_date = '') "
 			        			, tag_num );  
 			        	Log.i("searchByName", "command is " + cmd);
@@ -608,12 +628,15 @@ public class IDManagement extends ListActivity {
             	TV = (TextView) findViewById( R.id.sheepnameText );
                 TV.setText( "Sheep Database does not exist." ); 
          	}
+        
 	}
-	
+ 	
 	public void findTagsShowAlert (View v, Integer thissheep_id){
 		TextView TV;
-		try {
-		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.id_typeid, " +
+		
+		Log.i("find tags", "This sheep is record " + String.valueOf(thissheep_id));	
+				
+		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
 				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01 " +
 				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
@@ -622,116 +645,415 @@ public class IDManagement extends ListActivity {
 				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
 				"where id_info_table.sheep_id ='%s' and sheep_table.remove_date = '' and (id_info_table.tag_date_off is null or" +
 				        			" id_info_table.tag_date_off = '') order by idtype_name asc", thissheep_id);
-		Log.i("lookForSheep", "command is " + cmd);
+		Log.i("findtags", "command is " + cmd);
 		crsr2 = dbh.exec( cmd ); 
-		Log.i("lookForSheep", " after second query to get all tags. found  " + String.valueOf(dbh.getSize()));	        	
+		Log.i("findtags", " after second query to get all tags. found  " + String.valueOf(dbh.getSize()));	        	
 		cursor2   = ( Cursor ) crsr2; 
 		cursor2.moveToFirst();	
 		
 		nRecs2    = cursor2.getCount();
-		Log.i("lookForSheep", " nRecs2 is " + String.valueOf(nRecs2));
+		Log.i("findtags", " nRecs2 is " + String.valueOf(nRecs2));
 		
 		if (nRecs2 > 0) {		
 			thissheep_name = dbh.getStr(0);
-	//		TV = (TextView) findViewById( R.id.sheepnameText );
-	//	    TV.setText (thissheep_name);
+			TV = (TextView) findViewById( R.id.sheepnameText );
+		    TV.setText (thissheep_name);
 		}
-		try {
+//		TV = (TextView) findViewById( R.id.sheepnameText );
+//	    TV.setText (thissheep_name);
+//	   	Log.i("findtags ", "Alert Text is " + alert_text);
+		Log.i("findtags", " before formatting results");
+		
+		//	Get set up to try to use the CursorAdapter to display all the tag data
+		//	Select only the columns I need for the tag display section
+	    String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+		Log.i("FormatRecord", "after setting string array fromColumns");
+		//	Set the views for each column for each line. A tag takes up 1 line on the screen
+	    int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+	    Log.i("FormatRecord", "after setting string array toViews");
+	    myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor2 ,fromColumns, toViews, 0);
+	    Log.i("FormatRecord", "after setting myadapter");
+	    setListAdapter(myadapter);
+	    Log.i("FormatRecord", "after setting list adapter");
+
+//		try {
 			// Now we need to check and see if there is an alert for this sheep
 			String alert_text = dbh.getStr(8);
-		}catch (Exception e){
-    		// 	couldn't get a new alert for this sheep
-    	} 
-		}catch (Exception s){
-			// No tags for this sheep
-		}
-		TV = (TextView) findViewById( R.id.sheepnameText );
-	    TV.setText (thissheep_name);
-	   	Log.i("lookForSheep ", "Alert Text is " + alert_text);
-		Log.i("lookForSheep", " before formatting results");
+//			Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
+			if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+		       	// make the alert button red
+		    	Button btn = (Button) findViewById( R.id.alert_btn );
+		    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+		    	btn.setEnabled(true); 
+		    	//	testing whether I can put up an alert box here without issues
+		    	showAlert(v);
+			}
+			
+			// OLD XML file data
+//	        <GridLayout
+//            android:id="@+id/grid3"
+//            android:layout_width="wrap_content"
+//            android:layout_height="wrap_content"
+//            android:columnCount="6"
+//            android:rowCount="9" >
+//
+//            <TextView
+//                android:layout_width="90dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="0"
+//                android:layout_gravity="left"
+//                android:layout_row="0"
+//                android:inputType="none"
+//                android:text="@string/federal_id_lbl" />
+//
+//            <EditText
+//                android:id="@+id/fedText"
+//                android:layout_width="90dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="0"
+//                android:layout_gravity="left"
+//                android:layout_row="2"
+//                android:inputType="number"
+//                android:textSize="18sp"
+//                android:typeface="monospace" >
+//            </EditText>
+//
+//            <TextView
+//                android:layout_width="125dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="1"
+//                android:layout_gravity="left"
+//                android:layout_row="0"
+//                android:inputType="none"
+//                android:text="@string/tag_color_lbl" />
+//
+//            <EditText
+//                android:id="@+id/fed_colorText"
+//                android:layout_width="100dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="1"
+//                android:layout_gravity="left"
+//                android:layout_row="2"
+//                android:inputType="text"
+//                android:textSize="18sp"
+//                android:typeface="monospace" >
+//            </EditText>
+//
+//            <TextView
+//                android:layout_width="90dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="2"
+//                android:layout_gravity="left"
+//                android:layout_row="0"
+//                android:inputType="none"
+//                android:text="@string/tag_location_lbl" />
+//
+//            <EditText
+//                android:id="@+id/fed_locationText"
+//                android:layout_width="90dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="2"
+//                android:layout_gravity="left"
+//                android:layout_row="2"
+//                android:inputType="text"
+//                android:textSize="18sp"
+//                android:typeface="monospace" >
+//            </EditText>
+//
+//            <TextView
+//                android:layout_width="90dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="0"
+//                android:layout_gravity="left"
+//                android:layout_row="3"
+//                android:inputType="none"
+//                android:text="@string/farm_id_lbl" />
+//
+//            <EditText
+//                android:id="@+id/farmText"
+//                android:layout_width="90dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="0"
+//                android:layout_gravity="left"
+//                android:layout_row="4"
+//                android:enabled="true"
+//                android:inputType="number"
+//                android:textSize="18sp"
+//                android:typeface="monospace" />
+//
+//            <TextView
+//                android:layout_width="125dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="1"
+//                android:layout_gravity="left"
+//                android:layout_row="3"
+//                android:inputType="none"
+//                android:text="@string/tag_color_lbl" />
+//
+//            <EditText
+//                android:id="@+id/farm_colorText"
+//                android:layout_width="100dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="1"
+//                android:layout_gravity="left"
+//                android:layout_row="4"
+//                android:inputType="text"
+//                android:textSize="18sp"
+//                android:typeface="monospace" >
+//            </EditText>
+//
+//            <TextView
+//                android:layout_width="90dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="2"
+//                android:layout_gravity="left"
+//                android:layout_row="3"
+//                android:inputType="none"
+//                android:text="@string/tag_location_lbl" />
+//
+//            <EditText
+//                android:id="@+id/farm_locationText"
+//                android:layout_width="90dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="2"
+//                android:layout_gravity="left"
+//                android:layout_row="4"
+//                android:inputType="text"
+//                android:textSize="18sp"
+//                android:typeface="monospace" >
+//            </EditText>
+//
+//            <TextView
+//                android:layout_width="90dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="0"
+//                android:layout_gravity="left"
+//                android:layout_row="5"
+//                android:inputType="none"
+//                android:text="@string/paint_id_lbl" />
+//
+//            <EditText
+//                android:id="@+id/paintText"
+//                android:layout_width="90dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="0"
+//                android:layout_gravity="left"
+//                android:layout_row="6"
+//                android:enabled="true"
+//                android:inputType="number"
+//                android:textSize="18sp"
+//                android:typeface="monospace" />
+//
+//            <TextView
+//                android:layout_width="125dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="1"
+//                android:layout_gravity="left"
+//                android:layout_row="5"
+//                android:inputType="none"
+//                android:text="@string/paint_color_lbl" />
+//
+//            <EditText
+//                android:id="@+id/paint_colorText"
+//                android:layout_width="100dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="1"
+//                android:layout_gravity="left"
+//                android:layout_row="6"
+//                android:inputType="text"
+//                android:textSize="18sp"
+//                android:typeface="monospace" >
+//            </EditText>
+//
+//            <TextView
+//                android:layout_width="90dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="2"
+//                android:layout_gravity="left"
+//                android:layout_row="5"
+//                android:inputType="none"
+//                android:text="@string/tag_location_lbl" />
+//
+//            <EditText
+//                android:id="@+id/paint_locationText"
+//                android:layout_width="90dp"
+//                android:layout_height="wrap_content"
+//                android:layout_column="2"
+//                android:layout_gravity="left"
+//                android:layout_row="6"
+//                android:inputType="text"
+//                android:textSize="18sp"
+//                android:typeface="monospace" >
+//            </EditText>
+//
+//        </GridLayout>
+//		       <GridLayout
+//		        android:id="@+id/grid4"
+//		        android:layout_width="wrap_content"
+//		        android:layout_height="wrap_content"
+//		        android:columnCount="3"
+//		        android:rowCount="4" > 
+//		              
+//		        <TextView
+//		            android:layout_width="215dp"
+//		            android:layout_height="wrap_content"
+//		            android:layout_column="0"
+//		            android:layout_gravity="left|top"
+//		            android:layout_row="0"
+//		            android:inputType="none"
+//		            android:text="@string/electronic_id_lbl" />
+//		        
+//		        <EditText
+//		            android:id="@+id/eidText"
+//		            android:layout_width="215dp"
+//		            android:layout_height="wrap_content"
+//		            android:layout_column="0"
+//		            android:layout_gravity="left"
+//		            android:layout_row="1"
+//		            android:enabled="true"
+//		            android:inputType="text"
+//		            android:textSize="18sp"
+//		            android:typeface="monospace" />  
+//		        
+//		        <TextView
+//		            android:layout_width="90dp"
+//		            android:layout_height="wrap_content"
+//		            android:layout_column="2"
+//		            android:layout_gravity="left|top"
+//		            android:layout_row="0"
+//		            android:inputType="none"
+//		            android:text="@string/tag_location_lbl" />
+//
+//		        <EditText
+//		  	  		android:id="@+id/eid_locationText"
+//		  	  		android:layout_width="100dp"
+//		  	  		android:layout_height="wrap_content"
+//		  	  		android:layout_column="2"
+//		      		android:layout_gravity="left"
+//		      		android:layout_row="1"
+//		      		android:inputType="text"
+//		  	  		android:textSize="18sp"/>
+//		        
+//		        <TextView
+//		            android:layout_width="100dp"
+//		            android:layout_height="wrap_content"
+//		            android:layout_column="1"
+//		            android:layout_gravity="left|top"
+//		            android:layout_row="0"
+//		            android:inputType="none"
+//		            android:text="@string/tag_color_lbl" />
+//		        
+//		        <EditText
+//		  	  		android:id="@+id/eid_colorText"
+//		  	  		android:layout_width="100dp"
+//		  	  		android:layout_height="wrap_content"
+//		  	  		android:layout_column="1"
+//		      		android:layout_gravity="left"
+//		      		android:layout_row="1"
+//		      		android:inputType="text"
+//		  	  		android:textSize="18sp"/>
+//		        </GridLayout>
+
+//			<Button
+//            android:id="@+id/update_display_btn"
+//            android:layout_width="100dp"
+//            android:layout_height="50dp"
+//            android:layout_column="3"
+//      		android:layout_gravity="left"
+//     	 	android:layout_row="1"
+//            android:onClick="updateTag"
+//            android:text="@string/update_display_btn"
+//            android:textSize="14sp" />	        
+		        
+		        
+		        
+//		}catch (Exception e){
+//    		// 	couldn't get a new alert for this sheep
+//	    	} 
+
 		// Need to fill the federal and farm tag info from the returned cursor here
 	    // looping through all rows and adding to list
-		try {
-			for (cursor2.moveToFirst(); !cursor2.isAfterLast(); cursor2.moveToNext()){
-				// get the tag type of the first record
-				i = dbh.getInt(2);
-				Log.i("in for loop", " tag type is " + String.valueOf(i));
-				switch (i){		
-			    case 1:
-					//Got a federal tag
-			    	Log.i("in for loop", " got fed tag " + dbh.getStr(4));
-			    	TV = (TextView) findViewById(R.id.fedText)	;
-			    	TV.setText(dbh.getStr(4));
-			    	Log.i("in for loop", " fed tag number is " + dbh.getStr(4));
-			    	TV = (TextView) findViewById(R.id.fed_colorText);
-			    	TV.setText(dbh.getStr(3));
-			    	Log.i("in for loop", " fed tag color is " + dbh.getStr(3));
-			    	TV = (TextView) findViewById(R.id.fed_locationText);
-			    	TV.setText(dbh.getStr(5));
-			    	Log.i("in for loop", " fed tag location is " + dbh.getStr(5));
-			    	fedtagid = dbh.getInt(6);
-			    	Log.i("in for loop", " fed tag rec id is " + String.valueOf(fedtagid));
-			        break;
-			    case 2:
-			    	// Got an EID tag
-			    	Log.i("in for loop", " got EID tag " + dbh.getStr(4));
-			    	TV = (TextView) findViewById(R.id.eidText)	;
-			    	TV.setText(dbh.getStr(4));
-			    	//	Need to set the EID Tag color and location here by reading the data
-			    	TV = (TextView) findViewById(R.id.eid_colorText);
-			    	TV.setText(dbh.getStr(3));
-			    	TV = (TextView) findViewById(R.id.eid_locationText);
-			    	TV.setText(dbh.getStr(5));
-			    	eidtagid = dbh.getInt(6);
-			    	Log.i("in for loop", " EID tag id is " + String.valueOf(eidtagid));
-			        break;
-			    case 3:
-					// Got a paint brand
-			    	Log.i("in for loop", " got paint mark " + dbh.getStr(4));
-			    	TV = (TextView) findViewById(R.id.paintText)	;
-			    	TV.setText(dbh.getStr(4));
-			    	TV = (TextView) findViewById(R.id.paint_colorText);
-			    	TV.setText(dbh.getStr(3));
-			    	TV = (TextView) findViewById(R.id.paint_locationText);
-			    	TV.setText(dbh.getStr(5));
-			    	paintid = dbh.getInt(6);
-			    	Log.i("in for loop", " paint id is " + String.valueOf(paintid));
-			        break;
-			    case 4:
-			    	// got a farm tag
-			    	Log.i("in for loop", " got Farm tag " + dbh.getStr(4));	
-		    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
-		    		TV5.setText(dbh.getStr(4));
-		    		TextView TV6 = (TextView) findViewById(R.id.farm_colorText);
-		    		TV6.setText(dbh.getStr(3));
-		    		TextView TV7 = (TextView) findViewById(R.id.farm_locationText);
-		    		TV7.setText(dbh.getStr(5));
-		    		farmtagid = dbh.getInt(6);
-		    		Log.i("in for loop", " farm tag id is " + String.valueOf(farmtagid));
-			        break;
-			    case 5:
-			    case 6:
-			    case 7:
-			    	//	got a tattoo, split or notch
-			    	// TODO
-			    	//	Need to set a way to show tattoo, split and notches
-			        break;
-				} // end of case switch
-				Log.i("out of case", " switch " );
-			} // end of for loop
-			Log.i("out of for", " loop " );
-		} catch (Exception e) {
-			// No tags so dump out
-		}
+//		try {
+//			for (cursor2.moveToFirst(); !cursor2.isAfterLast(); cursor2.moveToNext()){
+//				// get the tag type of the first record
+//				i = dbh.getInt(2);
+//				Log.i("in for loop", " tag type is " + String.valueOf(i));
+//				switch (i){		
+//			    case 1:
+//					//Got a federal tag
+//			    	Log.i("in for loop", " got fed tag " + dbh.getStr(4));
+//			    	TV = (TextView) findViewById(R.id.fedText)	;
+//			    	TV.setText(dbh.getStr(4));
+//			    	Log.i("in for loop", " fed tag number is " + dbh.getStr(4));
+//			    	TV = (TextView) findViewById(R.id.fed_colorText);
+//			    	TV.setText(dbh.getStr(3));
+//			    	Log.i("in for loop", " fed tag color is " + dbh.getStr(3));
+//			    	TV = (TextView) findViewById(R.id.fed_locationText);
+//			    	TV.setText(dbh.getStr(5));
+//			    	Log.i("in for loop", " fed tag location is " + dbh.getStr(5));
+//			    	fedtagid = dbh.getInt(6);
+//			    	Log.i("in for loop", " fed tag rec id is " + String.valueOf(fedtagid));
+//			        break;
+//			    case 2:
+//			    	// Got an EID tag
+//			    	Log.i("in for loop", " got EID tag " + dbh.getStr(4));
+//			    	TV = (TextView) findViewById(R.id.eidText)	;
+//			    	TV.setText(dbh.getStr(4));
+//			    	//	Need to set the EID Tag color and location here by reading the data
+//			    	TV = (TextView) findViewById(R.id.eid_colorText);
+//			    	TV.setText(dbh.getStr(3));
+//			    	TV = (TextView) findViewById(R.id.eid_locationText);
+//			    	TV.setText(dbh.getStr(5));
+//			    	eidtagid = dbh.getInt(6);
+//			    	Log.i("in for loop", " EID tag id is " + String.valueOf(eidtagid));
+//			        break;
+//			    case 3:
+//					// Got a paint brand
+//			    	Log.i("in for loop", " got paint mark " + dbh.getStr(4));
+//			    	TV = (TextView) findViewById(R.id.paintText)	;
+//			    	TV.setText(dbh.getStr(4));
+//			    	TV = (TextView) findViewById(R.id.paint_colorText);
+//			    	TV.setText(dbh.getStr(3));
+//			    	TV = (TextView) findViewById(R.id.paint_locationText);
+//			    	TV.setText(dbh.getStr(5));
+//			    	paintid = dbh.getInt(6);
+//			    	Log.i("in for loop", " paint id is " + String.valueOf(paintid));
+//			        break;
+//			    case 4:
+//			    	// got a farm tag
+//			    	Log.i("in for loop", " got Farm tag " + dbh.getStr(4));	
+//		    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
+//		    		TV5.setText(dbh.getStr(4));
+//		    		TextView TV6 = (TextView) findViewById(R.id.farm_colorText);
+//		    		TV6.setText(dbh.getStr(3));
+//		    		TextView TV7 = (TextView) findViewById(R.id.farm_locationText);
+//		    		TV7.setText(dbh.getStr(5));
+//		    		farmtagid = dbh.getInt(6);
+//		    		Log.i("in for loop", " farm tag id is " + String.valueOf(farmtagid));
+//			        break;
+//			    case 5:
+//			    case 6:
+//			    case 7:
+//			    	//	got a tattoo, split or notch
+//			    	// TODO
+//			    	//	Need to set a way to show tattoo, split and notches
+//			        break;
+//				} // end of case switch
+//				Log.i("out of case", " switch " );
+//			} // end of for loop
+//			Log.i("out of for", " loop " );
+//		} catch (Exception e) {
+//			// No tags so dump out
+//		}
 			
-	//	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
-		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-	       	// make the alert button red
-	    	Button btn = (Button) findViewById( R.id.alert_btn );
-	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-	    	btn.setEnabled(true); 
-	    	showAlert(v);
-		}
+//	//	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
+//		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
+//	       	// make the alert button red
+//	    	Button btn = (Button) findViewById( R.id.alert_btn );
+//	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+//	    	btn.setEnabled(true); 
+//	    	showAlert(v);
+//		}
 	}
     // user clicked 'remove fed tag' button   
     public void removeFedTag( View v )
@@ -751,12 +1073,12 @@ public class IDManagement extends ListActivity {
     	        	   	Log.i("removefedtag", " command is " + cmd);
     	        	   	dbh.exec( cmd );
 //    	    		   	Clear the display of the tags
-    	    		   	TextView TV = (TextView) findViewById(R.id.fedText)	;
-    	           	    TV.setText(null);
-    	           	    TV = (TextView) findViewById(R.id.fed_colorText);
-    	           		TV.setText("");
-    	           		TV = (TextView) findViewById(R.id.fed_locationText);
-    	           		TV.setText("");
+//    	    		   	TextView TV = (TextView) findViewById(R.id.fedText)	;
+//    	           	    TV.setText(null);
+//    	           	    TV = (TextView) findViewById(R.id.fed_colorText);
+//    	           		TV.setText("");
+//    	           		TV = (TextView) findViewById(R.id.fed_locationText);
+//    	           		TV.setText("");
     	           		fedtagid = 0;
     	               }
     	       });
@@ -791,12 +1113,12 @@ public class IDManagement extends ListActivity {
     	       			dbh.exec( cmd );
     	    		  
 //   	    		   	Clear the display of the tags
-   	    		   	TextView TV = (TextView) findViewById(R.id.farmText)	;
-   	           	    TV.setText(null);
-   	           		TV = (TextView) findViewById(R.id.farm_colorText);
-   	           		TV.setText("");
-   	           		TV = (TextView) findViewById(R.id.farm_locationText);
-   	           		TV.setText("");  
+//   	    		   	TextView TV = (TextView) findViewById(R.id.farmText)	;
+//   	           	    TV.setText(null);
+//   	           		TV = (TextView) findViewById(R.id.farm_colorText);
+//   	           		TV.setText("");
+//   	           		TV = (TextView) findViewById(R.id.farm_locationText);
+//   	           		TV.setText("");  
    	           		farmtagid = 0;
    	           		}
     	       });
@@ -829,12 +1151,12 @@ public class IDManagement extends ListActivity {
     	       			dbh.exec( cmd );
     	    		  
 //   	    		   	Clear the display of the tags
-   	    		   	TextView TV = (TextView) findViewById(R.id.paintText)	;
-   	           	    TV.setText(null);
-   	           		TV = (TextView) findViewById(R.id.paint_colorText);
-   	           		TV.setText("");
-   	           		TV = (TextView) findViewById(R.id.paint_locationText);
-   	           		TV.setText("");  
+//   	    		   	TextView TV = (TextView) findViewById(R.id.paintText)	;
+//   	           	    TV.setText(null);
+//   	           		TV = (TextView) findViewById(R.id.paint_colorText);
+//   	           		TV.setText("");
+//   	           		TV = (TextView) findViewById(R.id.paint_locationText);
+//   	           		TV.setText("");  
    	           		paintid = 0;
    	           		}
     	       });
@@ -867,12 +1189,12 @@ public class IDManagement extends ListActivity {
     	        	   	Log.i("removeeidtag", " command is " + cmd);
     	        	   	dbh.exec( cmd );
 //    	    		   	Clear the display of the tags
-    	    		   	TextView TV = (TextView) findViewById(R.id.eidText)	;
-    	           	    TV.setText(null);   	           	    
-    	           	    TV = (TextView) findViewById(R.id.eid_colorText);
-    	           		TV.setText("");
-    	           		TV = (TextView) findViewById(R.id.eid_locationText);
-    	           		TV.setText("");
+//    	    		   	TextView TV = (TextView) findViewById(R.id.eidText)	;
+//    	           	    TV.setText(null);   	           	    
+//    	           	    TV = (TextView) findViewById(R.id.eid_colorText);
+//    	           		TV.setText("");
+//    	           		TV = (TextView) findViewById(R.id.eid_locationText);
+//    	           		TV.setText("");
     	           		eidtagid = 0;
     	               }
     	       });
@@ -913,7 +1235,8 @@ public class IDManagement extends ListActivity {
     
     public void updateDatabase( View v ){
     	Object crsr;
-    	String sheepnameText, fedText, fed_colorText, fed_locationText;
+    	String sheepnameText;
+    	String fedText, fed_colorText, fed_locationText;
     	String farmText, farm_colorText, farm_locationText, eidText, eid_colorText, eid_locationText;
     	String paintText, paint_colorText, paint_locationText ;
     	int		fed_colorid, farm_colorid, eid_colorid, fed_locationid, farm_locationid, eid_locationid;
@@ -935,20 +1258,20 @@ public class IDManagement extends ListActivity {
 //    	Log.i("update everything ", "sheep name " + sheepnameText);   	
 //    	Log.i("update everything ", "sheep_id is " + String.valueOf(thissheep_id));   	
 //    	Log.i("update everything ", "fed info record " + fedtagid);  
-    	TV  = (TextView) findViewById( R.id.fedText );
-	    fedText = TV.getText().toString();
+//    	TV  = (TextView) findViewById( R.id.fedText );
+//	    fedText = TV.getText().toString();
 //	    Log.i("update everything ", "fed tag " + fedText);	    
 //	    Log.i("update everything ", "farm info record " + farmtagid);
-	    TV  = (TextView) findViewById( R.id.farmText );
-	    farmText = TV.getText().toString();
+//	    TV  = (TextView) findViewById( R.id.farmText );
+//	    farmText = TV.getText().toString();
 //	    Log.i("update everything ", "farm tag " + farmText);	    	    
 //	    Log.i("update everything ", "eid info record " + eidtagid);
-	    TV  = (TextView) findViewById( R.id.eidText );
-	    eidText = TV.getText().toString();	
+//	    TV  = (TextView) findViewById( R.id.eidText );
+//	    eidText = TV.getText().toString();	
 //	    Log.i("update everything ", "EID Tag " + eidText);
 	    
-	    TV  = (TextView) findViewById( R.id.paintText );
-	    paintText = TV.getText().toString();	
+//	    TV  = (TextView) findViewById( R.id.paintText );
+//	    paintText = TV.getText().toString();	
 	 
 	    //	Need to add tests to see what data we really have and only update if there is some
 	    String today = Utilities.TodayIs();
@@ -960,9 +1283,9 @@ public class IDManagement extends ListActivity {
 	    }
 	    	else {
 	    		// fedtagid is zero so need to test whether there is a federal tag and add a record if there is one
-	    		if (fedText != null && !fedText.isEmpty()){
+//	    		if (fedText != null && !fedText.isEmpty()){
 	    			//have a federal tag but no fedtagid so add a new record;
-	    		    TV = (TextView) findViewById( R.id.fed_colorText );
+//	    		    TV = (TextView) findViewById( R.id.fed_colorText );
 	    		    fed_colorText = TV.getText().toString();
 	    		    Log.i("update everything ", "fed color " + fed_colorText);	    
 	    		    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
@@ -973,7 +1296,7 @@ public class IDManagement extends ListActivity {
 	    	        fed_colorid = dbh.getInt(0);
 	    	        Log.i("update everything ", "fed color integer " + String.valueOf(fed_colorid));
 	    	        
-	    		    TV = (TextView) findViewById( R.id.fed_locationText );
+//	    		    TV = (TextView) findViewById( R.id.fed_locationText );
 	    		    fed_locationText = TV.getText().toString();
 	    		    Log.i("update everything ", "fed location " + fed_locationText);
 	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
@@ -1004,11 +1327,11 @@ public class IDManagement extends ListActivity {
 	    			dbh.exec( cmd );	
 	    			Log.i("updatefed ", "after cmd exec");
 	    		}
-	    		else{
-	    			// no federal tag to enter so return
-	    			Log.i("updatefed ", "no federal tag so nothing to do");	
-	    		}
-	    	}
+//	    		else{
+//	    			// no federal tag to enter so return
+//	    			Log.i("updatefed ", "no federal tag so nothing to do");	
+//	    		}
+//	    	}
 //	    Update the split mark data
 //	    if (splitid != 0) {
 //	    	// update the split ear data
@@ -1055,7 +1378,7 @@ public class IDManagement extends ListActivity {
 	    	else {
 	    		// farmtagid is zero so need to test whether there is a farm tag and add a record if there is one
 	    		if (farmText != null && !farmText.isEmpty()){
-	    		    TV = (TextView) findViewById( R.id.farm_locationText);
+//	    		    TV = (TextView) findViewById( R.id.farm_locationText);
 	    		    farm_locationText = TV.getText().toString();
 	    		    Log.i("updatefarm ", "farm location " + farm_locationText);
 	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
@@ -1065,7 +1388,7 @@ public class IDManagement extends ListActivity {
 	    	        dbh.moveToFirstRecord();
 	    	        farm_locationid = dbh.getInt(0);
 	    	        Log.i("updatefarm ", "farm location integer " + String.valueOf(farm_locationid));
-	    		    TV = (TextView) findViewById( R.id.farm_colorText );
+//	    		    TV = (TextView) findViewById( R.id.farm_colorText );
 	    		    farm_colorText = TV.getText().toString();
 	    		    Log.i("updatefarm ", "farm color " + farm_colorText);
 	    		    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
@@ -1101,7 +1424,7 @@ public class IDManagement extends ListActivity {
 	    		if (paintText != null && !paintText.isEmpty()){
 	    			
 //	    		    paint_number = Integer.valueOf(paintText);
-	    		    TV = (TextView) findViewById( R.id.paint_locationText);
+//	    		    TV = (TextView) findViewById( R.id.paint_locationText);
 	    		    paint_locationText = TV.getText().toString();
 	    		    Log.i("updatepaint ", "paint location " + paint_locationText);
 	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
@@ -1111,7 +1434,7 @@ public class IDManagement extends ListActivity {
 	    	        dbh.moveToFirstRecord();
 	    	        paint_locationid = dbh.getInt(0);
 	    	        Log.i("updatepaint ", "paint color integer " + String.valueOf(paint_locationid));
-	    		    TV = (TextView) findViewById( R.id.paint_colorText );
+//	    		    TV = (TextView) findViewById( R.id.paint_colorText );
 	    		    paint_colorText = TV.getText().toString();
 	    		    Log.i("updatepaint ", "paint color " + paint_colorText);
 	    		    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
@@ -1145,7 +1468,7 @@ public class IDManagement extends ListActivity {
 	    		if (paintText != null && !paintText.isEmpty()){
 	    			
 //	    		    paint_number = Integer.valueOf(paintText);
-	    		    TV = (TextView) findViewById( R.id.paint_locationText);
+//	    		    TV = (TextView) findViewById( R.id.paint_locationText);
 	    		    paint_locationText = TV.getText().toString();
 	    		    Log.i("updatetattoo ", "paint location " + paint_locationText);
 	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
@@ -1155,7 +1478,7 @@ public class IDManagement extends ListActivity {
 	    	        dbh.moveToFirstRecord();
 	    	        paint_locationid = dbh.getInt(0);
 	    	        Log.i("updatetattoo ", "tattoo color integer " + String.valueOf(paint_locationid));
-	    		    TV = (TextView) findViewById( R.id.paint_colorText );
+//	    		    TV = (TextView) findViewById( R.id.paint_colorText );
 	    		    paint_colorText = TV.getText().toString();
 	    		    Log.i("updatetattoo ", "paint color " + paint_colorText);
 	    		    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
@@ -1201,7 +1524,7 @@ public class IDManagement extends ListActivity {
 	    		// eidtagid is zero so need to test whether there is an EID tag and add a record if there is one
 	    			if (eidText != null && !eidText.isEmpty()){
 	    		
-	    			TV = (TextView) findViewById( R.id.eid_locationText);
+//	    			TV = (TextView) findViewById( R.id.eid_locationText);
 	    			eid_locationText = TV.getText().toString();
 	    		    Log.i("updateeid ", "eid location " + eid_locationText);
 	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
@@ -1211,7 +1534,7 @@ public class IDManagement extends ListActivity {
 	    	        dbh.moveToFirstRecord();
 	    	        eid_locationid = dbh.getInt(0);
 	    	        Log.i("updateeid ", "eid color integer " + String.valueOf(eid_locationid));
-	    		    TV = (TextView) findViewById( R.id.eid_colorText );
+//	    		    TV = (TextView) findViewById( R.id.eid_colorText );
 	    		    eid_colorText = TV.getText().toString();
 	    		    Log.i("updateeid ", "eid color " + eid_colorText);
 	    		    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
@@ -1396,12 +1719,12 @@ public class IDManagement extends ListActivity {
 	        		//	Federal Tag so update federal section and set needs database update
 	        		// 	by setting id of 0 meaning either no tag or needs update
 	        		Log.i("in if", "Got a new federal tag type");
-	        	    TV  = (TextView) findViewById( R.id.fedText );
-	        	    TV.setText(new_tag_number);
-	        	    TV = (TextView) findViewById( R.id.fed_colorText );
-	        	    TV.setText(tag_color_label);
-	        	    TV = (TextView) findViewById( R.id.fed_locationText );
-	        	    TV.setText(tag_location_label);
+//	        	    TV  = (TextView) findViewById( R.id.fedText );
+//	        	    TV.setText(new_tag_number);
+//	        	    TV = (TextView) findViewById( R.id.fed_colorText );
+//	        	    TV.setText(tag_color_label);
+//	        	    TV = (TextView) findViewById( R.id.fed_locationText );
+//	        	    TV.setText(tag_location_label);
 	        	    fedtagid = 0;
     			}
     			break;
@@ -1423,12 +1746,12 @@ public class IDManagement extends ListActivity {
             		//	EID Tag so update eid section and set needs database update
             		//	by setting id of 0 meaning either no tag or needs update       		
             		Log.i("in if", "Got a new eid tag type");
-            	    TV  = (TextView) findViewById( R.id.eidText );
-            	    TV.setText(new_tag_number);
-            	    TV = (TextView) findViewById( R.id.eid_colorText );
-            	    TV.setText(tag_color_label);
-            	    TV = (TextView) findViewById( R.id.eid_locationText );
-            	    TV.setText(tag_location_label);
+//            	    TV  = (TextView) findViewById( R.id.eidText );
+//            	    TV.setText(new_tag_number);
+//            	    TV = (TextView) findViewById( R.id.eid_colorText );
+//            	    TV.setText(tag_color_label);
+//            	    TV = (TextView) findViewById( R.id.eid_locationText );
+//            	    TV.setText(tag_location_label);
             	    eidtagid = 0;
     			}
     			break;
@@ -1436,12 +1759,12 @@ public class IDManagement extends ListActivity {
 	    		//	Paint mark so update paint section and set needs database update
 	    		// 	by setting id of 0 meaning either no tag or needs update
 	    		Log.i("in if", "Got a new paint mark type");
-	    	    TV  = (TextView) findViewById( R.id.paintText );
-	    	    TV.setText(new_tag_number);
-	    	    TV = (TextView) findViewById( R.id.paint_colorText );
-	    	    TV.setText(tag_color_label);
-	    	    TV = (TextView) findViewById( R.id.paint_locationText );
-	    	    TV.setText(tag_location_label);
+//	    	    TV  = (TextView) findViewById( R.id.paintText );
+//	    	    TV.setText(new_tag_number);
+//	    	    TV = (TextView) findViewById( R.id.paint_colorText );
+//	    	    TV.setText(tag_color_label);
+//	    	    TV = (TextView) findViewById( R.id.paint_locationText );
+//	    	    TV.setText(tag_location_label);
 	    	    paintid = 0;
     			break;
     		case 4:
@@ -1449,11 +1772,11 @@ public class IDManagement extends ListActivity {
         		//	by setting id of 0 meaning either no tag or needs update       		
         		Log.i("in if", "Got a new farm tag type");
         	    TV  = (TextView) findViewById( R.id.farmText );
-        	    TV.setText(new_tag_number);
-        	    TV = (TextView) findViewById( R.id.farm_colorText );
-        	    TV.setText(tag_color_label);
-        	    TV = (TextView) findViewById( R.id.farm_locationText );
-        	    TV.setText(tag_location_label);
+//        	    TV.setText(new_tag_number);
+//        	    TV = (TextView) findViewById( R.id.farm_colorText );
+//        	    TV.setText(tag_color_label);
+//        	    TV = (TextView) findViewById( R.id.farm_locationText );
+//        	    TV.setText(tag_location_label);
         	    farmtagid = 0;
     			break;
 //    		case 5:
