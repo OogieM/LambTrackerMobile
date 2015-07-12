@@ -280,17 +280,17 @@ public class IDManagement extends ListActivity {
 		thissheep_id = 0;
     	//	make the remove tag buttons red
 		Log.i("onCreate", " before setting remove tag buttons red");
-    	btn = (Button) findViewById( R.id.remove_fedtag_btn );
-    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-    	Log.i("onCreate", " remove fed tag button is red");
+//    	btn = (Button) findViewById( R.id.remove_fedtag_btn );
+//    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+//    	Log.i("onCreate", " remove fed tag button is red");
     	btn = (Button) findViewById( R.id.remove_farmtag_btn );
     	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	Log.i("onCreate", " remove farm tag button is red");
-    	btn = (Button) findViewById( R.id.remove_paint_btn );
-    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-    	Log.i("onCreate", " remove paint tag button is red");
-    	btn = (Button) findViewById( R.id.remove_eidtag_btn );
-    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+//    	btn = (Button) findViewById( R.id.remove_paint_btn );
+//    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+//    	Log.i("onCreate", " remove paint tag button is red");
+//    	btn = (Button) findViewById( R.id.remove_eidtag_btn );
+//    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
     	Log.i("onCreate", " after setting remove tag buttons red");
    	   	   
     	//	make the scan eid button red
@@ -720,9 +720,7 @@ public class IDManagement extends ListActivity {
 	@Override protected void onListItemClick (ListView l, View v, int position, long id)
 	{
 		Log.i("IDManagement", "Listitemclick set id" + String.format("%d", id));
-//		v.setSelected (true);
 		selectedItem = id;
-//		id.setBackgroundResource (R.drawable.group_item_pressed);
 	}
 
 			// OLD XML file data
@@ -1060,8 +1058,41 @@ public class IDManagement extends ListActivity {
 //
 //		</ListView>  
 	
-			
-			
+//	<Button
+//    android:id="@+id/remove_fedtag_btn"
+//    android:layout_width="100dp"
+//    android:layout_height="50dp"
+//    android:layout_column="0"
+//    android:layout_gravity="left|top"
+//    android:layout_row="1"
+//    android:onClick="removeFedTag"
+//    android:text="@string/remove_fedtag_btn"
+//    android:textSize="14sp" />		
+		
+	
+//	
+//    <Button
+//    android:id="@+id/remove_paint_btn"
+//    android:layout_width="100dp"
+//    android:layout_height="50dp"
+//    android:layout_column="2"
+//    android:layout_gravity="left|top"
+//    android:layout_row="1"
+//    android:onClick="removePaintTag"
+//    android:text="@string/remove_paint_btn"
+//    android:textSize="14sp" />
+//
+//<Button
+//    android:id="@+id/remove_eidtag_btn"
+//    android:layout_width="100dp"
+//    android:layout_height="50dp"
+//    android:layout_column="3"
+//    android:layout_gravity="left|top"
+//    android:layout_row="1"
+//    android:onClick="removeEIDTag"
+//    android:text="@string/remove_eidtag_btn"
+//    android:textSize="14sp" />
+
 			
 //		}catch (Exception e){
 //    		// 	couldn't get a new alert for this sheep
@@ -1204,6 +1235,7 @@ public class IDManagement extends ListActivity {
  	  final int tag_to_remove = (int) selectedItem;
 //    	if( farmtagid != 0 )
 //    		{
+ 	  
     		AlertDialog.Builder builder = new AlertDialog.Builder( this );
     		builder.setMessage( R.string.delete_tag )
     	           .setTitle( R.string.delete_warning );

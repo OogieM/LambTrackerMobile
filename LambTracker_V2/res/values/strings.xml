@@ -43,6 +43,7 @@
     <string name="search_fed_btn">Search Federal Tag</string>
     <string name="search_farm_btn">Search Farm Tag</string>
     <string name="remove_fedtag_btn">Remove Fed Tag</string>
+    <string name="remove_this_tag_btn">Remove This Tag</string>
     <string name="remove_farmtag_btn">Remove Farm Tag</string>
     <string name="remove_eidtag_btn">Remove EID Tag</string>
     <string name="remove_paint_btn">Remove Paint Mark</string>
