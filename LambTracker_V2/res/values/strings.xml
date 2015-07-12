@@ -169,6 +169,7 @@
     <string name="tag_type_abbrev_lbl">Type</string>
     <string name="tag_color_lbl">Tag Color</string>
     <string name="paint_color_lbl">Paint Color</string>
+    <string name="add_new_tag_lbl">New ID Information</string>
     <string name="tag_color_abbrev_lbl">Color</string>
     <string name="tag_color_male_lbl">Tag Color Male Side</string>
     <string name="tag_color_female_lbl">Tag Color Female Side</string>
