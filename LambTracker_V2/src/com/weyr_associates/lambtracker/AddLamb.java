@@ -529,8 +529,8 @@ public class AddLamb extends Activity {
   		TableLayout tl;
     	Object crsr;
     	Context context = this;
-		String title;
-		String message;
+//		String title;
+//		String message;
     	
 		// Disable Update Database button and make it red to prevent getting 2 records at one time
     	btn = (Button) findViewById( R.id.update_database_btn );
@@ -566,8 +566,7 @@ public class AddLamb extends Activity {
        		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
         	btn.setEnabled(true);
         	//	Defaulted to rear-type of 1 so the later query won't crash
-			rear_type = 1;	
-        	
+			rear_type = 1;	        	
 		}
 			
   		//	Get the radio group selected for the sex
@@ -1252,9 +1251,9 @@ public class AddLamb extends Activity {
 	  		}
   			Log.i("in catch block ", " after setting lambing_notes " + lambing_notes);
 			cmd = String.format("insert into lambing_history_table (lambing_date, dam_id, sire_id, " +
-			"lambing_notes, lambs_born, lamb01_id, lambing_time, gestation_length, lambing_contact) " +
-			"values ('%s', %s, %s,'%s', %s, %s, '%s', %s, %s) ", 
-			mytoday, dam_id, sire_id, lambing_notes, lambs_born, lamb_id, mytime, real_gestation_length,lambing_contact);
+			"lambing_notes, lambs_born, lamb01_id, lamb02_id, lamb03_id, lambing_time, gestation_length, lambing_contact) " +
+			"values ('%s', %s, %s,'%s', %s, %s, '%s','%s', '%s', %s, %s) ", 
+			mytoday, dam_id, sire_id, lambing_notes, lambs_born, lamb_id, "", "", mytime, real_gestation_length,lambing_contact);
 			Log.i("in catch block ", " cmd is " + cmd);
 			dbh.exec( cmd );
 			Log.i("in catch block ", "after cmd to create a new record");
