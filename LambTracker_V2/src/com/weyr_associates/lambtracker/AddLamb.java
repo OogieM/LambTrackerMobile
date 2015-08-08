@@ -870,6 +870,10 @@ public class AddLamb extends Activity {
 		//	For now set these to ?? because we don't know what this lamb is
 		lamb_codon154 = 1;
 		lamb_codon136 = 6;
+		// If Stillborn clear out alerts		
+		if (stillborn){
+			lamb_alert_text = "";
+		}
 		//	Fill all the misc variables for the sheep record
 		// TODO
 		//	Set breed based on sire and dam breed
