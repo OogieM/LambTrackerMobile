@@ -595,7 +595,6 @@ public class SheepManagement extends ListActivity {
             	TV = (TextView) findViewById( R.id.sheepnameText );
                 TV.setText( "Sheep Database does not exist." ); 
          	}
-
 	}
 
 	public void formatSheepRecord (View v){
@@ -704,8 +703,7 @@ public class SheepManagement extends ListActivity {
 	    	showAlert(v);
 		}
 	}	
-	 public void updateDatabase( View v ){
-	    	
+	 public void updateDatabase( View v ){	    	
 		 	TextView 	TV;
 		 	String 		temp_string;
 	    	Float 		trait11_data = 0.0f;
@@ -717,8 +715,7 @@ public class SheepManagement extends ListActivity {
 	    	// If there is no sheep ID then drop out completely
 	    	// thissheep_id is 0 if no sheep has been selected.
 	    	//	need to figure out how to loop around if it's 0 and do this stuff if not 0
-	    	// TODO
-	    	
+	    	if (thissheep_id != 0){
 	    	
     		//	Get the date and time to enter into the database.
     		String mytoday = Utilities.TodayIs();
@@ -1001,10 +998,11 @@ public class SheepManagement extends ListActivity {
 				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
 				i = wormer_id_drugid.get(which_wormer);
 				Log.i("wormer id", " value is " + String.valueOf(i));
-				//	Drug location 5 is by mouth, all wormer given by mouth
+				//	Drug location 5 is by mouth, all wormer given by mouth							
 				cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
-		  				" drug_time_on, drug_location) values " +
-		  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, 5);
+		  				" drug_time_on, drug_date_off, drug_time_off, drug_dosage, drug_location) values " +
+		  				" (%s, '%s', '%s', '%s', '%s', '%s', '%s', %s) ", thissheep_id, i, mytoday, mytime, 
+		  				empty_string_field, empty_string_field, empty_string_field, 5);
 		  		Log.i("add drug to ", "db cmd is " + cmd);
 				dbh.exec(cmd);
 				Log.i("add tag ", "after insert into sheep_drug_table");
@@ -1072,9 +1070,7 @@ public class SheepManagement extends ListActivity {
 				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
 				i = drug_id_drugid.get(which_drug);
 				Log.i("drug id", " value is " + String.valueOf(i));
-				//TODO
 				//	Go get a Drug location 
-				
 				drug_location_spinner = (Spinner) findViewById(R.id.drug_location_spinner);
 				drug_loc = drug_location_spinner.getSelectedItemPosition();
 		 		if (drug_loc == 0){
@@ -1095,9 +1091,10 @@ public class SheepManagement extends ListActivity {
 		    		dialog.show();	
 		    		return;
 		 		}else{
-					cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
-			  				" drug_time_on, drug_location) values " +
-			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, drug_loc);
+		 					cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
+			  				" drug_time_on, drug_date_off, drug_time_off, drug_dosage, drug_location) values " +
+			  				" (%s, '%s', '%s', '%s', '%s', '%s', '%s', %s) ", thissheep_id, i, mytoday, mytime, 
+			  				empty_string_field, empty_string_field, empty_string_field, drug_loc);
 			  		Log.i("add drug to ", "db cmd is " + cmd);
 					dbh.exec(cmd);
 					Log.i("add tag ", "after insert into sheep_drug_table");
@@ -1130,7 +1127,7 @@ public class SheepManagement extends ListActivity {
 					// TODO
 					// Consider calculating the actual date/time withdrawal and putting that in instead. 
 					//	get and add Drug Reason
-					// Put this back into the sneep_management.xml file when I add in reasons
+					// Put this back into the sheep_management.xml file when I add in reasons
 //					<TextView
 //		        	android:layout_width="150dp"
 //		       	 	android:layout_height="wrap_content"
@@ -1162,12 +1159,7 @@ public class SheepManagement extends ListActivity {
 				//	Go get which drug was selected in the spinner
 				drug_spinner = (Spinner) findViewById(R.id.drug_spinner);
 				which_drug = drug_spinner.getSelectedItemPosition();
-				
-				
-				
-				
-				
-				
+							
 				// The drug_id is at the same position in the drug_id_drugid list as the spinner position			
 				i = drug_id_drugid.get(which_drug);
 				Log.i("drug id", " value is " + String.valueOf(i));
@@ -1245,9 +1237,11 @@ public class SheepManagement extends ListActivity {
 			    		Log.i("add evaluation ", "cmd is "+ cmd);
 						dbh.exec(cmd);
 						Log.i("add evaluation ", "after insert into sheep_evaluation_table");
-					}	
-					
+					}						
 			clearBtn( null );
+	    	}else{
+	    		clearBtn( null );
+	    	}
 	 }
 	public void printLabel( View v ){ 
 		try

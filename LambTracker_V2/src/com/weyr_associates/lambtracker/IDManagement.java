@@ -597,7 +597,7 @@ public class IDManagement extends ListActivity {
 				    	//	got a name				    	
 				    	
 			        	tag_num = "%" + tag_num + "%";
-			        	cmd = String.format( "select sheep_id, sheep_name from sheep_table where sheep_name like '%s'" +
+			        	cmd = String.format( "select sheep_id, sheep_name, alert01 from sheep_table where sheep_name like '%s'" +
 			        			" and (remove_date is null or remove_date = '') "
 			        			, tag_num );  
 			        	Log.i("searchByName", "command is " + cmd);
