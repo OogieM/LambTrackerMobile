@@ -66,6 +66,7 @@ public class CreateRamBreedingRecord extends ListActivity {
 	private TextView dateoutput, timeoutput;
     private Button setDate;
     public String currentsetdate, currentsettime;
+    public String currentyear;
 	public int 		thissheep_id, nRecs, this_service;
 	public Cursor 	cursor;
 	public Object 	crsr;
@@ -105,13 +106,16 @@ public class CreateRamBreedingRecord extends ListActivity {
 		service_type_spinner.setSelection(0);
 
     	test_name_list = (ListView) findViewById(android.R.id.list);
+    	final Calendar c = Calendar.getInstance();
+        year  = c.get(Calendar.YEAR);
+        currentyear = String.valueOf(year) + "%";
 //			Now go get all the current sheep names and format them
 		cmd = String.format( "select sheep_table.sheep_id as _id, flock_prefix_table.flock_name, sheep_table.sheep_name " +
 				" from sheep_table inner join flock_prefix_table " +
 				"on flock_prefix_table.flock_prefixid = sheep_table.flock_prefix" +
 				" where (sheep_table.remove_date IS NULL or sheep_table.remove_date is '') and sheep_table.sex = 1 " +
 				"and sheep_table.birth_date not like '%s' "+
-				"order by sheep_table.sheep_name asc ", "2014%");  	        	
+				"order by sheep_table.sheep_name asc ", currentyear );  	        	
 		Log.i("format record", " command is  " + cmd);
 		crsr = dbh.exec( cmd );
 		cursor   = ( Cursor ) crsr; 
@@ -149,7 +153,7 @@ public class CreateRamBreedingRecord extends ListActivity {
 		dateoutput = (TextView) findViewById(R.id.dateoutput);
         timeoutput = (TextView) findViewById(R.id.timeoutput);
      // Get current date and time by calender       
-        final Calendar c = Calendar.getInstance();
+     //   final Calendar c = Calendar.getInstance();
         year  = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day   = c.get(Calendar.DAY_OF_MONTH);
@@ -181,7 +185,8 @@ public class CreateRamBreedingRecord extends ListActivity {
     			thissheep_id = test_sheep_id.get(temp_location);
     			Log.i ("for loop", "the sheep " + " " + test_names.get(temp_location)+ " is checked");
     			Log.i ("for loop", "the sheep id is " + String.valueOf(test_sheep_id.get(temp_location)));
-     			cmd = String.format("insert into breeding_record_table (ram_id, date_ram_in, time_ram_in,service_type) values (%s,'%s','%s',%s)" , thissheep_id, currentsetdate, currentsettime, this_service );
+     			cmd = String.format("insert into breeding_record_table (ram_id, date_ram_in, time_ram_in, date_ram_out, time_ram_out, service_type) " +
+     					"	values (%s,'%s','%s','%s','%s',%s)" , thissheep_id, currentsetdate, currentsettime, "", "", this_service );
     			Log.i("add record ", "before cmd " + cmd);
     			dbh.exec( cmd);
     			Log.i("add record ", "after cmd " + cmd);	    			

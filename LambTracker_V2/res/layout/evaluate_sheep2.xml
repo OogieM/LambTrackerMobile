@@ -203,7 +203,7 @@
   <ScrollView
 	    android:id="@+id/scroll01"
 	    android:layout_width="fill_parent"
-	    android:layout_height="600dp">
+	    android:layout_height="560dp">
 			<TableLayout
 		       android:id="@+id/TableLayout01"
 		       android:layout_width="fill_parent"
@@ -222,7 +222,7 @@
     <ScrollView
 	    android:id="@+id/scroll02"
 	    android:layout_width="fill_parent"
-	    android:layout_height="110dp">
+	    android:layout_height="75dp">
 	   	
 			<TableLayout
 		       android:id="@+id/TableLayout02"
@@ -242,7 +242,7 @@
     <ScrollView
 	    android:id="@+id/scroll03"
 	    android:layout_width="fill_parent"
-	    android:layout_height="50dp">
+	    android:layout_height="2dp">
 	   	
 			<TableLayout
 		       android:id="@+id/TableLayout03"

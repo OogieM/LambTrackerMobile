@@ -28,7 +28,7 @@
         <Button
             android:id="@+id/group_sheep_management_btn"
             android:layout_width="250dp"
-            android:layout_height="50dp"           
+            android:layout_height="75dp"           
             android:onClick="groupSheepManagement"
             android:layout_below="@+id/lambing_btn"
             android:text="@string/title_activity_group_sheep_management"
@@ -37,7 +37,7 @@
   		<Button
             android:id="@+id/draw_blood_btn"
             android:layout_width="250dp"
-            android:layout_height="50dp"           
+            android:layout_height="75dp"           
             android:onClick="drawBlood"
             android:layout_below="@+id/group_sheep_management_btn"
             android:text="@string/title_activity_draw_blood"
@@ -46,7 +46,7 @@
   		<Button
             android:id="@+id/sort_sheep_btn"
             android:layout_width="250dp"
-            android:layout_height="50dp"           
+            android:layout_height="75dp"           
             android:onClick="sortSheep"
             android:layout_below="@+id/draw_blood_btn"
             android:text="@string/title_activity_sort_sheep"
@@ -54,7 +54,7 @@
        <Button
             android:id="@+id/evaluate_sheep_btn"
             android:layout_width="250dp"
-            android:layout_height="50dp"           
+            android:layout_height="75dp"           
             android:onClick="evaluateSheep"
             android:layout_below="@+id/sort_sheep_btn"
             android:text="@string/title_activity_evaluate_sheep"
@@ -63,7 +63,7 @@
        <Button
             android:id="@+id/remove_sheep_btn"
             android:layout_width="250dp"
-            android:layout_height="50dp"           
+            android:layout_height="75dp"           
             android:onClick="removeSheep"
             android:layout_below="@+id/evaluate_sheep_btn"
             android:text="@string/title_activity_remove_sheep"
