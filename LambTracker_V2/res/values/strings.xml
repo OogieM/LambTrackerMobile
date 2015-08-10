@@ -145,6 +145,7 @@
     <string name="sheep_remove_reason_lbl">Remove Reason</string>
     <string name="sheep_lambease_lbl">Lambease Score</string>
     <string name="sheep_sire_lbl">Sire</string>
+    <string name="sheep_service_lbl">Service Type</string>
     <string name="sheep_dam_lbl">Dam</string>
     <string name="sheep_stillborn">Stillborn</string>
     <string name="sheep_stillborn_lbl">Stillborn Status</string>

@@ -1058,7 +1058,7 @@ public class LambingSheep extends ListActivity
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
 	    	btn.setEnabled(false);  
 	    	
-	       	//	Disable the Next Record and Prev. Record button until we have multiple records
+	       	//	Disable the  and Prev. Record button until we have multiple records
 	    	btn = (Button) findViewById( R.id.next_rec_btn );
 	    	btn.setEnabled(false); 
 	    	btn = (Button) findViewById( R.id.prev_rec_btn );
@@ -1073,5 +1073,51 @@ public class LambingSheep extends ListActivity
 	     public void doNote( View v )
 	     {	 
 	     	Utilities.takeNote(v, thissheep_id, this);
+	     }
+	     
+	     // user clicked the "next record" button
+	     public void nextRecord( View v)
+	     {
+	     	//	Clear out the display first
+	     	clearBtn( v );
+	     	//	Go get the sheep id of this record
+	     	Log.i("in next record", "this sheep ID is " + String.valueOf(thissheep_id));
+	     	cursor.moveToNext();
+	     	Log.i("in next record", "after moving the cursor ");
+	     	thissheep_id = cursor.getInt(0);
+//	     	thissheep_name = cursor.getString(1);
+	     	Log.i("in next record", "this sheep ID is " + String.valueOf(thissheep_id));
+//	     	Log.i("in next record", "this sheep name is " + thissheep_name);
+	     	recNo         += 1;
+//	     	findTagsShowAlert(v, thissheep_id);
+//	 		// I've moved forward so I need to enable the previous record button
+	 		Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
+	 		btn3.setEnabled(true);	    	
+	     	if (recNo == (nRecs)) {
+	     		// at end so disable next record button
+	     		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
+	         	btn2.setEnabled(false);   		
+	     	}
+	     }
+
+	     // user clicked the "previous record" button
+	     public void previousRecord( View v){
+//	     	Clear out the display first
+	     	clearBtn( v );
+	     	Log.i("in prev record", "this sheep ID is " + String.valueOf(thissheep_id));
+	     	cursor.moveToPrevious();
+	     	Log.i("in prev record", "after moving the cursor ");
+	     	thissheep_id = cursor.getInt(0);
+	     	Log.i("in prev record", "this sheep ID is " + String.valueOf(thissheep_id));
+	     	recNo         -= 1;
+//	     	findTagsShowAlert(v, thissheep_id);
+	 		// I've moved back so enable the next record button
+	 		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
+	 		btn2.setEnabled(true);      		
+	     	if (recNo == 1) {
+	     		// at beginning so disable prev record button
+	     		Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
+	         	btn3.setEnabled(false);   		
+	     	}
 	     }
 }

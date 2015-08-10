@@ -59,6 +59,7 @@ public class AddLamb extends Activity {
 	public int 		thissheep_id;
 	public int	rear_type, birth_type, sex, lambease, codon171, codon136, codon154;
 	public String dam_name, sire_name, lamb_name;
+	public String service_abbrev;
 	public String lamb_alert_text, death_date, remove_date;
 	public String nsip_id, sale_price, sell_price_units, purchase_price, purchase_price_units;
 	public String weaned_date, inbreeding;
@@ -437,11 +438,14 @@ public class AddLamb extends Activity {
 				" sheep_table.sheep_name, " +
 				" julianday(breeding_record_table.date_ram_in), " +
     			" julianday(breeding_record_table.date_ram_out),  " +
-    			" breeding_record_table.service_type " +
+    			" breeding_record_table.service_type, " +
+    			" service_type_table.service_abbrev " +
     			" from breeding_record_table " +
     			" left outer join sheep_breeding_table on " +
     			" sheep_breeding_table.breeding_id = breeding_record_table.id_breedingid " +
     			" inner join sheep_table on sheep_id = ram_id " +
+    			" inner join service_type_table on " +
+    			" breeding_record_table.service_type = service_type_table.id_servicetypeid "+
     			" where sheep_breeding_table.ewe_id = '%s' ", dam_id);		  					
     	Log.i("add a lamb ", " cmd is " + cmd);	    	
     	crsr = dbh.exec( cmd );
@@ -481,6 +485,7 @@ public class AddLamb extends Activity {
 	        		sire_name = dbh.getStr(3);
 	        		sire_id = dbh.getInt(2);
 	        		service_type = dbh.getInt(6);
+	        		service_abbrev = dbh.getStr(7);
 	        		//	make the gestation length an integer so it can be added to the lambing history record. 
 	        		real_gestation_length = (int)gestation_length;
 	        		Log.i("addlamb", " gestation length is " + String.valueOf(real_gestation_length));
@@ -494,6 +499,8 @@ public class AddLamb extends Activity {
 		//	Handle the sire data here
         TV = (TextView) findViewById( R.id.sireName );
         TV.setText(sire_name); 
+        TV = (TextView) findViewById( R.id.serviceType );
+        TV.setText(service_abbrev); 
         Log.i("addlamb", " after set display of sire name " + sire_name);
         //	Go get the sire Codon171,154 and 136 values
         if (sire_id == 0){
