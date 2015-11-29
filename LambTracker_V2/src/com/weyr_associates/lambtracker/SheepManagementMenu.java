@@ -49,4 +49,9 @@ public class SheepManagementMenu extends Activity {
 		i = new Intent(SheepManagementMenu.this, RemoveSheep.class);
 		SheepManagementMenu.this.startActivity(i);
 	}
+	public void removeDrug (View v){
+		Intent i = null;
+		i = new Intent(SheepManagementMenu.this, RemoveDrug.class);
+		SheepManagementMenu.this.startActivity(i);
+	}
 }

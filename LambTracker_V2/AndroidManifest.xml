@@ -195,6 +195,10 @@
             android:label="@string/title_activity_remove_sheep" >
         </activity>
         <activity
+            android:name="com.weyr_associates.lambtracker.RemoveDrug"
+            android:label="@string/title_activity_remove_drug" >
+        </activity>
+        <activity
             android:name="com.weyr_associates.lambtracker.DesktopFunctionsMenu"
             android:configChanges="orientation"
             android:label="@string/title_activity_desktop_functions"

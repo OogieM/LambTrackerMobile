@@ -1183,42 +1183,42 @@ public class IDManagement extends ListActivity {
 //		}
 //	}
     // user clicked 'remove fed tag' button   
-    public void removeFedTag( View v )
-    	{
-    	if( fedtagid != 0 )
-    		{
-    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-    		builder.setMessage( R.string.delete_tag )
-    	           .setTitle( R.string.delete_warning );
-    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
-    	           public void onClick(DialogInterface dialog, int idx) {
-    	               // User clicked OK button -- remove the federal tag
-    	        	   // add a tag_date_off of today to the tag   	       		
-    	        	   	String today = Utilities.TodayIs();
-    	        	   	Log.i("removefedtag", String.valueOf(fedtagid));
-    	        	   	String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", fedtagid );
-    	        	   	Log.i("removefedtag", " command is " + cmd);
-    	        	   	dbh.exec( cmd );
-//    	    		   	Clear the display of the tags
-//    	    		   	TextView TV = (TextView) findViewById(R.id.fedText)	;
-//    	           	    TV.setText(null);
-//    	           	    TV = (TextView) findViewById(R.id.fed_colorText);
-//    	           		TV.setText("");
-//    	           		TV = (TextView) findViewById(R.id.fed_locationText);
-//    	           		TV.setText("");
-    	           		fedtagid = 0;
-    	               }
-    	       });
-    		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
-    	           public void onClick(DialogInterface dialog, int idx) {
-    	               // User cancelled the dialog
-    	           }
-    	       });
-    		
-    		AlertDialog dialog = builder.create();
-    		dialog.show();
-    		}
-    	}    
+//    public void removeFedTag( View v )
+//    	{
+//    	if( fedtagid != 0 )
+//    		{
+//    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+//    		builder.setMessage( R.string.delete_tag )
+//    	           .setTitle( R.string.delete_warning );
+//    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+//    	           public void onClick(DialogInterface dialog, int idx) {
+//    	               // User clicked OK button -- remove the federal tag
+//    	        	   // add a tag_date_off of today to the tag   	       		
+//    	        	   	String today = Utilities.TodayIs();
+//    	        	   	Log.i("removefedtag", String.valueOf(fedtagid));
+//    	        	   	String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", fedtagid );
+//    	        	   	Log.i("removefedtag", " command is " + cmd);
+//    	        	   	dbh.exec( cmd );
+////    	    		   	Clear the display of the tags
+////    	    		   	TextView TV = (TextView) findViewById(R.id.fedText)	;
+////    	           	    TV.setText(null);
+////    	           	    TV = (TextView) findViewById(R.id.fed_colorText);
+////    	           		TV.setText("");
+////    	           		TV = (TextView) findViewById(R.id.fed_locationText);
+////    	           		TV.setText("");
+//    	           		fedtagid = 0;
+//    	               }
+//    	       });
+//    		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
+//    	           public void onClick(DialogInterface dialog, int idx) {
+//    	               // User cancelled the dialog
+//    	           }
+//    	       });
+//    		
+//    		AlertDialog dialog = builder.create();
+//    		dialog.show();
+//    		}
+//    	}    
     
     // user clicked 'remove farm tag' button   
     public void removeFarmTag( final View v)
@@ -1347,43 +1347,43 @@ public class IDManagement extends ListActivity {
     	}
    
     // user clicked 'remove eid tag' button   
-    public void removeEIDTag( View v )
-    	{
-    	if( eidtagid != 0 )
-    		{
-    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-    		builder.setMessage( R.string.delete_tag )
-    	           .setTitle( R.string.delete_warning );
-    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
-    	           public void onClick(DialogInterface dialog, int idx) {
-    	               // User clicked OK button -- remove the eid tag
-    	        	   // add a tag_date_off of today to the tag   	       		
-    	        	   	String today = Utilities.TodayIs();
-    	        	   	Log.i("removeeidtag", String.valueOf(eidtagid));
-    	        	   	String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", eidtagid );
-    	        	   	Log.i("removeeidtag", " command is " + cmd);
-    	        	   	dbh.exec( cmd );
-//    	    		   	Clear the display of the tags
-//    	    		   	TextView TV = (TextView) findViewById(R.id.eidText)	;
-//    	           	    TV.setText(null);   	           	    
-//    	           	    TV = (TextView) findViewById(R.id.eid_colorText);
-//    	           		TV.setText("");
-//    	           		TV = (TextView) findViewById(R.id.eid_locationText);
-//    	           		TV.setText("");
-    	           		eidtagid = 0;
-    	               }
-    	       });
-    		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
-    	           public void onClick(DialogInterface dialog, int idx) {
-    	               // User cancelled the dialog
-    	           }
-    	       });
-    		
-    		AlertDialog dialog = builder.create();
-    		dialog.show();
-    		}
-    	}    
-    
+//    public void removeEIDTag( View v )
+//    	{
+//    	if( eidtagid != 0 )
+//    		{
+//    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+//    		builder.setMessage( R.string.delete_tag )
+//    	           .setTitle( R.string.delete_warning );
+//    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+//    	           public void onClick(DialogInterface dialog, int idx) {
+//    	               // User clicked OK button -- remove the eid tag
+//    	        	   // add a tag_date_off of today to the tag   	       		
+//    	        	   	String today = Utilities.TodayIs();
+//    	        	   	Log.i("removeeidtag", String.valueOf(eidtagid));
+//    	        	   	String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", eidtagid );
+//    	        	   	Log.i("removeeidtag", " command is " + cmd);
+//    	        	   	dbh.exec( cmd );
+////    	    		   	Clear the display of the tags
+////    	    		   	TextView TV = (TextView) findViewById(R.id.eidText)	;
+////    	           	    TV.setText(null);   	           	    
+////    	           	    TV = (TextView) findViewById(R.id.eid_colorText);
+////    	           		TV.setText("");
+////    	           		TV = (TextView) findViewById(R.id.eid_locationText);
+////    	           		TV.setText("");
+//    	           		eidtagid = 0;
+//    	               }
+//    	       });
+//    		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
+//    	           public void onClick(DialogInterface dialog, int idx) {
+//    	               // User cancelled the dialog
+//    	           }
+//    	       });
+//    		
+//    		AlertDialog dialog = builder.create();
+//    		dialog.show();
+//    		}
+//    	}    
+//    
     public void doNote( View v )
     {	 
     	Utilities.takeNote(v, thissheep_id, this);

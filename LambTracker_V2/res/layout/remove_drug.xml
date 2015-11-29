@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-    
-      <GridLayout 
+
+     <GridLayout 
         	android:id="@+id/grid1"
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -34,7 +33,7 @@
 			</EditText>
             
   			<TextView
-        	android:layout_width="180dp"
+        	android:layout_width="150dp"
        	 	android:layout_height="wrap_content"
         	android:layout_column="1"
             android:layout_gravity="left"
@@ -87,12 +86,12 @@
             android:id="@+id/scan_eid_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/alert_btn"
             android:onClick="scanEid"
             android:text="@string/scan_eid_btn"
             android:textSize="14sp" />    
   </RelativeLayout>
-      <GridLayout
+  <GridLayout
         android:id="@+id/secondRowButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -120,137 +119,166 @@
             android:onClick="nextRecord"
             android:text="@string/next_rec_btn"
             android:textSize="14sp" />
-               
-       <Button
-            android:id="@+id/save_evaluation_scores_btn"
+ 
+      <Button
+            android:id="@+id/print_label_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_column="2"
+            android:layout_gravity="left|top"
+            android:layout_row="0"        	
+            android:onClick="printLabel"
+            android:text="@string/print_label_btn"
+            android:textSize="14sp" />
+      
+      <Button
+            android:id="@+id/update_database_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_column="3"
             android:layout_gravity="left|top"
             android:layout_row="0"
-            android:onClick="saveScores"
-            android:text="@string/save_evaluation_scores_btn"
+            android:onClick="updateDatabase"
+            android:text="@string/update_database_btn"
             android:textSize="14sp" /> 
-  
-    </GridLayout>   
-    
-    <GridLayout
-        android:id="@+id/grid3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:columnCount="6"
-        android:rowCount="6" >
-
-        <TextView
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left"
-            android:layout_row="0"
-            android:inputType="none"
-            android:text="@string/federal_id_lbl" />
-
-        <TextView
-            android:id="@+id/fedText"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left"
-            android:layout_row="1"
-			android:textSize="14sp"
-            android:typeface="monospace" />
+    </GridLayout> 		
+		<GridLayout
+	        android:id="@+id/grid2"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:columnCount="5">   	    
+	     	    
+	        <TextView
+	            android:layout_width="176dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="1"
+	            android:layout_gravity="left|top"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_number_lbl" />
+	        
+	        <TextView
+	            android:layout_width="65dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="2"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_color_abbrev_lbl" />
+	        
+	        <TextView
+	            android:layout_width="40dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="3"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_location_abbrev_lbl" />
+	        
+	        <TextView
+	            android:layout_width="80dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="4"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_type_abbrev_lbl" />
         
- 		<TextView
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
+     	</GridLayout>
+    	    
+       <ListView 
+			android:id="@+id/android:list" 
+	  		android:layout_height="wrap_content"
+	  		android:layout_width="fill_parent">
+		</ListView>
+		        
+  <GridLayout 
+        	android:id="@+id/grid3"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+        	android:columnCount="3"
+       		android:rowCount="3">
+        
+           <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"     
             android:layout_gravity="left"
+            android:layout_column="0"
             android:layout_row="0"
             android:inputType="none"
-            android:text="@string/farm_id_lbl" />
-
-        <TextView
-            android:id="@+id/farmText"
-            android:layout_width="90dp"
+            android:textStyle="bold"
+            android:text="@string/sheep_sire_lbl" />
+           
+           <TextView
+            android:id="@+id/sireName"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_column="1"
             android:layout_gravity="left"
+            android:layout_column="0"
             android:layout_row="1"
             android:enabled="true"
-            android:textSize="14sp"
-            android:typeface="monospace" />
-        
-        <TextView
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
+            android:typeface="monospace" >
+			</TextView>
+            
+  			<TextView
+        	android:layout_width="200dp"
+       	 	android:layout_height="wrap_content"
+        	android:layout_column="1"
             android:layout_gravity="left"
             android:layout_row="0"
             android:inputType="none"
-            android:text="@string/electronic_id_lbl" />
+            android:textStyle="bold"
+        	android:text="@string/sheep_dam_lbl" />
         
         <TextView
-            android:id="@+id/eidText"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left|top"
+        	android:id="@+id/damName"
+        	android:layout_width="200dp"
+       	 	android:layout_height="wrap_content"
+           	android:layout_column="1"
+            android:layout_gravity="left"
             android:layout_row="1"
-            android:textSize="14sp"
-            android:typeface="monospace" />       
-    </GridLayout>
-    
-  <ScrollView
-	    android:id="@+id/scroll01"
-	    android:layout_width="fill_parent"
-	    android:layout_height="470dp">
-			<TableLayout
-		       android:id="@+id/TableLayout01"
-		       android:layout_width="fill_parent"
-		       android:layout_height="wrap_content">
-			</TableLayout>  
-  	</ScrollView> 
-  	
-  	<View
-	    android:id="@+id/dividerbar"
-	    android:layout_width="fill_parent"
-	    android:layout_height="2dp"
-	    android:background="@android:color/black"
-	    >
-	</View>
-	
-    <ScrollView
-	    android:id="@+id/scroll02"
-	    android:layout_width="fill_parent"
-	    android:layout_height="75dp">
-	   	
-			<TableLayout
-		       android:id="@+id/TableLayout02"
-		       android:layout_width="fill_parent"
-		       android:layout_height="wrap_content">
-			</TableLayout>  
-  	</ScrollView>   
-  	
-	<View
-	    android:id="@+id/dividerbar02"
-	    android:layout_width="fill_parent"
-	    android:layout_height="2dp"
-	    android:background="@android:color/black">
-	   
-	</View>
-	
-    <ScrollView
-	    android:id="@+id/scroll03"
-	    android:layout_width="fill_parent"
-	    android:layout_height="70dp">
-	   	
-			<TableLayout
-		       android:id="@+id/TableLayout03"
-		       android:layout_width="fill_parent"
-		       android:layout_height="wrap_content">
-			</TableLayout>  
-  	</ScrollView>   
+            android:ems="10"
+        	android:gravity="left"
+        	android:typeface="monospace" />  
+ </GridLayout>
+ 
+         <TableLayout
+           android:id="@+id/grid4"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_above="@+id/bottomButtonBar"
+           android:stretchColumns="2"
+           android:gravity="center">
 
+        <TableRow android:gravity="center">
+ 
+         <TextView
+             android:layout_width="300dp"
+             android:layout_height="wrap_content"
+             android:inputType="none"
+             android:layout_weight="1"
+             android:text="@string/sheep_drug_lbl"
+             android:textStyle="bold" />
+		</TableRow>
+
+		<TableRow 
+		    android:gravity="center">
+		    
+        <ListView
+          android:id="@+id/druglist"
+          android:layout_width="300dp"
+          android:layout_height="match_parent" 
+          android:layout_weight="1"
+          android:layout_gravity="right">
+
+		</ListView>
+        </TableRow>
+        </TableLayout>
+      
 <RelativeLayout
     android:id="@+id/BottomButtonBar"
     android:orientation="horizontal" 
@@ -297,5 +325,6 @@
            android:text="@string/help_btn"
            android:textSize="14sp" />
 </RelativeLayout>
-  
+
+
 </LinearLayout>
