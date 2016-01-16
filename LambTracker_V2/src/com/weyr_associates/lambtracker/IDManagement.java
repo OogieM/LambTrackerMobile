@@ -687,6 +687,9 @@ public class IDManagement extends ListActivity {
 	    Log.i("FormatRecord", "after setting myadapter");
 	    setListAdapter(myadapter);
 	    Log.i("FormatRecord", "after setting list adapter");
+	    
+	  
+	    
 	    // TODO
 	    // 	Now I need to figure out how to get the items selected from the list of tags and pass that on
 	    //	to the remove tag code as needed
@@ -721,6 +724,7 @@ public class IDManagement extends ListActivity {
 	{
 		Log.i("IDManagement", "Listitemclick set id" + String.format("%d", id));
 		selectedItem = id;
+
 	}
 
 			// OLD XML file data
@@ -1308,44 +1312,44 @@ public class IDManagement extends ListActivity {
 	
 	
     // user clicked 'remove Paint tag' button   
-    public void removePaintTag( View v )
-    	{
-    	if( paintid != 0 )
-    		{
-    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-    		builder.setMessage( R.string.delete_tag )
-    	           .setTitle( R.string.delete_warning );
-    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
-    	           public void onClick(DialogInterface dialog, int idx) {
-    	               // User clicked OK button -- remove the paint brand
-    	        	   //add a tag_date_off of today to the tag
-    	        	   String today = Utilities.TodayIs();
-     	        	   Log.i("removepaint", " paint mark record is " + String.valueOf(paintid) );
-    	       		   String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", paintid );
-    	       		   Log.i("removepaint", " command is " + cmd);
-    	       			dbh.exec( cmd );
-    	    		  
-//   	    		   	Clear the display of the tags
-//   	    		   	TextView TV = (TextView) findViewById(R.id.paintText)	;
-//   	           	    TV.setText(null);
-//   	           		TV = (TextView) findViewById(R.id.paint_colorText);
-//   	           		TV.setText("");
-//   	           		TV = (TextView) findViewById(R.id.paint_locationText);
-//   	           		TV.setText("");  
-   	           		paintid = 0;
-   	           		}
-    	       });
-    		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
-    	           public void onClick(DialogInterface dialog, int idx) {
-    	               // User cancelled the dialog
-    	           }
-    	       });
-    		
-    		AlertDialog dialog = builder.create();
-    		dialog.show();
-    		}
-    	}
-   
+//    public void removePaintTag( View v )
+//    	{
+//    	if( paintid != 0 )
+//    		{
+//    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+//    		builder.setMessage( R.string.delete_tag )
+//    	           .setTitle( R.string.delete_warning );
+//    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+//    	           public void onClick(DialogInterface dialog, int idx) {
+//    	               // User clicked OK button -- remove the paint brand
+//    	        	   //add a tag_date_off of today to the tag
+//    	        	   String today = Utilities.TodayIs();
+//     	        	   Log.i("removepaint", " paint mark record is " + String.valueOf(paintid) );
+//    	       		   String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", paintid );
+//    	       		   Log.i("removepaint", " command is " + cmd);
+//    	       			dbh.exec( cmd );
+//    	    		  
+////   	    		   	Clear the display of the tags
+////   	    		   	TextView TV = (TextView) findViewById(R.id.paintText)	;
+////   	           	    TV.setText(null);
+////   	           		TV = (TextView) findViewById(R.id.paint_colorText);
+////   	           		TV.setText("");
+////   	           		TV = (TextView) findViewById(R.id.paint_locationText);
+////   	           		TV.setText("");  
+//   	           		paintid = 0;
+//   	           		}
+//    	       });
+//    		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
+//    	           public void onClick(DialogInterface dialog, int idx) {
+//    	               // User cancelled the dialog
+//    	           }
+//    	       });
+//    		
+//    		AlertDialog dialog = builder.create();
+//    		dialog.show();
+//    		}
+//    	}
+//   
     // user clicked 'remove eid tag' button   
 //    public void removeEIDTag( View v )
 //    	{

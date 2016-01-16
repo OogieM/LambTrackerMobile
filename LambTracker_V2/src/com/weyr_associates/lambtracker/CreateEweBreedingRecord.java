@@ -56,7 +56,7 @@ public class CreateEweBreedingRecord extends ListActivity {
 	public int 		thissheep_id, nRecs, this_service;
 	public Cursor 	cursor;
 	public Object 	crsr;
-	String     	cmd;
+	String     	cmd, cmd2;
 	private int year;
 	public String currentyear,nextyear;
 	public List<String> service_type;
@@ -181,9 +181,24 @@ public class CreateEweBreedingRecord extends ListActivity {
 	public void updateDatabase( View v ){
 		boolean temp_value;
 		int temp_location, temp_size;
+		String ram_name, this_alert;
+		
 		which_breeding_spinner = (Spinner) findViewById(R.id.which_breeding_spinner);
 		this_service = which_breeding_spinner.getSelectedItemPosition();
 		this_service = which_service.get (this_service-1);
+		
+		// Add code to get ram name for alert update for sort
+		cmd = String.format( "select sheep_table.sheep_id, sheep_table.sheep_name " +
+				"from breeding_record_table " +
+				"inner join sheep_table on breeding_record_table.ram_id = sheep_table.sheep_id " +
+				"where breeding_record_table.id_breedingid = %s ", this_service );  
+		Log.i("update", " command is  " + cmd);
+		crsr = dbh.exec( cmd );
+		cursor   = ( Cursor ) crsr; 
+		cursor.moveToFirst();
+		ram_name = cursor.getString(1);
+		Log.i("update", " Ram is  " + ram_name);
+		
 		temp_size = sparse_array.size();
 		Log.i("in Update ", "sparse array size is " + String.valueOf(temp_size));
         Log.i ("before loop", " the service record id is  " + String.valueOf(this_service));
@@ -198,7 +213,23 @@ public class CreateEweBreedingRecord extends ListActivity {
      			cmd = String.format("insert into sheep_breeding_table (ewe_id, breeding_id) values (%s,%s)" , thissheep_id, this_service );
     			Log.i("add record ", "before cmd " + cmd);
     			dbh.exec( cmd);
-    			Log.i("add record ", "after cmd " + cmd);	    			
+    			Log.i("add record ", "after cmd " + cmd);	 
+    			cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_table.sheep_id = %s ", thissheep_id);
+    			Log.i("add record ", "before cmd " + cmd);
+    			crsr = dbh.exec( cmd );
+    			cursor   = ( Cursor ) crsr; 
+    			cursor.moveToFirst();
+    			this_alert = cursor.getString(0);
+    			Log.i("add record ", "after cmd " + cmd);
+    			Log.i("add record ", "Before alert is " + this_alert);
+    			this_alert = ram_name + ' ' + "\n" + this_alert;
+    			Log.i("add record ", "After alert is " + this_alert);		
+    			cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ",
+    					this_alert, thissheep_id ) ;
+    			Log.i("update alert ", "before cmd " + cmd);
+    			dbh.exec( cmd );
+    			Log.i("update alert ", "after cmd " + cmd);
+    			
     		}   		
     	}// for loop
     	Log.i("after for ", "loop in add record.");  

@@ -24,11 +24,14 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.SimpleCursorAdapter;
@@ -36,6 +39,7 @@ import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class RemoveDrug extends ListActivity{
 	private DatabaseHandler dbh;
@@ -49,7 +53,7 @@ public class RemoveDrug extends ListActivity{
 	public String 	eid_tag_location_label, eidText, alert_text;
 	public String 	thissire_name, thisdam_name;
 
-	public Cursor 	cursor, cursor2, cursor3, cursor4, cursor5, drugCursor;
+	public Cursor 	cursor, cursor2, cursor3, cursor4, cursor5, drugCursor, testCursor;
 	public Object 	crsr, crsr2, crsr3, crsr4, crsr5;
 	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
 	public List<String> tag_types, tag_locations, tag_colors;
@@ -241,25 +245,25 @@ public void onCreate(Bundle savedInstanceState)
 {
 
 super.onCreate(savedInstanceState);
-setContentView(R.layout.remove_drug);
+	setContentView(R.layout.remove_drug);
 //Log.i("SheepMgmt", " after set content view");
 //View v = null;
-String 	dbfile = getString(R.string.real_database_file) ;
+	String 	dbfile = getString(R.string.real_database_file) ;
 //Log.i("SheepMgmt", " after get database file");
-dbh = new DatabaseHandler( this, dbfile );
+	dbh = new DatabaseHandler( this, dbfile );
 //Added the variable definitions here    	
 	String          cmd;
-ArrayList radiobtnlist;
-String[] radioBtnText;
+	ArrayList radiobtnlist;
+	String[] radioBtnText;
 //////////////////////////////////// 
 //CheckIfServiceIsRunning();
-LoadPreferences (true);
+	LoadPreferences (true);
 //Log.i("SheepMgmt", "back from isRunning");  	
 ////////////////////////////////////    	
-thissheep_id = 0;
-empty_string_field = "";
+	thissheep_id = 0;
+	empty_string_field = "";
 // Fill the Tag Type Spinner
-tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
+	tag_type_spinner = (Spinner) findViewById(R.id.tag_type_spinner);
 	tag_types = new ArrayList<String>();      	
 	
 	// Select All fields from id types to build the spinner
@@ -414,7 +418,6 @@ public void formatSheepRecord (View v){
 	
 	Object crsr, crsr2, crsr3, crsr4, drugCrsr;
 	TextView TV;
-	ListView drugList = (ListView) findViewById(R.id.druglist);
 	
 	thissheep_id = cursor.getInt(0);	        	
 	Log.i("format record", "This sheep is record " + String.valueOf(thissheep_id));	        	
@@ -532,6 +535,7 @@ catch(Exception r)
 	drugRecs = drugCursor.getCount();		
 	Log.i("lookForSheep", " drugRecs is " + String.valueOf(drugRecs));		
 	drugCursor.moveToFirst();	
+	final ListView drugList = (ListView) findViewById(R.id.druglist);
 	if (drugRecs > 0) {
     	// format the drug records
 		//	Select drug record columns
@@ -551,14 +555,96 @@ catch(Exception r)
 		drugAdapter = new SimpleCursorAdapter(this, R.layout.drug_entry, null, null, null, 0);
 		drugList.setAdapter(drugAdapter);
 	}
+		
+		drugList.setOnItemClickListener(new OnItemClickListener(){
+	        public void onItemClick(AdapterView<?> parent, View view,int position,long id) {
+	            View v = drugList.getChildAt(position);
+	            Log.i("in click","I am inside onItemClick and position is:"+String.valueOf(position));
+	        }
+	    });
 }	
+
+
 //Catches clicks and updates selectedItem - can't believe this is necessary in this day and age
 	@Override protected void onListItemClick (ListView l, View v, int position, long id)
 	{
 		Log.i("IDManagement", "Listitemclick set id" + String.format("%d", id));
 		selectedItem = id;
 	}
+
 	
+    // user clicked 'remove drug' button   
+    public void removeThisDrug( final View v)
+    	{
+    	final ListView drugList = (ListView) findViewById(R.id.druglist);
+    	String drug_to_remove;
+		// Check to see that something has been selected
+		if (selectedItem == android.widget.AdapterView.INVALID_ROW_ID)
+		{
+			Toast.makeText(this, "No Drug Selected", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		Log.i("removedrug", " drug record to remove is row " + String.valueOf(selectedItem) );
+//	 	  final int drug_to_remove = (int) selectedItem;
+//		 ListView lv = (ListView) findViewById (R.id.druglist); 
+		 drugList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+			Log.i("removedrug", " after listview ");
+			
+//			drug_to_remove =  lv.getItemAtPosition(0).toString();
+			
+//			LinearLayout row = (LinearLayout)((LinearLayout)row).getChildAt(0);
+//			TextView column = (TextView)((ViewGroup) v).getChildAt(0);
+//			Log.i("removedrug", " after textview column ");
+//			drug_to_remove = column.getText().toString();
+//			Log.i("removedrug", " after get drug to remove ");
+//			drug_to_remove =  getItemAtPosition(0).toString();
+//			drug_to_remove = ((TextView) v.findViewById(R.id.drug_record)).getText().toString();
+			Log.i("removedrug", " after get drug to remove ");
+			
+//	 	 final String drug_to_remove = (String) lv.getItemAtPosition(0);
+//	 	 Log.i("removeDrug", " Drug record to remove is " + String.valueOf(drug_to_remove ));
+//	 	Log.i("removeDrug", " Drug record to remove is " + drug_to_remove ); 
+		
+//		ListView lv = (ListView) findViewById (R.id.druglist);
+//		Log.i("removedrug", " before get item ");
+////		final 
+//		Object drug_to_remove = (lv.getItemAtPosition(0));
+		
+//		final int drug_to_remove = integerValueOf(ListView.SelectedItems[0].Text);
+		
+// 	    final int drug_to_remove = (int) selectedItem;
+ 	  
+    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+    		builder.setMessage( R.string.delete_drug )
+    	           .setTitle( R.string.delete_warning );
+    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int idx) {
+    	               // User clicked OK button -- remove the drug
+    	        	   //add a drug_date_off of today to the sheep drug record
+    	        	   String today = Utilities.TodayIs();
+    	        	   String mytime = Utilities.TimeIs();
+    	        	   
+//    	       		   tag_to_remove = fetchSingleField(String.format("SELECT id_infoid FROM id_info_table where id_infoid = %s;", selectedItem),"user_task_name");
+ //   	        	   Log.i("removefarmtag", today);
+//    	        	   Log.i("removeDrug", " drug record is " + drug_to_remove );
+    	        	   
+//    	       		   String cmd = String.format( "update sheep_drug_table SET drug_date_off = '" + today + "' where id_sheepdrugid=%s", drug_to_remove );
+//    	       		   Log.i("removeDrug", " command is " + cmd);
+ //   	       		   dbh.exec( cmd );
+//    	       		   findTagsShowAlert (v, thissheep_id); 
+   	           		}
+    	       });
+    		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int idx) {
+    	               // User cancelled the dialog
+    	           }
+    	       });
+    		
+    		AlertDialog dialog = builder.create();
+    		dialog.show();
+    		}
+
 public void updateDatabase( View v ){	    	
  
 	// Disable Update Database button and make it red to prevent getting 2 records at one time

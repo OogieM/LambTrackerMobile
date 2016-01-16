@@ -141,6 +141,16 @@
             android:onClick="updateDatabase"
             android:text="@string/update_database_btn"
             android:textSize="14sp" /> 
+      <Button
+       	  	android:id="@+id/remove_drug_btn"
+         	android:layout_width="100dp"
+         	android:layout_height="50dp"
+         	android:layout_column="0"
+         	android:layout_gravity="left|top"
+         	android:layout_row="1"
+         	android:onClick="removeThisDrug"
+         	android:text="@string/remove_this_drug_btn"
+         	android:textSize="14sp" />
     </GridLayout> 		
 		<GridLayout
 	        android:id="@+id/grid2"
@@ -273,7 +283,8 @@
           android:layout_width="300dp"
           android:layout_height="match_parent" 
           android:layout_weight="1"
-          android:layout_gravity="right">
+          android:layout_gravity="right"
+          android:choiceMode="singleChoice">
 
 		</ListView>
         </TableRow>

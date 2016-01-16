@@ -55,6 +55,7 @@
     <string name="print_label_btn">Print Label</string>
     <string name="dispose_btn">Dispose</string>
     <string name="new_lot_btn">New Lot</string>
+    <string name="remove_this_drug_btn">Remove This Drug</string>    
     <string name="drug_details_btn">Show Details</string>
     <string name="load_sheeplist">Load Sheep Database</string>
     <string name="look_up_sheep">Look up a Sheep by EID</string>
@@ -205,7 +206,8 @@
     <string name="include_removed_sheep">Include Removed Sheep in Look Up Sheep?</string>
     <string name="delete_sheep">Delete Sheep?</string>
     <string name="remove_sheep">Remove Sheep?</string>
-    <string name="delete_tag">Remove Tag from this Sheep?</string>
+    <string name="delete_tag">Remove this Tag from this Sheep?</string>
+    <string name="delete_drug">Remove this Drug from this Sheep?</string>
     <string name="delete_warning">Delete Warning</string>
     <string name="action_settings">Settings</string>
     <string name="sheep_drug_lbl">Drug History</string>
