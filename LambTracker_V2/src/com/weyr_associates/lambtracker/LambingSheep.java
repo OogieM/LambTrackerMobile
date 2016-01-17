@@ -58,7 +58,7 @@ public class LambingSheep extends ListActivity
 		
 		public String[] this_sheeps_tags ;
 		
-		private int             nRecs;
+		private int             nRecs, nRecs5;
 		private int			    recNo;
 		private String[]        colNames;
 		
@@ -233,7 +233,7 @@ public class LambingSheep extends ListActivity
 	    {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.lambing_sheep);
-	        Log.i("LookUpSheep", " after set content view");
+	        Log.i("LambingSheep", " after set content view");
 	        View v = null;
 
 //			Added the variable definitions here    	
@@ -266,7 +266,7 @@ public class LambingSheep extends ListActivity
 		
 		public void lookForSheep (View v){
 			Log.i("lookforsheep"," at beginning of look for sheep");
-			int 	lamb01_id, lamb02_id, lamb03_id;
+			int 	lamb01_id, lamb02_id, lamb03_id, lambs_born;
 			Boolean exists;
 			TextView TV;
 			String 	lambingdate ;
@@ -279,6 +279,7 @@ public class LambingSheep extends ListActivity
 	    	lamb01_id = 0;
 	    	lamb02_id = 0;
 	    	lamb03_id = 0;
+	    	lambs_born = 0;
 	    	
 	    	//	empty the codon records
 	    	codon171 = 0;
@@ -287,6 +288,11 @@ public class LambingSheep extends ListActivity
 	    	
 	        TV = (TextView) findViewById( R.id.inputText );	        
 	    	String	tag_num = TV.getText().toString();
+	    	
+	    	// Clear fields before we do anything
+	    	clearBtn(v);
+	    	// Set back tag_num for cosmetic appearance
+	    	TV.setText(tag_num);
 
 	    	ListView historylist = (ListView) findViewById(R.id.list2);
 	    	ListView lambtags01 = (ListView) findViewById(R.id.list3);
@@ -294,28 +300,120 @@ public class LambingSheep extends ListActivity
 	    	ListView lambtags03 = (ListView) findViewById(R.id.list5);
 	    	
 	    	Log.i("LookForSheep", " got to lookForSheep with Tag Number of " + tag_num);
+	    	Log.i("LookForSheep", " got to lookForSheep with Tag type of " + tag_type_spinner.getSelectedItemPosition());
 	        exists = tableExists("sheep_table");
-	        if (exists){
-	        	if( tag_num != null && tag_num.length() > 0 ){
-//	        		Get the sheep id from the id table for this tag number and selected tag type
-		        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
-		        			"and id_info_table.tag_type='%s' ", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
-		        	
-		        	crsr = dbh.exec( cmd ); 	    		
-		    		cursor   = ( Cursor ) crsr; 
-//		    		startManagingCursor(cursor);
-					cursor.moveToFirst();	
-					nRecs    = cursor.getCount();
-//					dbh.exec( cmd );
-//		        	dbh.moveToFirstRecord();
-		        	if( nRecs == 0 )
-			    		{ // no sheep with that tag in the database so clear out and return
-			    		clearBtn( v );
-			    		TV = (TextView) findViewById( R.id.sheepnameText );
-			        	TV.setText( "Cannot find this sheep." );
-			        	return;
-			    		}
-		        	thissheep_id = dbh.getInt(0);
+	        if (exists){       	
+	    			switch (tag_type_spinner.getSelectedItemPosition()){
+	    				case 1:
+	    				case 2:
+	    				case 3:
+	    				case 4:
+	    				case 5:
+	    					if( tag_num != null && tag_num.length() > 0 ){       		
+	    						// Get the sheep id from the id table for this tag number and selected tag type
+				        		cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
+					        			"and id_info_table.tag_type='%s' and (id_info_table.tag_date_off is null or" +
+					        			" id_info_table.tag_date_off = '') "
+					        			, tag_num , tag_type_spinner.getSelectedItemPosition());  
+					        	Log.i("searchByNumber", "command is " + cmd);
+					        	crsr = dbh.exec( cmd );
+					    		cursor   = ( Cursor ) crsr; 
+					        	recNo    = 1;
+								nRecs    = cursor.getCount();
+								Log.i("searchByNumber", " nRecs = "+ String.valueOf(nRecs));
+					        	dbh.moveToFirstRecord();
+					        	Log.i("searchByNumber", " the cursor is of size " + String.valueOf(dbh.getSize()));
+					        	if( dbh.getSize() == 0 ){ 
+					        		// no sheep with that  tag in the database so clear out and return
+						    		clearBtn( v );
+						    		TV = (TextView) findViewById( R.id.sheepnameText );
+						        	TV.setText( "Cannot find this sheep." );
+						        	return;
+						    	}
+					        	thissheep_id = dbh.getInt(0);
+					        	Log.i("searchByNumber", "This sheep is record " + String.valueOf(thissheep_id));
+					        	if (nRecs >1){
+					        		//	Have multiple sheep with this tag so enable next button
+					            	btn = (Button) findViewById( R.id.next_rec_btn );
+					            	btn.setEnabled(true);       		
+					        	}				        		        	
+					        	//	We need to call the format the record method
+//					        	formatSheepRecord(v);   	
+	    					}
+	    					break;
+					    case 6:
+					    	//	got a split
+					    	//	Assume no split ears at this time. 
+					    	//	Needs modification for future use
+					    	TV = (TextView) findViewById( R.id.sheepnameText );
+				        	TV.setText( "Cannot search on splits yet." );
+					    	// TODO
+					        break;
+					    case 7:
+					    	//	got a notch
+					    	//	Assume no notches at this time. 
+					    	//	Needs modification for future use
+					    	TV = (TextView) findViewById( R.id.sheepnameText );
+				        	TV.setText( "Cannot search on notches yet." );
+					    	// TODO
+					        break;
+					    case 8:
+					    	//	got a name				    	
+					    	// TODO
+				        	tag_num = "%" + tag_num + "%";
+				        	cmd = String.format( "select sheep_id, sheep_name from sheep_table where sheep_name like '%s'" +
+				        			" and (remove_date is null or remove_date = '') "
+				        			, tag_num );  
+				        	Log.i("searchByName", "command is " + cmd);
+				        	crsr = dbh.exec( cmd );
+				    		cursor   = ( Cursor ) crsr; 
+				        	recNo    = 1;
+							nRecs5    = cursor.getCount();
+							Log.i("searchByName", " nRecs5 = "+ String.valueOf(nRecs));
+				        	dbh.moveToFirstRecord();
+				        	Log.i("searchByName", " the cursor is of size " + String.valueOf(dbh.getSize()));
+				        	if( dbh.getSize() == 0 )
+					    		{ // no sheep with that name in the database so clear out and return
+					    		clearBtn( v );
+					    		TV = (TextView) findViewById( R.id.sheepnameText );
+					        	TV.setText( "Cannot find this sheep." );
+					        	return;
+					    		}
+				        	thissheep_id = dbh.getInt(0);			        	
+				        	if (nRecs >1){
+				        		//	Have multiple sheep with this name so enable next button
+				            	btn = (Button) findViewById( R.id.next_rec_btn );
+				            	btn.setEnabled(true);       		
+				        	}
+				        	//	We need to call the format the record method
+//				        	formatSheepRecord(v);   	
+					        break;
+	    				} // end of case switch 
+	    	
+    	
+	    	
+//	        exists = tableExists("sheep_table");
+//	        if (exists){
+//	        	if( tag_num != null && tag_num.length() > 0 ){
+////	        		Get the sheep id from the id table for this tag number and selected tag type
+//		        	cmd = String.format( "select sheep_id from id_info_table where tag_number='%s' "+
+//		        			"and id_info_table.tag_type='%s' ", tag_num , tag_type_spinner.getSelectedItemPosition());  	        	
+//		        	
+//		        	crsr = dbh.exec( cmd ); 	    		
+//		    		cursor   = ( Cursor ) crsr; 
+////		    		startManagingCursor(cursor);
+//					cursor.moveToFirst();	
+//					nRecs    = cursor.getCount();
+////					dbh.exec( cmd );
+////		        	dbh.moveToFirstRecord();
+//		        	if( nRecs == 0 )
+//			    		{ // no sheep with that tag in the database so clear out and return
+//			    		clearBtn( v );
+//			    		TV = (TextView) findViewById( R.id.sheepnameText );
+//			        	TV.setText( "Cannot find this sheep." );
+//			        	return;
+//			    		}
+//		        	thissheep_id = dbh.getInt(0);
 		        	Log.i("LookForSheep", "This sheep is record " + String.valueOf(thissheep_id));
 		        	//	Go get the sex of this sheep
 		        	cmd = String.format( "select sheep_table.sex, sheep_table.remove_date from sheep_table where sheep_id = %s",thissheep_id);
@@ -326,7 +424,8 @@ public class LambingSheep extends ListActivity
 					i =  (dbh.getInt(0));
 					tempString = (dbh.getStr(1));
 					Log.i("LookForSheep", "This sheep is sex " + String.valueOf(i));
-					Log.i("LookForSheep", "This sheep was removed " + tempString);
+					Log.i("LookForSheep", "This sheep was removed on " + tempString);
+					Log.i("LookForSheep", "Remove string length is " + String.valueOf(tempString.length()));
 					if (i != 2) {
 						// This is not a ewe so set the name to not a ewe, clear out and return
 						clearBtn( v );
@@ -334,13 +433,15 @@ public class LambingSheep extends ListActivity
 			        	TV.setText( "This is not a ewe." );
 			        	return;
 					}
-					if (tempString != null) {
+
+					if (!tempString.trim().equals("")) {				
 						// This is a removed sheep so set the name to removed, clear out and return
 						clearBtn( v );
 			    		TV = (TextView) findViewById( R.id.sheepnameText );
 			        	TV.setText( "This sheep was Removed on " + tempString);
 			        	return;
 					}
+//					
 		        	Log.i("LookForSheep", " Before finding all tags");		        	
 		    		cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 		    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
@@ -384,7 +485,8 @@ public class LambingSheep extends ListActivity
 
 					//	Add display the lambing history for this ewe here					
 					cmd = String.format( "select lambing_history_table.lambing_historyid as _id, lambing_history_table.lambing_date, " +
-							"lambing_history_table.lambing_notes, lambing_history_table.lamb01_id, lambing_history_table.lamb02_id, lambing_history_table.lamb03_id " +
+							"lambing_history_table.lambing_notes, lambing_history_table.lamb01_id, lambing_history_table.lamb02_id, lambing_history_table.lamb03_id, " +
+							"lambing_history_table.lambs_born as lambs_born " +
 							"from lambing_history_table inner join sheep_table on sheep_table.sheep_id = lambing_history_table.dam_id " +
 							" where lambing_history_table.dam_id = '%s'  " +
 							"order by lambing_history_table.lambing_date desc", thissheep_id );					
@@ -403,6 +505,7 @@ public class LambingSheep extends ListActivity
 //						Log.i("lookForSheep", " second lamb is id " + String.valueOf(lamb02_id));
 						lamb03_id = dbh.getInt(5);
 //						Log.i("lookForSheep", " third lamb is id " + String.valueOf(lamb03_id));
+						lambs_born = dbh.getInt(6);
 						String[] fromColumns2 = new String[ ]{ "lambing_date", "lambing_notes"};
 //						Log.i("lookForSheep", " after set string array second time");
 						int[] toViews2 = new int[] { R.id.lambing_date, R.id.lambing_notes};
@@ -411,7 +514,96 @@ public class LambingSheep extends ListActivity
 //						Log.i("lookForSheep", " after set myadapter2");
 						historylist.setAdapter(myadapter2);
 						};
+
+					// No lambs
+					lambtags01.setAdapter(null);
+					lambtags02.setAdapter(null);
+					lambtags03.setAdapter(null);
+						
 					// Add display current year lambs here if there are any
+					// Don't bother looking for lambs that don't exist
+					Log.i("lookForSheep", String.format("Looking for %d lambs", lambs_born));	
+					switch (lambs_born) {
+						
+						case 3:
+						// third lamb
+						cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
+			    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+			    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off " +
+			    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+			    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+			    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+			    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+			    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid " +
+			    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb03_id);
+//						Log.i("lookForSheep", " command is" + cmd);
+			    		crsr5 = dbh.exec( cmd ); 
+			    		Log.i("lookForSheep", " after run 4th sqlite command");
+			    		cursor5   = ( Cursor ) crsr5; 
+						nRecs    = cursor5.getCount();
+						Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
+						cursor5.moveToFirst();				
+						if (nRecs > 0) {
+							// put the lamb name up and perhaps the lamb's sex
+							// lambs name is dbh.getStr (0)
+							Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
+							Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
+							TV = (TextView) findViewById( R.id.lamb03nameText );
+				        	TV.setText(dbh.getStr(0));
+				        	TV = (TextView) findViewById( R.id.lamb03sexText );
+				        	TV.setText(dbh.getStr(2));
+							//	Get set up to try to use the CursorAdapter to display all the tag data
+							//	Select only the columns I need for the tag display section
+					        String[] fromColumns5 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+							//	Set the views for each column for each line. A tag takes up 1 line on the screen
+					        int[] toViews5 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+							myadapter5 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns5, toViews5, 0);
+							lambtags03.setAdapter(myadapter5);	
+						}else {
+							//	Clear out the id data for lamb03 in the ewe lambing display 	
+							lambtags03.setAdapter(null);
+						}
+						
+						case 2:
+						// second lamb
+						cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
+			    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+			    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off " +
+			    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+			    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+			    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+			    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+			    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid " +
+			    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb02_id);
+//						Log.i("lookForSheep", " command is" + cmd);
+			    		crsr4 = dbh.exec( cmd ); 
+			    		Log.i("lookForSheep", " after run 4th sqlite command");
+			    		cursor4   = ( Cursor ) crsr4; 
+						nRecs    = cursor4.getCount();
+						Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
+						cursor4.moveToFirst();				
+						if (nRecs > 0) {
+							// put the lamb name up and perhaps the lamb's sex
+							// lambs name is dbh.getStr (0)
+							Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
+							Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
+							TV = (TextView) findViewById( R.id.lamb02nameText );
+				        	TV.setText(dbh.getStr(0));
+				        	TV = (TextView) findViewById( R.id.lamb02sexText );
+				        	TV.setText(dbh.getStr(2));
+							//	Get set up to try to use the CursorAdapter to display all the tag data
+							//	Select only the columns I need for the tag display section
+					        String[] fromColumns4 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+							//	Set the views for each column for each line. A tag takes up 1 line on the screen
+					        int[] toViews4 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+							myadapter4 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns4, toViews4, 0);
+							lambtags02.setAdapter(myadapter4);	
+						}else {
+							//	Clear out the id data for lamb02 in the ewe lambing display 	
+							lambtags02.setAdapter(null);
+						}
+						
+						case 1:
 						// First lamb
 						cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
 			    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
@@ -452,80 +644,11 @@ public class LambingSheep extends ListActivity
 							//	Clear out the id data for lamb01 in the ewe lambing display 	
 							lambtags01.setAdapter(null);
 						}
-						// second lamb
-						cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
-			    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-			    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off " +
-			    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-			    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-			    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-			    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-			    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid " +
-			    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb02_id);
-//						Log.i("lookForSheep", " command is" + cmd);
-			    		crsr4 = dbh.exec( cmd ); 
-			    		Log.i("lookForSheep", " after run 4th sqlite command");
-			    		cursor4   = ( Cursor ) crsr4; 
-						nRecs    = cursor4.getCount();
-						Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
-						cursor4.moveToFirst();				
-						if (nRecs > 0) {
-							// put the lamb name up and perhaps the lamb's sex
-							// lambs name is dbh.getStr (0)
-							Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
-							Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
-							TV = (TextView) findViewById( R.id.lamb02nameText );
-				        	TV.setText(dbh.getStr(0));
-				        	TV = (TextView) findViewById( R.id.lamb02sexText );
-				        	TV.setText(dbh.getStr(2));
-							//	Get set up to try to use the CursorAdapter to display all the tag data
-							//	Select only the columns I need for the tag display section
-					        String[] fromColumns4 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
-							//	Set the views for each column for each line. A tag takes up 1 line on the screen
-					        int[] toViews4 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-							myadapter4 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns4, toViews4, 0);
-							lambtags02.setAdapter(myadapter4);	
-						}else {
-							//	Clear out the id data for lamb02 in the ewe lambing display 	
-							lambtags02.setAdapter(null);
-						}
-						// third lamb
-						cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
-			    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-			    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off " +
-			    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-			    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-			    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-			    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-			    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid " +
-			    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb03_id);
-//						Log.i("lookForSheep", " command is" + cmd);
-			    		crsr5 = dbh.exec( cmd ); 
-			    		Log.i("lookForSheep", " after run 4th sqlite command");
-			    		cursor5   = ( Cursor ) crsr5; 
-						nRecs    = cursor5.getCount();
-						Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
-						cursor5.moveToFirst();				
-						if (nRecs > 0) {
-							// put the lamb name up and perhaps the lamb's sex
-							// lambs name is dbh.getStr (0)
-							Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
-							Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
-							TV = (TextView) findViewById( R.id.lamb03nameText );
-				        	TV.setText(dbh.getStr(0));
-				        	TV = (TextView) findViewById( R.id.lamb03sexText );
-				        	TV.setText(dbh.getStr(2));
-							//	Get set up to try to use the CursorAdapter to display all the tag data
-							//	Select only the columns I need for the tag display section
-					        String[] fromColumns5 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
-							//	Set the views for each column for each line. A tag takes up 1 line on the screen
-					        int[] toViews5 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-							myadapter5 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns5, toViews5, 0);
-							lambtags03.setAdapter(myadapter5);	
-						}else {
-							//	Clear out the id data for lamb03 in the ewe lambing display 	
-							lambtags03.setAdapter(null);
-						}
+						default:
+					}
+						
+						
+						
 					//	Now to test of the sheep has an alert and if so then display the alert
 					if (alert_text != null && !alert_text.isEmpty()){
 						// if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
@@ -541,12 +664,12 @@ public class LambingSheep extends ListActivity
 		        	return;
 		        }
 //		        Log.i("lookForSheep", " out of the if statement");
-	        	}
-	    		else {
-	    			clearBtn( null );
-	            	TV = (TextView) findViewById( R.id.sheepnameText );
-	                TV.setText( "Sheep Database does not exist." ); 
-	        	}
+//	        	}
+//	    		else {
+//	    			clearBtn( null );
+//	            	TV = (TextView) findViewById( R.id.sheepnameText );
+//	                TV.setText( "Sheep Database does not exist." ); 
+//	        	}
 		}
 	
 		@Override
@@ -560,7 +683,7 @@ public class LambingSheep extends ListActivity
 	        Log.i("LookUpSheep", " after get database file");
 	    	dbh = new DatabaseHandler( this, dbfile );
 	    	
-			int 	lamb01_id, lamb02_id, lamb03_id;
+			int 	lamb01_id, lamb02_id, lamb03_id, lambs_born;
 //			Object crsr, crsr2, crsr3, crsr4, crsr5;
 			TextView TV;
 			String 	lambingdate ;
@@ -606,6 +729,7 @@ public class LambingSheep extends ListActivity
 	    	lamb01_id = 0;
 	    	lamb02_id = 0;
 	    	lamb03_id = 0;
+	    	lambs_born = 0;
 	    	Log.i("in resume", " before get listviews of all lists");
 	    	ListView historylist = (ListView) findViewById(R.id.list2);
 	    	ListView lambtags01 = (ListView) findViewById(R.id.list3);
@@ -616,7 +740,8 @@ public class LambingSheep extends ListActivity
 		Log.i("inResume", " before get lamb history for this ewe");	
 //		Add display the lambing history for this ewe here					
 		cmd = String.format( "select lambing_history_table.lambing_historyid as _id, lambing_history_table.lambing_date, " +
-				"lambing_history_table.lambing_notes, lambing_history_table.lamb01_id, lambing_history_table.lamb02_id, lambing_history_table.lamb03_id " +
+				"lambing_history_table.lambing_notes, lambing_history_table.lamb01_id, lambing_history_table.lamb02_id, lambing_history_table.lamb03_id, " +
+				"lambing_history_table.lambs_born as lambs_born " +
 				"from lambing_history_table inner join sheep_table on sheep_table.sheep_id = lambing_history_table.dam_id " +
 				" where lambing_history_table.dam_id = '%s'  " +
 				"order by lambing_history_table.lambing_date desc", thissheep_id );					
@@ -635,6 +760,7 @@ public class LambingSheep extends ListActivity
 //			Log.i("lookForSheep", " second lamb is id " + String.valueOf(lamb02_id));
 			lamb03_id = dbh.getInt(5);
 //			Log.i("lookForSheep", " third lamb is id " + String.valueOf(lamb03_id));
+			lambs_born = dbh.getInt("lambs_born");
 			String[] fromColumns2 = new String[ ]{ "lambing_date", "lambing_notes"};
 			Log.i("lookForSheep", " after set string array second time");
 			int[] toViews2 = new int[] { R.id.lambing_date, R.id.lambing_notes};
@@ -643,115 +769,132 @@ public class LambingSheep extends ListActivity
 			Log.i("lookForSheep", " after set myadapter2");
 			historylist.setAdapter(myadapter2);
 			};
-		// Add display current year lambs here if there are any
-			// First lamb
-			cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
-    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off " +
-    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid " +
-    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb01_id);
-//			Log.i("lookForSheep", " command is" + cmd);
-    		crsr3 = dbh.exec( cmd ); 
-    		Log.i("lookForSheep", " after run get this year first lamb sqlite command");
-    		cursor3   = ( Cursor ) crsr3; 
-			nRecs    = cursor3.getCount();
-			Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
-			cursor3.moveToFirst();				
-			if (nRecs > 0) {
-				// put the lamb name up and the lamb's sex
-				Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
-				Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
-				TV = (TextView) findViewById( R.id.lamb01nameText );
-	        	TV.setText(dbh.getStr(0));
-	        	TV = (TextView) findViewById( R.id.lamb01sexText );
-	        	TV.setText(dbh.getStr(2));
-	        	
-				//	Get set up to try to use the CursorAdapter to display all the tag data
-				//	Select only the columns I need for the tag display section
-		        String[] fromColumns3 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
-				//	Set the views for each column for each line. A tag takes up 1 line on the screen
-		        int[] toViews3 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-				myadapter3 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor3 ,fromColumns3, toViews3, 0);
-				lambtags01.setAdapter(myadapter3);	
-			}else {
-				//	Clear out the id data for lamb01 in the ewe lambing display 	
+
+			// No lambs
 				lambtags01.setAdapter(null);
-			}
-			// second lamb
-			cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
-    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off " +
-    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid " +
-    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb02_id);
-//			Log.i("lookForSheep", " command is" + cmd);
-    		crsr4 = dbh.exec( cmd ); 
-    		Log.i("lookForSheep", " after run get this year second lamb sqlite command");
-    		cursor4   = ( Cursor ) crsr4; 
-			nRecs    = cursor4.getCount();
-			Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
-			cursor4.moveToFirst();				
-			if (nRecs > 0) {
-				// put the lamb name up and the lamb's sex
-				Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
-				Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
-				TV = (TextView) findViewById( R.id.lamb02nameText );
-	        	TV.setText(dbh.getStr(0));
-	        	TV = (TextView) findViewById( R.id.lamb02sexText );
-	        	TV.setText(dbh.getStr(2));
-				//	Get set up to try to use the CursorAdapter to display all the tag data
-				//	Select only the columns I need for the tag display section
-		        String[] fromColumns4 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
-				//	Set the views for each column for each line. A tag takes up 1 line on the screen
-		        int[] toViews4 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-				myadapter4 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns4, toViews4, 0);
-				lambtags02.setAdapter(myadapter4);	
-			}else {
-				//	Clear out the id data for lamb02 in the ewe lambing display
 				lambtags02.setAdapter(null);
-			}
-			// third lamb
-			cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
-    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off " +
-    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid " +
-    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb03_id);
-//			Log.i("lookForSheep", " command is" + cmd);
-    		crsr5 = dbh.exec( cmd ); 
-    		Log.i("lookForSheep", " after run get this year third lamb sqlite command");
-    		cursor5   = ( Cursor ) crsr5; 
-			nRecs    = cursor5.getCount();
-			Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
-			cursor5.moveToFirst();				
-			if (nRecs > 0) {
-				// put the lamb name up and the lamb's sex
-				Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
-				Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
-				TV = (TextView) findViewById( R.id.lamb03nameText );
-	        	TV.setText(dbh.getStr(0));
-	        	TV = (TextView) findViewById( R.id.lamb03sexText );
-	        	TV.setText(dbh.getStr(2));
-				//	Get set up to try to use the CursorAdapter to display all the tag data
-				//	Select only the columns I need for the tag display section
-		        String[] fromColumns5 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
-				//	Set the views for each column for each line. A tag takes up 1 line on the screen
-		        int[] toViews5 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
-				myadapter5 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns5, toViews5, 0);
-				lambtags03.setAdapter(myadapter5);	
-			}else {
-				//	Clear out the id data for lamb03 in the ewe lambing display
 				lambtags03.setAdapter(null);
+				
+			// Add display current year lambs here if there are any
+			// Don't bother looking for lambs that don't exist
+			Log.i("lookForSheep", String.format("Looking for %d lambs", lambs_born));	
+			switch (lambs_born) {
+			
+			case 3:			
+			// third lamb
+				cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
+	    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+	    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off " +
+	    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+	    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+	    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+	    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+	    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid " +
+	    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb03_id);
+//						Log.i("lookForSheep", " command is" + cmd);
+	    		crsr5 = dbh.exec( cmd ); 
+	    		Log.i("lookForSheep", " after run get this year third lamb sqlite command");
+	    		cursor5   = ( Cursor ) crsr5; 
+				nRecs    = cursor5.getCount();
+				Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
+				cursor5.moveToFirst();				
+				if (nRecs > 0) {
+					// put the lamb name up and the lamb's sex
+					Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
+					Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
+					TV = (TextView) findViewById( R.id.lamb03nameText );
+		        	TV.setText(dbh.getStr(0));
+		        	TV = (TextView) findViewById( R.id.lamb03sexText );
+		        	TV.setText(dbh.getStr(2));
+					//	Get set up to try to use the CursorAdapter to display all the tag data
+					//	Select only the columns I need for the tag display section
+			        String[] fromColumns5 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+					//	Set the views for each column for each line. A tag takes up 1 line on the screen
+			        int[] toViews5 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+					myadapter5 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns5, toViews5, 0);
+					lambtags03.setAdapter(myadapter5);	
+				}else {
+					//	Clear out the id data for lamb03 in the ewe lambing display
+					lambtags03.setAdapter(null);
+				}
+			
+			case 2:			
+			// second lamb
+				cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
+	    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+	    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off " +
+	    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+	    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+	    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+	    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+	    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid " +
+	    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb02_id);
+	//			Log.i("lookForSheep", " command is" + cmd);
+	    		crsr4 = dbh.exec( cmd ); 
+	    		Log.i("lookForSheep", " after run get this year second lamb sqlite command");
+	    		cursor4   = ( Cursor ) crsr4; 
+				nRecs    = cursor4.getCount();
+				Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
+				cursor4.moveToFirst();				
+				if (nRecs > 0) {
+					// put the lamb name up and the lamb's sex
+					Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
+					Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
+					TV = (TextView) findViewById( R.id.lamb02nameText );
+		        	TV.setText(dbh.getStr(0));
+		        	TV = (TextView) findViewById( R.id.lamb02sexText );
+		        	TV.setText(dbh.getStr(2));
+					//	Get set up to try to use the CursorAdapter to display all the tag data
+					//	Select only the columns I need for the tag display section
+			        String[] fromColumns4 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+					//	Set the views for each column for each line. A tag takes up 1 line on the screen
+			        int[] toViews4 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+					myadapter4 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor4 ,fromColumns4, toViews4, 0);
+					lambtags02.setAdapter(myadapter4);	
+				}else {
+					//	Clear out the id data for lamb02 in the ewe lambing display
+					lambtags02.setAdapter(null);
+				}
+			
+			case 1:
+			// First lamb
+				cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, sheep_sex_table.sex_name, id_type_table.idtype_name, " +
+	    				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+	    				"id_info_table.id_infoid as _id, id_info_table.tag_date_off " +
+	    				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+	    				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+	    				"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+	    				"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+	    				"inner join sheep_sex_table on sheep_table.sex = sheep_sex_table.sex_sheepid " +
+	    				"where id_info_table.sheep_id ='%s' and id_info_table.tag_date_off is null order by idtype_name asc", lamb01_id);
+	//						Log.i("lookForSheep", " command is" + cmd);
+	    		crsr3 = dbh.exec( cmd ); 
+	    		Log.i("lookForSheep", " after run get this year first lamb sqlite command");
+	    		cursor3   = ( Cursor ) crsr3; 
+				nRecs    = cursor3.getCount();
+				Log.i("lookForSheep", " number of lamb tags is "+ String.valueOf(nRecs));
+				cursor3.moveToFirst();				
+				if (nRecs > 0) {
+					// put the lamb name up and the lamb's sex
+					Log.i("lookForSheep", "Lamb Name is " + dbh.getStr(0));
+					Log.i("lookForSheep", "Lamb sex is " + dbh.getStr(2));
+					TV = (TextView) findViewById( R.id.lamb01nameText );
+		        	TV.setText(dbh.getStr(0));
+		        	TV = (TextView) findViewById( R.id.lamb01sexText );
+		        	TV.setText(dbh.getStr(2));
+		        	
+					//	Get set up to try to use the CursorAdapter to display all the tag data
+					//	Select only the columns I need for the tag display section
+			        String[] fromColumns3 = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
+					//	Set the views for each column for each line. A tag takes up 1 line on the screen
+			        int[] toViews3 = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
+					myadapter3 = new SimpleCursorAdapter(this, R.layout.list_entry, cursor3 ,fromColumns3, toViews3, 0);
+					lambtags01.setAdapter(myadapter3);	
+				}else {
+					//	Clear out the id data for lamb01 in the ewe lambing display 	
+					lambtags01.setAdapter(null);
+				}
+				break;
 			}
 		}
 		public void addLamb (View v){
@@ -827,11 +970,16 @@ public class LambingSheep extends ListActivity
 			stopService(new Intent(LambingSheep.this, eidService.class));   	
 	    	// Added this to close the database if we go back to the main activity  	
 //	    	stopManagingCursor (cursor);
-	    	cursor.close();
+			try {
+	    		cursor.close();
+	    	}catch (Exception r)
+	    	{
+	    		Log.i("back btn", "cursor RunTimeException: " + r);
+	    	}
 	    	dbh.closeDB();
 	    	clearBtn( null );
-	    	//Go back to main
-	      	finish();
+	    	//Go back to menu
+	    	this.finish();
 		    }
 	 
 	    public void showAlert (View v){    		
@@ -910,7 +1058,7 @@ public class LambingSheep extends ListActivity
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFF000000));
 	    	btn.setEnabled(false);  
 	    	
-	       	//	Disable the Next Record and Prev. Record button until we have multiple records
+	       	//	Disable the  and Prev. Record button until we have multiple records
 	    	btn = (Button) findViewById( R.id.next_rec_btn );
 	    	btn.setEnabled(false); 
 	    	btn = (Button) findViewById( R.id.prev_rec_btn );
@@ -926,7 +1074,50 @@ public class LambingSheep extends ListActivity
 	     {	 
 	     	Utilities.takeNote(v, thissheep_id, this);
 	     }
+	     
+	     // user clicked the "next record" button
+	     public void nextRecord( View v)
+	     {
+	     	//	Clear out the display first
+	     	clearBtn( v );
+	     	//	Go get the sheep id of this record
+	     	Log.i("in next record", "this sheep ID is " + String.valueOf(thissheep_id));
+	     	cursor.moveToNext();
+	     	Log.i("in next record", "after moving the cursor ");
+	     	thissheep_id = cursor.getInt(0);
+//	     	thissheep_name = cursor.getString(1);
+	     	Log.i("in next record", "this sheep ID is " + String.valueOf(thissheep_id));
+//	     	Log.i("in next record", "this sheep name is " + thissheep_name);
+	     	recNo         += 1;
+//	     	findTagsShowAlert(v, thissheep_id);
+//	 		// I've moved forward so I need to enable the previous record button
+	 		Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
+	 		btn3.setEnabled(true);	    	
+	     	if (recNo == (nRecs)) {
+	     		// at end so disable next record button
+	     		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
+	         	btn2.setEnabled(false);   		
+	     	}
+	     }
+
+	     // user clicked the "previous record" button
+	     public void previousRecord( View v){
+//	     	Clear out the display first
+	     	clearBtn( v );
+	     	Log.i("in prev record", "this sheep ID is " + String.valueOf(thissheep_id));
+	     	cursor.moveToPrevious();
+	     	Log.i("in prev record", "after moving the cursor ");
+	     	thissheep_id = cursor.getInt(0);
+	     	Log.i("in prev record", "this sheep ID is " + String.valueOf(thissheep_id));
+	     	recNo         -= 1;
+//	     	findTagsShowAlert(v, thissheep_id);
+	 		// I've moved back so enable the next record button
+	 		Button btn2 = (Button) findViewById( R.id.next_rec_btn );
+	 		btn2.setEnabled(true);      		
+	     	if (recNo == 1) {
+	     		// at beginning so disable prev record button
+	     		Button btn3 = (Button) findViewById( R.id.prev_rec_btn );
+	         	btn3.setEnabled(false);   		
+	     	}
+	     }
 }
-
-	
-

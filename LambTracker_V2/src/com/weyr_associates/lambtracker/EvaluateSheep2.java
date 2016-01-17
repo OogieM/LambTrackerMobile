@@ -252,7 +252,12 @@ public class EvaluateSheep2 extends Activity {
         Button 			btn;
         TextView TV;       
         dbh = new DatabaseHandler( this, dbname );
-       
+        
+		// Disable Save Scores button and make it red to prevent getting 2 records at one time
+    	btn = (Button) findViewById( R.id.save_evaluation_scores_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+    	btn.setEnabled(false);    
+    	
         //	Go get the preference on whether to update alerts after an evaluation or not
         cmd = "select * from lambtracker_default_settings";
         crsr = dbh.exec( cmd );  
@@ -886,9 +891,9 @@ public class EvaluateSheep2 extends Activity {
 		btn = (Button) findViewById( R.id.scan_eid_btn );
 		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000)); 
     	// Enable Save Scores button and make it normal to get set for next sheep
-    	btn = (Button) findViewById( R.id.save_evaluation_scores_btn );
-    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));        	
-    	btn.setEnabled(true);
+//    	btn = (Button) findViewById( R.id.save_evaluation_scores_btn );
+//    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));        	
+//    	btn.setEnabled(true);
     }
 
 //  user clicked 'Scan' button    
@@ -986,9 +991,10 @@ public class EvaluateSheep2 extends Activity {
 				    case 8:
 				    	//	got a name				    	
 			        	tag_num = "%" + tag_num + "%";
-			        	cmd = String.format( "select sheep_id, sheep_name from sheep_table where sheep_name like '%s'" +
-			        			" and (remove_date is null or remove_date = '') "
-			        			, tag_num );  
+			        	cmd = String.format( "select sheep_id, sheep_name from sheep_table where sheep_name like '%s'" 
+			         			, tag_num );  
+//			        			" and (remove_date is null or remove_date = '') "
+//			        			, tag_num );  
 			        	Log.i("searchByName", "command is " + cmd);
 			        	crsr = dbh.exec( cmd );
 			    		cursor   = ( Cursor ) crsr; 
@@ -1106,7 +1112,11 @@ public class EvaluateSheep2 extends Activity {
 	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 	    	btn.setEnabled(true); 
 	    	showAlert(v);
-		}        	
+		}  
+	   	// Enable Save Scores button and make it normal
+    	btn = (Button) findViewById( R.id.save_evaluation_scores_btn );
+    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFF000000));        	
+    	btn.setEnabled(true);
 	}
 	
     public void doNote( View v )

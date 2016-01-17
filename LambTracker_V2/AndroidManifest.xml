@@ -15,7 +15,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/lambtracker_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -121,6 +121,15 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
         </activity>
+        
+        <activity
+            android:name="com.weyr_associates.lambtracker.GroupSheepManagement"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_group_sheep_management"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        
         <activity
             android:name="com.weyr_associates.lambtracker.AddLamb"
             android:configChanges="orientation"
@@ -186,6 +195,10 @@
             android:label="@string/title_activity_remove_sheep" >
         </activity>
         <activity
+            android:name="com.weyr_associates.lambtracker.RemoveDrug"
+            android:label="@string/title_activity_remove_drug" >
+        </activity>
+        <activity
             android:name="com.weyr_associates.lambtracker.DesktopFunctionsMenu"
             android:configChanges="orientation"
             android:label="@string/title_activity_desktop_functions"
@@ -210,8 +223,9 @@
         <activity
             android:name="com.weyr_associates.lambtracker.DrugManagement"
             android:label="@string/title_activity_drug_management" 
-            android:screenOrientation="portrait" >
+            android:screenOrientation="landscape" >
         </activity>
     </application>
 
 </manifest>
+

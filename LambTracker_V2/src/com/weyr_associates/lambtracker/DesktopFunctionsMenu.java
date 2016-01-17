@@ -37,4 +37,10 @@ public class DesktopFunctionsMenu extends Activity {
 		i = new Intent(DesktopFunctionsMenu.this, CreateEweBreedingRecord.class);
 		DesktopFunctionsMenu.this.startActivity(i);
 	}
+	public void drugManagement (View v){
+		Intent i = null;
+		i = new Intent(DesktopFunctionsMenu.this, DrugManagement.class);
+		DesktopFunctionsMenu.this.startActivity(i);
+	}	
+	
 }

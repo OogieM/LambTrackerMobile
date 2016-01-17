@@ -50,16 +50,15 @@ import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
 import com.google.zxing.client.android.Intents;
 
-
 public class CreateEweBreedingRecord extends ListActivity {
 	private DatabaseHandler dbh;
 	public Spinner which_breeding_spinner;
 	public int 		thissheep_id, nRecs, this_service;
 	public Cursor 	cursor;
 	public Object 	crsr;
-	String     	cmd;
+	String     	cmd, cmd2;
 	private int year;
-	public String currentyear;
+	public String currentyear,nextyear;
 	public List<String> service_type;
 	public List<Integer> which_service;
 	ArrayAdapter<String> dataAdapter;
@@ -90,11 +89,13 @@ public class CreateEweBreedingRecord extends ListActivity {
        		"inner join flock_prefix_table on flock_prefix_table.flock_prefixid = sheep_table.flock_prefix " +
     		"inner join sheep_table on breeding_record_table.ram_id = sheep_table.sheep_id " +
        		"inner join service_type_table on service_type_table.id_servicetypeid  = breeding_record_table.service_type " +
-       		"where breeding_record_table.date_ram_in like '%s' " +
-       		"order by sheep_table.sheep_name asc ", currentyear);
+       		"where breeding_record_table.date_ram_out = '' " +
+       		"order by sheep_table.sheep_name asc ");
        Log.i("set spinner ", "before cmd " + cmd); 
        crsr = dbh.exec( cmd );  
        cursor   = ( Cursor ) crsr;
+       nRecs    = cursor.getCount();
+       Log.i("countrams", " nRecs is " + String.valueOf(nRecs));
        dbh.moveToFirstRecord();
        service_type.add("Select a Breeding Record");
         // looping through all rows and adding to list
@@ -103,7 +104,32 @@ public class CreateEweBreedingRecord extends ListActivity {
 			Log.i("EweBreeding", " the service type is " + cursor.getString(1) + " " + cursor.getString(2) + " " + cursor.getString(3)); 
 			which_service.add (cursor.getInt(0));
 			Log.i("EweBreeding", " The breeding record id is " + String.valueOf(cursor.getInt(0)) );
-	   	}	   	
+	   	}	
+	   	
+//	   	year  = year+1;
+//        nextyear = String.valueOf(year) + "%";
+//        Log.i ("next year ",nextyear );
+//	   	// Select All active breeding records to build the spinner
+//       cmd = String.format( "select breeding_record_table.id_breedingid as _id, flock_prefix_table.flock_name," +
+//       		"sheep_table.sheep_name, breeding_record_table.date_ram_in, breeding_record_table.time_ram_in, " +
+//       		"service_type_table.service_type " +
+//       		"from breeding_record_table " +
+//       		"inner join flock_prefix_table on flock_prefix_table.flock_prefixid = sheep_table.flock_prefix " +
+//    		"inner join sheep_table on breeding_record_table.ram_id = sheep_table.sheep_id " +
+//       		"inner join service_type_table on service_type_table.id_servicetypeid  = breeding_record_table.service_type " +
+//       		"where breeding_record_table.date_ram_out = '' " +
+//       		"order by sheep_table.sheep_name asc ");
+//       Log.i("set spinner ", "before cmd " + cmd); 
+//       crsr = dbh.exec( cmd );  
+//       cursor   = ( Cursor ) crsr;
+//       dbh.moveToFirstRecord();
+//        // looping through all rows and adding to list
+//	   	for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+//	   		service_type.add(cursor.getString(1)+ " " + cursor.getString(2) + " " + cursor.getString(5) + " " + cursor.getString(3)+ " " + cursor.getString(4));
+//			Log.i("EweBreeding", " the service type is " + cursor.getString(1) + " " + cursor.getString(2) + " " + cursor.getString(3)); 
+//			which_service.add (cursor.getInt(0));
+//			Log.i("EweBreeding", " The breeding record id is " + String.valueOf(cursor.getInt(0)) );
+//	   	}	   	
 	   	// Creating adapter for spinner
 	   	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, service_type);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -123,7 +149,7 @@ public class CreateEweBreedingRecord extends ListActivity {
 		crsr = dbh.exec( cmd );
 		cursor   = ( Cursor ) crsr; 
 		nRecs    = cursor.getCount();
-		Log.i("setalerts", " nRecs is " + String.valueOf(nRecs));
+		Log.i("countewes", " nRecs is " + String.valueOf(nRecs));
 		test_names = new ArrayList<String>(); 
        	test_sheep_id = new ArrayList<Integer>();
 		cursor.moveToFirst();	
@@ -155,9 +181,24 @@ public class CreateEweBreedingRecord extends ListActivity {
 	public void updateDatabase( View v ){
 		boolean temp_value;
 		int temp_location, temp_size;
+		String ram_name, this_alert;
+		
 		which_breeding_spinner = (Spinner) findViewById(R.id.which_breeding_spinner);
 		this_service = which_breeding_spinner.getSelectedItemPosition();
 		this_service = which_service.get (this_service-1);
+		
+		// Add code to get ram name for alert update for sort
+		cmd = String.format( "select sheep_table.sheep_id, sheep_table.sheep_name " +
+				"from breeding_record_table " +
+				"inner join sheep_table on breeding_record_table.ram_id = sheep_table.sheep_id " +
+				"where breeding_record_table.id_breedingid = %s ", this_service );  
+		Log.i("update", " command is  " + cmd);
+		crsr = dbh.exec( cmd );
+		cursor   = ( Cursor ) crsr; 
+		cursor.moveToFirst();
+		ram_name = cursor.getString(1);
+		Log.i("update", " Ram is  " + ram_name);
+		
 		temp_size = sparse_array.size();
 		Log.i("in Update ", "sparse array size is " + String.valueOf(temp_size));
         Log.i ("before loop", " the service record id is  " + String.valueOf(this_service));
@@ -172,7 +213,23 @@ public class CreateEweBreedingRecord extends ListActivity {
      			cmd = String.format("insert into sheep_breeding_table (ewe_id, breeding_id) values (%s,%s)" , thissheep_id, this_service );
     			Log.i("add record ", "before cmd " + cmd);
     			dbh.exec( cmd);
-    			Log.i("add record ", "after cmd " + cmd);	    			
+    			Log.i("add record ", "after cmd " + cmd);	 
+    			cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_table.sheep_id = %s ", thissheep_id);
+    			Log.i("add record ", "before cmd " + cmd);
+    			crsr = dbh.exec( cmd );
+    			cursor   = ( Cursor ) crsr; 
+    			cursor.moveToFirst();
+    			this_alert = cursor.getString(0);
+    			Log.i("add record ", "after cmd " + cmd);
+    			Log.i("add record ", "Before alert is " + this_alert);
+    			this_alert = ram_name + ' ' + "\n" + this_alert;
+    			Log.i("add record ", "After alert is " + this_alert);		
+    			cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ",
+    					this_alert, thissheep_id ) ;
+    			Log.i("update alert ", "before cmd " + cmd);
+    			dbh.exec( cmd );
+    			Log.i("update alert ", "after cmd " + cmd);
+    			
     		}   		
     	}// for loop
     	Log.i("after for ", "loop in add record.");  

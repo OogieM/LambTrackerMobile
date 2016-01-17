@@ -198,42 +198,33 @@ public class MainActivity extends Activity {
 					MainActivity.this.startActivity(i);
 			        break;
 			    case 5:
-					i = new Intent(MainActivity.this, LambingSheep.class);
-					MainActivity.this.startActivity(i);
-			        break;
-			    case 6:
 					i = new Intent(MainActivity.this, CreateSheepEvaluation.class);
 					MainActivity.this.startActivity(i);
 			        break;
-			    case 7:
+			    case 6:
 					i = new Intent(MainActivity.this, FixLamb.class);
 					MainActivity.this.startActivity(i);
 			        break;			   			    
-			    case 8:
+			    case 7:
 					i = new Intent(MainActivity.this, PrintLabels.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 9:
+				case 8:
 					i = new Intent(MainActivity.this, EditDB.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 10:		
+				case 9:		
 					i = new Intent(MainActivity.this, DesktopFunctionsMenu.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 11:		
+				case 10:		
 					i = new Intent(MainActivity.this, SetDefaults.class);
 					MainActivity.this.startActivity(i);
 			        break;
-				case 12:		
+				case 11:		
 					i = new Intent(MainActivity.this, TestInterfaceDesigns.class);
 					MainActivity.this.startActivity(i);
-			        break;
-				case 13:
-					i = new Intent(MainActivity.this, DrugManagement.class);
-					MainActivity.this.startActivity(i);
-					break;
-				
+			        break;				
 			}
 			
 		}
@@ -485,6 +476,7 @@ public class MainActivity extends Activity {
 		btnService.setText("Connect");
 	}
 
+	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -542,9 +534,4 @@ public class MainActivity extends Activity {
 		this.moveTaskToBack( true );
 	}
 	
-}
-
-
-
-
-	 
+} 

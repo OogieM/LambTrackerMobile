@@ -84,6 +84,3 @@ public class EditPreferences extends PreferenceActivity implements OnSharedPrefe
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 }
-
-
-	

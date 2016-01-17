@@ -46,7 +46,7 @@ import android.widget.LinearLayout.LayoutParams;
 
 import com.google.zxing.client.android.Intents;
 
-public class SheepManagement extends ListActivity {
+public class GroupSheepManagement extends ListActivity {
 	private DatabaseHandler dbh;
 	int             id;
 	String 			logmessages;
@@ -68,7 +68,7 @@ public class SheepManagement extends ListActivity {
 	public List<String> tag_types, tag_locations, tag_colors;
 	public List<String> wormers, vaccines, drugs, drug_location, blood_tests;
 	public List<Integer> wormer_id_drugid, vaccine_id_drugid, drug_id_drugid, blood_test_id;
-	public int wormer_id, vaccine_id, shot_loc, drug_loc, sheep_birth_record, lambs_weaned;
+	public int wormer_id, vaccine_id, shot_loc, drug_loc;
 	public String[] this_sheeps_tags ;
 	public int drug_gone; // 0 = false 1 = true
 	public int	drug_type, which_wormer, which_vaccine, which_drug, which_blood, id_sheepdrugid;
@@ -127,7 +127,7 @@ public class SheepManagement extends ListActivity {
 			case eidService.MSG_THREAD_SUICIDE:
 //				Log.i("Evaluate", "Service informed Activity of Suicide.");
 				doUnbindService();
-				stopService(new Intent(SheepManagement.this, eidService.class));
+				stopService(new Intent(GroupSheepManagement.this, eidService.class));
 				
 				break;
 			default:
@@ -174,7 +174,7 @@ public class SheepManagement extends ListActivity {
 			doBindService();
 		} else {
 //			Log.i("SheepMgmt", "is not, start it");
-			startService(new Intent(SheepManagement.this, eidService.class));
+			startService(new Intent(GroupSheepManagement.this, eidService.class));
 			doBindService();
 		}
 //		Log.i("SheepMgmt", "Done isRunning.");
@@ -255,8 +255,10 @@ public class SheepManagement extends ListActivity {
     public void onCreate(Bundle savedInstanceState)	
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sheep_management);
-//        Log.i("SheepMgmt", " after set content view");
+        Log.i("SheepMgmt", " before set content view");
+
+        setContentView(R.layout.group_sheep_management);
+        Log.i("SheepMgmt", " after set content view");
 //        View v = null;
         String 	dbfile = getString(R.string.real_database_file) ;
 //        Log.i("SheepMgmt", " after get database file");
@@ -595,6 +597,7 @@ public class SheepManagement extends ListActivity {
             	TV = (TextView) findViewById( R.id.sheepnameText );
                 TV.setText( "Sheep Database does not exist." ); 
          	}
+
 	}
 
 	public void formatSheepRecord (View v){
@@ -609,7 +612,7 @@ public class SheepManagement extends ListActivity {
 				"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
 				"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
 				"sheep_table.sire_id, sheep_table.dam_id, sheep_table.birth_date, birth_type_table.birth_type," +
-				"sheep_sex_table.sex_name, sheep_table.birth_weight, sheep_table.sheep_birth_record " +
+				"sheep_sex_table.sex_name, sheep_table.birth_weight " +
 				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
 				"inner join birth_type_table on id_birthtypeid = sheep_table.birth_type " +
 				"inner join sheep_sex_table on sheep_sex_table.sex_sheepid = sheep_table.sex " +
@@ -625,7 +628,7 @@ public class SheepManagement extends ListActivity {
 	    TV.setText (dbh.getStr(0));
 	    SheepName = dbh.getStr(0);
 	    alert_text = dbh.getStr(8);
-	    sheep_birth_record = dbh.getInt(15);
+		
 	    //	Get the sire and dam id numbers
 	    thissire_id = dbh.getInt(9);
 	    Log.i("format record", " Sire is " + String.valueOf(thissire_id));
@@ -703,7 +706,8 @@ public class SheepManagement extends ListActivity {
 	    	showAlert(v);
 		}
 	}	
-	 public void updateDatabase( View v ){	    	
+	 public void updateDatabase( View v ){
+	    	
 		 	TextView 	TV;
 		 	String 		temp_string;
 	    	Float 		trait11_data = 0.0f;
@@ -715,7 +719,8 @@ public class SheepManagement extends ListActivity {
 	    	// If there is no sheep ID then drop out completely
 	    	// thissheep_id is 0 if no sheep has been selected.
 	    	//	need to figure out how to loop around if it's 0 and do this stuff if not 0
-	    	if (thissheep_id != 0){
+	    	// TODO
+	    	
 	    	
     		//	Get the date and time to enter into the database.
     		String mytoday = Utilities.TodayIs();
@@ -870,21 +875,6 @@ public class SheepManagement extends ListActivity {
     			Log.i("update sheep table ", "before cmd " + cmd);
     			dbh.exec( cmd );	
     			Log.i("update sheep table ", "after cmd exec");
-    			// update the lambing history table number lambs weaned
-    			cmd = String.format("Select lambing_history_table.lambs_weaned from lambing_history_table " +
-						" where lambing_historyid = %s", sheep_birth_record);
-				Log.i("lambing history ", "db cmd is " + cmd);
-				crsr = dbh.exec(cmd);
-				cursor   = ( Cursor ) crsr;
-				cursor.moveToFirst();
-				lambs_weaned = dbh.getInt(0);
-				Log.i("update lambing history ", String.valueOf(lambs_weaned));
-				
-				lambs_weaned = lambs_weaned + 1;
-				Log.i("update lambing history ", String.valueOf(lambs_weaned));
-				cmd = String.format("update lambing_history_table set lambs_weaned = %d " +
-						" where lambing_historyid =%d ", lambs_weaned , sheep_birth_record ) ;
-				dbh.exec( cmd );
 			}			
 			
 //			//	Get the value of the checkbox for take  blood
@@ -998,11 +988,10 @@ public class SheepManagement extends ListActivity {
 				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
 				i = wormer_id_drugid.get(which_wormer);
 				Log.i("wormer id", " value is " + String.valueOf(i));
-				//	Drug location 5 is by mouth, all wormer given by mouth							
+				//	Drug location 5 is by mouth, all wormer given by mouth
 				cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
-		  				" drug_time_on, drug_date_off, drug_time_off, drug_dosage, drug_location) values " +
-		  				" (%s, '%s', '%s', '%s', '%s', '%s', '%s', %s) ", thissheep_id, i, mytoday, mytime, 
-		  				empty_string_field, empty_string_field, empty_string_field, 5);
+		  				" drug_time_on, drug_location) values " +
+		  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, 5);
 		  		Log.i("add drug to ", "db cmd is " + cmd);
 				dbh.exec(cmd);
 				Log.i("add tag ", "after insert into sheep_drug_table");
@@ -1070,7 +1059,9 @@ public class SheepManagement extends ListActivity {
 				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
 				i = drug_id_drugid.get(which_drug);
 				Log.i("drug id", " value is " + String.valueOf(i));
+				//TODO
 				//	Go get a Drug location 
+				
 				drug_location_spinner = (Spinner) findViewById(R.id.drug_location_spinner);
 				drug_loc = drug_location_spinner.getSelectedItemPosition();
 		 		if (drug_loc == 0){
@@ -1091,10 +1082,9 @@ public class SheepManagement extends ListActivity {
 		    		dialog.show();	
 		    		return;
 		 		}else{
-		 					cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
-			  				" drug_time_on, drug_date_off, drug_time_off, drug_dosage, drug_location) values " +
-			  				" (%s, '%s', '%s', '%s', '%s', '%s', '%s', %s) ", thissheep_id, i, mytoday, mytime, 
-			  				empty_string_field, empty_string_field, empty_string_field, drug_loc);
+					cmd = String.format("insert into sheep_drug_table (sheep_id, drug_id, drug_date_on," +
+			  				" drug_time_on, drug_location) values " +
+			  				" (%s, '%s', '%s', '%s' , %s) ", thissheep_id, i, mytoday, mytime, drug_loc);
 			  		Log.i("add drug to ", "db cmd is " + cmd);
 					dbh.exec(cmd);
 					Log.i("add tag ", "after insert into sheep_drug_table");
@@ -1127,7 +1117,7 @@ public class SheepManagement extends ListActivity {
 					// TODO
 					// Consider calculating the actual date/time withdrawal and putting that in instead. 
 					//	get and add Drug Reason
-					// Put this back into the sheep_management.xml file when I add in reasons
+					// Put this back into the sneep_management.xml file when I add in reasons
 //					<TextView
 //		        	android:layout_width="150dp"
 //		       	 	android:layout_height="wrap_content"
@@ -1159,7 +1149,12 @@ public class SheepManagement extends ListActivity {
 				//	Go get which drug was selected in the spinner
 				drug_spinner = (Spinner) findViewById(R.id.drug_spinner);
 				which_drug = drug_spinner.getSelectedItemPosition();
-							
+				
+				
+				
+				
+				
+				
 				// The drug_id is at the same position in the drug_id_drugid list as the spinner position			
 				i = drug_id_drugid.get(which_drug);
 				Log.i("drug id", " value is " + String.valueOf(i));
@@ -1237,11 +1232,9 @@ public class SheepManagement extends ListActivity {
 			    		Log.i("add evaluation ", "cmd is "+ cmd);
 						dbh.exec(cmd);
 						Log.i("add evaluation ", "after insert into sheep_evaluation_table");
-					}						
+					}	
+					
 			clearBtn( null );
-	    	}else{
-	    		clearBtn( null );
-	    	}
 	 }
 	public void printLabel( View v ){ 
 		try
@@ -1279,7 +1272,7 @@ public class SheepManagement extends ListActivity {
 	    public void backBtn( View v )
 	    {
     	doUnbindService();
-		stopService(new Intent(SheepManagement.this, eidService.class));   	
+		stopService(new Intent(GroupSheepManagement.this, eidService.class));   	
     	// Added this to close the database if we go back to the main activity  	
     	try {
     		cursor.close();

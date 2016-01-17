@@ -54,7 +54,8 @@
             android:typeface="monospace" />
        
        </GridLayout>  
-       
+    
+
  <RelativeLayout
     android:id="@+id/TopButtonRow"
     android:orientation="horizontal" 
@@ -94,407 +95,187 @@
   </RelativeLayout>
        
  <GridLayout
-        android:id="@+id/secondRowButtons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:columnCount="4"
-        android:rowCount="2" >
-        
+     android:id="@+id/secondRowButtons"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:columnCount="4"
+     android:rowCount="3" >
+
      <Button
-            android:id="@+id/prev_rec_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_column="0"
-            android:layout_gravity="left|top"
-            android:layout_row="0"
-            android:onClick="previousRecord"
-            android:text="@string/prev_rec_btn"
-            android:textSize="14sp" />
-     
-      <Button
-            android:id="@+id/next_rec_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_column="1"
-            android:layout_gravity="left|top"
-            android:layout_row="0"
-            android:onClick="nextRecord"
-            android:text="@string/next_rec_btn"
-            android:textSize="14sp" />
-     
-        <Button
-            android:id="@+id/add_new_tag_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_column="2"
-            android:layout_gravity="left|top"
-            android:layout_row="0"
-            android:onClick="addNewTag"
-            android:text="@string/add_new_tag_btn"
-            android:textSize="14sp" />
-               
-       <Button
-            android:id="@+id/update_database_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_column="3"
-            android:layout_gravity="left|top"
-            android:layout_row="0"
-            android:onClick="updateDatabase"
-            android:text="@string/update_database_btn"
-            android:textSize="14sp" />
+         android:id="@+id/prev_rec_btn"
+         android:layout_width="100dp"
+         android:layout_height="50dp"
+         android:layout_column="0"
+         android:layout_gravity="left|top"
+         android:layout_row="0"
+         android:onClick="previousRecord"
+         android:text="@string/prev_rec_btn"
+         android:textSize="14sp" />
+
+     <Button
+         android:id="@+id/next_rec_btn"
+         android:layout_width="100dp"
+         android:layout_height="50dp"
+         android:layout_column="1"
+         android:layout_gravity="left|top"
+         android:layout_row="0"
+         android:onClick="nextRecord"
+         android:text="@string/next_rec_btn"
+         android:textSize="14sp" />
+
+     <Button
+         android:id="@+id/add_new_tag_btn"
+         android:layout_width="100dp"
+         android:layout_height="50dp"
+         android:layout_column="2"
+         android:layout_gravity="left|top"
+         android:layout_row="0"
+         android:onClick="addNewTag"
+         android:text="@string/add_new_tag_btn"
+         android:textSize="14sp" />
+
+     <Button
+         android:id="@+id/update_database_btn"
+         android:layout_width="100dp"
+         android:layout_height="50dp"
+         android:layout_column="3"
+         android:layout_gravity="left|top"
+         android:layout_row="0"
+         android:onClick="updateDatabase"
+         android:text="@string/update_database_btn"
+         android:textSize="14sp" />
  
-    </GridLayout>
-    	
-        <GridLayout
-        android:id="@+id/grid3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:columnCount="6"
-        android:rowCount="8" >
 
-        <TextView
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left"
-            android:layout_row="0"
-            android:inputType="none"
-            android:text="@string/federal_id_lbl" />
+     <Button
+         android:id="@+id/remove_farmtag_btn"
+         android:layout_width="100dp"
+         android:layout_height="50dp"
+         android:layout_column="0"
+         android:layout_gravity="left|top"
+         android:layout_row="1"
+         android:onClick="removeFarmTag"
+         android:text="@string/remove_this_tag_btn"
+         android:textSize="14sp" />
 
-        <EditText
-            android:id="@+id/fedText"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left"
-            android:layout_row="1"
-            android:inputType="number"
-            android:textSize="18sp"
-            android:typeface="monospace" >
-        </EditText>
-
-        <TextView
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="left"
-            android:layout_row="0"
-            android:inputType="none"
-            android:text="@string/tag_color_lbl" />
-
-        <EditText
-            android:id="@+id/fed_colorText"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="left"
-            android:layout_row="1"
-            android:inputType="text"
-            android:textSize="18sp"
-            android:typeface="monospace" >
-        </EditText>
-        
-        <TextView
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left"
-            android:layout_row="0"
-            android:inputType="none"
-            android:text="@string/tag_location_lbl" />
-
-        <EditText
-            android:id="@+id/fed_locationText"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left"
-            android:layout_row="1"
-            android:inputType="text"
-            android:textSize="18sp"
-            android:typeface="monospace" >
-        </EditText>
-        <Button
-            android:id="@+id/remove_fedtag_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_column="3"
-            android:layout_gravity="left|top"
-            android:layout_row="1"
-            android:onClick="removeFedTag"
-            android:text="@string/remove_fedtag_btn"
-            android:textSize="14sp" />
-               
-        <TextView
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left"
-            android:layout_row="2"
-            android:inputType="none"
-            android:text="@string/farm_id_lbl" />
-
-        <EditText
-            android:id="@+id/farmText"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left"
-            android:layout_row="3"
-            android:enabled="true"
-            android:inputType="number"
-            android:textSize="18sp"
-            android:typeface="monospace" />
-      
-        <TextView
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="left"
-            android:layout_row="2"
-            android:inputType="none"
-            android:text="@string/tag_color_lbl" />
-
-        <EditText
-            android:id="@+id/farm_colorText"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="left"
-            android:layout_row="3"
-            android:inputType="text"
-            android:textSize="18sp"
-            android:typeface="monospace" >
-        </EditText>
-        
-        <TextView
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left"
-            android:layout_row="2"
-            android:inputType="none"
-            android:text="@string/tag_location_lbl" />
-
-        <EditText
-            android:id="@+id/farm_locationText"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left"
-            android:layout_row="3"
-            android:inputType="text"
-            android:textSize="18sp"
-            android:typeface="monospace" >
-        </EditText>
-        
-        <Button
-            android:id="@+id/remove_farmtag_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_column="3"
-            android:layout_gravity="left|top"
-            android:layout_row="3"
-            android:onClick="removeFarmTag"
-            android:text="@string/remove_farmtag_btn"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left"
-            android:layout_row="4"
-            android:inputType="none"
-            android:text="@string/paint_id_lbl" />
-        
-                <EditText
-            android:id="@+id/paintText"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left"
-            android:layout_row="5"
-            android:enabled="true"
-            android:inputType="number"
-            android:textSize="18sp"
-            android:typeface="monospace" />
-      
-        <TextView
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="left"
-            android:layout_row="4"
-            android:inputType="none"
-            android:text="@string/paint_color_lbl" />
-
-        <EditText
-            android:id="@+id/paint_colorText"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="left"
-            android:layout_row="5"
-            android:inputType="text"
-            android:textSize="18sp"
-            android:typeface="monospace" >
-        </EditText>
-        
-        <TextView
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left"
-            android:layout_row="4"
-            android:inputType="none"
-            android:text="@string/tag_location_lbl" />
-
-        <EditText
-            android:id="@+id/paint_locationText"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left"
-            android:layout_row="5"
-            android:inputType="text"
-            android:textSize="18sp"
-            android:typeface="monospace" >
-        </EditText>
-        
-        <Button
-            android:id="@+id/remove_paint_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_column="3"
-            android:layout_gravity="left|top"
-            android:layout_row="5"
-            android:onClick="removePaintTag"
-            android:text="@string/remove_paint_btn"
-            android:textSize="14sp" />
-        
-        </GridLayout>
-       <GridLayout
-        android:id="@+id/grid4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:columnCount="3"
-        android:rowCount="4" > 
-              
-        <TextView
-            android:layout_width="215dp"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left|top"
-            android:layout_row="0"
-            android:inputType="none"
-            android:text="@string/electronic_id_lbl" />
-        
-        <EditText
-            android:id="@+id/eidText"
-            android:layout_width="215dp"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left"
-            android:layout_row="1"
-            android:enabled="true"
-            android:inputType="text"
-            android:textSize="18sp"
-            android:typeface="monospace" />  
-        
-        <TextView
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="left|top"
-            android:layout_row="0"
-            android:inputType="none"
-            android:text="@string/tag_location_lbl" />
-
-        <EditText
-  	  		android:id="@+id/eid_locationText"
-  	  		android:layout_width="100dp"
-  	  		android:layout_height="wrap_content"
-  	  		android:layout_column="2"
-      		android:layout_gravity="left"
-      		android:layout_row="1"
-      		android:inputType="text"
-  	  		android:textSize="18sp"/>
-        
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="left|top"
-            android:layout_row="0"
-            android:inputType="none"
-            android:text="@string/tag_color_lbl" />
-        
-        <EditText
-  	  		android:id="@+id/eid_colorText"
-  	  		android:layout_width="100dp"
-  	  		android:layout_height="wrap_content"
-  	  		android:layout_column="1"
-      		android:layout_gravity="left"
-      		android:layout_row="1"
-      		android:inputType="text"
-  	  		android:textSize="18sp"/>
-        </GridLayout>
-        
  
+ </GridLayout>
+  		<GridLayout
+	        android:id="@+id/grid2"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:columnCount="5">   	    
+	     	    
+	        <TextView
+	            android:layout_width="176dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="1"
+	            android:layout_gravity="left|top"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_number_lbl" />
+	        
+	        <TextView
+	            android:layout_width="65dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="2"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_color_abbrev_lbl" />
+	        
+	        <TextView
+	            android:layout_width="40dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="3"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_location_abbrev_lbl" />
+	        
+	        <TextView
+	            android:layout_width="80dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="4"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_type_abbrev_lbl" />
+        
+     	</GridLayout>
+    	    
+       <ListView
+           android:id="@+id/android:list"
+           android:layout_width="fill_parent"
+            android:choiceMode="singleChoice"
+            android:layout_gravity="left"
+           android:layout_height="155dp" >
+
+		</ListView>  
+			
+ <TextView 
+	    	 android:id="@+id/add_new_tags"
+	    	 android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+     	 	android:inputType="none"
+     	 	android:textSize="14sp"
+     	 	android:text="@string/add_new_tag_lbl"/>
+
+		
+       
  <GridLayout
         android:id="@+id/grid5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:columnCount="5"
+        android:columnCount="4"
         android:rowCount="3" >
-        
-     <Button
-      android:id="@+id/remove_eidtag_btn"
-      android:layout_width="100dp"
-      android:layout_height="50dp" 
-      android:layout_column="0"
-      android:layout_row="0"     
-      android:layout_gravity="left|top"     
-      android:onClick="removeEIDTag"
-      android:text="@string/remove_eidtag_btn"
-      android:textSize="14sp" />
-     
       
   <Spinner
         android:id="@+id/tag_type_spinner2"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:layout_column="1"
+        android:layout_column="0"
         android:layout_gravity="left"
         android:layout_row="0"
         android:textSize="18sp" />
   <Spinner
   	  android:id="@+id/tag_color_spinner"
-  	  android:layout_width="100dp"
+  	  android:layout_width="140dp"
   	  android:layout_height="wrap_content"
-  	  android:layout_column="2"
+  	  android:layout_column="1"
       android:layout_gravity="left"
       android:layout_row="0"
   	  android:textSize="18sp"/>
   <Spinner
   	  android:id="@+id/tag_location_spinner"
-  	  android:layout_width="100dp"
+  	  android:layout_width="160dp"
   	  android:layout_height="wrap_content"
-  	  android:layout_column="3"
+  	  android:layout_column="2"
       android:layout_gravity="left"
       android:layout_row="0"
   	  android:textSize="18sp"/>
  
+  </GridLayout>
+ 
+ 
+  <GridLayout
+        android:id="@+id/grid7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:rowCount="2" >
+        
    <EditText
             android:id="@+id/new_tag_number"
             android:layout_width="215dp"
             android:layout_height="wrap_content"
             android:layout_column="0"
-            android:layout_columnSpan="2"
-      		android:layout_gravity="left"
-     	 	android:layout_row="1"
+            android:layout_gravity="left"
+     	 	android:layout_row="0"
             android:enabled="true"
             android:inputType="text"
             android:textSize="18sp"
@@ -502,23 +283,15 @@
            </EditText>
 	<TextView 
 	    	 android:id="@+id/new_tag_label"
-	    	 android:layout_width="90dp"
+	    	 android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:layout_column="2"
+            android:layout_column="1"
       		android:layout_gravity="left"
-     	 	android:layout_row="1"
+     	 	android:layout_row="0"
             android:inputType="none"
             android:text="@string/new_tag_lbl"/>
-	<Button
-            android:id="@+id/update_display_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_column="3"
-      		android:layout_gravity="left"
-     	 	android:layout_row="1"
-            android:onClick="updateTag"
-            android:text="@string/update_display_btn"
-            android:textSize="14sp" />
+
+				
 </GridLayout>
 <RelativeLayout
     android:id="@+id/BottomButtonBar"

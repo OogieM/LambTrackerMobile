@@ -91,7 +91,7 @@
             android:text="@string/scan_eid_btn"
             android:textSize="14sp" />    
   </RelativeLayout>
-   <GridLayout
+  <GridLayout
         android:id="@+id/secondRowButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -119,8 +119,39 @@
             android:onClick="nextRecord"
             android:text="@string/next_rec_btn"
             android:textSize="14sp" />
-     
- 	</GridLayout>		
+ 
+      <Button
+            android:id="@+id/print_label_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_column="2"
+            android:layout_gravity="left|top"
+            android:layout_row="0"        	
+            android:onClick="printLabel"
+            android:text="@string/print_label_btn"
+            android:textSize="14sp" />
+      
+      <Button
+            android:id="@+id/update_database_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_column="3"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
+            android:onClick="updateDatabase"
+            android:text="@string/update_database_btn"
+            android:textSize="14sp" /> 
+      <Button
+       	  	android:id="@+id/remove_drug_btn"
+         	android:layout_width="100dp"
+         	android:layout_height="50dp"
+         	android:layout_column="0"
+         	android:layout_gravity="left|top"
+         	android:layout_row="1"
+         	android:onClick="removeThisDrug"
+         	android:text="@string/remove_this_drug_btn"
+         	android:textSize="14sp" />
+    </GridLayout> 		
 		<GridLayout
 	        android:id="@+id/grid2"
 	        android:layout_width="match_parent"
@@ -168,144 +199,97 @@
 	            android:text="@string/tag_type_abbrev_lbl" />
         
      	</GridLayout>
-  	    
-      	<ListView 
+    	    
+       <ListView 
 			android:id="@+id/android:list" 
 	  		android:layout_height="wrap_content"
 	  		android:layout_width="fill_parent">
-		</ListView>     	
-		<View
-		    android:id="@+id/dividerbar02"
-		    android:layout_width="fill_parent"
-		    android:layout_height="2dp"
-		    android:background="@android:color/black">
-		</View>
-		<TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-	       	android:layout_gravity="left"
+		</ListView>
+		        
+  <GridLayout 
+        	android:id="@+id/grid3"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+        	android:columnCount="3"
+       		android:rowCount="3">
+        
+           <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"     
+            android:layout_gravity="left"
+            android:layout_column="0"
+            android:layout_row="0"
             android:inputType="none"
             android:textStyle="bold"
-            android:text="@string/lambing_history_lbl" 
-            android:textSize="14sp"/>
-	    <ListView 
-			android:id="@+id/list2" 
-	  		android:layout_height="50dp"
-	  		android:layout_width="fill_parent">
-		</ListView>
-		<View
-		    android:id="@+id/dividerbar03"
-		    android:layout_width="fill_parent"
-		    android:layout_height="2dp"
-		    android:background="@android:color/black">
-		</View>
-	
-	<RelativeLayout
-    	android:orientation="horizontal" 
-  		android:layout_width="fill_parent"
-  		android:layout_height="wrap_content">
-	   	<TextView
-        	android:id="@+id/lamb01nameText"
-        	android:layout_width="150dp"
+            android:text="@string/sheep_sire_lbl" />
+           
+           <TextView
+            android:id="@+id/sireName"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_column="0"
+            android:layout_row="1"
+            android:enabled="true"
+            android:typeface="monospace" >
+			</TextView>
+            
+  			<TextView
+        	android:layout_width="200dp"
        	 	android:layout_height="wrap_content"
+        	android:layout_column="1"
+            android:layout_gravity="left"
+            android:layout_row="0"
+            android:inputType="none"
+            android:textStyle="bold"
+        	android:text="@string/sheep_dam_lbl" />
+        
+        <TextView
+        	android:id="@+id/damName"
+        	android:layout_width="200dp"
+       	 	android:layout_height="wrap_content"
+           	android:layout_column="1"
+            android:layout_gravity="left"
+            android:layout_row="1"
             android:ems="10"
         	android:gravity="left"
-        	android:textSize="14sp"
-        	android:typeface="monospace" /> 
-        <TextView
-        	android:id="@+id/lamb01sexText"
-        	android:layout_width="70dp"
-       	 	android:layout_height="wrap_content"
-           	android:layout_toRightOf="@+id/lamb01nameText"
-        	android:gravity="right"
-        	android:textSize="14sp"
-        	android:typeface="monospace" /> 
-        	</RelativeLayout>
-	    <ListView 
-			android:id="@+id/list3" 
-	  		android:layout_height="55dp"
-	  		android:layout_width="fill_parent">
-		</ListView>	
-		<View
-		    android:id="@+id/dividerbar04"
-		    android:layout_width="fill_parent"
-		    android:layout_height="2dp"
-		    android:background="@android:color/black">
-		</View>
-		<RelativeLayout
-    	android:orientation="horizontal" 
-  		android:layout_width="fill_parent"
-  		android:layout_height="wrap_content">
-        <TextView
-        	android:id="@+id/lamb02nameText"
-        	android:layout_width="150dp"
-       	 	android:layout_height="wrap_content"
-             android:ems="10"
-        	android:gravity="left"
-        	android:textSize="14sp"
-        	android:typeface="monospace" />
-        <TextView
-        	android:id="@+id/lamb02sexText"
-        	android:layout_width="70dp"
-       	 	android:layout_height="wrap_content"
-           	android:layout_toRightOf="@+id/lamb02nameText"
-        	android:gravity="right"
-        	android:textSize="14sp"
-        	android:typeface="monospace" /> 
-        </RelativeLayout>
-	    <ListView 
-			android:id="@+id/list4" 
-	  		android:layout_height="55dp"
-	  		android:layout_width="fill_parent">
-		</ListView>
-		<View
-		    android:id="@+id/dividerbar05"
-		    android:layout_width="fill_parent"
-		    android:layout_height="2dp"
-		    android:background="@android:color/black">
-		</View>
-		<RelativeLayout
-    	android:orientation="horizontal" 
-  		android:layout_width="fill_parent"
-  		android:layout_height="wrap_content">
-        <TextView
-        	android:id="@+id/lamb03nameText"
-        	android:layout_width="150dp"
-       	 	android:layout_height="wrap_content"
-            android:gravity="left"
-        	android:textSize="14sp"
-        	android:typeface="monospace" />
-        <TextView
-        	android:id="@+id/lamb03sexText"
-        	android:layout_width="70dp"
-       	 	android:layout_height="wrap_content"
-           	android:layout_toRightOf="@+id/lamb03nameText"
-        	android:gravity="right"
-        	android:textSize="14sp"
-        	android:typeface="monospace" /> 
-        </RelativeLayout>
-	    <ListView 
-			android:id="@+id/list5" 
-	  		android:layout_height="wrap_content"
-	  		android:layout_width="fill_parent">
-		</ListView>	
+        	android:typeface="monospace" />  
+ </GridLayout>
+ 
+         <TableLayout
+           android:id="@+id/grid4"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_above="@+id/bottomButtonBar"
+           android:stretchColumns="2"
+           android:gravity="center">
 
-<RelativeLayout
-    android:id="@+id/RelativeLayout04"
-    android:orientation="horizontal" 
-  	android:layout_width="fill_parent"
-  	android:layout_height="wrap_content">
-	        
-      	<Button
-            android:id="@+id/add_lamb_btn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-           	android:layout_alignParentLeft="true"
-            android:onClick="addLamb"
-            android:text="@string/add_lamb_btn"
-            android:textSize="14sp" />
-	</RelativeLayout>
-	      	
+        <TableRow android:gravity="center">
+ 
+         <TextView
+             android:layout_width="300dp"
+             android:layout_height="wrap_content"
+             android:inputType="none"
+             android:layout_weight="1"
+             android:text="@string/sheep_drug_lbl"
+             android:textStyle="bold" />
+		</TableRow>
+
+		<TableRow 
+		    android:gravity="center">
+		    
+        <ListView
+          android:id="@+id/druglist"
+          android:layout_width="300dp"
+          android:layout_height="match_parent" 
+          android:layout_weight="1"
+          android:layout_gravity="right"
+          android:choiceMode="singleChoice">
+
+		</ListView>
+        </TableRow>
+        </TableLayout>
+      
 <RelativeLayout
     android:id="@+id/BottomButtonBar"
     android:orientation="horizontal" 
@@ -317,7 +301,7 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
            	android:layout_alignParentLeft="true"
-  			android:layout_alignParentBottom="true"
+           	android:layout_alignParentBottom="true"
             android:onClick="backBtn"
             android:text="@string/back_btn"
             android:textSize="14sp" />
@@ -337,7 +321,7 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
            	android:layout_toRightOf="@+id/clear_form_btn"
-            android:layout_alignParentBottom="true"
+           	android:layout_alignParentBottom="true"
             android:onClick="doNote"
             android:text="@string/take_note_btn"
             android:textSize="14sp" />
@@ -352,5 +336,6 @@
            android:text="@string/help_btn"
            android:textSize="14sp" />
 </RelativeLayout>
+
 
 </LinearLayout>

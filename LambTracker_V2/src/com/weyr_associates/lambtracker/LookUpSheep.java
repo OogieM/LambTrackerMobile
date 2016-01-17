@@ -286,7 +286,6 @@ public class LookUpSheep extends ListActivity
         }
 	public void lookForSheep (View v){
 
-//		Object crsr, crsr2, crsr3, crsr4;
 		Object crsr;
 		Boolean exists;
 		TextView TV;
@@ -417,21 +416,7 @@ public void formatSheepRecord (View v){
 	
 	thissheep_id = cursor.getInt(0);	        	
 	Log.i("format record", "This sheep is record " + String.valueOf(thissheep_id));	        	
-//	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-//			"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-//			"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
-//			"sheep_table.sire_id, sheep_table.dam_id, sheep_table.birth_date, birth_type_table.birth_type," +
-//			"sheep_sex_table.sex_name, sheep_table.birth_weight, sheep_table.remove_date, sheep_table.death_date," +
-//			"remove_reason_table.remove_reason " +
-//			"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
-//			"inner join birth_type_table on id_birthtypeid = sheep_table.birth_type " +
-//			"inner join sheep_sex_table on sheep_sex_table.sex_sheepid = sheep_table.sex " +
-//			"inner join remove_reason_table on sheep_table.remove_reason = remove_reason_table.remove_reasonid " +
-//			"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-//			"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-//			"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-//			"where id_info_table.sheep_id ='%s' and (id_info_table.tag_date_off is null or " +
-//			"id_info_table.tag_date_off is '')order by idtype_name asc", thissheep_id);
+
 	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 			"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
 			"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
@@ -447,8 +432,7 @@ public void formatSheepRecord (View v){
 			"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
 			"where id_info_table.sheep_id ='%s' and (id_info_table.tag_date_off is null or " +
 			"id_info_table.tag_date_off is '')order by idtype_name asc", thissheep_id);
-	
-	
+		
 	Log.i("format record", " comand is " + cmd);	
 	crsr = dbh.exec( cmd ); 
 	Log.i("format record", " after run the command");

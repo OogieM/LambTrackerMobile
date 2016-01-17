@@ -198,8 +198,9 @@ public class DrugManagement extends ListActivity {
 				TextView lotPrice = (TextView) newLotDialog.findViewById(R.id.newlot_price);
 
 				// Format dates
-				newPurchase = String.format("%d-%d-%d", purchasePicker.getYear(), purchasePicker.getMonth(), purchasePicker.getDayOfMonth());
-				newExpiry = String.format("%d-%d-%d", expiryPicker.getYear(), expiryPicker.getMonth(),expiryPicker.getDayOfMonth());
+				// Android pickers use zero index month
+				newPurchase = String.format("%d-%d-%d", purchasePicker.getYear(), purchasePicker.getMonth()+1, purchasePicker.getDayOfMonth());
+				newExpiry = String.format("%d-%d-%d", expiryPicker.getYear(), expiryPicker.getMonth()+1,expiryPicker.getDayOfMonth());
 				newLot = lotText.getText().toString();
 
 				newLotDialog.dismiss();
@@ -241,7 +242,6 @@ public class DrugManagement extends ListActivity {
 		try {
 			//			Log.i("Back Button", " In try stmt cursor");
 			drugCursor.close();
-
 		}
 		catch (Exception e) {
 			Log.i("Back Button", "Failed to close cursors");
@@ -249,8 +249,8 @@ public class DrugManagement extends ListActivity {
 		}
 
 		dbh.closeDB();
-		//Go back to main
-		finish();
+		//Go back to menu		  	
+       finish();	
 	}
 
 	// User clicked Show Details
