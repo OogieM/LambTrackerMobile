@@ -1,0 +1,222 @@
+[
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/list_entry_names.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/list_entry_names.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/task_spinner.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/task_spinner.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/drug_entry2.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/drug_entry2.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/list_entry.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/list_entry.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/share.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/exploded-aar/LambTracker_Android/zxinglibweyr/unspecified/res/layout/share.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/lambing_sheep.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/lambing_sheep.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/draw_blood.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/draw_blood.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/create_ewe_breeding_record.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/create_ewe_breeding_record.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/remove_sheep.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/remove_sheep.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/note_prompt.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/note_prompt.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/sheep_management.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/sheep_management.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/note_entry.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/note_entry.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/activity_main.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/edit_db.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/edit_db.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/print_labels.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/print_labels.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/load_sheeplist.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/load_sheeplist.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/sheep_management_menu.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/sheep_management_menu.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/evaluate_sheep2.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/evaluate_sheep2.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/set_defaults.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/set_defaults.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/filelist.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/filelist.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/test_interface_designs.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/test_interface_designs.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/draw_blood_list_entry.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/draw_blood_list_entry.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/eval_score_entry.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/eval_score_entry.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/id_management.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/id_management.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/drug_entry.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/drug_entry.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/help.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/exploded-aar/LambTracker_Android/zxinglibweyr/unspecified/res/layout/help.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/lookup_sheep.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/lookup_sheep.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/fix_lamb.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/fix_lamb.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/eval_custom_item.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/eval_custom_item.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/drug_management.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/drug_management.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/history_list_item.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/exploded-aar/LambTracker_Android/zxinglibweyr/unspecified/res/layout/history_list_item.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/group_sheep_management.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/group_sheep_management.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/remove_drug.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/remove_drug.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/add_lamb.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/add_lamb.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/sort_sheep.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/sort_sheep.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/search_book_contents_header.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/exploded-aar/LambTracker_Android/zxinglibweyr/unspecified/res/layout/search_book_contents_header.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/encode.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/exploded-aar/LambTracker_Android/zxinglibweyr/unspecified/res/layout/encode.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/eval_data_item_entry.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/eval_data_item_entry.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/capture.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/exploded-aar/LambTracker_Android/zxinglibweyr/unspecified/res/layout/capture.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/set_alerts.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/set_alerts.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/lamb_tracker_receiver.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/lamb_tracker_receiver.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/create_sheep_evaluation.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/create_sheep_evaluation.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/drug_new_lot.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/drug_new_lot.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/search_book_contents.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/exploded-aar/LambTracker_Android/zxinglibweyr/unspecified/res/layout/search_book_contents.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/load_csvfile.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/load_csvfile.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/desktop_functions.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/desktop_functions.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/eval_item_entry.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/eval_item_entry.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/create_ram_breeding_record.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/create_ram_breeding_record.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/lambheader.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/lambheader.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/list_entry_alerts.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/list_entry_alerts.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/activity_incoming_receiver.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/activity_incoming_receiver.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/list_entry2.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/list_entry2.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/bookmark_picker_list_item.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/exploded-aar/LambTracker_Android/zxinglibweyr/unspecified/res/layout/bookmark_picker_list_item.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/list_entry_rams.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/src/main/res/layout/list_entry_rams.xml"
+    },
+    {
+        "merged": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/res/merged/debug/layout/search_book_contents_list_item.xml",
+        "source": "/Users/oogiemcguire/Documents/LambTracker_Android/lambTracker_V3/build/intermediates/exploded-aar/LambTracker_Android/zxinglibweyr/unspecified/res/layout/search_book_contents_list_item.xml"
+    }
+]

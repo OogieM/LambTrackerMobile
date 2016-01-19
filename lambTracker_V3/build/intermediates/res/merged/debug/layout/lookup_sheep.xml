@@ -1,0 +1,462 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+     <GridLayout 
+        	android:id="@+id/grid1"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+        	android:columnCount="3"
+       		android:rowCount="3">
+        
+           <TextView
+            android:layout_width="205dp"
+            android:layout_height="wrap_content"     
+            android:layout_gravity="left"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:inputType="none"
+            android:text="@string/input_id_lbl" />
+           
+           <EditText
+            android:id="@+id/inputText"
+            android:layout_width="205dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_column="0"
+            android:layout_row="1"
+            android:inputType="text"
+            android:enabled="true"
+            android:textSize="18sp"
+            android:typeface="monospace" >
+			</EditText>
+            
+  			<TextView
+        	android:layout_width="150dp"
+       	 	android:layout_height="wrap_content"
+        	android:layout_column="1"
+            android:layout_gravity="left"
+            android:layout_row="0"
+            android:inputType="none"
+        	android:text="@string/sheep_name_lbl" />
+        
+        <TextView
+        	android:id="@+id/sheepnameText"
+        	android:layout_width="180dp"
+       	 	android:layout_height="wrap_content"
+           	android:layout_column="1"
+            android:layout_gravity="left"
+            android:layout_row="1"
+            android:ems="10"
+        	android:gravity="left"
+        	android:textSize="18sp"
+        	android:typeface="monospace" />       
+       </GridLayout>  
+       
+ <RelativeLayout
+    android:id="@+id/TopButtonRow"
+    android:orientation="horizontal" 
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content">    
+     
+     <Spinner
+        android:id="@+id/tag_type_spinner"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:textSize="18sp" />     
+     <Button
+            android:id="@+id/look_up_sheep_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/tag_type_spinner"
+            android:onClick="lookForSheep"
+            android:text="@string/look_up_sheep_btn"
+            android:textSize="14sp" />  
+     <Button
+            android:id="@+id/alert_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/look_up_sheep_btn"
+            android:onClick="showAlert"
+            android:text="@string/alert_btn"
+            android:textSize="14sp" />           
+     <Button
+            android:id="@+id/scan_eid_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/alert_btn"
+            android:onClick="scanEid"
+            android:text="@string/scan_eid_btn"
+            android:textSize="14sp" />    
+  </RelativeLayout>
+  <GridLayout
+        android:id="@+id/secondRowButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="4"
+        android:rowCount="2" >
+        
+     <Button
+            android:id="@+id/prev_rec_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
+            android:onClick="prevRecord"
+            android:text="@string/prev_rec_btn"
+            android:textSize="14sp" />
+     
+      <Button
+            android:id="@+id/next_rec_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_column="1"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
+            android:onClick="nextRecord"
+            android:text="@string/next_rec_btn"
+            android:textSize="14sp" />
+ 
+    </GridLayout> 		
+		<GridLayout
+	        android:id="@+id/grid2"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:columnCount="5">   	    
+	     	    
+	        <TextView
+	            android:layout_width="176dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="1"
+	            android:layout_gravity="left|top"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_number_lbl" />
+	        
+	        <TextView
+	            android:layout_width="65dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="2"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_color_abbrev_lbl" />
+	        
+	        <TextView
+	            android:layout_width="40dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="3"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_location_abbrev_lbl" />
+	        
+	        <TextView
+	            android:layout_width="80dp"
+	            android:layout_height="wrap_content"
+	            android:layout_column="4"
+	            android:layout_gravity="left"
+	            android:layout_row="0"
+	            android:inputType="none"
+	            android:textStyle="bold"
+	            android:text="@string/tag_type_abbrev_lbl" />
+        
+     	</GridLayout>
+    	    
+       <ListView
+           android:id="@+id/android:list"
+           android:layout_width="fill_parent"
+           android:layout_height="65dp" >
+
+		</ListView>
+  <TableLayout 
+        	android:id="@+id/grid3"
+	        android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+        	android:stretchColumns="4"
+        	android:gravity="center">
+
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:gravity="center" >
+      
+           		<TextView
+            	android:layout_width="0dp"
+            	android:layout_height="wrap_content"     
+            	android:layout_gravity="left"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+            	android:text="@string/sheep_sire_lbl" />
+           
+           		<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="center"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_dam_lbl" />
+       
+          		<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="right"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_birth_weight_lbl" />
+  			</TableRow> 
+
+           <TableRow android:gravity="center" >
+
+           		<TextView
+            	android:id="@+id/sireName"
+            	android:layout_width="0dp"
+            	android:layout_height="wrap_content"
+            	android:layout_gravity="left"
+            	android:enabled="true"
+            	android:layout_weight="1"
+            	android:typeface="monospace" />
+              			       
+        		<TextView
+        		android:id="@+id/damName"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="center"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" /> 
+       
+        
+        		<TextView
+        		android:id="@+id/birth_weight"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="right"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" />  
+        	</TableRow>
+
+        	<TableRow android:gravity="center" >
+
+        		<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="left"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_birth_date_lbl" />
+        
+ 				<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="center"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_birth_type_lbl" />      
+        		
+        		<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="right"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_sex_lbl" />
+        		
+        	</TableRow>
+
+        	<TableRow android:gravity="center" >
+        		
+        		<TextView
+        		android:id="@+id/birth_date"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="left"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" />   
+        
+        		<TextView
+        		android:id="@+id/birth_type"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="center"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" /> 
+        	   
+        		<TextView
+        		android:id="@+id/sheep_sex"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="right"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" />  
+        		</TableRow>
+        		
+        	<TableRow android:gravity="center" >
+
+        		<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="left"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_remove_date_lbl" />  
+        		
+        		<TextView
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="right"
+            	android:inputType="none"
+            	android:textStyle="bold"
+            	android:layout_weight="1"
+        		android:text="@string/sheep_death_date_lbl" />
+        		
+        	</TableRow>
+        	<TableRow android:gravity="center" >
+        		
+        		<TextView
+        		android:id="@+id/remove_date"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="left"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" />   
+ 
+        		<TextView
+        		android:id="@+id/death_date"
+        		android:layout_width="0dp"
+       	 		android:layout_height="wrap_content"
+            	android:layout_gravity="right"
+            	android:ems="10"
+        		android:gravity="left"
+        		android:layout_weight="1"
+        		android:typeface="monospace" />  
+        		</TableRow>
+       </TableLayout> 
+       
+       <RelativeLayout
+           android:id="@+id/lowerlayout"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+       
+       <TableLayout
+           android:id="@+id/grid4"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_above="@+id/bottomButtonBar"
+           android:stretchColumns="2"
+           android:gravity="center">
+
+        <TableRow android:gravity="center">
+
+       <TextView
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:inputType="none"
+           android:layout_weight="1"
+           android:text="@string/sheep_note_lbl"
+           android:textStyle="bold" />
+ 
+         <TextView
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:inputType="none"
+             android:layout_weight="1"
+             android:text="@string/sheep_drug_lbl"
+             android:textStyle="bold" />
+		</TableRow>
+
+		<TableRow 
+		    android:gravity="center">
+
+         <ListView
+             android:id="@+id/list2"
+             android:layout_width="0dp"
+             android:layout_height="match_parent"
+             android:layout_weight="1" 
+             android:layout_gravity="left">
+
+		</ListView>
+        <ListView
+          android:id="@+id/druglist"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" 
+          android:layout_weight="1"
+          android:layout_gravity="right">
+
+		</ListView>
+        </TableRow>
+        </TableLayout>
+<RelativeLayout
+    android:id="@+id/bottomButtonBar"
+    android:orientation="horizontal" 
+  	android:layout_width="fill_parent"
+  	android:layout_height="50dp"
+  	android:layout_gravity="bottom"
+  	android:layout_alignParentBottom="true">
+    	
+       	<Button
+            android:id="@+id/back_to_main_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_alignParentLeft="true"
+           	android:layout_alignParentBottom="true"
+            android:onClick="backBtn"
+            android:text="@string/back_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+            android:id="@+id/clear_form_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/back_to_main_btn"
+            android:layout_alignParentBottom="true"
+            android:onClick="clearBtn"
+            android:text="@string/clear_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+            android:id="@+id/take_note"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+           	android:layout_toRightOf="@+id/clear_form_btn"
+           	android:layout_alignParentBottom="true"
+            android:onClick="doNote"
+            android:text="@string/take_note_btn"
+            android:textSize="14sp" />
+       	
+       	<Button
+           android:id="@+id/help_btn"
+           android:layout_width="100dp"
+           android:layout_height="50dp"
+           android:layout_toRightOf="@+id/take_note"
+           android:layout_alignParentBottom="true"
+           android:onClick="helpBtn"
+           android:text="@string/help_btn"
+           android:textSize="14sp" />
+</RelativeLayout>
+</RelativeLayout>
+</LinearLayout>
