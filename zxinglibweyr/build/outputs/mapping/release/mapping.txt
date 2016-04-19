@@ -389,17 +389,17 @@ com.google.zxing.client.android.InactivityTimer -> com.google.zxing.client.andro
     java.lang.String access$300() -> c
     android.app.Activity access$400(com.google.zxing.client.android.InactivityTimer) -> b
     void <clinit>() -> <clinit>
-com.google.zxing.client.android.InactivityTimer$InactivityAsyncTask -> com.google.zxing.client.android.r:
+com.google.zxing.client.android.InactivityTimer$InactivityAsyncTask -> com.google.zxing.client.android.s:
     com.google.zxing.client.android.InactivityTimer this$0 -> a
     void <init>(com.google.zxing.client.android.InactivityTimer) -> <init>
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     void <init>(com.google.zxing.client.android.InactivityTimer,byte) -> <init>
-com.google.zxing.client.android.InactivityTimer$PowerStatusReceiver -> com.google.zxing.client.android.s:
+com.google.zxing.client.android.InactivityTimer$PowerStatusReceiver -> com.google.zxing.client.android.t:
     com.google.zxing.client.android.InactivityTimer this$0 -> a
     void <init>(com.google.zxing.client.android.InactivityTimer) -> <init>
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
     void <init>(com.google.zxing.client.android.InactivityTimer,byte) -> <init>
-com.google.zxing.client.android.IntentSource -> com.google.zxing.client.android.t:
+com.google.zxing.client.android.IntentSource -> com.google.zxing.client.android.u:
     int NATIVE_APP_INTENT$37429bb9 -> a
     int PRODUCT_SEARCH_LINK$37429bb9 -> b
     int ZXING_LINK$37429bb9 -> c
@@ -407,7 +407,7 @@ com.google.zxing.client.android.IntentSource -> com.google.zxing.client.android.
     int[] $VALUES$74d7029e -> e
     int[] values$45e305bf() -> a
     void <clinit>() -> <clinit>
-com.google.zxing.client.android.LocaleManager -> com.google.zxing.client.android.u:
+com.google.zxing.client.android.LocaleManager -> com.google.zxing.client.android.v:
     java.util.Map GOOGLE_COUNTRY_TLD -> a
     java.util.Map GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD -> b
     java.util.Map GOOGLE_BOOK_SEARCH_COUNTRY_TLD -> c
@@ -428,8 +428,15 @@ com.google.zxing.client.android.PreferencesActivity -> com.google.zxing.client.a
     void onCreate(android.os.Bundle) -> onCreate
     void onSharedPreferenceChanged(android.content.SharedPreferences,java.lang.String) -> onSharedPreferenceChanged
     void disableLastCheckedPref() -> a
-com.google.zxing.client.android.R -> com.google.zxing.client.android.v:
-com.google.zxing.client.android.R$color -> com.google.zxing.client.android.w:
+com.google.zxing.client.android.R -> com.google.zxing.client.android.R:
+    void <init>() -> <init>
+com.google.zxing.client.android.R$array -> com.google.zxing.client.android.R$array:
+    int country_codes -> country_codes
+    void <init>() -> <init>
+    void <clinit>() -> <clinit>
+com.google.zxing.client.android.R$attr -> com.google.zxing.client.android.R$attr:
+    void <init>() -> <init>
+com.google.zxing.client.android.R$color -> com.google.zxing.client.android.R$color:
     int contents_text -> contents_text
     int encode_view -> encode_view
     int possible_result_points -> possible_result_points
@@ -441,13 +448,20 @@ com.google.zxing.client.android.R$color -> com.google.zxing.client.android.w:
     int transparent -> transparent
     int viewfinder_laser -> viewfinder_laser
     int viewfinder_mask -> viewfinder_mask
+    void <init>() -> <init>
     void <clinit>() -> <clinit>
-com.google.zxing.client.android.R$drawable -> com.google.zxing.client.android.x:
+com.google.zxing.client.android.R$dimen -> com.google.zxing.client.android.R$dimen:
+    int half_padding -> half_padding
+    int standard_padding -> standard_padding
+    void <init>() -> <init>
+    void <clinit>() -> <clinit>
+com.google.zxing.client.android.R$drawable -> com.google.zxing.client.android.R$drawable:
     int launcher_icon -> launcher_icon
     int share_via_barcode -> share_via_barcode
     int shopper_icon -> shopper_icon
+    void <init>() -> <init>
     void <clinit>() -> <clinit>
-com.google.zxing.client.android.R$id -> com.google.zxing.client.android.y:
+com.google.zxing.client.android.R$id -> com.google.zxing.client.android.R$id:
     int back_button -> back_button
     int barcode_image_view -> barcode_image_view
     int bookmark_title -> bookmark_title
@@ -494,8 +508,9 @@ com.google.zxing.client.android.R$id -> com.google.zxing.client.android.y:
     int time_text_view -> time_text_view
     int type_text_view -> type_text_view
     int viewfinder_view -> viewfinder_view
+    void <init>() -> <init>
     void <clinit>() -> <clinit>
-com.google.zxing.client.android.R$layout -> com.google.zxing.client.android.z:
+com.google.zxing.client.android.R$layout -> com.google.zxing.client.android.R$layout:
     int bookmark_picker_list_item -> bookmark_picker_list_item
     int capture -> capture
     int encode -> encode
@@ -505,16 +520,19 @@ com.google.zxing.client.android.R$layout -> com.google.zxing.client.android.z:
     int search_book_contents_header -> search_book_contents_header
     int search_book_contents_list_item -> search_book_contents_list_item
     int share -> share
+    void <init>() -> <init>
     void <clinit>() -> <clinit>
-com.google.zxing.client.android.R$menu -> com.google.zxing.client.android.aa:
+com.google.zxing.client.android.R$menu -> com.google.zxing.client.android.R$menu:
     int capture -> capture
     int encode -> encode
     int history -> history
+    void <init>() -> <init>
     void <clinit>() -> <clinit>
-com.google.zxing.client.android.R$raw -> com.google.zxing.client.android.ab:
+com.google.zxing.client.android.R$raw -> com.google.zxing.client.android.R$raw:
     int beep -> beep
+    void <init>() -> <init>
     void <clinit>() -> <clinit>
-com.google.zxing.client.android.R$string -> com.google.zxing.client.android.ac:
+com.google.zxing.client.android.R$string -> com.google.zxing.client.android.R$string:
     int app_name -> app_name
     int app_picker_name -> app_picker_name
     int bookmark_picker_name -> bookmark_picker_name
@@ -636,11 +654,13 @@ com.google.zxing.client.android.R$string -> com.google.zxing.client.android.ac:
     int wifi_changing_network -> wifi_changing_network
     int wifi_ssid_label -> wifi_ssid_label
     int wifi_type_label -> wifi_type_label
+    void <init>() -> <init>
     void <clinit>() -> <clinit>
-com.google.zxing.client.android.R$xml -> com.google.zxing.client.android.ad:
+com.google.zxing.client.android.R$xml -> com.google.zxing.client.android.R$xml:
     int preferences -> preferences
+    void <init>() -> <init>
     void <clinit>() -> <clinit>
-com.google.zxing.client.android.ViewfinderResultPointCallback -> com.google.zxing.client.android.ae:
+com.google.zxing.client.android.ViewfinderResultPointCallback -> com.google.zxing.client.android.w:
     com.google.zxing.client.android.ViewfinderView viewfinderView -> a
     void <init>(com.google.zxing.client.android.ViewfinderView) -> <init>
     void foundPossibleResultPoint(com.google.zxing.ResultPoint) -> a

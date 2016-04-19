@@ -710,7 +710,6 @@ public void formatSheepRecord (View v){
 //    				cursor2.close();	
     	}
 
-   
     // user clicked 'clear' button
     public void clearBtn( View v )
 	    {
@@ -732,6 +731,10 @@ public void formatSheepRecord (View v){
 	    TV.setText( "" );
 	    TV = (TextView) findViewById( R.id.birth_weight );
 	    TV.setText( "" );
+		TV = (TextView) findViewById( R.id.remove_date );
+		TV.setText( "" );
+		TV = (TextView) findViewById( R.id.death_date );
+		TV.setText( "" );
 		//	Need to clear out the rest of the tags here 
 		Log.i("clear btn", "before changing myadapter");
 		try {

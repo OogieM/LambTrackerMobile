@@ -1236,9 +1236,9 @@ public class SheepManagement extends ListActivity {
 						dbh.exec(cmd);
 						Log.i("add evaluation ", "after insert into sheep_evaluation_table");
 					}						
-			clearBtn( null );
+//			clearBtn( null );
 	    	}else{
-	    		clearBtn( null );
+//	    		clearBtn( null );
 	    	}
 	 }
 	public void printLabel( View v ){ 

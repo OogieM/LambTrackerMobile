@@ -79,27 +79,6 @@ com.google.zxing.client.android.PreferencesActivity:
     public static final java.lang.String KEY_SEARCH_COUNTRY
     public static final java.lang.String KEY_DISABLE_CONTINUOUS_FOCUS
     public static final java.lang.String KEY_HELP_VERSION_SHOWN
-com.google.zxing.client.android.R:
-    10:10:public R()
-com.google.zxing.client.android.R$array
-com.google.zxing.client.android.R$attr
-com.google.zxing.client.android.R$color:
-    16:16:public R$color()
-com.google.zxing.client.android.R$dimen
-com.google.zxing.client.android.R$drawable:
-    33:33:public R$drawable()
-com.google.zxing.client.android.R$id:
-    38:38:public R$id()
-com.google.zxing.client.android.R$layout:
-    86:86:public R$layout()
-com.google.zxing.client.android.R$menu:
-    97:97:public R$menu()
-com.google.zxing.client.android.R$raw:
-    102:102:public R$raw()
-com.google.zxing.client.android.R$string:
-    105:105:public R$string()
-com.google.zxing.client.android.R$xml:
-    228:228:public R$xml()
 com.google.zxing.client.android.ViewfinderView:
     private static final long ANIMATION_DELAY
     private static final int CURRENT_POINT_OPACITY
