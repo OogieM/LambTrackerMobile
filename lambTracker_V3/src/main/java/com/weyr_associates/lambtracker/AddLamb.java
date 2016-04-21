@@ -605,6 +605,8 @@ public class AddLamb extends Activity {
 			//	Set the remove reason to be the value for Died Stillborn
 			stillborn = true;
 			remove_reason = 6;
+			//	added rear_type 0 for stillborns
+			rear_type = 0;
 			Log.i("stillborn ", String.valueOf(stillborn));
 			death_date = mytoday;
 			remove_date = mytoday;

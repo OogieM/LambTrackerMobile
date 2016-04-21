@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-  
+
     <TextView
         android:id="@+id/TextView1"
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
     <ScrollView
 		android:id="@+id/scroll1"
 		android:layout_width="fill_parent"
-    	android:layout_height="100dp"
+    	android:layout_height="70dp"
     	android:layout_below="@id/TextView1">
    		<GridLayout
 	   		android:id="@+id/grid1"
@@ -277,6 +277,5 @@
            android:onClick="helpBtn"
            android:text="@string/help_btn"
            android:textSize="14sp" />
-  </RelativeLayout>        
-  
+  </RelativeLayout>
 </RelativeLayout>  
