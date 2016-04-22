@@ -5,9 +5,9 @@ Android program for managing a sheep flock. Uses both EID and visual tagging to 
 
 We are shepherds, programming of this item is happening in modules as we need to do different tasks with the flock during the year.
 
-We have completed a full year of development as we do tasks with our flock. By and large things are working very well. We are now going back and as we do tasks this year we are updating the program to add the additional features we identified in the first run. 
+We've been running with LambTracker now for 2 years. The pile of potential issues/enhancements is getting larger but most stuff is working well. 
 
-Current development is focused on improving workflow, expanding the database to handle NSIP EBV data input and output and adapting to more screen sizes and resolutions.
+Current development is focused on improving workflow, handling NSIP EBV data output and adapting to more screen sizes and resolutions.
 
 System is based on an SQLite database for all flock data.
 
