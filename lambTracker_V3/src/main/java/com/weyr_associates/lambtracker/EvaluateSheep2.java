@@ -722,13 +722,14 @@ public class EvaluateSheep2 extends Activity {
 
 		if (trait11 == 27) {
 			// Calculate the age in days for this sheep for this evaluation to fill the age_in_days field
-			cmd = String.format("Select julianday(remove_date), remove_date from sheep_table where sheep_id = '%s'", thissheep_id);
+			cmd = String.format("Select julianday(remove_date), remove_date, julianday(birth_date) from sheep_table where sheep_id = '%s'", thissheep_id);
 			Log.i("get remove date eval ", cmd);
 			dbh.exec(cmd);
 			crsr3 = dbh.exec(cmd);
 			cursor3 = (Cursor) crsr3;
 			dbh.moveToFirstRecord();
-			temp_integer = (int) Utilities.GetJulianDate() - (dbh.getInt(0));
+			// temp_integer = (int) Utilities.GetJulianDate() - (dbh.getInt(0));
+			temp_integer = dbh.getInt(0) - dbh.getInt(2);
 			Log.i("get age in days ", String.valueOf(temp_integer));
 			mytoday = (dbh.getStr(1));
 			mytime = "";
@@ -786,6 +787,10 @@ public class EvaluateSheep2 extends Activity {
 	            	//	Alert is empty now so just add the evaluation done phrase
 		    		alert_text = "Evaluation Done";
 	            }
+				if (trait11 == 27) {
+					// Empty the alerts
+					alert_text = "";
+				}
 //	    		Log.i ("Evaluate Alert", " Alert Text is " + alert_text);	
 	    		cmd = String.format("update sheep_table set alert01='%s' where sheep_id=%d", alert_text, thissheep_id);
 //	    		Log.i("test alert ", cmd);  

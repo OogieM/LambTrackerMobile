@@ -18,12 +18,10 @@
     </layouts>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="DEBUG" />
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fad729b7-e5d9-4d3b-8d48-d49c9824c0a4" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lambTracker_V3/src/main/assets/lambtracker_db.sqlite" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/exploded-aar/LambTracker_Android/zxinglibweyr/unspecified/jars/classes.jar" afterPath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/exploded-aar/LambTracker_Android/zxinglibweyr/unspecified/jars/classes.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/res/resources-debug-androidTest.ap_" afterPath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/res/resources-debug-androidTest.ap_" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/res/resources-debug.ap_" afterPath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/res/resources-debug.ap_" />
@@ -34,22 +32,8 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zxinglibweyr/build/intermediates/transforms/proguard/release/jars/3/3/main.jar" afterPath="$PROJECT_DIR$/zxinglibweyr/build/intermediates/transforms/proguard/release/jars/3/3/main.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zxinglibweyr/build/outputs/aar/zxinglibweyr-debug.aar" afterPath="$PROJECT_DIR$/zxinglibweyr/build/outputs/aar/zxinglibweyr-debug.aar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zxinglibweyr/build/outputs/aar/zxinglibweyr-release.aar" afterPath="$PROJECT_DIR$/zxinglibweyr/build/outputs/aar/zxinglibweyr-release.aar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/assets/debug/lambtracker_db.sqlite" afterPath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/assets/debug/lambtracker_db.sqlite" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/incremental/mergeDebugAndroidTestAssets/merger.xml" afterPath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/incremental/mergeDebugAndroidTestAssets/merger.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/incremental/mergeDebugAssets/merger.xml" afterPath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/incremental/mergeDebugAssets/merger.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/res/merged/debug/layout/evaluate_sheep2.xml" afterPath="$PROJECT_DIR$/lambTracker_V3/build/intermediates/res/merged/debug/layout/evaluate_sheep2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lambTracker_V3/lambTracker_V3.iml" afterPath="$PROJECT_DIR$/lambTracker_V3/lambTracker_V3.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lambTracker_V3/src/main/java/com/weyr_associates/lambtracker/AddLamb.java" afterPath="$PROJECT_DIR$/lambTracker_V3/src/main/java/com/weyr_associates/lambtracker/AddLamb.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lambTracker_V3/src/main/java/com/weyr_associates/lambtracker/EvaluateSheep2.java" afterPath="$PROJECT_DIR$/lambTracker_V3/src/main/java/com/weyr_associates/lambtracker/EvaluateSheep2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lambTracker_V3/src/main/java/com/weyr_associates/lambtracker/RemoveSheep.java" afterPath="$PROJECT_DIR$/lambTracker_V3/src/main/java/com/weyr_associates/lambtracker/RemoveSheep.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lambTracker_V3/src/main/res/layout/evaluate_sheep2.xml" afterPath="$PROJECT_DIR$/lambTracker_V3/src/main/res/layout/evaluate_sheep2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zxinglibweyr/build/intermediates/incremental/mergeDebugAndroidTestAssets/merger.xml" afterPath="$PROJECT_DIR$/zxinglibweyr/build/intermediates/incremental/mergeDebugAndroidTestAssets/merger.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zxinglibweyr/build/intermediates/incremental/mergeDebugAssets/merger.xml" afterPath="$PROJECT_DIR$/zxinglibweyr/build/intermediates/incremental/mergeDebugAssets/merger.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zxinglibweyr/build/intermediates/incremental/mergeReleaseAssets/merger.xml" afterPath="$PROJECT_DIR$/zxinglibweyr/build/intermediates/incremental/mergeReleaseAssets/merger.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zxinglibweyr/zxinglibweyr.iml" afterPath="$PROJECT_DIR$/zxinglibweyr/zxinglibweyr.iml" />
     </list>
     <ignored path="LambTracker_V2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -82,11 +66,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="88" column="24" selection-start-line="88" selection-start-column="21" selection-end-line="88" selection-end-column="24" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#48740#48741#0" expanded="false" />
-                <element signature="e#48800#48801#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -104,8 +84,8 @@
       <file leaf-file-name="EvaluateSheep2.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lambTracker_V3/src/main/java/com/weyr_associates/lambtracker/EvaluateSheep2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.36910996">
-              <caret line="733" column="22" selection-start-line="733" selection-start-column="22" selection-end-line="733" selection-end-column="22" />
+            <state vertical-scroll-proportion="1.6282723">
+              <caret line="810" column="36" selection-start-line="810" selection-start-column="36" selection-end-line="810" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -116,9 +96,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="240" column="92" selection-start-line="240" selection-start-column="92" selection-end-line="240" selection-end-column="92" />
-              <folding>
-                <element signature="e#1909#1947#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -2518,6 +2496,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
@@ -2535,42 +2515,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="lambTracker_V3" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="LambTracker_V2" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lambTracker_V3" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="LambTracker_V2" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lambTracker_V3" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -2591,21 +2535,9 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="LambTracker_V2" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lambTracker_V3" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="ProjectPane" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2908,7 +2840,13 @@
       <option name="project" value="LOCAL" />
       <updated>1461249100686</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="added proper calculation of age in days for sheep that are butchered and you add carcass weights later">
+      <created>1466448333197</created>
+      <option name="number" value="00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1466448333197</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2917,11 +2855,10 @@
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.122393474" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32871974" sideWeight="0.49343187" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32454696" sideWeight="0.7271079" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32454696" sideWeight="0.7271079" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.39899832" sideWeight="0.4968254" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32454696" sideWeight="0.27289212" order="7" side_tool="true" content_ui="tabs" />
@@ -2941,6 +2878,7 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.122393474" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -2965,7 +2903,8 @@
     <MESSAGE value="Removed unused import to fix errors" />
     <MESSAGE value="cleaned up a few places where text fields were not getting cleared properly" />
     <MESSAGE value="new database added with new tables" />
-    <option name="LAST_COMMIT_MESSAGE" value="new database added with new tables" />
+    <MESSAGE value="added proper calculation of age in days for sheep that are butchered and you add carcass weights later" />
+    <option name="LAST_COMMIT_MESSAGE" value="added proper calculation of age in days for sheep that are butchered and you add carcass weights later" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -2976,11 +2915,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="88" column="24" selection-start-line="88" selection-start-column="21" selection-end-line="88" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#48740#48741#0" expanded="false" />
-            <element signature="e#48800#48801#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3004,11 +2939,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="88" column="24" selection-start-line="88" selection-start-column="21" selection-end-line="88" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#48740#48741#0" expanded="false" />
-            <element signature="e#48800#48801#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3032,11 +2963,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="88" column="24" selection-start-line="88" selection-start-column="21" selection-end-line="88" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#48740#48741#0" expanded="false" />
-            <element signature="e#48800#48801#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3060,11 +2987,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#48740#48741#0" expanded="false" />
-            <element signature="e#48800#48801#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3072,11 +2995,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="88" column="24" selection-start-line="88" selection-start-column="21" selection-end-line="88" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#48740#48741#0" expanded="false" />
-            <element signature="e#48800#48801#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3100,11 +3019,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#48740#48741#0" expanded="false" />
-            <element signature="e#48800#48801#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3112,11 +3027,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#48740#48741#0" expanded="false" />
-            <element signature="e#48800#48801#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3128,13 +3039,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lambTracker_V3/src/main/res/layout/create_sheep_evaluation.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="18" column="32" selection-start-line="18" selection-start-column="32" selection-end-line="18" selection-end-column="32" />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lambTracker_V3/src/main/java/com/weyr_associates/lambtracker/SheepManagement.java">
@@ -3145,13 +3056,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lambTracker_V3/src/main/res/layout/create_sheep_evaluation.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="202" column="32" selection-start-line="202" selection-start-column="32" selection-end-line="202" selection-end-column="32" />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lambTracker_V3/src/main/AndroidManifest.xml">
@@ -3295,13 +3206,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lambTracker_V3/src/main/res/layout/lookup_sheep.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.962264">
           <caret line="338" column="44" selection-start-line="338" selection-start-column="33" selection-end-line="338" selection-end-column="44" />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lambTracker_V3/src/main/java/com/weyr_associates/lambtracker/LookUpSheep.java">
@@ -3312,13 +3223,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lambTracker_V3/src/main/res/layout/create_sheep_evaluation.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3402367">
           <caret line="18" column="32" selection-start-line="18" selection-start-column="32" selection-end-line="18" selection-end-column="32" />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lambTracker_V3/src/main/java/com/weyr_associates/lambtracker/SheepManagement.java">
@@ -3332,11 +3243,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="88" column="24" selection-start-line="88" selection-start-column="21" selection-end-line="88" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#48740#48741#0" expanded="false" />
-            <element signature="e#48800#48801#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3370,12 +3277,20 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lambTracker_V3/src/main/res/layout/evaluate_sheep2.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.31610942">
           <caret line="290" column="37" selection-start-line="290" selection-start-column="37" selection-end-line="290" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lambTracker_V3/src/main/java/com/weyr_associates/lambtracker/EvaluateSheep2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.6282723">
+          <caret line="810" column="36" selection-start-line="810" selection-start-column="36" selection-end-line="810" selection-end-column="36" />
           <folding />
         </state>
       </provider>
@@ -3384,16 +3299,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="240" column="92" selection-start-line="240" selection-start-column="92" selection-end-line="240" selection-end-column="92" />
-          <folding>
-            <element signature="e#1909#1947#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lambTracker_V3/src/main/java/com/weyr_associates/lambtracker/EvaluateSheep2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36910996">
-          <caret line="733" column="22" selection-start-line="733" selection-start-column="22" selection-end-line="733" selection-end-column="22" />
           <folding />
         </state>
       </provider>
