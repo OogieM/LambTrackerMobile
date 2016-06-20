@@ -69,11 +69,11 @@ public class AddLamb extends Activity {
 	public int sire_id, sire_codon171, sire_codon154, sire_codon136;
 	public int lamb_id, lamb_codon171, lamb_codon154, lamb_codon136;
 	public int flock_prefix, id_sheepbreedid, id_locationid, id_ownerid, acquire_reason, management_group;
-	public int	service_type, birth_weight_units, lamb_birth_record;
+	public int	service_type, birth_weight_units, lamb_birth_record, correct_breeding_record;
 	public CheckBox 	stillbornbox, markewebox;
 	public boolean stillborn, markewe;
 	public Float birth_weight;
-	public double	real_gestation_length;
+	public int	real_gestation_length;
 	public RadioGroup radioGroup;
 	public String mytoday;
 	public String mytime;
@@ -466,14 +466,14 @@ public class AddLamb extends Activity {
 	        	Log.i("addlamb", " julian ram in " + String.valueOf(temp_ram_in));
 	        	temp_ram_out = dbh.getReal(5);
 	        	Log.i("addlamb", " julian ram out " + String.valueOf(temp_ram_out));
-	        	// need to figure out if the date is within early date 141 from ram in
+	        	// need to figure out if the date is within early date 140 from ram in
 	        	// and end date 159 from ram out
 	        	//	Calculate the first possible and last possible for this breeding record
 	        	//	Should make these dates a preference or settings in LambTracker
 	        	// TODO
 	        	first_gestation_possible = temp_ram_in + 140.0;
 	        	Log.i("addlamb", " julian first gestation is " + String.valueOf(first_gestation_possible));
-	        	last_gestation_possible = temp_ram_out + 153.0;
+	        	last_gestation_possible = temp_ram_out + 159.0;
 	        	Log.i("addlamb", " julian last gestation is " + String.valueOf(last_gestation_possible));        	
 	        	// First calculate how many days gestation this is from date ram in
 	        	gestation_length = temp_julian_today - temp_ram_in;
@@ -482,7 +482,8 @@ public class AddLamb extends Activity {
 	        	if  (temp_julian_today > first_gestation_possible && temp_julian_today < last_gestation_possible) {
 	        		//	This is the correct record so save the data and bump out
 	        		Log.i("addlamb", " correct breeding record is this cursor " + String.valueOf(cursor.getPosition()));
-	        		sire_name = dbh.getStr(3);
+	        		correct_breeding_record = dbh.getInt(1);
+					sire_name = dbh.getStr(3);
 	        		sire_id = dbh.getInt(2);
 	        		service_type = dbh.getInt(6);
 	        		service_abbrev = dbh.getStr(7);
@@ -1264,9 +1265,9 @@ public class AddLamb extends Activity {
 	  		}
   			Log.i("in catch block ", " after setting lambing_notes " + lambing_notes);
 			cmd = String.format("insert into lambing_history_table (lambing_date, dam_id, sire_id, " +
-			"lambing_notes, lambs_born, lamb01_id, lamb02_id, lamb03_id, lambing_time, gestation_length, lambing_contact) " +
-			"values ('%s', %s, %s,'%s', %s, %s, '%s','%s', '%s', %s, %s) ", 
-			mytoday, dam_id, sire_id, lambing_notes, lambs_born, lamb_id, "", "", mytime, real_gestation_length,lambing_contact);
+			"lambing_notes, lambs_born, lamb01_id, lamb02_id, lamb03_id, lambing_time, gestation_length, lambing_contact,id_breedingid) " +
+			"values ('%s', %s, %s,'%s', %s, %s, '%s','%s', '%s', %s, %s, %s) ",
+			mytoday, dam_id, sire_id, lambing_notes, lambs_born, lamb_id, "", "", mytime, real_gestation_length,lambing_contact,correct_breeding_record);
 			Log.i("in catch block ", " cmd is " + cmd);
 			dbh.exec( cmd );
 			Log.i("in catch block ", "after cmd to create a new record");

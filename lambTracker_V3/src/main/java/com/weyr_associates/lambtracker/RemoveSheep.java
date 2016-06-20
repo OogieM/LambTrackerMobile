@@ -235,9 +235,23 @@ public class RemoveSheep extends ListActivity  {
 					// Sheep sold for breeding so only need to update remove date					
 					break;
 				case 8:
+					// 	Sheep butchered so need to update with a death date as well as remove date.
+					//	Fill the deathdate with the same date as remove date.
+					deathdate = removedate;
+					//	need to set a carcass evaluation flag or make a new evaluate section
+
+					break;
 				case 9:
 				case 10:
 //				 	Sheep Died so need to update with a death date as well as remove date. 
+					//	Fill the deathdate with the same date as remove date.
+					deathdate = removedate;
+					break;
+				case 11:
+					// Sold Unregistered so only need to update remove date
+					break;
+				case 12:
+					// Sheep Died so need to update with a death date as well as remove date.
 					//	Fill the deathdate with the same date as remove date.
 					deathdate = removedate;
 					break;

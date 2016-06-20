@@ -516,177 +516,176 @@ public class EvaluateSheep2 extends Activity {
   	    radioGroup.addView(radioBtn, i);
   	  }
   	}        
-    public void saveScores( View v )
-    {    	
-        String          cmd;    
-        List<Float> 	rating_scores;
-    	TextView 		TV;
-    	Float 			tempData;
-    	int				tempRadioBtn, tempTrait;
-		int 			temp_integer;
+    public void saveScores( View v ) {
+		String cmd;
+		List<Float> rating_scores;
+		TextView TV;
+		Float tempData;
+		int tempRadioBtn, tempTrait;
+		int temp_integer;
 // TODO    	
-    	rating_scores = new ArrayList<Float>();
-    	real_scores = new ArrayList<Float>();
-    	user_scores = new ArrayList<Integer>();
+		rating_scores = new ArrayList<Float>();
+		real_scores = new ArrayList<Float>();
+		user_scores = new ArrayList<Integer>();
 		RatingBar ratingBar;
-		Button	btn;
-    	
+		Button btn;
+
 		// Disable Save Scores button and make it red to prevent getting 2 records at one time
-    	btn = (Button) findViewById( R.id.save_evaluation_scores_btn );
-    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-    	btn.setEnabled(false);    
-    	   	
-    	// I got the sheep id from the look up sheep function
-    	// it's in the thissheep_id variable
-    
-    	Log.i("in save scores", " thissheep id is " + String.valueOf(thissheep_id)); 
-    	    	
+		btn = (Button) findViewById(R.id.save_evaluation_scores_btn);
+		btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
+		btn.setEnabled(false);
+
+		// I got the sheep id from the look up sheep function
+		// it's in the thissheep_id variable
+
+		Log.i("in save scores", " thissheep id is " + String.valueOf(thissheep_id));
+
 		// 	get the rating bar scores and fill the rating_scores array
 		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
 //		Log.i("in save scores", " number rating bars is " + String.valueOf(nRecs)); 
 		if (nRecs != 0) {
-			for( int ii = 0; ii < nRecs; ii++ ){	
+			for (int ii = 0; ii < nRecs; ii++) {
 //				Log.i("in save scores", " in 1st for loop ii is" + String.valueOf(ii)); 
-				TableRow row1= (TableRow)table.getChildAt(ii);
+				TableRow row1 = (TableRow) table.getChildAt(ii);
 				ratingBar = (RatingBar) row1.getChildAt(1);
-				rating_scores.add(ratingBar.getRating());			
+				rating_scores.add(ratingBar.getRating());
 //				Log.i("RatingBar01 ", String.valueOf(ratingBar.getRating()));  
 			}
 			//	Fill the rest of the array with zeros
-			for( int ii = nRecs; ii < 10; ii++ ){	
+			for (int ii = nRecs; ii < 10; ii++) {
 				rating_scores.add((float) 0.0f);
 //				Log.i("in save scores ", "Filling remainder of rating bar array with zeros");
 			}
-		}else{
+		} else {
 			//	Nothing to add so fill the entire thing with zeros
-			for( int ii = 0; ii < 10; ii++ ){	
+			for (int ii = 0; ii < 10; ii++) {
 				rating_scores.add((float) 0.0f);
 //				Log.i("in save scores ", "Filling entire rating bar array with zeros");
 			}
 		}
-		
-    	// Fill the rating bar score variables from the rating_scores array			
-    		trait01_data = rating_scores.get(0);
+
+		// Fill the rating bar score variables from the rating_scores array
+		trait01_data = rating_scores.get(0);
 //    		Log.i("trait01_ratingbar ", String.valueOf(trait01_data));
-     		trait02_data = rating_scores.get(1);
+		trait02_data = rating_scores.get(1);
 //    		Log.i("trait02_ratingbar ", String.valueOf(trait02_data));
-    		trait03_data = rating_scores.get(2);	
+		trait03_data = rating_scores.get(2);
 //    		Log.i("trait03_ratingbar ", String.valueOf(trait03_data));    		
-    		trait04_data = rating_scores.get(3);
+		trait04_data = rating_scores.get(3);
 //    		Log.i("trait04_ratingbar ", String.valueOf(trait04_data));    		
-    		trait05_data = rating_scores.get(4);
+		trait05_data = rating_scores.get(4);
 //    		Log.i("trait05_ratingbar ", String.valueOf(trait05_data));    		
-    		trait06_data = rating_scores.get(5);
+		trait06_data = rating_scores.get(5);
 //    		Log.i("trait06_ratingbar ", String.valueOf(trait06_data));    		
-    		trait07_data = rating_scores.get(6);
+		trait07_data = rating_scores.get(6);
 //    		Log.i("trait07_ratingbar ", String.valueOf(trait07_data));    		
-    		trait08_data = rating_scores.get(7);
+		trait08_data = rating_scores.get(7);
 //    		Log.i("trait08_ratingbar ", String.valueOf(trait08_data));    		
-    		trait09_data = rating_scores.get(8);
+		trait09_data = rating_scores.get(8);
 //    		Log.i("trait09_ratingbar ", String.valueOf(trait09_data));    		
-    		trait10_data = rating_scores.get(9);
+		trait10_data = rating_scores.get(9);
 //    		Log.i("trait10_ratingbar ", String.valueOf(trait10_data));    				
-    		
-    		//	get the real data values  	
+
+		//	get the real data values
 //    		Log.i("in save scores", " number real data points is " + String.valueOf(nRecs2));
-    		table = (TableLayout) findViewById(R.id.TableLayout02);
+		table = (TableLayout) findViewById(R.id.TableLayout02);
 //    		Log.i("in save scores", " after find tablelayout02 ");
-    		if (nRecs2 != 0) {
-    			for( int ii = 0; ii < nRecs2; ii++ ){	
-    				TableRow row1= (TableRow)table.getChildAt(ii);
-    				TV = (EditText ) row1.getChildAt(1);
-    			try {
-    				tempData = Float.valueOf(TV.getText().toString());
+		if (nRecs2 != 0) {
+			for (int ii = 0; ii < nRecs2; ii++) {
+				TableRow row1 = (TableRow) table.getChildAt(ii);
+				TV = (EditText) row1.getChildAt(1);
+				try {
+					tempData = Float.valueOf(TV.getText().toString());
 				} catch (Exception ex) {
 					tempData = 0.0f;
 				}
-     			real_scores.add(ii,tempData);
+				real_scores.add(ii, tempData);
 //    			Log.i("index ii ", String.valueOf(ii));
 //    			Log.i("real_score ", String.valueOf(real_scores.get(ii)));
 //    			Log.i("realscore ", String.valueOf(tempData)); 
-    			}
-    	    	for( int ii = nRecs2; ii < 5; ii++ ){	
+			}
+			for (int ii = nRecs2; ii < 5; ii++) {
 //    	    		Log.i("in save scores ", "Filling remainder of real data array with zeros");
-    	    		real_scores.add((float) 0.0f);
-    			}
-    		}else {
-    			for( int ii = 0; ii < 5; ii++ ){
+				real_scores.add((float) 0.0f);
+			}
+		} else {
+			for (int ii = 0; ii < 5; ii++) {
 //    				Log.i("in save scores ", "Filling entire real data array with zeros");
-    	    		real_scores.add((float) 0.0f);
-    			}
-    		}
-    		//	Fill the real score variables from the real_scores array
-    		trait11_data = real_scores.get(0);
+				real_scores.add((float) 0.0f);
+			}
+		}
+		//	Fill the real score variables from the real_scores array
+		trait11_data = real_scores.get(0);
 //    		Log.i("trait11_data ", String.valueOf(trait11_data));
-    		trait12_data = real_scores.get(1);
+		trait12_data = real_scores.get(1);
 //    		Log.i("trait12_data ", String.valueOf(trait12_data));
-    		trait13_data = real_scores.get(2);
+		trait13_data = real_scores.get(2);
 //       	Log.i("trait13_data ", String.valueOf(trait13_data));
-    		trait14_data = real_scores.get(3);
+		trait14_data = real_scores.get(3);
 //       	Log.i("trait14_data ", String.valueOf(trait14_data));
-    		trait15_data = real_scores.get(4);
+		trait15_data = real_scores.get(4);
 //    		Log.i("trait15_data ", String.valueOf(trait15_data));
- 	    	
- //    		get the User data values  	
+
+		//    		get the User data values
 //    		Log.i("in save scores", " number user data points is " + String.valueOf(nRecs3));
-    		table = (TableLayout) findViewById(R.id.TableLayout03);
+		table = (TableLayout) findViewById(R.id.TableLayout03);
 //    		Log.i("in save scores", " after find tablelayout03 ");
-    		if (nRecs3 != 0) {
-    			for( int ii = 0; ii < nRecs3; ii++ ){	
+		if (nRecs3 != 0) {
+			for (int ii = 0; ii < nRecs3; ii++) {
 //    				Log.i("in save scores", " before get child row ");
-    				TableRow row1= (TableRow)table.getChildAt(ii);
+				TableRow row1 = (TableRow) table.getChildAt(ii);
 //    				Log.i("in save scores", " after get child row ");
-    				tempTrait = user_trait_numbers.get (ii);
-    				Log.i("in save scores", " trait number is " + String.valueOf(tempTrait));
-    				RadioGroup rg = ((RadioGroup) row1.findViewById(R.id.radioGroup1));
-    				Log.i("in save scores", " after get radiogroup view ");
-	    			try {
+				tempTrait = user_trait_numbers.get(ii);
+				Log.i("in save scores", " trait number is " + String.valueOf(tempTrait));
+				RadioGroup rg = ((RadioGroup) row1.findViewById(R.id.radioGroup1));
+				Log.i("in save scores", " after get radiogroup view ");
+				try {
 //	    				Log.i("in save scores", " in try block ");
-	    				tempRadioBtn = rg.getCheckedRadioButtonId();
-	    				Log.i("try radioBtn ", String.valueOf(tempRadioBtn));
-	    				cmd = String.format("select custom_evaluation_traits_table.id_custom_traitid " +
-	    		    			" from custom_evaluation_traits_table " +
-	    		    			" where custom_evaluation_traits_table.id_traitid = %s "+
-	    		    			" and custom_evaluation_traits_table.custom_evaluation_order =  %s ", tempTrait, tempRadioBtn+1);
-	    				crsr2 = dbh.exec( cmd );
-	    		        cursor2   = ( Cursor ) crsr2;
-	    		        dbh.moveToFirstRecord();		        
-	    		        tempRadioBtn = cursor2.getInt(0);
-	    		        Log.i("try ", String.valueOf(tempRadioBtn));
-					} catch (Exception ex) {
-						tempRadioBtn = 0;
-						Log.i("catch ", String.valueOf(tempRadioBtn));
-					}
-	    			Log.i("out of try ", "before adding score to user.scores");
-	    			Log.i("index ii ", String.valueOf(ii));
-	     			user_scores.add(tempRadioBtn);
-	    			Log.i("user_score ", String.valueOf(user_scores.get(ii)));
-	    			Log.i("user_score ", String.valueOf(tempRadioBtn)); 
-	    		}
-    	    	for( int ii = nRecs3; ii < 5; ii++ ){	
+					tempRadioBtn = rg.getCheckedRadioButtonId();
+					Log.i("try radioBtn ", String.valueOf(tempRadioBtn));
+					cmd = String.format("select custom_evaluation_traits_table.id_custom_traitid " +
+							" from custom_evaluation_traits_table " +
+							" where custom_evaluation_traits_table.id_traitid = %s " +
+							" and custom_evaluation_traits_table.custom_evaluation_order =  %s ", tempTrait, tempRadioBtn + 1);
+					crsr2 = dbh.exec(cmd);
+					cursor2 = (Cursor) crsr2;
+					dbh.moveToFirstRecord();
+					tempRadioBtn = cursor2.getInt(0);
+					Log.i("try ", String.valueOf(tempRadioBtn));
+				} catch (Exception ex) {
+					tempRadioBtn = 0;
+					Log.i("catch ", String.valueOf(tempRadioBtn));
+				}
+				Log.i("out of try ", "before adding score to user.scores");
+				Log.i("index ii ", String.valueOf(ii));
+				user_scores.add(tempRadioBtn);
+				Log.i("user_score ", String.valueOf(user_scores.get(ii)));
+				Log.i("user_score ", String.valueOf(tempRadioBtn));
+			}
+			for (int ii = nRecs3; ii < 5; ii++) {
 //    	    		Log.i("in save scores ", "Filling remainder of user data array with zeros");
-    	    		user_scores.add(0);
-    			}
-    		}else {
-    			for( int ii = 0; ii < 5; ii++ ){
+				user_scores.add(0);
+			}
+		} else {
+			for (int ii = 0; ii < 5; ii++) {
 //    				Log.i("in save scores ", "no user scores so make all 0");
-    	    		user_scores.add(0);
-    			}
-    		}
+				user_scores.add(0);
+			}
+		}
 //    		Fill the user score variables from the user_scores array
-    		trait16_data = user_scores.get(0);
-    		Log.i("trait16_data ", String.valueOf(trait16_data));
-    		trait17_data = user_scores.get(1);
-    		Log.i("trait17_data ", String.valueOf(trait17_data));
-    		trait18_data = user_scores.get(2);
-    		Log.i("trait18_data ", String.valueOf(trait18_data));
-    		trait19_data = user_scores.get(3);
-    		Log.i("trait19_data ", String.valueOf(trait19_data));
-    		trait20_data = user_scores.get(4);
-    		Log.i("trait20_data ", String.valueOf(trait20_data));
-    		
-    		// Now that I have all the data I need to write it into the sheep_evaluation_table
-    		
+		trait16_data = user_scores.get(0);
+		Log.i("trait16_data ", String.valueOf(trait16_data));
+		trait17_data = user_scores.get(1);
+		Log.i("trait17_data ", String.valueOf(trait17_data));
+		trait18_data = user_scores.get(2);
+		Log.i("trait18_data ", String.valueOf(trait18_data));
+		trait19_data = user_scores.get(3);
+		Log.i("trait19_data ", String.valueOf(trait19_data));
+		trait20_data = user_scores.get(4);
+		Log.i("trait20_data ", String.valueOf(trait20_data));
+
+		// Now that I have all the data I need to write it into the sheep_evaluation_table
+
 //	    	Log.i("number ","eval trait01 "+String.valueOf(trait01));
 //	    	Log.i("number ","eval trait02 "+String.valueOf(trait02));
 //	    	Log.i("number ","eval trait03 "+String.valueOf(trait03));
@@ -708,27 +707,44 @@ public class EvaluateSheep2 extends Activity {
 //	    	Log.i("number ","eval trait14 units "+String.valueOf(trait14_unitid));
 //	    	Log.i("number ","eval trait15 "+String.valueOf(trait15));
 //	    	Log.i("number ","eval trait15 units "+String.valueOf(trait15_unitid));
-    		
-    		Log.i("number ","eval trait16 "+String.valueOf(trait16_data));
+
+		Log.i("number ", "eval trait16 " + String.valueOf(trait16_data));
 //    		Log.i("number ","eval trait17 "+String.valueOf(trait17_data));
 //    		Log.i("number ","eval trait18 "+String.valueOf(trait18_data));
 //    		Log.i("number ","eval trait19 "+String.valueOf(trait19_data));
 //    		Log.i("number ","eval trait20 "+String.valueOf(trait20_data));
-    		
-    		//	Get the date and time to enter into the database.
-    		String mytoday = Utilities.TodayIs();
-    		String mytime = Utilities.TimeIs();
-       		
-    		// Calculate the age in days for this sheep for this evaluation to fill the age_in_days field
-    		cmd = String.format("Select julianday(birth_date) from sheep_table where sheep_id = '%s'", thissheep_id);
-    		Log.i("get birthdate eval ", cmd);
-    		dbh.exec( cmd );
-    		crsr3 = dbh.exec( cmd );
-            cursor3   = ( Cursor ) crsr3;
-            dbh.moveToFirstRecord();	            
-            temp_integer = (int) Utilities.GetJulianDate()-(dbh.getInt(0));
-            Log.i("get age in days ", String.valueOf (temp_integer));
-    		
+
+		//	Get the date and time to enter into the database.
+		String mytoday = Utilities.TodayIs();
+		String mytime = Utilities.TimeIs();
+
+		//	If the sheep evaluation is a carcass date do all date stuff based on remove date
+
+		if (trait11 == 27) {
+			// Calculate the age in days for this sheep for this evaluation to fill the age_in_days field
+			cmd = String.format("Select julianday(remove_date), remove_date from sheep_table where sheep_id = '%s'", thissheep_id);
+			Log.i("get remove date eval ", cmd);
+			dbh.exec(cmd);
+			crsr3 = dbh.exec(cmd);
+			cursor3 = (Cursor) crsr3;
+			dbh.moveToFirstRecord();
+			temp_integer = (int) Utilities.GetJulianDate() - (dbh.getInt(0));
+			Log.i("get age in days ", String.valueOf(temp_integer));
+			mytoday = (dbh.getStr(1));
+			mytime = "";
+		}
+		else{
+			// not a carcass evaluation
+			// Calculate the age in days for this sheep for this evaluation to fill the age_in_days field
+			cmd = String.format("Select julianday(birth_date) from sheep_table where sheep_id = '%s'", thissheep_id);
+			Log.i("get birthdate eval ", cmd);
+			dbh.exec(cmd);
+			crsr3 = dbh.exec(cmd);
+			cursor3 = (Cursor) crsr3;
+			dbh.moveToFirstRecord();
+			temp_integer = (int) Utilities.GetJulianDate() - (dbh.getInt(0));
+			Log.i("get age in days ", String.valueOf(temp_integer));
+	}
     		cmd = String.format("insert into sheep_evaluation_table (sheep_id, " +
     		"trait_name01, trait_score01, trait_name02, trait_score02, trait_name03, trait_score03, " +
     		"trait_name04, trait_score04, trait_name05, trait_score05, trait_name06, trait_score06," +
