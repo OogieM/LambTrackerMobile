@@ -16,7 +16,7 @@
     <ScrollView
 		android:id="@+id/scroll1"
 		android:layout_width="fill_parent"
-    	android:layout_height="70dp"
+    	android:layout_height="350dp"
     	android:layout_below="@id/TextView1">
    		<GridLayout
 	   		android:id="@+id/grid1"
@@ -108,7 +108,7 @@
 <ScrollView
     	android:id="@+id/scroll2"
     	android:layout_width="fill_parent"
-    	android:layout_height="100dp"
+    	android:layout_height="175dp"
     	android:layout_below="@id/TextView2">
 	<GridLayout
         android:id="@+id/grid2"
