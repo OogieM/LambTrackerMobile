@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+ 
+ 	<Spinner
+        android:id="@+id/predefined_note_spinner01"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+       android:textSize="18sp" />
+ 	<Spinner
+        android:id="@+id/predefined_note_spinner02"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+       android:textSize="18sp" />
+ 	<Spinner
+        android:id="@+id/predefined_note_spinner03"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+       android:textSize="18sp" />
+ 	<Spinner
+        android:id="@+id/predefined_note_spinner04"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+       android:textSize="18sp" />
+ 	<Spinner
+        android:id="@+id/predefined_note_spinner05"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+       android:textSize="18sp" />
+ 	
+    <TextView
+        android:id="@+id/note_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/take_note_lbl"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+ 
+    <EditText
+        android:id="@+id/note_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:inputType="text">
+        <requestFocus /> 
+    </EditText>
+ 
+</LinearLayout>

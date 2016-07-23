@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/rb1_lbl"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center"
+        android:textSize="18sp"
+        android:typeface="monospace" />
+    
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center"
+        android:numStars="5"
+        android:rating="0.0"
+        android:stepSize="1.0" />
+
+</TableRow>

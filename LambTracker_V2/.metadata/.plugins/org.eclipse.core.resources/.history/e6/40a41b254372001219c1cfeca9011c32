@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="pad_left">5</dimen>
-    <dimen name="pad_left2">5 px</dimen>
-</resources>
