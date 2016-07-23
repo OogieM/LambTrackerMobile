@@ -1,8 +1,7 @@
-
-LambTracker_V2/bin/AndroidManifest.xml
 .gradle
 /build
 /.idea
 *.iml
 local.properties
 .DS_Store 
+*/build/
