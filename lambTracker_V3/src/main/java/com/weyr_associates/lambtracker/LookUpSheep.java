@@ -267,7 +267,7 @@ public class LookUpSheep extends ListActivity
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_type_spinner.setAdapter (dataAdapter);
 		//	set initial tag type to look for to be federal tag
-		tag_type_spinner.setSelection(1);	
+		tag_type_spinner.setSelection(8);
 
        	// make the alert button normal and disabled
     	btn = (Button) findViewById( R.id.alert_btn );
@@ -420,19 +420,31 @@ public void formatSheepRecord (View v){
 	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
 			"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
 			"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
-			"sheep_table.sire_id, sheep_table.dam_id, sheep_table.birth_date, birth_type_table.birth_type," +
-			"sheep_sex_table.sex_name, sheep_table.birth_weight, sheep_table.remove_date, sheep_table.death_date  " +
-//			"remove_reason_table.remove_reason " +
+			"sheep_table.sire_id, sheep_table.dam_id, sheep_table.birth_date, birth_type_table.birth_type, " +
+			"sheep_sex_table.sex_name, sheep_table.birth_weight, sheep_table.remove_date, sheep_table.death_date " +
+			", cluster_table.cluster_name  " +
+// 			"remove_reason_table.remove_reason " +
 			"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
 			"inner join birth_type_table on id_birthtypeid = sheep_table.birth_type " +
 			"inner join sheep_sex_table on sheep_sex_table.sex_sheepid = sheep_table.sex " +
+			"left outer  join  sheep_cluster_table on sheep_table.sheep_id = sheep_cluster_table.sheep_id " +
 //			"inner join remove_reason_table on sheep_table.remove_reason = remove_reason_table.remove_reasonid " +
+			"left join cluster_table on cluster_table.id_clusternameid = sheep_cluster_table.which_cluster " +
 			"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 			"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 			"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
 			"where id_info_table.sheep_id ='%s' and (id_info_table.tag_date_off is null or " +
 			"id_info_table.tag_date_off is '')order by idtype_name asc", thissheep_id);
-		
+//	<TextView
+//	android:id="@+id/cluster_name"
+//	android:layout_width="0dp"
+//	android:layout_height="wrap_content"
+//	android:layout_gravity="right"
+//	android:ems="10"
+//	android:gravity="left"
+//	android:layout_weight="1"
+//	android:typeface="monospace" />
+
 	Log.i("format record", " comand is " + cmd);	
 	crsr = dbh.exec( cmd ); 
 	Log.i("format record", " after run the command");
@@ -463,6 +475,10 @@ public void formatSheepRecord (View v){
     TV = (TextView) findViewById( R.id.death_date );
     TV.setText (dbh.getStr(16));
     Log.i("format record", "after get death date ");
+
+	TV = (TextView) findViewById( R.id.cluster_name );
+    TV.setText (dbh.getStr(17));
+    Log.i("format record", "after get cluster name ");
     
     alert_text = dbh.getStr(8);
     Log.i("format record", "after get alert ");
@@ -734,6 +750,8 @@ public void formatSheepRecord (View v){
 		TV = (TextView) findViewById( R.id.remove_date );
 		TV.setText( "" );
 		TV = (TextView) findViewById( R.id.death_date );
+		TV.setText( "" );
+		TV = (TextView) findViewById( R.id.cluster_name );
 		TV.setText( "" );
 		//	Need to clear out the rest of the tags here 
 		Log.i("clear btn", "before changing myadapter");

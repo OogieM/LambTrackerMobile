@@ -331,6 +331,15 @@
             	android:textStyle="bold"
             	android:layout_weight="1"
         		android:text="@string/sheep_death_date_lbl" />
+
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_gravity="right"
+					android:inputType="none"
+					android:textStyle="bold"
+					android:layout_weight="1"
+					android:text="@string/sheep_cluster_lbl" />
         		
         	</TableRow>
         	<TableRow android:gravity="center" >
@@ -353,7 +362,19 @@
             	android:ems="10"
         		android:gravity="left"
         		android:layout_weight="1"
-        		android:typeface="monospace" />  
+        		android:typeface="monospace" />
+
+					<TextView
+					android:id="@+id/cluster_name"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_gravity="right"
+					android:ems="10"
+					android:gravity="left"
+					android:layout_weight="1"
+					android:typeface="monospace" />
+
+
         		</TableRow>
        </TableLayout> 
        

@@ -679,7 +679,6 @@ public class IDManagement extends ListActivity {
 		selectedItem = id;
 //		v.setSelected(true);
 
-
 	}
 
     // user clicked 'remove tag' button
