@@ -423,27 +423,21 @@ public void formatSheepRecord (View v){
 			"sheep_table.sire_id, sheep_table.dam_id, sheep_table.birth_date, birth_type_table.birth_type, " +
 			"sheep_sex_table.sex_name, sheep_table.birth_weight, sheep_table.remove_date, sheep_table.death_date " +
 			", cluster_table.cluster_name  " +
-// 			"remove_reason_table.remove_reason " +
+ 			", remove_reason_table.remove_reason " +
+			", codon171_table.codon171_alleles " +
 			"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
 			"inner join birth_type_table on id_birthtypeid = sheep_table.birth_type " +
+			"inner join codon171_table on sheep_table.codon171 = codon171_table.id_codon171id " +
 			"inner join sheep_sex_table on sheep_sex_table.sex_sheepid = sheep_table.sex " +
 			"left outer  join  sheep_cluster_table on sheep_table.sheep_id = sheep_cluster_table.sheep_id " +
-//			"inner join remove_reason_table on sheep_table.remove_reason = remove_reason_table.remove_reasonid " +
+			"inner join remove_reason_table on sheep_table.remove_reason = remove_reason_table.remove_reasonid " +
 			"left join cluster_table on cluster_table.id_clusternameid = sheep_cluster_table.which_cluster " +
 			"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 			"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
 			"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
 			"where id_info_table.sheep_id ='%s' and (id_info_table.tag_date_off is null or " +
 			"id_info_table.tag_date_off is '')order by idtype_name asc", thissheep_id);
-//	<TextView
-//	android:id="@+id/cluster_name"
-//	android:layout_width="0dp"
-//	android:layout_height="wrap_content"
-//	android:layout_gravity="right"
-//	android:ems="10"
-//	android:gravity="left"
-//	android:layout_weight="1"
-//	android:typeface="monospace" />
+
 
 	Log.i("format record", " comand is " + cmd);	
 	crsr = dbh.exec( cmd ); 
@@ -469,9 +463,7 @@ public void formatSheepRecord (View v){
     TV = (TextView) findViewById( R.id.remove_date );
     TV.setText (dbh.getStr(15));
     Log.i("format record", "after get remove date ");
-//    TV = (TextView) findViewById( R.id.remove_reason );
-//    TV.setText (dbh.getStr(16));
-//    Log.i("format record", "after get remove reason ");
+
     TV = (TextView) findViewById( R.id.death_date );
     TV.setText (dbh.getStr(16));
     Log.i("format record", "after get death date ");
@@ -479,7 +471,12 @@ public void formatSheepRecord (View v){
 	TV = (TextView) findViewById( R.id.cluster_name );
     TV.setText (dbh.getStr(17));
     Log.i("format record", "after get cluster name ");
-    
+	TV = (TextView) findViewById( R.id.remove_reason );
+	TV.setText (dbh.getStr(18));
+	Log.i("format record", "after get remove reason ");
+	TV = (TextView) findViewById( R.id.codon_171 );
+	TV.setText (dbh.getStr(19));
+	Log.i("format record", "after get codon 171 ");
     alert_text = dbh.getStr(8);
     Log.i("format record", "after get alert ");
    

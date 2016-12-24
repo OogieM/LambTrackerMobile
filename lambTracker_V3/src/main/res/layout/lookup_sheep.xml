@@ -330,7 +330,7 @@
             	android:inputType="none"
             	android:textStyle="bold"
             	android:layout_weight="1"
-        		android:text="@string/sheep_death_date_lbl" />
+        		android:text="@string/sheep_remove_reason_lbl" />
 
 				<TextView
 					android:layout_width="0dp"
@@ -339,7 +339,7 @@
 					android:inputType="none"
 					android:textStyle="bold"
 					android:layout_weight="1"
-					android:text="@string/sheep_cluster_lbl" />
+					android:text="@string/sheep_death_date_lbl" />
         		
         	</TableRow>
         	<TableRow android:gravity="center" >
@@ -352,8 +352,18 @@
             	android:ems="10"
         		android:gravity="left"
         		android:layout_weight="1"
-        		android:typeface="monospace" />   
- 
+        		android:typeface="monospace" />
+
+				<TextView
+					android:id="@+id/remove_reason"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_gravity="right"
+					android:ems="10"
+					android:gravity="left"
+					android:layout_weight="1"
+					android:typeface="monospace" />
+
         		<TextView
         		android:id="@+id/death_date"
         		android:layout_width="0dp"
@@ -364,18 +374,54 @@
         		android:layout_weight="1"
         		android:typeface="monospace" />
 
-					<TextView
-					android:id="@+id/cluster_name"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_gravity="right"
-					android:ems="10"
-					android:gravity="left"
-					android:layout_weight="1"
-					android:typeface="monospace" />
-
-
         		</TableRow>
+	  <TableRow android:gravity="center" >
+
+
+		  <TextView
+			  android:layout_width="0dp"
+			  android:layout_height="wrap_content"
+			  android:layout_gravity="right"
+			  android:inputType="none"
+			  android:textStyle="bold"
+			  android:layout_weight="1"
+			  android:text="@string/sheep_cluster_lbl" />
+
+		  <TextView
+			  android:layout_width="0dp"
+			  android:layout_height="wrap_content"
+			  android:layout_gravity="left"
+			  android:inputType="none"
+			  android:textStyle="bold"
+			  android:layout_weight="1"
+			  android:text="@string/sheep_codon171_lbl" />
+
+
+	  </TableRow>
+	  <TableRow android:gravity="center" >
+
+		  <TextView
+			  android:id="@+id/cluster_name"
+			  android:layout_width="0dp"
+			  android:layout_height="wrap_content"
+			  android:layout_gravity="right"
+			  android:ems="10"
+			  android:gravity="left"
+			  android:layout_weight="1"
+			  android:typeface="monospace" />
+
+		  <TextView
+			  android:id="@+id/codon_171"
+			  android:layout_width="0dp"
+			  android:layout_height="wrap_content"
+			  android:layout_gravity="left"
+			  android:ems="10"
+			  android:gravity="left"
+			  android:layout_weight="1"
+			  android:typeface="monospace" />
+
+
+	  </TableRow>
        </TableLayout> 
        
        <RelativeLayout
