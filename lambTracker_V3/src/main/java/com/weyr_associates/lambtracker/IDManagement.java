@@ -639,6 +639,7 @@ public class IDManagement extends ListActivity {
     		clearBtn( v );
     		TV = (TextView) findViewById( R.id.sheepnameText );
         	TV.setText( "This sheep was removed." );
+			clearBtn( v );
         	return;			
 		}
 //		TV = (TextView) findViewById( R.id.sheepnameText );
@@ -765,6 +766,8 @@ public class IDManagement extends ListActivity {
     {	 
     	Utilities.takeNote(v, thissheep_id, this);
     }
+
+
 //     user clicked 'Scan' button    
     public void scanEid( View v){
    
