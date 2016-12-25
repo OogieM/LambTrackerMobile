@@ -395,8 +395,6 @@
 			  android:textStyle="bold"
 			  android:layout_weight="1"
 			  android:text="@string/sheep_codon171_lbl" />
-
-
 	  </TableRow>
 	  <TableRow android:gravity="center" >
 
@@ -411,7 +409,7 @@
 			  android:typeface="monospace" />
 
 		  <TextView
-			  android:id="@+id/codon_171"
+			  android:id="@+id/codon"
 			  android:layout_width="0dp"
 			  android:layout_height="wrap_content"
 			  android:layout_gravity="left"

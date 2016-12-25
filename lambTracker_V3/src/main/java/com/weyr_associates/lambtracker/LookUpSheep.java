@@ -442,9 +442,10 @@ public void formatSheepRecord (View v){
 	Log.i("format record", " comand is " + cmd);	
 	crsr = dbh.exec( cmd ); 
 	Log.i("format record", " after run the command");
-	cursor5   = ( Cursor ) crsr; 
+	cursor5   = ( Cursor ) crsr;
+	cursor5.moveToFirst();
 	Log.i("format record", " the cursor is of size " + String.valueOf(dbh.getSize()));
-	cursor5.moveToFirst();				
+
 	TV = (TextView) findViewById( R.id.sheepnameText );
     TV.setText (dbh.getStr(0));
     Log.i("format record", "after get sheep name ");
@@ -472,7 +473,7 @@ public void formatSheepRecord (View v){
 	TV = (TextView) findViewById( R.id.remove_reason );
 	TV.setText (dbh.getStr(18));
 	Log.i("format record", "after get remove reason ");
-	TV = (TextView) findViewById( R.id.codon_171 );
+	TV = (TextView) findViewById( R.id.codon );
 	TV.setText (dbh.getStr(19));
 	Log.i("format record", "after get codon 171 ");
     alert_text = dbh.getStr(8);
@@ -560,6 +561,7 @@ public void formatSheepRecord (View v){
 		//	Select only the columns I need for the note display section
 //    	String[] fromColumns2 = new String[ ]{ "note_date", "note_time", "note_text", "predefined_note_text"};
     	String[] fromColumns2 = new String[ ]{ "note_date", "note_text", "predefined_note_text"};
+
 		Log.i("LookForSheep", "after setting string array fromColumns for notes");
 		//	Set the views for each column for each line. A tag takes up 1 line on the screen
 		//Removed the time from a note
@@ -724,9 +726,12 @@ public void formatSheepRecord (View v){
     // user clicked 'clear' button
     public void clearBtn( View v )
 	    {
+//	    Log.i("clear btn", "got here");
     	thissheep_id = 0;
-		TextView TV ;
-		TV = (TextView) findViewById( R.id.inputText );
+		// TextView TV ;
+
+		// Log.i("clear btn", "before clearing input");
+		TextView TV = (TextView) findViewById( R.id.inputText );
 		TV.setText( "" );		
 		TV = (TextView) findViewById( R.id.sheepnameText );
 		TV.setText( "" );
@@ -734,26 +739,35 @@ public void formatSheepRecord (View v){
 		TV.setText( "" );
 		TV = (TextView) findViewById( R.id.damName );
 		TV.setText( "" );
+		TV = (TextView) findViewById( R.id.birth_weight );
+	    TV.setText( "" );
+	  //   Log.i("clear btn", "after clearing sire to birth weight");
+
 	    TV = (TextView) findViewById( R.id.birth_date );
 	    TV.setText( "" );
 	    TV = (TextView) findViewById( R.id.birth_type );
 	    TV.setText( "" );
 	    TV = (TextView) findViewById( R.id.sheep_sex );
 	    TV.setText( "" );
-	    TV = (TextView) findViewById( R.id.birth_weight );
-	    TV.setText( "" );
+	   // Log.i("clear btn", "after clearing birth date to sex");
+
 		TV = (TextView) findViewById( R.id.remove_date );
+		TV.setText( "" );
+		TV = (TextView) findViewById(R.id.remove_reason);
 		TV.setText( "" );
 		TV = (TextView) findViewById( R.id.death_date );
 		TV.setText( "" );
+	//	Log.i("clear btn", "after remove date to death date");
+
 		TV = (TextView) findViewById( R.id.cluster_name );
 		TV.setText( "" );
-			TV = (TextView) findViewById(R.id.remove_reason);
-			TV.setText("");
-			TV = (TextView) findViewById(R.id.codon_171);
-			TV.setText("");
-			//	Need to clear out the rest of the tags here
-		Log.i("clear btn", "before changing myadapter");
+		TV = (TextView) findViewById(R.id.codon);
+		TV.setText( "" );
+
+	//	Log.i("clear btn", "after cluster to codon");
+
+		//	Need to clear out the rest of the tags here
+	//	Log.i("clear btn", "before changing myadapter");
 		try {
 			myadapter.changeCursor(null);
 		}
@@ -761,12 +775,12 @@ public void formatSheepRecord (View v){
 			// In this case there is no adapter so do nothing
 		}
 		try {
-//			Log.i("lookup clrbtn", " before set notes to null");
+	//		Log.i("lookup clrbtn", " before set notes to null");
 			myadapter2.changeCursor(null);
 		} catch (Exception e) {
 			// In this case there is no adapter so do nothing
 		}
-//		Log.i("clear btn", "after changing myadapter and myadapter2");
+	//	Log.i("clear btn", "after changing myadapter and myadapter2");
 
 				try {
 						drugAdapter.changeCursor(null);
