@@ -427,10 +427,10 @@ public void formatSheepRecord (View v){
 			", codon171_table.codon171_alleles " +
 			"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
 			"inner join birth_type_table on id_birthtypeid = sheep_table.birth_type " +
-			"inner join codon171_table on sheep_table.codon171 = codon171_table.id_codon171id " +
+			"left outer join codon171_table on sheep_table.codon171 = codon171_table.id_codon171id " +
 			"inner join sheep_sex_table on sheep_sex_table.sex_sheepid = sheep_table.sex " +
-			"left outer  join  sheep_cluster_table on sheep_table.sheep_id = sheep_cluster_table.sheep_id " +
-			"inner join remove_reason_table on sheep_table.remove_reason = remove_reason_table.remove_reasonid " +
+			"left outer join sheep_cluster_table on sheep_table.sheep_id = sheep_cluster_table.sheep_id " +
+			"left outer join remove_reason_table on sheep_table.remove_reason = remove_reason_table.remove_reasonid " +
 			"left join cluster_table on cluster_table.id_clusternameid = sheep_cluster_table.which_cluster " +
 			"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
 			"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
@@ -463,11 +463,9 @@ public void formatSheepRecord (View v){
     TV = (TextView) findViewById( R.id.remove_date );
     TV.setText (dbh.getStr(15));
     Log.i("format record", "after get remove date ");
-
     TV = (TextView) findViewById( R.id.death_date );
     TV.setText (dbh.getStr(16));
     Log.i("format record", "after get death date ");
-
 	TV = (TextView) findViewById( R.id.cluster_name );
     TV.setText (dbh.getStr(17));
     Log.i("format record", "after get cluster name ");
@@ -750,7 +748,11 @@ public void formatSheepRecord (View v){
 		TV.setText( "" );
 		TV = (TextView) findViewById( R.id.cluster_name );
 		TV.setText( "" );
-		//	Need to clear out the rest of the tags here 
+			TV = (TextView) findViewById(R.id.remove_reason);
+			TV.setText("");
+			TV = (TextView) findViewById(R.id.codon_171);
+			TV.setText("");
+			//	Need to clear out the rest of the tags here
 		Log.i("clear btn", "before changing myadapter");
 		try {
 			myadapter.changeCursor(null);
