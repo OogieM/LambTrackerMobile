@@ -426,7 +426,7 @@ public class SheepManagement extends ListActivity {
 			   	// Select All fields from drug types to build the spinner
 			   	cmd = String.format( "select id_drugid, user_task_name, drug_lot from drug_table where " +
 			   			"drug_gone = %s and (drug_type = 3 or drug_type = 4 or " +
-			   			"drug_type = 5 or drug_type = 6) ", drug_gone );
+			   			"drug_type = 5 or drug_type = 6 or drug_type = 7) ", drug_gone );
 			   	crsr = dbh.exec( cmd );  
 			   	cursor   = ( Cursor ) crsr;
 		   	  	dbh.moveToFirstRecord();
