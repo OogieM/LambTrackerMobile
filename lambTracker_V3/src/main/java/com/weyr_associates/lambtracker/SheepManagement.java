@@ -369,6 +369,7 @@ public class SheepManagement extends ListActivity {
 					if (cursor.getCount() > 0){ blood_spinner.setSelection(0);	}
 					
 			// Fill the Vaccine Spinner
+        //  Need to figure out how to do multiple drugs and vaccines at one time.
 	    	vaccine_spinner = (Spinner) findViewById(R.id.vaccine_spinner);
 		   	vaccines = new ArrayList<String>(); 
 		   	vaccine_id_drugid = new ArrayList<Integer>();
