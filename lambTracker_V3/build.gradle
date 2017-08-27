@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 15
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 21
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId "com.weyr_associates.lambtracker"
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 19
     }
 

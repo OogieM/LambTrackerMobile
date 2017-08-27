@@ -3,7 +3,7 @@
 
     <TextView
         android:id="@+id/data_lbl"
-        android:layout_width="250dp"
+        android:layout_width="375dp"
         android:layout_height="wrap_content"
         android:layout_gravity="left|center"
          android:textSize="18sp"

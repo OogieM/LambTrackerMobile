@@ -13,4 +13,6 @@ System is based on an SQLite database for all flock data.
 
 Currently I set up the database on my desktop system by hand using various SQLite management tools. Then the database is moved to the Android and used there.
 
-The latest additions are using this to run in Chrome for desktop functions. 
+The latest additions are using this to run in Chrome for desktop functions.
+
+Cleaning lots of files after conversion to Android Studio

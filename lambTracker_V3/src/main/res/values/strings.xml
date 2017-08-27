@@ -151,6 +151,9 @@
     <string name="sheep_death_date_lbl">Death Date</string>
     <string name="sheep_remove_date_lbl">Remove Date</string>
     <string name="sheep_remove_reason_lbl">Remove Reason</string>
+    <string name="sheep_cluster_lbl">Cluster</string>
+
+    <string name="sheep_codon171_lbl">Codon 171</string>
     <string name="sheep_lambease_lbl">Lambease Score</string>
     <string name="sheep_sire_lbl">Sire</string>
     <string name="sheep_service_lbl">Service Type</string>

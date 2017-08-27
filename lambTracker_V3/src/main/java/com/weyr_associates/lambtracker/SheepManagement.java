@@ -369,6 +369,7 @@ public class SheepManagement extends ListActivity {
 					if (cursor.getCount() > 0){ blood_spinner.setSelection(0);	}
 					
 			// Fill the Vaccine Spinner
+        //  Need to figure out how to do multiple drugs and vaccines at one time.
 	    	vaccine_spinner = (Spinner) findViewById(R.id.vaccine_spinner);
 		   	vaccines = new ArrayList<String>(); 
 		   	vaccine_id_drugid = new ArrayList<Integer>();
@@ -426,7 +427,7 @@ public class SheepManagement extends ListActivity {
 			   	// Select All fields from drug types to build the spinner
 			   	cmd = String.format( "select id_drugid, user_task_name, drug_lot from drug_table where " +
 			   			"drug_gone = %s and (drug_type = 3 or drug_type = 4 or " +
-			   			"drug_type = 5 or drug_type = 6) ", drug_gone );
+			   			"drug_type = 5 or drug_type = 6 or drug_type = 7) ", drug_gone );
 			   	crsr = dbh.exec( cmd );  
 			   	cursor   = ( Cursor ) crsr;
 		   	  	dbh.moveToFirstRecord();
@@ -567,8 +568,8 @@ public class SheepManagement extends ListActivity {
 			        	crsr = dbh.exec( cmd );
 			    		cursor   = ( Cursor ) crsr; 
 			        	recNo    = 1;
-						nRecs5    = cursor.getCount();
-						Log.i("searchByName", " nRecs5 = "+ String.valueOf(nRecs));
+						nRecs    = cursor.getCount();
+						Log.i("searchByName", " nRecs = "+ String.valueOf(nRecs));
 			        	dbh.moveToFirstRecord();
 			        	Log.i("searchByName", " the cursor is of size " + String.valueOf(dbh.getSize()));
 			        	if( dbh.getSize() == 0 )
@@ -803,10 +804,12 @@ public class SheepManagement extends ListActivity {
 							//	temp_string = alert_text + "\n" + temp_string;
 							// modified to put the new alert on top and add a newline character. 
 							temp_string = temp_string + "\n" + alert_text;
+							alert_text = temp_string;
 						}
 						cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
 						Log.i("update alerts ", "before cmd " + cmd);
 						dbh.exec( cmd );
+
 						Log.i("update alerts ", "after cmd " + cmd);
 					}
 					else
@@ -834,8 +837,7 @@ public class SheepManagement extends ListActivity {
 		    			Log.i("update notes ", "after cmd exec");
 						Log.i("shorn ", String.valueOf(boxshear));					
 					}
-					
-					
+
 			//	Get the value of the checkbox for trim toes
 			Log.i("before checkbox", " getting ready to get trim toes or not ");
 			boxtrimtoes = (CheckBox) findViewById(R.id.checkBoxTrimToes);
@@ -862,9 +864,15 @@ public class SheepManagement extends ListActivity {
     			Log.i("update sheep table ", "before cmd " + cmd);
     			dbh.exec( cmd );	
     			Log.i("update sheep table ", "after cmd exec");
-    			// remove the wean alert
-    			cmd = String.format("update sheep_table set alert01 = replace " +
-						"( alert01, 'Wean', '') where sheep_id =%d ", thissheep_id ) ;	
+    			// todo
+				// remove the wean alert
+				alert_text = alert_text.replace("Wean","");
+				Log.i("update sheep table ", alert_text);
+
+				cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", alert_text, thissheep_id ) ;
+
+//				cmd = String.format("update sheep_table set alert01 = replace " +
+//						"( alert01, 'Wean', '') where sheep_id =%d ", thissheep_id ) ;
     			Log.i("update sheep table ", "before cmd " + cmd);
     			dbh.exec( cmd );	
     			Log.i("update sheep table ", "after cmd exec");
@@ -929,8 +937,12 @@ public class SheepManagement extends ListActivity {
 				Log.i("blood taken ", String.valueOf(boxblood));
 				try {
 				//	Update the sheep record to remove the scrapie blood in alert
-				cmd = String.format("update sheep_table set alert01 = replace " +
-						"( alert01, 'Scrapie Blood', '') where sheep_id =%d ", thissheep_id ) ;
+					alert_text = alert_text.replace("Scrapie Blood","");
+
+					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", alert_text, thissheep_id ) ;
+
+//					cmd = String.format("update sheep_table set alert01 = replace " +
+//						"( alert01, 'Scrapie Blood', '') where sheep_id =%d ", thissheep_id ) ;
 //				Log.i("update alerts ", "before cmd " + cmd);
 				dbh.exec( cmd );
 //				Log.i("update alerts ", "after cmd " + cmd);
@@ -940,8 +952,12 @@ public class SheepManagement extends ListActivity {
 				}
 				try {
 					//	Update the sheep record to remove the Brucellosis blood in alert
-					cmd = String.format("update sheep_table set alert01 = replace " +
-							"( alert01, 'Brucellosis Blood', '') where sheep_id =%d ", thissheep_id ) ;
+					alert_text = alert_text.replace("Brucellosis Blood","");
+
+					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", alert_text, thissheep_id ) ;
+
+//					cmd = String.format("update sheep_table set alert01 = replace " +
+//							"( alert01, 'Brucellosis Blood', '') where sheep_id =%d ", thissheep_id ) ;
 //					Log.i("update alerts ", "before cmd " + cmd);
 					dbh.exec( cmd );
 //					Log.i("update alerts ", "after cmd " + cmd);
@@ -951,8 +967,12 @@ public class SheepManagement extends ListActivity {
 					}
 				try {
 					//	Update the sheep record to remove the OPP blood in alert
-					cmd = String.format("update sheep_table set alert01 = replace " +
-							"( alert01, 'OPP Blood', '') where sheep_id =%d ", thissheep_id ) ;
+					alert_text = alert_text.replace("OPP Blood","");
+
+					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", alert_text, thissheep_id ) ;
+
+//					cmd = String.format("update sheep_table set alert01 = replace " +
+//							"( alert01, 'OPP Blood', '') where sheep_id =%d ", thissheep_id ) ;
 //					Log.i("update alerts ", "before cmd " + cmd);
 					dbh.exec( cmd );
 //					Log.i("update alerts ", "after cmd " + cmd);
@@ -1016,14 +1036,19 @@ public class SheepManagement extends ListActivity {
 					//	Initially just set an alert with the number and units from today
 					temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 					Log.i("drug withdrawal ", " new alert is " + temp_string);
+//					cmd = String.format("select alert01 from sheep_table " +
+//							" where sheep_id =%d ", thissheep_id ) ;
+//					dbh.exec( cmd );
+//					alert_text = dbh.getStr(0);
 					if (alert_text != null){
 						temp_string = temp_string + "\n" + alert_text;
-	//					temp_string = alert_text + "\n" + temp_string;
+						alert_text = temp_string;
 					}
-	
+
 					cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
 					Log.i("update alerts ", "before cmd " + cmd);
 					dbh.exec( cmd );
+
 					Log.i("update alerts ", "after cmd " + cmd);
 				}
 				else{
@@ -1065,7 +1090,7 @@ public class SheepManagement extends ListActivity {
 				}	
 								
 				//	go update the database with a drug record for this wormer and this sheep
-				// The drug_id is at the same position in the wormer_id_drugid list as the spinner position			
+				// The drug_id is at the same position in the drug list as the spinner position
 				i = drug_id_drugid.get(which_drug);
 				Log.i("drug id", " value is " + String.valueOf(i));
 				//	Go get a Drug location 
@@ -1109,9 +1134,14 @@ public class SheepManagement extends ListActivity {
 						Log.i("today is ", mytoday);
 						temp_string = "Slaughter Withdrawal is " + dbh.getStr(1) + " " + dbh.getStr(0) + " from " + mytoday ;
 						Log.i("drug withdrawal ", " new alert is " + temp_string);
+//						cmd = String.format("select alert01 from sheep_table " +
+//								" where sheep_id =%d ", thissheep_id ) ;
+//						dbh.exec( cmd );
+//						alert_text = dbh.getStr(0);
+						Log.i("current alert ", alert_text);
 						if (alert_text != null){
 							temp_string = temp_string + "\n" + alert_text;
-	//						temp_string = alert_text + "\n" + temp_string;
+							alert_text = temp_string;
 						}
 						cmd = String.format("update sheep_table set alert01 = '%s' where sheep_id =%d ", temp_string, thissheep_id ) ;
 						Log.i("update alerts ", "before cmd " + cmd);
@@ -1312,12 +1342,12 @@ public class SheepManagement extends ListActivity {
 		// Display alerts here   	
 				AlertDialog.Builder builder = new AlertDialog.Builder( this );
 				cmd = String.format("select sheep_table.alert01 from sheep_table where sheep_id =%d", thissheep_id);
-				Log.i("evalGetAlert ", cmd);  
+				Log.i("SheepMgmntGetAlert ", cmd);
 				crsr = dbh.exec( cmd );
 		        cursor   = ( Cursor ) crsr;
 		        dbh.moveToFirstRecord();		       
 		        alert_text = (dbh.getStr(0));
-		        Log.i("evalShowAlert ", alert_text); 
+		        Log.i("SheepMgmntShowAlert ", alert_text);
 				builder.setMessage( alert_text )
 			           .setTitle( R.string.alert_warning );
 				builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {

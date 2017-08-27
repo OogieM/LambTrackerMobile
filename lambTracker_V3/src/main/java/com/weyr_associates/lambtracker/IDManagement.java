@@ -55,7 +55,7 @@ public class IDManagement extends ListActivity {
 	public  List <String> new_tag_numbers;
 	public List <String> new_tag_colors, new_tag_locations, new_tag_types;
 	ArrayAdapter<String> dataAdapter;
-	String     	cmd;
+	String     	cmd, cmd2;
 	Integer 	i;
 	private int			    recNo;
 	public int nRecs, nRecs2;
@@ -222,7 +222,7 @@ public class IDManagement extends ListActivity {
     	dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tag_types);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tag_type_spinner2.setAdapter (dataAdapter);
-		tag_type_spinner2.setSelection(0);	
+		tag_type_spinner2.setSelection(0);
 		Log.i ("in got EID", " after set tag_type_spinner");
 		
 //    	// Fill the Tag Color Spinner
@@ -345,7 +345,7 @@ public class IDManagement extends ListActivity {
 		tag_type_spinner.setAdapter (dataAdapter);
 		//	Default to looking up federal tag number
 		//	Should be a preference as to which type is the default look-up 
-		tag_type_spinner.setSelection(1);	
+		tag_type_spinner.setSelection(2);
 		
     	//	Set up the location and color spinners
 //    	eid_tag_color_spinner = (Spinner) findViewById(R.id.eid_tag_color);
@@ -415,30 +415,6 @@ public class IDManagement extends ListActivity {
     	TV.setText( "" );		
     	TV = (TextView) findViewById( R.id.sheepnameText );
 	    TV.setText( "" );
-//	    TV  = (TextView) findViewById( R.id.eidText );
-//	    TV.setText( "" );
-//	    TV  = (TextView) findViewById( R.id.fedText );
-//	    TV.setText( "" );
-//	    TV  = (TextView) findViewById( R.id.farmText );
-//	    TV.setText( "" );
-//	    TV  = (TextView) findViewById( R.id.paintText );
-//	    TV.setText( "" );
-//	    TV = (TextView) findViewById( R.id.fed_colorText );
-//	    TV.setText( "" );
-//	    TV = (TextView) findViewById( R.id.fed_locationText );
-//	    TV.setText( "" );
-//	    TV = (TextView) findViewById( R.id.farm_colorText );
-//	    TV.setText( "" );
-//	    TV = (TextView) findViewById( R.id.farm_locationText);
-//	    TV.setText( "" );
-//	    TV = (TextView) findViewById( R.id.paint_colorText );
-//	    TV.setText( "" );
-//	    TV = (TextView) findViewById( R.id.paint_locationText);
-//	    TV.setText( "" );
-//	    TV = (TextView) findViewById( R.id.eid_colorText );
-//	    TV.setText( "" );
-//	    TV = (TextView) findViewById( R.id.eid_locationText);
-//	    TV.setText( "" );
 	    TV = (TextView) findViewById( R.id.new_tag_number);
 	    TV.setText( "" );
 	    //	Clear out the tag ids
@@ -488,12 +464,6 @@ public class IDManagement extends ListActivity {
     	btn.setEnabled(false); 
     	btn = (Button) findViewById( R.id.prev_rec_btn );
     	btn.setEnabled(false);
-    	
-//    	crsr = null;
-//    	fedtagid = 0;
-//    	farmtagid = 0;
-//    	eidtagid = 0;
-//    	paintid = 0;
     	
     	 TV = (EditText) findViewById( R.id.inputText );
          String	tag_num = TV.getText().toString();
@@ -669,6 +639,7 @@ public class IDManagement extends ListActivity {
     		clearBtn( v );
     		TV = (TextView) findViewById( R.id.sheepnameText );
         	TV.setText( "This sheep was removed." );
+			clearBtn( v );
         	return;			
 		}
 //		TV = (TextView) findViewById( R.id.sheepnameText );
@@ -687,34 +658,17 @@ public class IDManagement extends ListActivity {
 	    Log.i("FormatRecord", "after setting myadapter");
 	    setListAdapter(myadapter);
 	    Log.i("FormatRecord", "after setting list adapter");
-	    
-	  
-	    
+
 	    // TODO
 	    // 	Now I need to figure out how to get the items selected from the list of tags and pass that on
 	    //	to the remove tag code as needed
-	    
-	    
-//	    myadapter.setOnItemClickListener (new OnItemClickListener(){
-//	    	
-//	    	public void onItemClick(adapterView<?> parent, View v, int pos,long id){
-//	    		cursor2.moveToPosition(pos);
-//	    		int rowId = cursor2.getInt(cursor2.getColumnIndexOrThrow("_id"));
-//	    		
-//	    	}
-//	    })
-	    
-	    
-////		try {
-			// Now we need to check and see if there is an alert for this sheep
-//			String alert_text = dbh.getStr(8);
+
 //			Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
 			if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
 		       	// make the alert button red
 		    	Button btn = (Button) findViewById( R.id.alert_btn );
 		    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
 		    	btn.setEnabled(true); 
-		    	//	testing whether I can put up an alert box here without issues
 		    	showAlert(v);
 			}
 	}	
@@ -724,508 +678,12 @@ public class IDManagement extends ListActivity {
 	{
 		Log.i("IDManagement", "Listitemclick set id" + String.format("%d", id));
 		selectedItem = id;
+//		v.setSelected(true);
 
 	}
 
-			// OLD XML file data
-//	        <GridLayout
-//            android:id="@+id/grid3"
-//            android:layout_width="wrap_content"
-//            android:layout_height="wrap_content"
-//            android:columnCount="6"
-//            android:rowCount="9" >
-//
-//            <TextView
-//                android:layout_width="90dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="0"
-//                android:layout_gravity="left"
-//                android:layout_row="0"
-//                android:inputType="none"
-//                android:text="@string/federal_id_lbl" />
-//
-//            <EditText
-//                android:id="@+id/fedText"
-//                android:layout_width="90dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="0"
-//                android:layout_gravity="left"
-//                android:layout_row="2"
-//                android:inputType="number"
-//                android:textSize="18sp"
-//                android:typeface="monospace" >
-//            </EditText>
-//
-//            <TextView
-//                android:layout_width="125dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="1"
-//                android:layout_gravity="left"
-//                android:layout_row="0"
-//                android:inputType="none"
-//                android:text="@string/tag_color_lbl" />
-//
-//            <EditText
-//                android:id="@+id/fed_colorText"
-//                android:layout_width="100dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="1"
-//                android:layout_gravity="left"
-//                android:layout_row="2"
-//                android:inputType="text"
-//                android:textSize="18sp"
-//                android:typeface="monospace" >
-//            </EditText>
-//
-//            <TextView
-//                android:layout_width="90dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="2"
-//                android:layout_gravity="left"
-//                android:layout_row="0"
-//                android:inputType="none"
-//                android:text="@string/tag_location_lbl" />
-//
-//            <EditText
-//                android:id="@+id/fed_locationText"
-//                android:layout_width="90dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="2"
-//                android:layout_gravity="left"
-//                android:layout_row="2"
-//                android:inputType="text"
-//                android:textSize="18sp"
-//                android:typeface="monospace" >
-//            </EditText>
-//
-//            <TextView
-//                android:layout_width="90dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="0"
-//                android:layout_gravity="left"
-//                android:layout_row="3"
-//                android:inputType="none"
-//                android:text="@string/farm_id_lbl" />
-//
-//            <EditText
-//                android:id="@+id/farmText"
-//                android:layout_width="90dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="0"
-//                android:layout_gravity="left"
-//                android:layout_row="4"
-//                android:enabled="true"
-//                android:inputType="number"
-//                android:textSize="18sp"
-//                android:typeface="monospace" />
-//
-//            <TextView
-//                android:layout_width="125dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="1"
-//                android:layout_gravity="left"
-//                android:layout_row="3"
-//                android:inputType="none"
-//                android:text="@string/tag_color_lbl" />
-//
-//            <EditText
-//                android:id="@+id/farm_colorText"
-//                android:layout_width="100dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="1"
-//                android:layout_gravity="left"
-//                android:layout_row="4"
-//                android:inputType="text"
-//                android:textSize="18sp"
-//                android:typeface="monospace" >
-//            </EditText>
-//
-//            <TextView
-//                android:layout_width="90dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="2"
-//                android:layout_gravity="left"
-//                android:layout_row="3"
-//                android:inputType="none"
-//                android:text="@string/tag_location_lbl" />
-//
-//            <EditText
-//                android:id="@+id/farm_locationText"
-//                android:layout_width="90dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="2"
-//                android:layout_gravity="left"
-//                android:layout_row="4"
-//                android:inputType="text"
-//                android:textSize="18sp"
-//                android:typeface="monospace" >
-//            </EditText>
-//
-//            <TextView
-//                android:layout_width="90dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="0"
-//                android:layout_gravity="left"
-//                android:layout_row="5"
-//                android:inputType="none"
-//                android:text="@string/paint_id_lbl" />
-//
-//            <EditText
-//                android:id="@+id/paintText"
-//                android:layout_width="90dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="0"
-//                android:layout_gravity="left"
-//                android:layout_row="6"
-//                android:enabled="true"
-//                android:inputType="number"
-//                android:textSize="18sp"
-//                android:typeface="monospace" />
-//
-//            <TextView
-//                android:layout_width="125dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="1"
-//                android:layout_gravity="left"
-//                android:layout_row="5"
-//                android:inputType="none"
-//                android:text="@string/paint_color_lbl" />
-//
-//            <EditText
-//                android:id="@+id/paint_colorText"
-//                android:layout_width="100dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="1"
-//                android:layout_gravity="left"
-//                android:layout_row="6"
-//                android:inputType="text"
-//                android:textSize="18sp"
-//                android:typeface="monospace" >
-//            </EditText>
-//
-//            <TextView
-//                android:layout_width="90dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="2"
-//                android:layout_gravity="left"
-//                android:layout_row="5"
-//                android:inputType="none"
-//                android:text="@string/tag_location_lbl" />
-//
-//            <EditText
-//                android:id="@+id/paint_locationText"
-//                android:layout_width="90dp"
-//                android:layout_height="wrap_content"
-//                android:layout_column="2"
-//                android:layout_gravity="left"
-//                android:layout_row="6"
-//                android:inputType="text"
-//                android:textSize="18sp"
-//                android:typeface="monospace" >
-//            </EditText>
-//
-//        </GridLayout>
-//		       <GridLayout
-//		        android:id="@+id/grid4"
-//		        android:layout_width="wrap_content"
-//		        android:layout_height="wrap_content"
-//		        android:columnCount="3"
-//		        android:rowCount="4" > 
-//		              
-//		        <TextView
-//		            android:layout_width="215dp"
-//		            android:layout_height="wrap_content"
-//		            android:layout_column="0"
-//		            android:layout_gravity="left|top"
-//		            android:layout_row="0"
-//		            android:inputType="none"
-//		            android:text="@string/electronic_id_lbl" />
-//		        
-//		        <EditText
-//		            android:id="@+id/eidText"
-//		            android:layout_width="215dp"
-//		            android:layout_height="wrap_content"
-//		            android:layout_column="0"
-//		            android:layout_gravity="left"
-//		            android:layout_row="1"
-//		            android:enabled="true"
-//		            android:inputType="text"
-//		            android:textSize="18sp"
-//		            android:typeface="monospace" />  
-//		        
-//		        <TextView
-//		            android:layout_width="90dp"
-//		            android:layout_height="wrap_content"
-//		            android:layout_column="2"
-//		            android:layout_gravity="left|top"
-//		            android:layout_row="0"
-//		            android:inputType="none"
-//		            android:text="@string/tag_location_lbl" />
-//
-//		        <EditText
-//		  	  		android:id="@+id/eid_locationText"
-//		  	  		android:layout_width="100dp"
-//		  	  		android:layout_height="wrap_content"
-//		  	  		android:layout_column="2"
-//		      		android:layout_gravity="left"
-//		      		android:layout_row="1"
-//		      		android:inputType="text"
-//		  	  		android:textSize="18sp"/>
-//		        
-//		        <TextView
-//		            android:layout_width="100dp"
-//		            android:layout_height="wrap_content"
-//		            android:layout_column="1"
-//		            android:layout_gravity="left|top"
-//		            android:layout_row="0"
-//		            android:inputType="none"
-//		            android:text="@string/tag_color_lbl" />
-//		        
-//		        <EditText
-//		  	  		android:id="@+id/eid_colorText"
-//		  	  		android:layout_width="100dp"
-//		  	  		android:layout_height="wrap_content"
-//		  	  		android:layout_column="1"
-//		      		android:layout_gravity="left"
-//		      		android:layout_row="1"
-//		      		android:inputType="text"
-//		  	  		android:textSize="18sp"/>
-//		        </GridLayout>
-
-//			
-//			<Button
-//            android:id="@+id/update_display_btn"
-//            android:layout_width="100dp"
-//            android:layout_height="50dp"
-//            android:layout_column="2"
-//      		android:layout_gravity="left"
-//     	 	android:layout_row="0"
-//            android:onClick="updateDisplay"
-//            android:text="@string/update_display_btn"
-//            android:textSize="14sp" />	
-//			
-//		
-			
-//			
-//	 		<GridLayout
-//	        android:id="@+id/grid6"
-//	        android:layout_width="match_parent"
-//	        android:layout_height="wrap_content"
-//	        android:columnCount="5">   	    
-//	     	    
-//	        <TextView
-//	            android:layout_width="176dp"
-//	            android:layout_height="wrap_content"
-//	            android:layout_column="1"
-//	            android:layout_gravity="left|top"
-//	            android:layout_row="0"
-//	            android:inputType="none"
-//	            android:textStyle="bold"
-//	            android:text="@string/tag_number_lbl" />
-//	        
-//	        <TextView
-//	            android:layout_width="65dp"
-//	            android:layout_height="wrap_content"
-//	            android:layout_column="2"
-//	            android:layout_gravity="left"
-//	            android:layout_row="0"
-//	            android:inputType="none"
-//	            android:textStyle="bold"
-//	            android:text="@string/tag_color_abbrev_lbl" />
-//	        
-//	        <TextView
-//	            android:layout_width="40dp"
-//	            android:layout_height="wrap_content"
-//	            android:layout_column="3"
-//	            android:layout_gravity="left"
-//	            android:layout_row="0"
-//	            android:inputType="none"
-//	            android:textStyle="bold"
-//	            android:text="@string/tag_location_abbrev_lbl" />
-//	        
-//	        <TextView
-//	            android:layout_width="80dp"
-//	            android:layout_height="wrap_content"
-//	            android:layout_column="4"
-//	            android:layout_gravity="left"
-//	            android:layout_row="0"
-//	            android:inputType="none"
-//	            android:textStyle="bold"
-//	            android:text="@string/tag_type_abbrev_lbl" />
-//        
-//     	</GridLayout>
-//    	    
-//       <ListView
-//           android:id="@+id/android:list2"
-//           android:layout_width="fill_parent"
-//           android:layout_height="15dp" >
-//
-//		</ListView>  
-	
-//	<Button
-//    android:id="@+id/remove_fedtag_btn"
-//    android:layout_width="100dp"
-//    android:layout_height="50dp"
-//    android:layout_column="0"
-//    android:layout_gravity="left|top"
-//    android:layout_row="1"
-//    android:onClick="removeFedTag"
-//    android:text="@string/remove_fedtag_btn"
-//    android:textSize="14sp" />		
-		
-	
-//	
-//    <Button
-//    android:id="@+id/remove_paint_btn"
-//    android:layout_width="100dp"
-//    android:layout_height="50dp"
-//    android:layout_column="2"
-//    android:layout_gravity="left|top"
-//    android:layout_row="1"
-//    android:onClick="removePaintTag"
-//    android:text="@string/remove_paint_btn"
-//    android:textSize="14sp" />
-//
-//<Button
-//    android:id="@+id/remove_eidtag_btn"
-//    android:layout_width="100dp"
-//    android:layout_height="50dp"
-//    android:layout_column="3"
-//    android:layout_gravity="left|top"
-//    android:layout_row="1"
-//    android:onClick="removeEIDTag"
-//    android:text="@string/remove_eidtag_btn"
-//    android:textSize="14sp" />
-
-			
-//		}catch (Exception e){
-//    		// 	couldn't get a new alert for this sheep
-//	    	} 
-
-		// Need to fill the federal and farm tag info from the returned cursor here
-	    // looping through all rows and adding to list
-//		try {
-//			for (cursor2.moveToFirst(); !cursor2.isAfterLast(); cursor2.moveToNext()){
-//				// get the tag type of the first record
-//				i = dbh.getInt(2);
-//				Log.i("in for loop", " tag type is " + String.valueOf(i));
-//				switch (i){		
-//			    case 1:
-//					//Got a federal tag
-//			    	Log.i("in for loop", " got fed tag " + dbh.getStr(4));
-//			    	TV = (TextView) findViewById(R.id.fedText)	;
-//			    	TV.setText(dbh.getStr(4));
-//			    	Log.i("in for loop", " fed tag number is " + dbh.getStr(4));
-//			    	TV = (TextView) findViewById(R.id.fed_colorText);
-//			    	TV.setText(dbh.getStr(3));
-//			    	Log.i("in for loop", " fed tag color is " + dbh.getStr(3));
-//			    	TV = (TextView) findViewById(R.id.fed_locationText);
-//			    	TV.setText(dbh.getStr(5));
-//			    	Log.i("in for loop", " fed tag location is " + dbh.getStr(5));
-//			    	fedtagid = dbh.getInt(6);
-//			    	Log.i("in for loop", " fed tag rec id is " + String.valueOf(fedtagid));
-//			        break;
-//			    case 2:
-//			    	// Got an EID tag
-//			    	Log.i("in for loop", " got EID tag " + dbh.getStr(4));
-//			    	TV = (TextView) findViewById(R.id.eidText)	;
-//			    	TV.setText(dbh.getStr(4));
-//			    	//	Need to set the EID Tag color and location here by reading the data
-//			    	TV = (TextView) findViewById(R.id.eid_colorText);
-//			    	TV.setText(dbh.getStr(3));
-//			    	TV = (TextView) findViewById(R.id.eid_locationText);
-//			    	TV.setText(dbh.getStr(5));
-//			    	eidtagid = dbh.getInt(6);
-//			    	Log.i("in for loop", " EID tag id is " + String.valueOf(eidtagid));
-//			        break;
-//			    case 3:
-//					// Got a paint brand
-//			    	Log.i("in for loop", " got paint mark " + dbh.getStr(4));
-//			    	TV = (TextView) findViewById(R.id.paintText)	;
-//			    	TV.setText(dbh.getStr(4));
-//			    	TV = (TextView) findViewById(R.id.paint_colorText);
-//			    	TV.setText(dbh.getStr(3));
-//			    	TV = (TextView) findViewById(R.id.paint_locationText);
-//			    	TV.setText(dbh.getStr(5));
-//			    	paintid = dbh.getInt(6);
-//			    	Log.i("in for loop", " paint id is " + String.valueOf(paintid));
-//			        break;
-//			    case 4:
-//			    	// got a farm tag
-//			    	Log.i("in for loop", " got Farm tag " + dbh.getStr(4));	
-//		    		TextView TV5 = (TextView) findViewById(R.id.farmText)	;
-//		    		TV5.setText(dbh.getStr(4));
-//		    		TextView TV6 = (TextView) findViewById(R.id.farm_colorText);
-//		    		TV6.setText(dbh.getStr(3));
-//		    		TextView TV7 = (TextView) findViewById(R.id.farm_locationText);
-//		    		TV7.setText(dbh.getStr(5));
-//		    		farmtagid = dbh.getInt(6);
-//		    		Log.i("in for loop", " farm tag id is " + String.valueOf(farmtagid));
-//			        break;
-//			    case 5:
-//			    case 6:
-//			    case 7:
-//			    	//	got a tattoo, split or notch
-//			    	// TODO
-//			    	//	Need to set a way to show tattoo, split and notches
-//			        break;
-//				} // end of case switch
-//				Log.i("out of case", " switch " );
-//			} // end of for loop
-//			Log.i("out of for", " loop " );
-//		} catch (Exception e) {
-//			// No tags so dump out
-//		}
-			
-//	//	Now to test of the sheep has an alert and if so then display the alert & set the alerts button to red
-//		if (alert_text != null && !alert_text.isEmpty() && !alert_text.trim().isEmpty()){
-//	       	// make the alert button red
-//	    	Button btn = (Button) findViewById( R.id.alert_btn );
-//	    	btn.getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFCC0000));
-//	    	btn.setEnabled(true); 
-//	    	showAlert(v);
-//		}
-//	}
-    // user clicked 'remove fed tag' button   
-//    public void removeFedTag( View v )
-//    	{
-//    	if( fedtagid != 0 )
-//    		{
-//    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-//    		builder.setMessage( R.string.delete_tag )
-//    	           .setTitle( R.string.delete_warning );
-//    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
-//    	           public void onClick(DialogInterface dialog, int idx) {
-//    	               // User clicked OK button -- remove the federal tag
-//    	        	   // add a tag_date_off of today to the tag   	       		
-//    	        	   	String today = Utilities.TodayIs();
-//    	        	   	Log.i("removefedtag", String.valueOf(fedtagid));
-//    	        	   	String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", fedtagid );
-//    	        	   	Log.i("removefedtag", " command is " + cmd);
-//    	        	   	dbh.exec( cmd );
-////    	    		   	Clear the display of the tags
-////    	    		   	TextView TV = (TextView) findViewById(R.id.fedText)	;
-////    	           	    TV.setText(null);
-////    	           	    TV = (TextView) findViewById(R.id.fed_colorText);
-////    	           		TV.setText("");
-////    	           		TV = (TextView) findViewById(R.id.fed_locationText);
-////    	           		TV.setText("");
-//    	           		fedtagid = 0;
-//    	               }
-//    	       });
-//    		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
-//    	           public void onClick(DialogInterface dialog, int idx) {
-//    	               // User cancelled the dialog
-//    	           }
-//    	       });
-//    		
-//    		AlertDialog dialog = builder.create();
-//    		dialog.show();
-//    		}
-//    	}    
-    
-    // user clicked 'remove farm tag' button   
-    public void removeFarmTag( final View v)
+    // user clicked 'remove tag' button
+    public void removeTag( final View v)
     	{
     	
 		// Check to see that something has been selected
@@ -1235,36 +693,30 @@ public class IDManagement extends ListActivity {
 			return;
 		}
 		
- 	   Log.i("removefarmtag", " tag record to remove is item " + String.valueOf(selectedItem) );
+ 	   Log.i("removetag", " tag record to remove is item " + String.valueOf(selectedItem) );
  	  final int tag_to_remove = (int) selectedItem;
-//    	if( farmtagid != 0 )
-//    		{
- 	  
-    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-    		builder.setMessage( R.string.delete_tag )
+			AlertDialog.Builder builder = new AlertDialog.Builder( this );
+			// need to get the tag data and add to alert
+			// tag_number, tag_color_name, id_location_abbrev, idtype_name
+
+
+		//	builder.setMessage( R.string.delete_tag + cmd2 )
+			builder.setMessage( R.string.delete_tag )
     	           .setTitle( R.string.delete_warning );
     		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int idx) {
-    	               // User clicked OK button -- remove the farm tag
+    	               // User clicked OK button -- remove the tag
     	        	   //add a tag_date_off of today to the tag
     	        	   String today = Utilities.TodayIs();
 
-//    	       		   tag_to_remove = fetchSingleField(String.format("SELECT id_infoid FROM id_info_table where id_infoid = %s;", selectedItem),"user_task_name");
- //   	        	   Log.i("removefarmtag", today);
-    	        	   Log.i("removefarmtag", " farm tag record is " + String.valueOf(tag_to_remove) );
+					   Log.i("removetag", "date is " + today);
+    	        	   Log.i("removetag", "tag record is " + String.valueOf(tag_to_remove) );
     	        	   
     	       		   String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", tag_to_remove );
-    	       		   Log.i("removefarmtag", " command is " + cmd);
+    	       		   Log.i("removetag", " command is " + cmd);
     	       		   dbh.exec( cmd );
     	       		   findTagsShowAlert (v, thissheep_id); 
-//   	    		   	Clear the display of the tags
-//   	    		   	TextView TV = (TextView) findViewById(R.id.farmText)	;
-//   	           	    TV.setText(null);
-//   	           		TV = (TextView) findViewById(R.id.farm_colorText);
-//   	           		TV.setText("");
-//   	           		TV = (TextView) findViewById(R.id.farm_locationText);
-//   	           		TV.setText("");  
-//   	           		farmtagid = 0;
+
    	           		}
     	       });
     		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
@@ -1309,89 +761,13 @@ public class IDManagement extends ListActivity {
 			return "";
 		}
 	}
-	
-	
-    // user clicked 'remove Paint tag' button   
-//    public void removePaintTag( View v )
-//    	{
-//    	if( paintid != 0 )
-//    		{
-//    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-//    		builder.setMessage( R.string.delete_tag )
-//    	           .setTitle( R.string.delete_warning );
-//    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
-//    	           public void onClick(DialogInterface dialog, int idx) {
-//    	               // User clicked OK button -- remove the paint brand
-//    	        	   //add a tag_date_off of today to the tag
-//    	        	   String today = Utilities.TodayIs();
-//     	        	   Log.i("removepaint", " paint mark record is " + String.valueOf(paintid) );
-//    	       		   String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", paintid );
-//    	       		   Log.i("removepaint", " command is " + cmd);
-//    	       			dbh.exec( cmd );
-//    	    		  
-////   	    		   	Clear the display of the tags
-////   	    		   	TextView TV = (TextView) findViewById(R.id.paintText)	;
-////   	           	    TV.setText(null);
-////   	           		TV = (TextView) findViewById(R.id.paint_colorText);
-////   	           		TV.setText("");
-////   	           		TV = (TextView) findViewById(R.id.paint_locationText);
-////   	           		TV.setText("");  
-//   	           		paintid = 0;
-//   	           		}
-//    	       });
-//    		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
-//    	           public void onClick(DialogInterface dialog, int idx) {
-//    	               // User cancelled the dialog
-//    	           }
-//    	       });
-//    		
-//    		AlertDialog dialog = builder.create();
-//    		dialog.show();
-//    		}
-//    	}
-//   
-    // user clicked 'remove eid tag' button   
-//    public void removeEIDTag( View v )
-//    	{
-//    	if( eidtagid != 0 )
-//    		{
-//    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-//    		builder.setMessage( R.string.delete_tag )
-//    	           .setTitle( R.string.delete_warning );
-//    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
-//    	           public void onClick(DialogInterface dialog, int idx) {
-//    	               // User clicked OK button -- remove the eid tag
-//    	        	   // add a tag_date_off of today to the tag   	       		
-//    	        	   	String today = Utilities.TodayIs();
-//    	        	   	Log.i("removeeidtag", String.valueOf(eidtagid));
-//    	        	   	String cmd = String.format( "update id_info_table SET tag_date_off = '" + today + "' where id_infoid=%d", eidtagid );
-//    	        	   	Log.i("removeeidtag", " command is " + cmd);
-//    	        	   	dbh.exec( cmd );
-////    	    		   	Clear the display of the tags
-////    	    		   	TextView TV = (TextView) findViewById(R.id.eidText)	;
-////    	           	    TV.setText(null);   	           	    
-////    	           	    TV = (TextView) findViewById(R.id.eid_colorText);
-////    	           		TV.setText("");
-////    	           		TV = (TextView) findViewById(R.id.eid_locationText);
-////    	           		TV.setText("");
-//    	           		eidtagid = 0;
-//    	               }
-//    	       });
-//    		builder.setNegativeButton( R.string.cancel_btn, new DialogInterface.OnClickListener() {
-//    	           public void onClick(DialogInterface dialog, int idx) {
-//    	               // User cancelled the dialog
-//    	           }
-//    	       });
-//    		
-//    		AlertDialog dialog = builder.create();
-//    		dialog.show();
-//    		}
-//    	}    
-//    
+
     public void doNote( View v )
     {	 
     	Utilities.takeNote(v, thissheep_id, this);
     }
+
+
 //     user clicked 'Scan' button    
     public void scanEid( View v){
    
@@ -1415,42 +791,18 @@ public class IDManagement extends ListActivity {
     public void updateDatabase( View v ){
 //    	Object crsr;
     	String sheepnameText;
-//    	String fedText, fed_colorText, fed_locationText;
-//    	String farmText, farm_colorText, farm_locationText, eidText, eid_colorText, eid_locationText;
-//    	String paintText, paint_colorText, paint_locationText ;
-//    	int		fed_colorid, farm_colorid, eid_colorid, fed_locationid, farm_locationid, eid_locationid;
-//    	int 	paint_colorid, paint_locationid ;
     	int	 	flock_id; // pointer into the flock id table so for the federal tag flock ID record
     	int		official_id_type;
     	//	Disable the update database button so we don't get 2 records entered
        	btn = (Button) findViewById( R.id.update_database_btn );
     	btn.setEnabled(false); 
-    	
-//    	official_id_type = 1;
-//    	eid_colorid = 0;
-//    	eid_locationid = 0;
-//    	eidText = null;
-//    	
+
     	// Get the values from the UI screen
     	TextView TV = (TextView) findViewById( R.id.sheepnameText );
     	sheepnameText = TV.getText().toString();
     	Log.i("update everything ", "sheep name " + sheepnameText);   	
     	Log.i("update everything ", "sheep_id is " + String.valueOf(thissheep_id));   	
-//    	Log.i("update everything ", "fed info record " + fedtagid);  
-//    	TV  = (TextView) findViewById( R.id.fedText );
-//	    fedText = TV.getText().toString();
-//	    Log.i("update everything ", "fed tag " + fedText);	    
-//	    Log.i("update everything ", "farm info record " + farmtagid);
-//	    TV  = (TextView) findViewById( R.id.farmText );
-//	    farmText = TV.getText().toString();
-//	    Log.i("update everything ", "farm tag " + farmText);	    	    
-//	    Log.i("update everything ", "eid info record " + eidtagid);
-//	    TV  = (TextView) findViewById( R.id.eidText );
-//	    eidText = TV.getText().toString();	
-//	    Log.i("update everything ", "EID Tag " + eidText);
-	    
-//	    TV  = (TextView) findViewById( R.id.paintText );
-//	    paintText = TV.getText().toString();	
+
     		String today = Utilities.TodayIs();	
         	// Get the data from the add tag section of the screen
         	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
@@ -1536,6 +888,7 @@ public class IDManagement extends ListActivity {
 	    			Log.i("updatefed ", "after cmd exec");
 	        		break;
         		case 2:
+
         			// 	have an electronic tag to add
         			
         		    int official_id_flag;
@@ -1551,26 +904,19 @@ public class IDManagement extends ListActivity {
 		    		if (isOfficial){
 		    			official_id_type = 2;
 		    			official_id_flag = 1;
-		    	        Log.i("updateEID ", "location integer " + String.valueOf(new_tag_location));
-		    			Log.i("updateEID ", "sheep_id is " + String.valueOf(thissheep_id));
-		    			Log.i("updateEID ", "fed color integer " + String.valueOf(new_tag_color));
-		    			Log.i("updateEID ", "today " + today);
-		    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number, id_flockid, official_id) " +
-		    					"values ( %s, 2, %s, %s, %s, '%s', %s, %s,null,null)", thissheep_id, new_tag_color, new_tag_color, new_tag_location, today, new_tag_number);
-		    			Log.i("updateEID ", "before cmd " + cmd);
-		    			dbh.exec( cmd );	
-		    			Log.i("updateEID ", "after cmd exec");
+
 		    		}else{
-		    	        Log.i("updateEID ", "location integer " + String.valueOf(new_tag_location));
-		    			Log.i("updateEID ", "sheep_id is " + String.valueOf(thissheep_id));
-		    			Log.i("updateEID ", "fed color integer " + String.valueOf(new_tag_color));
-		    			Log.i("updateEID ", "today " + today);
-		    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number, id_flockid, official_id) " +
-		    					"values ( %s, 2, %s, %s, %s, '%s', %s, %s, 1, %s)", thissheep_id, new_tag_color, new_tag_color, new_tag_location, today, new_tag_number,official_id_flag);
-		    			Log.i("updateEID ", "before cmd " + cmd);
-		    			dbh.exec( cmd );	
-		    			Log.i("updateEID ", "after cmd exec");
+						official_id_flag = 0;
+
 		    		}
+					cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male," +
+									" tag_color_female, tag_location, tag_date_on, tag_number, official_id) values " +
+									" (%s, %s, %s,%s,%s, '%s', '%s', %s) ", thissheep_id, 2, new_tag_color, new_tag_color,
+							new_tag_location, today, new_tag_number, official_id_flag);
+					Log.i("add tag to ", "db cmd is " + cmd);
+					dbh.exec(cmd);
+					Log.i("add tag ", "after insert into id_info_table");
+
 	        		break;
         		case 3:
         			//	have a paint tag to add
@@ -1608,293 +954,7 @@ public class IDManagement extends ListActivity {
          		TV  = (TextView) findViewById( R.id.new_tag_number);
          		TV.setText( "" );
          		findTagsShowAlert (v, thissheep_id); 
-        	}	
-
-        		//	old code no longer used
-//	    if (fedtagid != 0) {
-//	    	// 	update the Federal tag data if it has changed?
-//	    	//	not implemented at this time. Assumed we either are adding new tags or taking off tags first
-//	    	//	no update of an existing tag record is done in this module.
-//	    	Log.i("updatefed", " tag record id is not zero");
-//	    }
-//	    	else {
-//	    		// fedtagid is zero so need to test whether there is a federal tag and add a record if there is one
-////	    		if (fedText != null && !fedText.isEmpty()){
-//	    			//have a federal tag but no fedtagid so add a new record;
-////	    		    TV = (TextView) findViewById( R.id.fed_colorText );
-//	    		    fed_colorText = TV.getText().toString();
-//	    		    Log.i("update everything ", "fed color " + fed_colorText);	    
-//	    		    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
-//	    	    			"where tag_color_name='%s'", fed_colorText);
-//	    	    	crsr = dbh.exec( cmd );
-//	    	        cursor   = ( Cursor ) crsr;
-//	    	        dbh.moveToFirstRecord();
-//	    	        fed_colorid = dbh.getInt(0);
-//	    	        Log.i("update everything ", "fed color integer " + String.valueOf(fed_colorid));
-//	    	        
-////	    		    TV = (TextView) findViewById( R.id.fed_locationText );
-//	    		    fed_locationText = TV.getText().toString();
-//	    		    Log.i("update everything ", "fed location " + fed_locationText);
-//	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
-//	    	    			"where id_location_abbrev='%s'", fed_locationText);
-//	    	    	crsr = dbh.exec( cmd );
-//	    	        cursor   = ( Cursor ) crsr;
-//	    	        dbh.moveToFirstRecord();
-//	    	        fed_locationid = dbh.getInt(0);
-//	    	        // Set the flock ID to be the Desert Weyr Flock
-//	    	        // Will have to change to handle the general case. 
-//	    	        // In our case we assume all  federal tags being applied are with our 
-//	    	        //	CODL01 flock ID
-//	    	        // TODO 
-//	    	        //	This should be a user setting from default preferences that we use instead. 
-//	    	        flock_id = 1;
-//	    	        
-//	    	        Log.i("updatefed ", "fed location integer " + String.valueOf(fed_locationid));
-//	    			Log.i("updatefed ", "tag record id is 0 but have fed tag data will add a new record to id_info_table here");
-//	    			Log.i("updatefed ", "sheep_id is " + String.valueOf(thissheep_id));
-//	    			Log.i("updatefed ", "fed color integer " + String.valueOf(fed_colorid));
-//	    			Log.i("updatefed ", "fed location integer " + String.valueOf(fed_locationid));
-//	    			Log.i("updatefed ", "today " + today);
-//	    			Log.i("updatefed ", "flock ID " + String.valueOf(flock_id));
-//	    			//	 Set the official_id flag to indicate this is the official ID
-//	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number, id_flockid, official_id) " +
-//	    					"values ( %s, 1, %s, %s, %s, '%s', %s, %s, 1 )", thissheep_id, fed_colorid, fed_colorid, fed_locationid, today, new_tag_number, flock_id);
-//	    			Log.i("updatefed ", "before cmd " + cmd);
-//	    			dbh.exec( cmd );	
-//	    			Log.i("updatefed ", "after cmd exec");
-//	    		}
-////	    		else{
-////	    			// no federal tag to enter so return
-////	    			Log.i("updatefed ", "no federal tag so nothing to do");	
-////	    		}
-////	    	}
-////	    Update the split mark data
-////	    if (splitid != 0) {
-////	    	// update the split ear data
-////	    	//	not implemented at this time. Assumed we either are adding new tags or taking off tags first
-////	    	//	no update of an existing tag record is done.
-////	    	Log.i("updatesplit ", " tag record id is not zero");
-////		    }
-////	    	else {
-////	    		// splitid is zero so need to test whether there is a location and add a record if there is one
-////	    		if (paintText != null && !paintText.isEmpty()){	    			
-////	    		    paint_number = Integer.valueOf(paintText);
-////	    		    TV = (TextView) findViewById( R.id.paint_locationText);
-////	    		    paint_locationText = TV.getText().toString();
-////	    		    Log.i("updatesplit ", "paint location " + paint_locationText);
-////	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
-////	    	    			"where id_location_abbrev='%s'", paint_locationText);
-////	    	    	crsr = dbh.exec( cmd );
-////	    	        cursor   = ( Cursor ) crsr;
-////	    	        dbh.moveToFirstRecord();
-////	    	        paint_colorid = 19; // no color for a split
-////	    	        paint_locationid = dbh.getInt(0);
-////	    	        Log.i("updatesplit ", "split location integer " + String.valueOf(paint_locationid));
-////	    			//have a paint tag but no paintid so add a new record;
-////	    	        paintText = ""; // make the tag number empty
-////	    			Log.i("updatesplit ", "tag record id is 0 but have paint tag data need to add a new record to id_info_table here");
-////	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
-////	    					"values ( %s, 6, %s, %s, %s, '%s', %s )", thissheep_id, paint_colorid, paint_colorid, paint_locationid, today, paintText);
-////	    			dbh.exec( cmd );	
-////	    		}
-////	    		else{
-////	    			// no split to enter so return
-////	    			Log.i("updatesplit ", "no split so nothing to do");
-////	    			
-////	    		}
-////	    	}
-//	    
-//	    // Update the Farm Tag data
-//	    if (farmtagid != 0) {
-//	    	// update the Farm tag data
-//	    	//	not implemented at this time. Assumed we either are adding new tags or taking off tags first
-//	    	//	no update of an existing tag record is done.
-//	    	Log.i("updatefarm ", " tag record id is not zero");
-//		    }
-//	    	else {
-//	    		// farmtagid is zero so need to test whether there is a farm tag and add a record if there is one
-//	    		if (new_tag_number != null && !new_tag_number.isEmpty()){
-////	    		    TV = (TextView) findViewById( R.id.farm_locationText);
-//	    		    farm_locationText = TV.getText().toString();
-//	    		    Log.i("updatefarm ", "farm location " + farm_locationText);
-//	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
-//	    	    			"where id_location_abbrev='%s'", farm_locationText);
-//	    	    	crsr = dbh.exec( cmd );
-//	    	        cursor   = ( Cursor ) crsr;
-//	    	        dbh.moveToFirstRecord();
-//	    	        farm_locationid = dbh.getInt(0);
-//	    	        Log.i("updatefarm ", "farm location integer " + String.valueOf(farm_locationid));
-////	    		    TV = (TextView) findViewById( R.id.farm_colorText );
-//	    		    farm_colorText = TV.getText().toString();
-//	    		    Log.i("updatefarm ", "farm color " + farm_colorText);
-//	    		    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
-//	    	    			"where tag_color_name='%s'", farm_colorText);
-//	    	    	crsr = dbh.exec( cmd );
-//	    	        cursor   = ( Cursor ) crsr;
-//	    	        dbh.moveToFirstRecord();
-//	    	        farm_colorid = dbh.getInt(0);
-//	    	        Log.i("updatefarm ", "farm color integer " + String.valueOf(farm_colorid));
-//	    			//have a farm tag but no farmtagid so add a new record;
-//	    			Log.i("updatefarm ", "tag record id is 0 but have farm tag data need to add a new record to id_info_table here");
-//	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
-//	    					"values ( %s, 4, %s, %s, %s, '%s', '%s' )", thissheep_id, farm_colorid, farm_colorid, farm_locationid, today, new_tag_number);
-//	    			Log.i("updatefarm ", cmd);	
-//	    			dbh.exec( cmd );	
-//	    			Log.i("updatefarm ", "after cmd exec");
-//	    		}
-//	    		else{
-//	    			// no farm tag to enter so return
-//	    			Log.i("updatefarm ", "no farm tag so nothing to do");
-//	    		}
-//	    	}
-//	    
-////	    Update the Paint mark data
-//	    if (paintid != 0) {
-//	    	// update the Paint tag data
-//	    	//	not implemented at this time. Assumed we either are adding new tags or taking off tags first
-//	    	//	no update of an existing tag record is done.
-//	    	Log.i("updatepaint ", " tag record id is not zero");
-//		    }
-//	    	else {
-//	    		// paintid is zero so need to test whether there is a paint tag and add a record if there is one
-//	    		if (new_tag_number != null && !new_tag_number.isEmpty()){
-//	    			
-////	    		    paint_number = Integer.valueOf(paintText);
-////	    		    TV = (TextView) findViewById( R.id.paint_locationText);
-//	    		    paint_locationText = TV.getText().toString();
-//	    		    Log.i("updatepaint ", "paint location " + paint_locationText);
-//	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
-//	    	    			"where id_location_abbrev='%s'", paint_locationText);
-//	    	    	crsr = dbh.exec( cmd );
-//	    	        cursor   = ( Cursor ) crsr;
-//	    	        dbh.moveToFirstRecord();
-//	    	        paint_locationid = dbh.getInt(0);
-//	    	        Log.i("updatepaint ", "paint color integer " + String.valueOf(paint_locationid));
-////	    		    TV = (TextView) findViewById( R.id.paint_colorText );
-//	    		    paint_colorText = TV.getText().toString();
-//	    		    Log.i("updatepaint ", "paint color " + paint_colorText);
-//	    		    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
-//	    	    			"where tag_color_name='%s'", paint_colorText);
-//	    	    	crsr = dbh.exec( cmd );
-//	    	        cursor   = ( Cursor ) crsr;
-//	    	        dbh.moveToFirstRecord();
-//	    	        paint_colorid = dbh.getInt(0);
-//	    	        Log.i("updatepaint ", "paint location integer " + String.valueOf(paint_locationid));
-//	    			//have a paint tag but no paintid so add a new record;
-//	    			Log.i("updatepaint ", "tag record id is 0 but have paint tag data need to add a new record to id_info_table here");
-//	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
-//	    					"values ( %s, 3, %s, %s, %s, '%s', %s )", thissheep_id, paint_colorid, paint_colorid, paint_locationid, today, new_tag_number);
-//	    			dbh.exec( cmd );	
-//	    		}
-//	    		else{
-//	    			// no paint tag to enter so return
-//	    			Log.i("updatepaint ", "no paint tag so nothing to do");
-//	    			
-//	    		}
-//	    	}
-////	    Update the tattoo mark data
-//	    if (tattooid != 0) {
-//	    	// update the tattoo tag data
-//	    	//	not implemented at this time. Assumed we either are adding new tags or taking off tags first
-//	    	//	no update of an existing tag record is done.
-//	    	Log.i("updatetattoot ", " tag record id is not zero");
-//		    }
-//	    	else {
-//	    		// tattooid is zero so need to test whether there is a paint tag and add a record if there is one
-//	    		if (new_tag_number != null && !new_tag_number.isEmpty()){
-//	    			
-////	    		    paint_number = Integer.valueOf(paintText);
-////	    		    TV = (TextView) findViewById( R.id.paint_locationText);
-//	    		    paint_locationText = TV.getText().toString();
-//	    		    Log.i("updatetattoo ", "paint location " + paint_locationText);
-//	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
-//	    	    			"where id_location_abbrev='%s'", paint_locationText);
-//	    	    	crsr = dbh.exec( cmd );
-//	    	        cursor   = ( Cursor ) crsr;
-//	    	        dbh.moveToFirstRecord();
-//	    	        paint_locationid = dbh.getInt(0);
-//	    	        Log.i("updatetattoo ", "tattoo color integer " + String.valueOf(paint_locationid));
-////	    		    TV = (TextView) findViewById( R.id.paint_colorText );
-//	    		    paint_colorText = TV.getText().toString();
-//	    		    Log.i("updatetattoo ", "paint color " + paint_colorText);
-//	    		    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
-//	    	    			"where tag_color_name='%s'", paint_colorText);
-//	    	    	crsr = dbh.exec( cmd );
-//	    	        cursor   = ( Cursor ) crsr;
-//	    	        dbh.moveToFirstRecord();
-//	    	        paint_colorid = dbh.getInt(0);
-//	    	        Log.i("updatetattoo ", "paint location integer " + String.valueOf(paint_locationid));
-//	    			//have a paint tag but no paintid so add a new record;
-//	    			Log.i("updatetattoo ", "tag record id is 0 but have paint tag data need to add a new record to id_info_table here");
-//	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number) " +
-//	    					"values ( %s, 5, %s, %s, %s, '%s', %s )", thissheep_id, paint_colorid, paint_colorid, paint_locationid, today, new_tag_number);
-//	    			dbh.exec( cmd );	
-//	    		}
-//	    		else{
-//	    			// no tattoo to enter so return
-//	    			Log.i("updatetattoo ", "no tattoo so nothing to do");
-//	    			
-//	    		}
-//	    	}
-//
-//	    //Update the EID Tag data
-//	    int official_id_flag;
-//	    if (eidtagid != 0) {
-//	    	// update the EID tag data
-//	    	Log.i("updateEID ", "tag record id is not zero, needs update here");
-//		    }
-//	    	else {
-//	    		Log.i("updateeid ", "beginning of update eid code");
-//	    		//	assume ID is not an official one at this time so 
-//	    		official_id_flag = 0;
-//	    		//	get the first 3 digits of the EID tag number
-//	    		String str = eidText;
-//	    		Log.i("updateeid ", "string of eid " + str);
-//	    		str = str.substring(0,3);
-//	    		Boolean isOfficial = "840".equals(str);
-//	    		Log.i("updateeid ", "substring of eid " + str);
-//	    		if (isOfficial){
-//	    			official_id_type = 2;
-//	    			official_id_flag = 1;
-//	    		}
-//	    		// eidtagid is zero so need to test whether there is an EID tag and add a record if there is one
-//	    			if (eidText != null && !eidText.isEmpty()){
-//	    		
-////	    			TV = (TextView) findViewById( R.id.eid_locationText);
-//	    			eid_locationText = TV.getText().toString();
-//	    		    Log.i("updateeid ", "eid location " + eid_locationText);
-//	    		    cmd = String.format("select id_location_table.id_locationid from id_location_table " +
-//	    	    			"where id_location_abbrev='%s'", eid_locationText);
-//	    	    	crsr = dbh.exec( cmd );
-//	    	        cursor   = ( Cursor ) crsr;
-//	    	        dbh.moveToFirstRecord();
-//	    	        eid_locationid = dbh.getInt(0);
-//	    	        Log.i("updateeid ", "eid color integer " + String.valueOf(eid_locationid));
-////	    		    TV = (TextView) findViewById( R.id.eid_colorText );
-//	    		    eid_colorText = TV.getText().toString();
-//	    		    Log.i("updateeid ", "eid color " + eid_colorText);
-//	    		    cmd = String.format("select tag_colors_table.tag_colorsid from tag_colors_table " +
-//	    	    			"where tag_color_name='%s'", eid_colorText);
-//	    	    	crsr = dbh.exec( cmd );
-//	    	        cursor   = ( Cursor ) crsr;
-//	    	        dbh.moveToFirstRecord();
-//	    	        eid_colorid = dbh.getInt(0);
-//	    	        Log.i("updateeid ", "eid location integer " + String.valueOf(eid_locationid));
-//	    			//have an EID tag but no eidtagid so add a new record;
-//	    			Log.i("updateEID ", "tag record id is 0 need to add a new record to id_info_table here");
-//	    			cmd = String.format("insert into id_info_table (sheep_id, tag_type, tag_color_male, tag_color_female, tag_location, tag_date_on, tag_number, official_id) " +
-//	    					"values ( %s, 2, %s, %s, %s, '%s', '%s', %s )", thissheep_id, eid_colorid, eid_colorid, eid_locationid, today, eidText, official_id_flag);
-//	    			dbh.exec( cmd );	
-//	    		}
-//	    		else{
-//	    			// no EID tag to enter so return
-//	    			Log.i("updateEID ", "no eid tag so nothing to do");
-//	    		}
-//	    	}
-//	    clearBtn( v );
-//		Enable the update database button so we can continue to update
-//       	btn = (Button) findViewById( R.id.update_database_btn );
-//    	btn.setEnabled(true); 
+        	}
     }
     public void addNewTag( View v ){
 //    	Object crsr;
@@ -1904,8 +964,12 @@ public class IDManagement extends ListActivity {
     	//	Enable the scanner so we can add EID tags
     	scanEid (v); 
     	
-    	//make the new tag number empty at first
-    	new_tag_number = null;
+    	//make the new tag number the last eid read
+		TextView TV = (TextView) findViewById (R.id.new_tag_number);
+		TV.setText( LastEID );
+
+//		new_tag_number = findViewById(R.id.new_tag_number);
+//		new_tag_number = LastEID;
     	
        	// Fill the Tag Type Spinner    	    	    	
     	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
@@ -2034,138 +1098,7 @@ public class IDManagement extends ListActivity {
     		Log.i("New Location ID ", String.valueOf(new_tag_location));
      		tag_location_label = dbh.getStr(1);
     		Log.i("New Location ", tag_location_label);
-    		
-    	   	// 	Fill the new tag data with where it is in the screen display
-        	//	Integers to hold the info new_tag_type, new_tag_color, new_tag_location    		
-    		// Need to fill in the lists with the new tag info and call the list adapter
-    		// TODO
-    		// public  List <String> new_tag_numbers, new_tag_colors, new_tag_locations, new_tag_types;
-    		
-//    		new_tag_numbers.add(new_tag_number);
-//    		new_tag_colors.add(tag_color_label);
-//    		new_tag_locations.add(tag_location_label);
-//    		new_tag_types.add(tag_type_label);
-//    		
-//    		ListView newtags = (ListView) findViewById(R.id.list2);
-//      	    	
-//    		myadapter2 =  new SimpleListAdapter(this, R.layout.list_entry, newtags);
-//    		setListAdapter(myadapter2);
-    		
-    	    
-//    		switch (new_tag_type) {   		
-//    		case 1:
-//    			if (fedtagid != 0){
-//    				//	Already have a federal tag must delete one first
-//    	    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-//    	    		builder.setMessage( R.string.id_management_remove_tag )
-//    	    	           .setTitle( R.string.id_management_remove_tag_header );
-//    	    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
-//    	    	           public void onClick(DialogInterface dialog, int idx) {
-//    	    	               // User clicked OK button 
-//    	     	    		   return;
-//    	    	               }
-//    	    	       });		
-//    	    		AlertDialog dialog = builder.create();
-//    	    		dialog.show();		  				
-//    			}else{
-//	        		//	Federal Tag so update federal section and set needs database update
-//	        		// 	by setting id of 0 meaning either no tag or needs update
-//	        		Log.i("in if", "Got a new federal tag type");
-////	        	    TV  = (TextView) findViewById( R.id.fedText );
-////	        	    TV.setText(new_tag_number);
-////	        	    TV = (TextView) findViewById( R.id.fed_colorText );
-////	        	    TV.setText(tag_color_label);
-////	        	    TV = (TextView) findViewById( R.id.fed_locationText );
-////	        	    TV.setText(tag_location_label);
-//	        	    fedtagid = 0;
-//    			}
-//    			break;
-//    		case 2:
-//    			if (eidtagid != 0){
-//    				//	Already have an EID tag must delete one first
-//    	    		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-//    	    		builder.setMessage( R.string.id_management_remove_tag )
-//    	    	           .setTitle( R.string.id_management_remove_tag_header );
-//    	    		builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
-//    	    	           public void onClick(DialogInterface dialog, int idx) {
-//    	    	               // User clicked OK button 
-//    	     	    		   return;
-//    	    	               }
-//    	    	       });		
-//    	    		AlertDialog dialog = builder.create();
-//    	    		dialog.show();		  				
-//    			}else{
-//            		//	EID Tag so update eid section and set needs database update
-//            		//	by setting id of 0 meaning either no tag or needs update       		
-//            		Log.i("in if", "Got a new eid tag type");
-////            	    TV  = (TextView) findViewById( R.id.eidText );
-////            	    TV.setText(new_tag_number);
-////            	    TV = (TextView) findViewById( R.id.eid_colorText );
-////            	    TV.setText(tag_color_label);
-////            	    TV = (TextView) findViewById( R.id.eid_locationText );
-////            	    TV.setText(tag_location_label);
-//            	    eidtagid = 0;
-//    			}
-//    			break;
-//    		case 3:
-//	    		//	Paint mark so update paint section and set needs database update
-//	    		// 	by setting id of 0 meaning either no tag or needs update
-//	    		Log.i("in if", "Got a new paint mark type");
-////	    	    TV  = (TextView) findViewById( R.id.paintText );
-////	    	    TV.setText(new_tag_number);
-////	    	    TV = (TextView) findViewById( R.id.paint_colorText );
-////	    	    TV.setText(tag_color_label);
-////	    	    TV = (TextView) findViewById( R.id.paint_locationText );
-////	    	    TV.setText(tag_location_label);
-//	    	    paintid = 0;
-//    			break;
-//    		case 4:
-//        		//	Farm Tag so update farm section and set needs database update
-//        		//	by setting id of 0 meaning either no tag or needs update       		
-//        		Log.i("in if", "Got a new farm tag type");
-//        	    TV  = (TextView) findViewById( R.id.farmText );
-////        	    TV.setText(new_tag_number);
-////        	    TV = (TextView) findViewById( R.id.farm_colorText );
-////        	    TV.setText(tag_color_label);
-////        	    TV = (TextView) findViewById( R.id.farm_locationText );
-////        	    TV.setText(tag_location_label);
-//        	    farmtagid = 0;
-//    			break;
-////    		case 5:
-//////    			Tattoo so update farm section and set needs database update
-////        		//	by setting id of 0 meaning either no tag or needs update       		
-////        		Log.i("in if", "Got a new tattoo tag type");
-////        	    TV  = (TextView) findViewById( R.id.farmText );
-////        	    TV.setText(new_tag_number);
-////        	    TV = (TextView) findViewById( R.id.farm_colorText );
-////        	    TV.setText(tag_color_label);
-////        	    TV = (TextView) findViewById( R.id.farm_locationText );
-////        	    TV.setText(tag_location_label);
-////        	   	tattooid = 0;
-////    			break;
-////    		case 6:
-////        		//	Split so update farm section and set needs database update
-////        		//	by setting id of 0 meaning either no tag or needs update       		
-////        		Log.i("in if", "Got a new split ear type");
-////        	    TV  = (TextView) findViewById( R.id.farmText );
-////        	    TV.setText("Split");
-////        	    TV = (TextView) findViewById( R.id.farm_locationText );
-////        	    TV.setText(tag_location_label);
-////        	    splitid = 0;
-////    			break;
-////    		case 6:
-////        		//	Notch so update farm section and set needs database update
-////        		//	by setting id of 0 meaning either no tag or needs update       		
-////        		Log.i("in if", "Got a new farm tag type");
-////        	    TV  = (TextView) findViewById( R.id.farmText );
-////        	    TV.setText(new_tag_number);
-////        	    TV = (TextView) findViewById( R.id.farm_locationText );
-////        	    TV.setText(tag_location_label);
-////        	    notchid = 0;
-////    			break;
-//    		default:
-//    			break;
-//    		}
+
         	//	Clear out the add tag section    	
         	tag_type_spinner2 = (Spinner) findViewById(R.id.tag_type_spinner2);
         	tag_color_spinner = (Spinner) findViewById(R.id.tag_color_spinner);

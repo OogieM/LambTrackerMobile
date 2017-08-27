@@ -876,7 +876,8 @@ public class AddLamb extends Activity {
 				break;
 			}		
 		}
-		// TODO Add all the testing for codon154 and codon 136 here but left off for testing
+			Log.i("after ", "Case statement Codon 171");
+			// TODO Add all the testing for codon154 and codon 136 here but left off for testing
 		//	For now set these to ?? because we don't know what this lamb is
 		lamb_codon154 = 1;
 		lamb_codon136 = 6;
@@ -888,17 +889,7 @@ public class AddLamb extends Activity {
 		// TODO
 		//	Set breed based on sire and dam breed
 		// Need to get the default breed from settings or preferences
-		//	Need to fix for the general case of crossbred lambs but for now set to crossbred if dam is Sooner
-		//	Sooner is sheep_id 58
-		//	otherwise the default set to be Black Welsh
-//		if (dam_id == 58) {
-//			id_sheepbreedid = 2;
-//		}else {
-			//	need to test here if sire and dam are the same breed id and if so set lamb to that
-			//	For now set to be Black Welsh if not a child of Sooner
-//			id_sheepbreedid = 1;
-//		}		
-		Log.i("after ", "Case statement Codon 171");
+		//	Need to fix for the general case of crossbred lambs but set now for Black Welsh
 		id_sheepbreedid = 1;
 		//	Set the location to be East Orchard Pasture but will need to modify to be real one based on location of dam
 		id_locationid = 1;
