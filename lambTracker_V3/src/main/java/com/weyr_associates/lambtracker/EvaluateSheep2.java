@@ -966,7 +966,7 @@ public class EvaluateSheep2 extends Activity {
 				        			"and id_info_table.tag_type='%s' and (id_info_table.tag_date_off is null or" +
 				        			" id_info_table.tag_date_off = '') "
 				        			, tag_num , tag_type_spinner.getSelectedItemPosition());  
-//				        	Log.i("searchByNumber", "command is " + cmd);
+ 				        	Log.i("searchByNumber", "command is " + cmd);
 				        	crsr = dbh.exec( cmd );
 				    		cursor   = ( Cursor ) crsr; 
 				        	recNo    = 1;
@@ -1012,6 +1012,7 @@ public class EvaluateSheep2 extends Activity {
 				    case 8:
 				    	//	got a name				    	
 			        	tag_num = "%" + tag_num + "%";
+//						Log.i("searchByName_", "tagnum is " + tag_num);
 			        	cmd = String.format( "select sheep_id, sheep_name from sheep_table where sheep_name like '%s'" 
 			         			, tag_num );  
 //			        			" and (remove_date is null or remove_date = '') "

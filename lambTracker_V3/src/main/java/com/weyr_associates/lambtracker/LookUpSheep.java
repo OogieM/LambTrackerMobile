@@ -47,7 +47,7 @@ public class LookUpSheep extends ListActivity
 	public String 	tag_type_label, tag_color_label, tag_location_label, eid_tag_color_label ;
 	public String 	eid_tag_location_label, eidText, alert_text;
 	public String 	thissire_name, thisdam_name;
-	public Cursor 	cursor, cursor2, cursor3, cursor4, cursor5, drugCursor;
+	public Cursor 	cursor, cursor2, cursor3, cursor4, cursor5, drugCursor, tagcursor;
 	public Object	crsr;
 	public Spinner tag_type_spinner, tag_location_spinner, tag_color_spinner ;
 	public List<String> tag_types, tag_locations, tag_colors;
@@ -415,28 +415,45 @@ public void formatSheepRecord (View v){
 	ListView drugList = (ListView) findViewById(R.id.druglist);
 	
 	thissheep_id = cursor.getInt(0);	        	
-	Log.i("format record", "This sheep is record " + String.valueOf(thissheep_id));	        	
+	Log.i("format record", "This sheep is record " + String.valueOf(thissheep_id));
 
-	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
-			"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
-			"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
+	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id,  " +
+				" sheep_table.alert01,  " +
 			"sheep_table.sire_id, sheep_table.dam_id, sheep_table.birth_date, birth_type_table.birth_type, " +
 			"sheep_sex_table.sex_name, sheep_table.birth_weight, sheep_table.remove_date, sheep_table.death_date " +
 			", cluster_table.cluster_name  " +
- 			", remove_reason_table.remove_reason " +
+			", remove_reason_table.remove_reason " +
 			", codon171_table.codon171_alleles " +
-			"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+			"from sheep_table  " +
 			"inner join birth_type_table on id_birthtypeid = sheep_table.birth_type " +
 			"left outer join codon171_table on sheep_table.codon171 = codon171_table.id_codon171id " +
 			"inner join sheep_sex_table on sheep_sex_table.sex_sheepid = sheep_table.sex " +
 			"left outer join sheep_cluster_table on sheep_table.sheep_id = sheep_cluster_table.sheep_id " +
 			"left outer join remove_reason_table on sheep_table.remove_reason = remove_reason_table.remove_reasonid " +
 			"left join cluster_table on cluster_table.id_clusternameid = sheep_cluster_table.which_cluster " +
-			"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
-			"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
-			"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
-			"where id_info_table.sheep_id ='%s' and (id_info_table.tag_date_off is null or " +
-			"id_info_table.tag_date_off is '')order by idtype_name asc", thissheep_id);
+				"where sheep_table.sheep_id ='%s' " +
+			" ", thissheep_id);
+
+//	cmd = String.format( "select sheep_table.sheep_name, sheep_table.sheep_id, id_type_table.idtype_name, " +
+//			"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+//			"id_info_table.id_infoid as _id, id_info_table.tag_date_off, sheep_table.alert01,  " +
+//			"sheep_table.sire_id, sheep_table.dam_id, sheep_table.birth_date, birth_type_table.birth_type, " +
+//			"sheep_sex_table.sex_name, sheep_table.birth_weight, sheep_table.remove_date, sheep_table.death_date " +
+//			", cluster_table.cluster_name  " +
+// 			", remove_reason_table.remove_reason " +
+//			", codon171_table.codon171_alleles " +
+//			"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+//			"inner join birth_type_table on id_birthtypeid = sheep_table.birth_type " +
+//			"left outer join codon171_table on sheep_table.codon171 = codon171_table.id_codon171id " +
+//			"inner join sheep_sex_table on sheep_sex_table.sex_sheepid = sheep_table.sex " +
+//			"left outer join sheep_cluster_table on sheep_table.sheep_id = sheep_cluster_table.sheep_id " +
+//			"left outer join remove_reason_table on sheep_table.remove_reason = remove_reason_table.remove_reasonid " +
+//			"left join cluster_table on cluster_table.id_clusternameid = sheep_cluster_table.which_cluster " +
+//			"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+//			"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+//			"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+//			"where id_info_table.sheep_id ='%s' and (id_info_table.tag_date_off is null or " +
+//			"id_info_table.tag_date_off is '')order by idtype_name asc", thissheep_id);
 
 
 	Log.i("format record", " comand is " + cmd);	
@@ -450,39 +467,39 @@ public void formatSheepRecord (View v){
     TV.setText (dbh.getStr(0));
     Log.i("format record", "after get sheep name ");
     TV = (TextView) findViewById( R.id.birth_date );
-    TV.setText (dbh.getStr(11));
+    TV.setText (dbh.getStr(5));
     Log.i("format record", "after get birth date ");
     TV = (TextView) findViewById( R.id.birth_type );
-    TV.setText (dbh.getStr(12));
+    TV.setText (dbh.getStr(6));
     Log.i("format record", "after get birth type ");
     TV = (TextView) findViewById( R.id.sheep_sex );
-    TV.setText (dbh.getStr(13));
+    TV.setText (dbh.getStr(7));
     Log.i("format record", "after get sheep sex ");
     TV = (TextView) findViewById( R.id.birth_weight );
-    TV.setText (String.valueOf(dbh.getReal(14)));
+    TV.setText (String.valueOf(dbh.getReal(8)));
     Log.i("format record", "after get birth weight ");
     TV = (TextView) findViewById( R.id.remove_date );
-    TV.setText (dbh.getStr(15));
+    TV.setText (dbh.getStr(9));
     Log.i("format record", "after get remove date ");
     TV = (TextView) findViewById( R.id.death_date );
-    TV.setText (dbh.getStr(16));
+    TV.setText (dbh.getStr(10));
     Log.i("format record", "after get death date ");
 	TV = (TextView) findViewById( R.id.cluster_name );
-    TV.setText (dbh.getStr(17));
+    TV.setText (dbh.getStr(11));
     Log.i("format record", "after get cluster name ");
 	TV = (TextView) findViewById( R.id.remove_reason );
-	TV.setText (dbh.getStr(18));
+	TV.setText (dbh.getStr(12));
 	Log.i("format record", "after get remove reason ");
 	TV = (TextView) findViewById( R.id.codon );
-	TV.setText (dbh.getStr(19));
+	TV.setText (dbh.getStr(13));
 	Log.i("format record", "after get codon 171 ");
-    alert_text = dbh.getStr(8);
+    alert_text = dbh.getStr(2);
     Log.i("format record", "after get alert ");
    
     //	Get the sire and dam id numbers
-    thissire_id = dbh.getInt(9);
+    thissire_id = dbh.getInt(3);
     Log.i("format record", " Sire is " + String.valueOf(thissire_id));
-    thisdam_id = dbh.getInt(10);
+    thisdam_id = dbh.getInt(4);
     Log.i("format record", " Dam is " + String.valueOf(thisdam_id));
     
     //	Go get the sire name
@@ -512,7 +529,26 @@ public void formatSheepRecord (View v){
         Log.i("format record", " Dam is " + String.valueOf(thisdam_id));
     }    		
 	Log.i("FormatRecord", " before formatting results");
-	
+
+	cmd = String.format( "select sheep_table.sheep_name,  id_type_table.idtype_name, " +
+			"tag_colors_table.tag_color_name, id_info_table.tag_number, id_location_table.id_location_abbrev, " +
+			"id_info_table.id_infoid as _id, id_info_table.tag_date_off  " +
+				"from sheep_table inner join id_info_table on sheep_table.sheep_id = id_info_table.sheep_id " +
+				"left outer join tag_colors_table on id_info_table.tag_color_male = tag_colors_table.tag_colorsid " +
+			"left outer join id_location_table on id_info_table.tag_location = id_location_table.id_locationid " +
+			"inner join id_type_table on id_info_table.tag_type = id_type_table.id_typeid " +
+			"where id_info_table.sheep_id ='%s' and (id_info_table.tag_date_off is null or " +
+			"id_info_table.tag_date_off is '')order by idtype_name asc", thissheep_id);
+
+
+	Log.i("format record", " comand is " + cmd);
+	crsr = dbh.exec( cmd );
+	Log.i("format record", " after run the command");
+	tagcursor   = ( Cursor ) crsr;
+	tagcursor.moveToFirst();
+	Log.i("format record", " the cursor is of size " + String.valueOf(dbh.getSize()));
+
+
 	//	Get set up to try to use the CursorAdapter to display all the tag data
 	//	Select only the columns I need for the tag display section
     String[] fromColumns = new String[ ]{ "tag_number", "tag_color_name", "id_location_abbrev", "idtype_name"};
@@ -520,7 +556,7 @@ public void formatSheepRecord (View v){
 	//	Set the views for each column for each line. A tag takes up 1 line on the screen
     int[] toViews = new int[] { R.id.tag_number, R.id.tag_color_name, R.id.id_location_abbrev, R.id.idtype_name};
     Log.i("FormatRecord", "after setting string array toViews");
-    myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor5 ,fromColumns, toViews, 0);
+    myadapter = new SimpleCursorAdapter(this, R.layout.list_entry, tagcursor ,fromColumns, toViews, 0);
     Log.i("FormatRecord", "after setting myadapter");
     setListAdapter(myadapter);
     Log.i("FormatRecord", "after setting list adapter");

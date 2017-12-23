@@ -632,8 +632,10 @@ public class DrawBlood extends ListActivity {
     							Log.w("scrapie", "No OPP alert");
     						}
     				}			
-    			}	
-			clearBtn( null );
+    			}
+		 Log.i("update db ", "before print ");
+		 printLabel(v);
+		 //	clearBtn( null );
 	 }
 	public void printLabel( View v ){ 
 		try
@@ -774,7 +776,7 @@ public class DrawBlood extends ListActivity {
 		super.onResume();
 		CheckIfServiceIsRunning();
 		Log.i("DrawBlood", " OnResume");
-		scanEid( null );	
+//		scanEid( null );
 //		Log.i("DrawBlood", " OnResume after scanEID(null)");
 	}
 
